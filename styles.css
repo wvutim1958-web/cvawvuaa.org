@@ -4,11 +4,11 @@ body{font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgrou
 a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 .wrapper{max-width:1100px;margin:auto;padding:20px}
 header.site{background:linear-gradient(180deg,#0b2545 0%,#153a6b 100%);color:#fff}
-.topbar{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:14px 20px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand img{width:42px;height:42px;border-radius:8px;object-fit:cover}
-.brand h1{font-size:20px;margin:0}
-nav a{color:#ffd56e;margin:0 10px;font-weight:600}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
+.brand-wrap{display:flex;justify-content:center;align-items:center;width:100%;padding:12px 0}
+.brand img{width:72px;height:72px;border-radius:12px;object-fit:cover;display:block;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+nav{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding-bottom:10px}
+nav a{color:#ffd56e;margin:0 4px;font-weight:600}
 nav a.active{border-bottom:2px solid var(--gold)}
 .hero{padding:36px 20px;color:#fff;background:linear-gradient(90deg,#153a6b 0%, #1b4d8a 60%, #2b6cb0 100%)}
 .hero h2{margin:0 0 8px 0}
