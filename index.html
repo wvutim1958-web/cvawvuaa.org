@@ -4,11 +4,11 @@ body{font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgrou
 a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 .wrapper{max-width:1100px;margin:auto;padding:20px}
 header.site{background:linear-gradient(180deg,#0b2545 0%,#153a6b 100%);color:#fff}
-.topbar{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:14px 20px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand img{width:42px;height:42px;border-radius:8px;object-fit:cover}
-.brand h1{font-size:20px;margin:0}
-nav a{color:#ffd56e;margin:0 10px;font-weight:600}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
+.brand-wrap{display:flex;justify-content:center;align-items:center;width:100%;padding:12px 0}
+.brand img{width:72px;height:72px;border-radius:12px;object-fit:cover;display:block;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+nav{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding-bottom:10px}
+nav a{color:#ffd56e;margin:0 4px;font-weight:600}
 nav a.active{border-bottom:2px solid var(--gold)}
 .hero{padding:36px 20px;color:#fff;background:linear-gradient(90deg,#153a6b 0%, #1b4d8a 60%, #2b6cb0 100%)}
 .hero h2{margin:0 0 8px 0}
@@ -33,10 +33,15 @@ img.full{width:100%;border-radius:14px}
 .kbd{background:#eee;border-radius:6px;padding:2px 6px;border:1px solid #d0d7de}
 .tiles{display:grid;gap:16px}
 @media(min-width:900px){.tiles{grid-template-columns:repeat(3,1fr)}}
-</style><link rel='stylesheet' href='/css/styles.css'><link rel='icon' href='/assets/favicon.png'></head><body><header class="site"><div class="topbar wrapper">
-      <div class="brand"><img src="/assets/chapter-logo.jpg" alt="CVCWVUAA logo"><h1>Central Virginia WVU Alumni</h1></div>
+</style><link rel='stylesheet' href='/css/styles.css'><link rel='icon' href='/assets/favicon.png'>  <link rel="stylesheet" href="/assets/footer-fix.css?v=20250926">
+</head><body><header class="site">
+      <div class="brand-wrap">
+        <a class="brand" href="/index.html" aria-label="Central Virginia WVU Alumni">
+          <img src="/assets/favicon.png" alt="CVCWVUAA logo">
+        </a>
+      </div>
       <nav><a href="/index.html">Home</a><a href="/about.html">About</a><a href="/events.html">Events</a><a href="/scores.html">Scores</a><a href="/resources/" class="active">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html">Join/Renew</a><a href="/pay.html">Pay / Donate</a><a href="/contact.html">Contact</a></nav>
-    </div></header><main class="wrapper">
+    </header><main class="wrapper">
   <h2>Resources & Links</h2>
   <div class="tiles">
     <div class="card"><h3>WVU Homepage</h3><ul class="clean">
@@ -84,7 +89,32 @@ img.full{width:100%;border-radius:14px}
       <li><a href="https://www.thedaonline.com/">The Daily Athenaeum</a></li>
     </ul></div>
   </div>
-</main><footer class="site"><div class="wrapper">
-      Central Virginia WVU Alumni Association • <a href="mailto:president@cvawvuaa.org">president@cvawvuaa.org</a> • (804) 566-8058
-      <p class="small"><a href="/assets/proclamation.pdf">Bylaws & Proclamation (PDF)</a> • <a href="/scholarship.html">Scholarship</a> • <a href="/pay.html">Donate / Pay Dues</a></p>
-    </div></footer></body></html>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="/assets/logo.png?v=20250926" alt="CVCWVUAA" width="40" height="40" />
+      <span>Central Virginia WVU Alumni</span>
+    </div>
+    <nav class="footer-links">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/events.html">Events</a>
+      <a href="/board.html">Board</a>
+      <a href="/news.html">News</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/membership.html">Join / Renew</a>
+      <a href="/pay-dues.html">Pay Dues</a>
+      <a href="/donate.html">Donate</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/assets/proclamation.pdf">Bylaws / Proclamation (PDF)</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <div class="footer-meta">
+      <span>&copy; 2025 Central Virginia WVU Alumni Chapter</span>
+      <span>Richmond &amp; Central Virginia</span>
+      <a href="mailto:president@cvawvuaa.org">president@cvawvuaa.org</a>
+    </div>
+  </div>
+</footer>
+</body></html>
