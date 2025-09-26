@@ -40,23 +40,72 @@ img.full{width:100%;border-radius:14px}
           <img src="/assets/logo.png" alt="CVCWVUAA logo">
         </a>
       </div>
-      <nav><a href="/index.html">Home</a><a href="/about.html">About</a><a href="/events.html">Events</a><a href="/scores/high-school.html">High School Scores</a><a href="/resources/">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html" class="active">Join/Renew</a><a href="/pay.html">Pay / Donate</a><a href="/contact.html">Contact</a></nav>
-    </header><main class="wrapper">
-  <img class="full" src="/assets/photos/wvu-2.jpg" alt="WVU photo">
-<h2>Membership 2025–2026</h2>
-  <div class="card">
-    <form name="membership" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/membership.html?success=true">
-      <input type="hidden" name="form-name" value="membership"><input type="hidden" name="bot-field">
-      <p><label>First Name<br><input name="first" required></label></p>
-      <p><label>Last Name<br><input name="last" required></label></p>
-      <p><label>Email<br><input type="email" name="email" required></label></p>
-      <p><label>Phone<br><input name="phone"></label></p>
-      <p><label>Address<br><input name="address"></label></p>
-      <p><label>Notes<br><textarea name="notes" rows="4"></textarea></label></p>
-      <p><button class="btn" type="submit">Submit Membership</button> <a class="btn" href="/pay.html">Pay Dues / Donate</a></p>
-    </form>
+      <nav><a href="/index.html">Home</a><a href="/about.html">About</a><a href="/events.html">Events</a><a href="/programs.html">Programs</a><a href="/scores.html">WVU Scores</a><a href="/scores/live.html">Live Scores</a><a href="/resources.html">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html" class="active">Join/Renew</a><a href="/pay.html">Pay / Donate</a><a href="/board.html">Board</a><a href="/news.html">News</a><a href="/contact.html">Contact</a></nav>
+    </header>\1
+<div class=\"wrapper\">
+<h2>Join / Renew Membership</h2>
+<p class="note">Complete this form, then <strong>print</strong> or <strong>save as PDF</strong> and email to <a href="mailto:president@cvawvuaa.org">president@cvawvuaa.org</a>, or pay online on the <a href="/pay.html">Pay / Donate</a> page.</p>
+<form class="form" onsubmit="window.print();return false;">
+  <div class="row">
+    <div>
+      <label>Type of Membership</label>
+      <select name="membership_type" required>
+        <option value="family">Family – $25 annually</option>
+        <option value="single">Single – $20 annually</option>
+      </select>
+    </div>
+    <div>
+      <label>Additional Donation ($)</label>
+      <input type="number" name="donation" min="0" step="1" placeholder="0">
+    </div>
   </div>
+
+  <div class="row">
+    <div><label>First Name</label><input type="text" name="first_name" required></div>
+    <div><label>Last Name</label><input type="text" name="last_name" required></div>
+  </div>
+
+  <div class="row">
+    <div><label>Email</label><input type="email" name="email" required></div>
+    <div><label>Phone</label><input type="tel" name="phone"></div>
+  </div>
+
+  <div class="row">
+    <div><label>Address 1</label><input type="text" name="address1" required></div>
+    <div><label>Address 2</label><input type="text" name="address2"></div>
+  </div>
+
+  <div class="row">
+    <div><label>City</label><input type="text" name="city" required></div>
+    <div><label>State</label><input type="text" name="state" maxlength="2" placeholder="VA"></div>
+  </div>
+
+  <div class="row">
+    <div><label>ZIP</label><input type="text" name="zip" maxlength="10"></div>
+    <div><label>Family Members (for family membership)</label><input type="text" name="family_members" placeholder="List names"></div>
+  </div>
+
+  <div>
+    <label>Interested in Volunteering? (check all that apply)</label>
+    <div class="checks">
+      <label><input type="checkbox" name="volunteer" value="Game Watch"> Game Watch (setup/help)</label>
+      <label><input type="checkbox" name="volunteer" value="Fund Raising"> Fund Raising</label>
+      <label><input type="checkbox" name="volunteer" value="Networking"> Networking Events</label>
+      <label><input type="checkbox" name="volunteer" value="Social Events"> Social Events</label>
+      <label><input type="checkbox" name="volunteer" value="Membership"> Membership</label>
+      <label><input type="checkbox" name="volunteer" value="Social Media"> Social Media</label>
+      <label><input type="checkbox" name="volunteer" value="Other"> Other</label>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="btn">Print / Save as PDF</button>
+    <span class="note">After printing, email your form or bring it to an event.</span>
+  </div>
+</form>
+</div>
 </main>
+
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand">
@@ -64,15 +113,21 @@ img.full{width:100%;border-radius:14px}
       <span>Central Virginia WVU Alumni</span>
     </div>
     <nav class="footer-links">
+      <a href="/news.html">News</a>
+      <a href="/scores/live.html">Live Scores</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/news.html">News</a>
+      <a href="/scores/live.html">Live Scores</a>
+      <a href="/programs.html">Programs</a>
       <a href="/index.html">Home</a>
       <a href="/about.html">About</a>
       <a href="/events.html">Events</a>
-      <a href="/scores.html">WVU Scores</a>
+      <a href="/scores.html">WVU Scores</a><a href="/scores/high-school.html">High School Scores</a>
       <a href="/scores/high-school.html">High School Scores</a>
       <a href="/board.html">Board</a>
       <a href="/news.html">News</a>
       <a href="/resources.html">Resources</a>
-      <a href="/membership.html">Join / Renew</a>
+      <a href="/membership.html" class="active">Join / Renew</a>
       <a href="/pay.html">Pay / Donate</a>
       <a href="/scholarship.html">Scholarship</a>
       <a href="/assets/proclamation.pdf">Bylaws / Proclamation (PDF)</a>
@@ -85,4 +140,5 @@ img.full{width:100%;border-radius:14px}
     </div>
   </div>
 </footer>
+
 </body></html>

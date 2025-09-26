@@ -1,7 +1,6 @@
 
 /* === CVCWVUAA overrides (v32) === */
 .brand img{height:48px;width:auto;border-radius:0;object-fit:contain;display:block;box-shadow:none}
-/* WVU footer */
 .site-footer{background:#002855;color:#fff;margin-top:28px}
 .site-footer a{color:#ffd100;text-decoration:none}
 .site-footer a:hover{text-decoration:underline}
@@ -9,9 +8,23 @@
 .site-footer .footer-brand{display:flex;align-items:center;gap:10px;font-weight:700}
 .site-footer .footer-links{display:flex;flex-wrap:wrap;gap:10px 16px;border-top:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.18);padding:12px 0}
 .site-footer .footer-meta{display:flex;flex-wrap:wrap;gap:12px;font-size:14px;opacity:.9}
-/* photo grid */
-.photo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.photo-grid img{width:100%;height:140px;object-fit:cover;border-radius:8px;display:block}
-.photo-grid figure{margin:0}
-.photo-grid figcaption{font-size:12px;color:#cbd5e1;margin-top:4px}
-.small{font-size:14px;color:#5b6777}
+/* Utility */
+.wrapper{max-width:1100px;margin:auto;padding:20px}
+.img-wide{width:100%;max-height:320px;object-fit:cover;border-radius:10px;display:block;margin:10px 0 0}
+
+
+/* v33: form + layout polish */
+.form {display:grid; gap:12px; max-width:780px;}
+.form .row {display:grid; gap:12px;}
+@media(min-width:720px){ .form .row{grid-template-columns:repeat(2,1fr);} }
+label {font-weight:600; display:block; margin-bottom:6px;}
+input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select {
+  width:100%; padding:10px; border:1px solid #d0d7de; border-radius:8px; font:inherit; background:#fff;
+}
+textarea{min-height:120px}
+.checks{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px 16px}
+.actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.note{font-size:14px; color:#5b6777}
+.badge{display:inline-block;background:#e9eef7;border:1px solid #c9d4ea;border-radius:999px;padding:6px 10px;font-weight:600;color:#113a7a}
+/* spacing safety for wrapper */
+main > .wrapper { padding-top: 10px; }

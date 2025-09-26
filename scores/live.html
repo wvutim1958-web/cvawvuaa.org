@@ -1,4 +1,4 @@
-<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>News</title><style>:root{--ink:#0b2545; --blue:#1b4d8a; --gold:#ffb81c; --bg:#f6f8fb; --muted:#5b6777}
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Live Scores</title><style>:root{--ink:#0b2545; --blue:#1b4d8a; --gold:#ffb81c; --bg:#f6f8fb; --muted:#5b6777}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
 body{font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:#0f172a}
 a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
@@ -40,13 +40,23 @@ img.full{width:100%;border-radius:14px}
           <img src="/assets/logo.png" alt="CVCWVUAA logo">
         </a>
       </div>
-      <nav><a href="/index.html">Home</a><a href="/about.html">About</a><a href="/events.html">Events</a><a href="/programs.html">Programs</a><a href="/scores.html">WVU Scores</a><a href="/scores/live.html">Live Scores</a><a href="/resources.html">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html">Join/Renew</a><a href="/pay.html">Pay / Donate</a><a href="/board.html">Board</a><a href="/news.html" class="active">News</a><a href="/contact.html">Contact</a></nav>
+      <nav><a href="/index.html">Home</a><a href="/about.html">About</a><a href="/events.html">Events</a><a href="/programs.html">Programs</a><a href="/scores.html">WVU Scores</a><a href="/scores/live.html" class="active">Live Scores</a><a href="/resources.html">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html">Join/Renew</a><a href="/pay.html">Pay / Donate</a><a href="/board.html">Board</a><a href="/news.html">News</a><a href="/contact.html">Contact</a></nav>
     </header>\1
 <div class="wrapper">
-  <h2>Campus Life — WVU Events</h2>
-  <div id="localist-widget-74813321" class="localist-widget"></div>
-  <script defer type="text/javascript" src="https://cal.wvu.edu/widget/combo?schools=wvu&types=38634929567204%2C38634929553886%2C38634929562082%2C38634929555935%2C38801326270388%2C38801329324608%2C50416918812932%2C38634929560033%2C38634929564131%2C38634934878778%2C38634934883900%2C38634934872631%2C50416928594502%2C44588934017410%2C44588935805469%2C44588935087787&groups=mountaineer_maniacs%2Cmountaineer_racing%2Cstudent_organizations%2C4h%2Cwest-virginia-community-educational-outreach-service%2Cwest-virginia-extension-master-gardener-association%2Cwvu-extension-energy-express&departments=academic_advising_council%2Cacademic_engagement_success_center%2Caccounting%2Cadmissions%2Cadvance_center%2Cadventure_wv%2Calumni%2Carts_and_entertainment%2Cathletics%2Ccampus_recreation%2Ccodewv%2Ccommunity_design_team%2Cpresidents_office%2Cwvu_online%2Cwvu-jacksons-mill%2Cwvu_hub%2Cwvu_veterans&days=31&num=50&all_instances=1&match=any&experience=hybrid&exclude_experience=hybrid&container=localist-widget-74813321&template=modern"></script>
-  <div id="lclst_widget_footer"><a style="margin-left:auto;margin-right:auto;display:block;width:81px;margin-top:10px;" title="Widget powered by Concept3D Event Calendar Software" href="https://www.localist.com?utm_source=widget&utm_campaign=widget_footer&utm_medium=branded%20link"><img src="//d3e1o4bcbhmj8g.cloudfront.net/assets/platforms/default/about/widget_footer.png" alt="Localist Online Calendar Software" style="vertical-align: middle;" width="81" height="23"></a></div>
+  <h2>Live Scores</h2>
+  <p class="small">This page shows both WVU and High School scores. For WVU only, see <a href="/scores.html">WVU Scores</a>.</p>
+
+  <section class="section">
+    <h3>WVU Scores</h3>
+    <div class="scorestream-widget-container" data-ss_widget_type="vertScoreboard" style="height:720px" data-user-widget-id="66537"></div>
+    <script async type="text/javascript" src="https://scorestream.com/apiJsCdn/widgets/embed.js"></script>
+  </section>
+
+  <section class="section">
+    <h3>High School Scores</h3>
+    <div id="scorestream-widget-container" class="scorestream-widget-container" data-ss_widget_type="gallery" data-ss_widgetid="66592" style="min-height:720px"></div>
+    <script async src="https://scorestream.com/apiJsCdn/widgets/embed.js"></script>
+  </section>
 </div>
 \2
 
@@ -60,8 +70,8 @@ img.full{width:100%;border-radius:14px}
       <a href="/news.html">News</a>
       <a href="/scores/live.html">Live Scores</a>
       <a href="/programs.html">Programs</a>
-      <a href="/news.html" class="active">News</a>
-      <a href="/scores/live.html">Live Scores</a>
+      <a href="/news.html">News</a>
+      <a href="/scores/live.html" class="active">Live Scores</a>
       <a href="/programs.html">Programs</a>
       <a href="/index.html">Home</a>
       <a href="/about.html">About</a>
@@ -69,7 +79,7 @@ img.full{width:100%;border-radius:14px}
       <a href="/scores.html">WVU Scores</a><a href="/scores/high-school.html">High School Scores</a>
       <a href="/scores/high-school.html">High School Scores</a>
       <a href="/board.html">Board</a>
-      <a href="/news.html" class="active">News</a>
+      <a href="/news.html">News</a>
       <a href="/resources.html">Resources</a>
       <a href="/membership.html">Join / Renew</a>
       <a href="/pay.html">Pay / Donate</a>
