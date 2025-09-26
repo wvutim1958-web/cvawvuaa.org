@@ -1,0 +1,11 @@
+
+/* === CVCWVUAA Footer & Banner Fix === */
+.site-footer { background:#002855; color:#fff; margin-top:3rem; }
+.site-footer a { color:#ffd100; text-decoration:none; }
+.site-footer a:hover { text-decoration:underline; }
+.footer-inner { max-width:1100px; margin:0 auto; padding:2rem 1rem; display:grid; gap:1.2rem; }
+.footer-brand { display:flex; align-items:center; gap:.6rem; font-weight:700; }
+.footer-links { display:flex; flex-wrap:wrap; gap:.8rem 1.2rem; border-top:1px solid rgba(255,255,255,.2); border-bottom:1px solid rgba(255,255,255,.2); padding:1rem 0; }
+.footer-meta { display:flex; flex-wrap:wrap; gap:1rem; font-size:.95rem; opacity:.9; }
+/* Ensure banner logo shows */
+header img, .header img, .site-logo img, .brand img, .logo img { max-height:72px; height:auto; width:auto; display:inline-block; opacity:1 !important; visibility:visible !important; }
