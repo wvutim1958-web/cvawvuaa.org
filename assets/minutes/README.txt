@@ -1,1 +1,1 @@
-Drop meeting minutes PDFs here (YYYY-MM-DD.pdf).
+Place approved meeting minutes PDFs here (e.g., 2025-09-01.pdf).
