@@ -1,0 +1,1 @@
+Drop meeting minutes PDFs here (YYYY-MM-DD.pdf).

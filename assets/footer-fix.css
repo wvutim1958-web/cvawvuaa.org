@@ -1,30 +1,26 @@
 
-/* === CVCWVUAA overrides (v32) === */
-.brand img{height:48px;width:auto;border-radius:0;object-fit:contain;display:block;box-shadow:none}
-.site-footer{background:#002855;color:#fff;margin-top:28px}
-.site-footer a{color:#ffd100;text-decoration:none}
-.site-footer a:hover{text-decoration:underline}
-.site-footer .footer-inner{max-width:1100px;margin:0 auto;padding:22px 20px;display:grid;gap:12px}
-.site-footer .footer-brand{display:flex;align-items:center;gap:10px;font-weight:700}
-.site-footer .footer-links{display:flex;flex-wrap:wrap;gap:10px 16px;border-top:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.18);padding:12px 0}
-.site-footer .footer-meta{display:flex;flex-wrap:wrap;gap:12px;font-size:14px;opacity:.9}
-/* Utility */
-.wrapper{max-width:1100px;margin:auto;padding:20px}
-.img-wide{width:100%;max-height:320px;object-fit:cover;border-radius:10px;display:block;margin:10px 0 0}
-
-
-/* v33: form + layout polish */
-.form {display:grid; gap:12px; max-width:780px;}
-.form .row {display:grid; gap:12px;}
-@media(min-width:720px){ .form .row{grid-template-columns:repeat(2,1fr);} }
-label {font-weight:600; display:block; margin-bottom:6px;}
-input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select {
-  width:100%; padding:10px; border:1px solid #d0d7de; border-radius:8px; font:inherit; background:#fff;
-}
-textarea{min-height:120px}
-.checks{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px 16px}
-.actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-.note{font-size:14px; color:#5b6777}
+/* === CVCWVUAA overrides (v35) === */
+/* Fix header logo distortion */
+.brand img{max-height:56px !important; height:auto !important; width:auto !important;
+  border-radius:0 !important; object-fit:contain !important; box-shadow:none !important; filter:none !important; opacity:1 !important;}
+/* Nav button */
+nav a.btn{background:#ffd100;color:#002855;border-radius:999px;padding:6px 10px;font-weight:700}
+nav a.btn:hover{text-decoration:none;filter:brightness(.95)}
+/* Wrapper alignment */
+main > .wrapper{max-width:1100px;margin:0 auto;padding:20px}
+/* Two-column grid for side-by-side scores */
+.scores-grid{display:grid;gap:18px}
+@media(min-width:900px){.scores-grid{grid-template-columns:1fr 1fr}}
+.scores-grid section{background:#fff;border:1px solid #e6e9ef;border-radius:10px;padding:12px}
+/* Simple table */
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{border:1px solid #e6e9ef;padding:10px;text-align:left}
 .badge{display:inline-block;background:#e9eef7;border:1px solid #c9d4ea;border-radius:999px;padding:6px 10px;font-weight:600;color:#113a7a}
-/* spacing safety for wrapper */
-main > .wrapper { padding-top: 10px; }
+.note{font-size:14px;color:#5b6777}
+/* Membership form */
+.form{display:grid;gap:12px;max-width:780px}
+.form .row{display:grid;gap:12px}
+@media(min-width:720px){.form .row{grid-template-columns:repeat(2,1fr)}}
+input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select {
+  width:100%;padding:10px;border:1px solid #d0d7de;border-radius:8px;background:#fff;font:inherit}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
