@@ -13,21 +13,32 @@
 
 <main><div class="wrapper">
   <h2>Share Your Photos</h2>
-  <p class="small">Upload photos from chapter events. Your submission goes to the chapter email (not your email client).</p>
+  <p class="small">Upload photos from chapter events. Submissions go to the chapter inbox (not your email client).</p>
   <form class="stack" action="https://formsubmit.co/president@cvawvuaa.org" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="_subject" value="CVCWVUAA Photo Upload">
     <input type="hidden" name="_captcha" value="false">
     <input type="hidden" name="_next" value="https://cvawvuaa.org/thanks.html">
+
     <div class="row">
       <label>Your Name<input type="text" name="Name" required></label>
       <label>Email<input type="email" name="Email" required></label>
     </div>
     <label>Event / Caption<input type="text" name="Caption" placeholder="Event name, date, short caption"></label>
-    <label>Photos (you can select multiple)<input type="file" name="attachments" multiple></label>
+
+    <fieldset class="card" style="border:none">
+      <legend><strong>How would you like to share?</strong></legend>
+      <label>Upload a <strong>ZIP file</strong> of photos (preferred for many images)
+        <input type="file" name="attachment" accept=".zip,image/*">
+      </label>
+      <label>Or paste a shared album link (Google Photos, Dropbox, iCloud)
+        <input type="url" name="Album Link" placeholder="https://...">
+      </label>
+      <p class="small">Tip: Select your photos and compress them into a single <strong>.zip</strong> file before uploading for faster delivery.</p>
+    </fieldset>
+
     <label>Message (optional)<textarea name="Message" rows="3"></textarea></label>
     <button class="btn" type="submit">Send Photos</button>
   </form>
-  <p class="small">By submitting, you grant the chapter permission to share your photos on our website/social media.</p>
 </div></main>
 
 <footer class="site-footer">
