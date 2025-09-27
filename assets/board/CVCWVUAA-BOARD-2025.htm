@@ -21,8 +21,8 @@ xmlns="http://www.w3.org/TR/REC-html40">
  var c_lTabs=2;
 
  var c_rgszSh=new Array(c_lTabs);
- c_rgszSh[0] = "Customercontactdetails";
- c_rgszSh[1] = "Upcomingappointments";
+ c_rgszSh[0] = "Customer contact details";
+ c_rgszSh[1] = "Upcoming appointments";
 
 
 
@@ -71,8 +71,7 @@ function fnBuildTabStrip()
 {
  var szHTML=
   "<html><head><style>.clScroll {font:8pt Courier New;color:"+c_rgszClr[6]+";cursor:default;line-height:10pt;}"+
-  ".clScroll2 {font:10pt Arial;color:"+c_rgszClr[6]+";cursor:default;line-height:11pt;}</style>  <link rel="stylesheet" href="/assets/wvu-brand.css?v=40">
-</head>"+
+  ".clScroll2 {font:10pt Arial;color:"+c_rgszClr[6]+";cursor:default;line-height:11pt;}</style></head>"+
   "<body onclick=\"event.returnValue=false;\" ondragstart=\"event.returnValue=false;\" onselectstart=\"event.returnValue=false;\" bgcolor="+c_rgszClr[4]+" topmargin=0 leftmargin=0><table cellpadding=0 cellspacing=0 width=100%>"+
   "<tr><td colspan=6 height=1 bgcolor="+c_rgszClr[2]+"></td></tr>"+
   "<tr><td style=\"font:1pt\">&nbsp;<td>"+
@@ -80,28 +79,7 @@ function fnBuildTabStrip()
   "<td valign=top id=tdScroll class=\"clScroll2\" onclick=\"parent.fnScrollTabs(0);\" ondblclick=\"parent.fnScrollTabs(0);\" onmouseover=\"parent.fnMouseOverScroll(1);\" onmouseout=\"parent.fnMouseOutScroll(1);\"><a>&lt</a></td>"+
   "<td valign=top id=tdScroll class=\"clScroll2\" onclick=\"parent.fnScrollTabs(1);\" ondblclick=\"parent.fnScrollTabs(1);\" onmouseover=\"parent.fnMouseOverScroll(2);\" onmouseout=\"parent.fnMouseOutScroll(2);\"><a>&gt</a></td>"+
   "<td valign=top id=tdScroll class=\"clScroll\" onclick=\"parent.fnFastScrollTabs(1);\" onmouseover=\"parent.fnMouseOverScroll(3);\" onmouseout=\"parent.fnMouseOutScroll(3);\"><a>&#187;</a></td>"+
-  "<td style=\"font:1pt\">&nbsp;<td></tr></table><footer class="site-footer">
-  <div class="wrapper">
-    <nav class="links">
-      <a href="/index.html">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/events.html">Events</a>
-      <a href="/scores.html">Scores</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/scholarship.html">Scholarship</a>
-      <a href="/membership.html">Join / Renew</a>
-      <a href="/pay.html">Pay / Donate</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/programs.html">Programs</a>
-      <a href="/board.html">Board</a>
-      <a href="/news.html">News</a>
-      <a href="/minutes.html">Meeting Minutes</a>
-      <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
-    </nav>
-    <div class="meta small">Central Virginia WVU Alumni â€¢ <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a></div>
-  </div>
-</footer>
-</body></html>";
+  "<td style=\"font:1pt\">&nbsp;<td></tr></table></body></html>";
 
  with (frames['frScroll'].document) {
   open("text/html","replace");
@@ -158,28 +136,7 @@ function fnBuildTabStrip()
   szHTML+="</tr>";
  }
 
- szHTML+="</table><footer class="site-footer">
-  <div class="wrapper">
-    <nav class="links">
-      <a href="/index.html">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/events.html">Events</a>
-      <a href="/scores.html">Scores</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/scholarship.html">Scholarship</a>
-      <a href="/membership.html">Join / Renew</a>
-      <a href="/pay.html">Pay / Donate</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/programs.html">Programs</a>
-      <a href="/board.html">Board</a>
-      <a href="/news.html">News</a>
-      <a href="/minutes.html">Meeting Minutes</a>
-      <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
-    </nav>
-    <div class="meta small">Central Virginia WVU Alumni â€¢ <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a></div>
-  </div>
-</footer>
-</body></html>";
+ szHTML+="</table></body></html>";
  with (frames['frTabs'].document) {
   open("text/html","replace");
   charset=document.charset;
@@ -368,28 +325,7 @@ function fnSetActiveSheet(iSh)
  <noframes>
   <body>
    <p>This page uses frames, but your browser doesn't support them.</p>
-  <footer class="site-footer">
-  <div class="wrapper">
-    <nav class="links">
-      <a href="/index.html">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/events.html">Events</a>
-      <a href="/scores.html">Scores</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/scholarship.html">Scholarship</a>
-      <a href="/membership.html">Join / Renew</a>
-      <a href="/pay.html">Pay / Donate</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/programs.html">Programs</a>
-      <a href="/board.html">Board</a>
-      <a href="/news.html">News</a>
-      <a href="/minutes.html">Meeting Minutes</a>
-      <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
-    </nav>
-    <div class="meta small">Central Virginia WVU Alumni â€¢ <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a></div>
-  </div>
-</footer>
-</body>
+  </body>
  </noframes>
 </frameset>
 </html>

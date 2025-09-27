@@ -1,197 +1,54 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CVCWVUAA • Scholarship Fund</title>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CVCWVUAA • Scholarship</title>
+<link rel="stylesheet" href="/css/styles.css">
+</head><body>
 
-  <!-- Keep your global site CSS if present -->
-  <link rel="stylesheet" href="/css/styles.css">
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+    <nav>
+      <a href="/index.html" class="">Home</a> <a href="/about.html" class="">About</a> <a href="/events.html" class="">Events</a> <a href="/scores.html" class="">Scores</a> <a href="/resources.html" class="">Resources</a> <a href="/scholarship.html" class="active">Scholarship</a> <a href="/membership.html" class="">Join / Renew</a> <a href="/pay.html" class="">Pay / Donate</a> <a href="/contact.html" class="">Contact</a> <a href="/programs.html" class="">Programs</a> <a href="/board.html" class="">Board</a> <a href="/news.html" class="">News</a> <a href="/minutes.html" class="">Meeting Minutes</a> <a class="btn" href="/bylaws.html">Bylaws · Proclamation</a>
+    </nav>
+  </div>
+</header>
 
-  <!-- Lightweight WVU-style polish & scholarship layout -->
-  <style>
-    :root{
-      --wvu-blue:#002855; --wvu-gold:#ffd100;
-      --ink:#0b2545; --muted:#5b6777; --bg:#f7f9fc; --radius:12px;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:#111;font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    a{color:#1b4d8a;text-decoration:none} a:hover{text-decoration:underline}
-    .wrapper{max-width:1120px;margin:0 auto;padding:0 22px}
+<main><div class="wrapper">
+  <h2>Scholarship Fund</h2>
+  <div class="grid grid-2">
+    <section class="card">
+      <h3>Fund Transparency</h3>
+      <p class="small">We publish a recent history of our endowed scholarship fund.</p>
+      <p><a class="btn" href="/assets/docs/scholarship-fund.ods">Download CSV (ODS)</a></p>
+    </section>
+    <section class="card">
+      <h3>Blake E. Fought Memorial Scholarship</h3>
+      <p><strong>The Blake E. Fought Memorial Scholarship</strong> is a fund established by the West Virginia University (WVU) Central Virginia Alumni Chapter to honor Blake Fought, a member of the Class of 2008. The scholarship provides funds for non-resident undergraduate students at WVU, with awards being made based on both academic achievement and financial need. The scholarship is awarded through the WVU Foundation and the WVU Office of Financial Aid.</p>
+      <ul>
+        <li><strong>Donor:</strong> Established by friends and family of the Fought family through the VCOM community.</li>
+        <li><strong>Eligibility:</strong> Non-resident undergraduate students enrolled at WVU.</li>
+        <li><strong>Selection Criteria:</strong> Academic achievement and financial need.</li>
+        <li><strong>Awarding Body:</strong> WVU Foundation and the WVU Office of Financial Aid are responsible for determining recipients.</li>
+        <li><strong>Award Structure:</strong> Two or more scholarships of at least $500 are awarded annually, with the number and size of awards increasing as the endowment grows.</li>
+        <li><strong>Award Duration:</strong> Recipients are eligible for renewal in subsequent years but are limited to a maximum of two consecutive award cycles.</li>
+      </ul>
+      <p><strong>How to Apply / Learn More:</strong> For information on applying for the scholarship, students should contact the WVU Office of Financial Aid or the WVU Foundation. You can also read more on the WVU Foundation campaign page.</p>
+    </section>
+  </div>
+  <img src="/assets/photos/wvu-9.avif" alt="Mountaineer statue" style="width:100%;max-width:420px;border-radius:12px;margin:16px auto;display:block"/>
+</div></main>
 
-    /* Header / nav */
-    header.site{background:linear-gradient(180deg,#0f3465 0%,#002855 100%);color:#fff}
-    .topbar{display:flex;align-items:center;gap:16px;justify-content:space-between;padding:14px 0}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand img{max-height:56px;width:auto;height:auto;object-fit:contain}
-    nav a{color:#ffd56e;margin:0 .5rem;font-weight:700;display:inline-block;padding:.35rem .4rem;border-radius:6px}
-    nav a.active{box-shadow:inset 0 -3px 0 var(--wvu-gold)}
-    nav a.btn{background:var(--wvu-gold);color:var(--wvu-blue);border-radius:999px;padding:.45rem .8rem}
-
-    /* Page basics */
-    main{padding:22px 0 28px}
-    h1,h2,h3{color:#0b2a55;margin:16px 0 10px 0;font-weight:800}
-    .small{font-size:14px;color:var(--muted)}
-    .card{background:#fff;border:1px solid #e6e9ef;border-radius:12px;padding:18px}
-    .btn{display:inline-block;background:var(--wvu-gold);color:var(--wvu-blue);border-radius:999px;padding:.6rem .9rem;font-weight:800;text-decoration:none}
-    .btn:hover{filter:brightness(.96);text-decoration:none}
-
-    /* Scholarship grid: 2 wide columns + side image */
-    .schol-grid{
-      display:grid; gap:18px;
-      grid-template-columns: 1fr 1fr 360px;     /* two wide columns + image */
-      align-items:start;
-    }
-    /* Side image card */
-    .side-img img{width:100%; height:100%; max-height:640px; object-fit:cover; border-radius:12px}
-
-    /* “Fund Transparency” stays compact in the first column */
-    .fund{grid-column:1}
-
-    /* Scholarship detail spans the two wide columns (1–3 without the image) */
-    .detail{grid-column:1 / 3}
-    .detail h3{margin-top:0}
-
-    /* Inside the detail, split the body into two reading columns on larger screens */
-    .detail-columns{
-      display:grid; gap:12px; grid-template-columns:1fr 1fr;
-    }
-    .detail-columns > div{break-inside:avoid}
-    .detail-columns ul{margin:8px 0 0 18px}
-
-    /* Stack on narrow screens */
-    @media (max-width: 980px){
-      .schol-grid{grid-template-columns:1fr}
-      .detail{grid-column:auto}
-      .fund{order:2}
-      .side-img{order:3}
-      .detail-columns{grid-template-columns:1fr}
-    }
-
-    /* Footer (bottom banner with links) */
-    footer.site-footer{background:linear-gradient(180deg,#0f3465 0%,#002855 100%);color:#fff;margin-top:28px}
-    footer.site-footer .links a{color:var(--wvu-gold);margin-right:14px;display:inline-block;padding:8px 0}
-    footer.site-footer .meta{color:#dfe7f5;font-size:14px;padding-bottom:12px}
-  </style>
-</head>
-
-<body>
-  <!-- Header -->
-  <header class="site">
-    <div class="wrapper topbar">
-      <a class="brand" href="/index.html" aria-label="CVCWVUAA">
-        <img src="/assets/logo.png" alt="CVCWVUAA logo">
-      </a>
-      <nav>
-        <a href="/index.html">Home</a>
-        <a href="/about.html">About</a>
-        <a href="/events.html">Events</a>
-        <a href="/scores.html">Scores</a>
-        <a href="/resources.html">Resources</a>
-        <a href="/scholarship.html" class="active">Scholarship</a>
-        <a href="/membership.html">Join / Renew</a>
-        <a href="/pay.html">Pay / Donate</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/programs.html">Programs</a>
-        <a href="/board.html">Board</a>
-        <a href="/news.html">News</a>
-        <a href="/minutes.html">Meeting Minutes</a>
-        <a class="btn" href="/bylaws.html">Bylaws · Proclamation</a>
-      </nav>
+<footer class="site-footer">
+  <div class="wrapper">
+    <nav class="links"><a href="/index.html">Index</a> <a href="/about.html">About</a> <a href="/events.html">Events</a> <a href="/scores.html">Scores</a> <a href="/resources.html">Resources</a> <a href="/scholarship.html">Scholarship</a> <a href="/membership.html">Membership</a> <a href="/pay.html">Pay</a> <a href="/contact.html">Contact</a> <a href="/programs.html">Programs</a> <a href="/board.html">Board</a> <a href="/news.html">News</a> <a href="/minutes.html">Minutes</a> <a href="/bylaws.html">Bylaws</a></nav>
+    <div class="meta">
+      Central Virginia WVU Alumni Association •
+      <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a>
     </div>
-  </header>
+  </div>
+</footer>
 
-  <!-- Content -->
-  <main>
-    <div class="wrapper">
-      <h2>Scholarship Fund</h2>
-
-      <div class="schol-grid">
-        <!-- 1) Fund Transparency (compact) -->
-        <section class="card fund">
-          <h3>Fund Transparency</h3>
-          <p class="small">We publish a recent history of our endowed scholarship fund.</p>
-          <p>
-            <a class="btn" href="/assets/fund-history.csv" download>Download CSV</a>
-            <a class="btn" href="/pay.html" style="margin-left:8px">Donate</a>
-          </p>
-          <!-- (Optional) you can insert a small sparkline/graph image here -->
-        </section>
-
-        <!-- 2) Main scholarship details (spans two wide columns) -->
-        <section class="card detail">
-          <h3>Blake E. Fought Memorial Scholarship</h3>
-
-          <div class="detail-columns">
-            <div>
-              <p>
-                The <strong>Blake E. Fought Memorial Scholarship</strong> is a fund established by the
-                West Virginia University (WVU) Central Virginia Alumni Chapter to honor Blake Fought,
-                a member of the Class of 2008. The scholarship provides funds for non‑resident
-                undergraduate students at WVU, with awards based on both academic achievement and
-                financial need. The scholarship is awarded through the WVU Foundation and the WVU
-                Office of Financial Aid.
-              </p>
-
-              <ul>
-                <li><strong>Donor:</strong> Established by friends and family of the Fought family through the CVCM community.</li>
-                <li><strong>Eligibility:</strong> Non‑resident undergraduate students enrolled at WVU.</li>
-                <li><strong>Selection Criteria:</strong> Academic achievement and financial need.</li>
-                <li><strong>Awarding Body:</strong> WVU Foundation and WVU Office of Financial Aid are responsible for determining recipients.</li>
-              </ul>
-            </div>
-
-            <div>
-              <ul>
-                <li><strong>Award Structure:</strong> Two or more scholarships of at least $500 are awarded annually, with the number and size of awards increasing as the endowment grows.</li>
-                <li><strong>Award Duration:</strong> Recipients are eligible for renewal in subsequent years but are limited to a maximum of two consecutive award cycles.</li>
-              </ul>
-
-              <p>
-                <strong>How to Apply / Learn More:</strong> For information on applying for the scholarship, students
-                should contact the WVU Office of Financial Aid or the WVU Foundation. You can also read more on the
-                WVU Foundation campaign page or speak with the chapter directly.
-              </p>
-
-              <p class="small">
-                Download the latest ledger: <a href="/assets/scholarship-fund.ods" download>scholarship-fund.ods</a>
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 3) Side image -->
-        <aside class="side-img card" aria-label="Scholarship side image">
-          <img src="/assets/photos/wvu-9.avif" alt="WVU Mountaineer—scholarship support">
-        </aside>
-      </div>
-    </div>
-  </main>
-
-  <!-- Footer (bottom banner with links) -->
-  <footer class="site-footer">
-    <div class="wrapper">
-      <nav class="links">
-        <a href="/index.html">Home</a>
-        <a href="/about.html">About</a>
-        <a href="/events.html">Events</a>
-        <a href="/scores.html">Scores</a>
-        <a href="/resources.html">Resources</a>
-        <a href="/scholarship.html">Scholarship</a>
-        <a href="/membership.html">Join / Renew</a>
-        <a href="/pay.html">Pay / Donate</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/programs.html">Programs</a>
-        <a href="/board.html">Board</a>
-        <a href="/news.html">News</a>
-        <a href="/minutes.html">Meeting Minutes</a>
-        <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
-      </nav>
-      <div class="meta">
-        Central Virginia WVU Alumni Association •
-        <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a>
-      </div>
-    </div>
-  </footer>
-</body>
-</html>
+</body></html>
