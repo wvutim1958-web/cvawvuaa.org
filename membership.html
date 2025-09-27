@@ -1,50 +1,58 @@
-<!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CVCWVUAA • Join / Renew</title>
 <link rel="stylesheet" href="/css/styles.css">
 </head><body>
 
 <header class="site">
   <div class="wrapper topbar">
-    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
-      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
-    </a>
-    <nav>
-      <a href="/index.html" class="">Home</a> <a href="/about.html" class="">About</a> <a href="/events.html" class="">Events</a> <a href="/scores.html" class="">Scores</a> <a href="/resources.html" class="">Resources</a> <a href="/scholarship.html" class="">Scholarship</a> <a href="/membership.html" class="active">Join / Renew</a> <a href="/pay.html" class="">Pay / Donate</a> <a href="/contact.html" class="">Contact</a> <a href="/programs.html" class="">Programs</a> <a href="/board.html" class="">Board</a> <a href="/news.html" class="">News</a> <a href="/minutes.html" class="">Meeting Minutes</a> <a class="btn" href="/bylaws.html">Bylaws · Proclamation</a>
-    </nav>
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA"><img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo"></a>
+    <nav><a href="/index.html" class="">Home</a> <a href="/about.html" class="">About</a> <a href="/events.html" class="">Events</a> <a href="/scores.html" class="">Scores</a> <a href="/resources.html" class="">Resources</a> <a href="/scholarship.html" class="">Scholarship</a> <a href="/membership.html" class="active">Join / Renew</a> <a href="/pay.html" class="">Pay / Donate</a> <a href="/contact.html" class="">Contact</a> <a href="/programs.html" class="">Programs</a> <a href="/board.html" class="">Board</a> <a href="/news.html" class="">News</a> <a href="/media.html" class="">Media</a> <a href="/minutes.html" class="">Meeting Minutes</a> <a class="btn" href="/bylaws.html">Bylaws · Proclamation</a></nav>
   </div>
 </header>
 
 <main><div class="wrapper">
-  <img src="/assets/logo.png" alt="Membership Drive" style="height:80px;width:auto;display:block;margin:4px 0 10px 0"/>
+  <img class="natural" src="/assets/photos/550539255_10163868473745295_3650245405852649566_n.jpg" alt="Membership Banner">
   <h2>Membership 2025–2026</h2>
+  <p class="small">Annual dues: <strong>$25 per member</strong> and <strong>$15 per family member</strong>. After submitting, you’ll be redirected to pay online or you can pay by mail.</p>
 
-  <form class="rsvp" action="mailto:president@cvawvuaa.org" method="post" enctype="text/plain">
+  <form class="stack" action="https://formsubmit.co/president@cvawvuaa.org" method="POST">
+    <input type="hidden" name="_subject" value="CVCWVUAA Membership">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="https://cvawvuaa.org/thanks.html">
+
     <fieldset class="card" style="border:none">
       <legend><strong>Type of Membership</strong></legend>
-      <label><input type="radio" name="Membership Type" value="Member $25" required> Member – $25 / year</label>
-      <label><input type="radio" name="Membership Type" value="Family Member $15"> Family Member – $15 / year</label>
-      <label>Additional Donation $<input type="number" name="Additional Donation" step="1" min="0" value="0"></label>
+      <div class="row">
+        <label><input type="radio" name="Membership Type" value="Member $25" required> Member — $25 / year</label>
+        <label><input type="radio" name="Membership Type" value="Family Member $15"> Family Member — $15 / year</label>
+      </div>
+      <label>Additional Donation $<input type="number" name="Additional Donation" step="1" min="0"></label>
     </fieldset>
 
     <fieldset class="card" style="border:none">
       <legend><strong>Contact</strong></legend>
-      <label>First Name<input name="First Name" required></label>
-      <label>Last Name<input name="Last Name" required></label>
-      <label>Email<input type="email" name="Email" required></label>
-      <label>Phone<input name="Phone"></label>
-      <label>Address<textarea name="Address" rows="3"></textarea></label>
+      <div class="row">
+        <label>First Name<input name="First Name" required></label>
+        <label>Last Name<input name="Last Name" required></label>
+      </div>
+      <div class="row">
+        <label>Email<input type="email" name="Email" required></label>
+        <label>Phone<input name="Phone"></label>
+      </div>
+      <label>Address<textarea name="Address" rows="2"></textarea></label>
     </fieldset>
 
     <fieldset class="card" style="border:none">
       <legend><strong>Interested in Volunteering?</strong></legend>
-      <label><input type="checkbox" name="Volunteer" value="Game Watch"> Game Watch (Set-up / Help)</label>
-      <label><input type="checkbox" name="Volunteer" value="Fund Raising"> Fund Raising</label>
-      <label><input type="checkbox" name="Volunteer" value="Networking"> Networking Events</label>
-      <label><input type="checkbox" name="Volunteer" value="Social Events"> Social Events</label>
-      <label><input type="checkbox" name="Volunteer" value="Membership"> Membership</label>
-      <label>Other <input name="Other"></label>
+      <div class="row">
+        <label><input type="checkbox" name="Volunteer" value="Game Watch"> Game Watch (Set‑up/Help)</label>
+        <label><input type="checkbox" name="Volunteer" value="Fund Raising"> Fund Raising</label>
+        <label><input type="checkbox" name="Volunteer" value="Networking"> Networking Events</label>
+        <label><input type="checkbox" name="Volunteer" value="Social Events"> Social Events</label>
+        <label><input type="checkbox" name="Volunteer" value="Membership"> Membership</label>
+        <label>Other <input name="Other"></label>
+      </div>
     </fieldset>
 
     <fieldset class="card" style="border:none">
@@ -52,9 +60,9 @@
       <textarea name="Family Members" rows="3"></textarea>
     </fieldset>
 
-    <div>
+    <div class="row">
       <button class="btn" type="submit">Submit Membership</button>
-      <a class="btn" href="/pay.html">Pay Dues / Donate</a>
+      <a class="btn outline" href="/pay.html">Pay Dues / Donate</a>
     </div>
   </form>
 
@@ -65,11 +73,8 @@
 
 <footer class="site-footer">
   <div class="wrapper">
-    <nav class="links"><a href="/index.html">Index</a> <a href="/about.html">About</a> <a href="/events.html">Events</a> <a href="/scores.html">Scores</a> <a href="/resources.html">Resources</a> <a href="/scholarship.html">Scholarship</a> <a href="/membership.html">Membership</a> <a href="/pay.html">Pay</a> <a href="/contact.html">Contact</a> <a href="/programs.html">Programs</a> <a href="/board.html">Board</a> <a href="/news.html">News</a> <a href="/minutes.html">Minutes</a> <a href="/bylaws.html">Bylaws</a></nav>
-    <div class="meta">
-      Central Virginia WVU Alumni Association •
-      <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a>
-    </div>
+    <nav class="links"><a href="/index.html">Index</a> <a href="/about.html">About</a> <a href="/events.html">Events</a> <a href="/scores.html">Scores</a> <a href="/resources.html">Resources</a> <a href="/scholarship.html">Scholarship</a> <a href="/membership.html">Membership</a> <a href="/pay.html">Pay</a> <a href="/contact.html">Contact</a> <a href="/programs.html">Programs</a> <a href="/board.html">Board</a> <a href="/news.html">News</a> <a href="/media.html">Media</a> <a href="/minutes.html">Minutes</a> <a href="/bylaws.html">Bylaws</a></nav>
+    <div class="meta">Central Virginia WVU Alumni Association • <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a></div>
   </div>
 </footer>
 
