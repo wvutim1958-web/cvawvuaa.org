@@ -1,69 +1,136 @@
-<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>About • CVCWVUAA</title><style>:root{--ink:#0b2545; --blue:#1b4d8a; --gold:#ffb81c; --bg:#f6f8fb; --muted:#5b6777}
-*{box-sizing:border-box}html,body{margin:0;padding:0}
-body{font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:#0f172a}
-a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
-.wrapper{max-width:1100px;margin:auto;padding:20px}
-header.site{background:linear-gradient(180deg,#0b2545 0%,#153a6b 100%);color:#fff}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
-.brand-wrap{display:flex;justify-content:center;align-items:center;width:100%;padding:12px 0}
-.brand img{width:72px;height:72px;border-radius:12px;object-fit:cover;display:block;box-shadow:0 1px 3px rgba(0,0,0,.25)}
-nav{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding-bottom:10px}
-nav a{color:#ffd56e;margin:0 4px;font-weight:600}
-nav a.active{border-bottom:2px solid var(--gold)}
-.hero{padding:36px 20px;color:#fff;background:linear-gradient(90deg,#153a6b 0%, #1b4d8a 60%, #2b6cb0 100%)}
-.hero h2{margin:0 0 8px 0}
-.grid{display:grid;gap:18px}
-@media(min-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
-.card{background:#fff;border:1px solid #e6e9ef;border-radius:14px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.card h3{margin:0 0 10px 0;font-size:18px;color:var(--ink)}
-footer.site{margin-top:32px;padding:18px;border-top:1px solid #e6e9ef;color:var(--muted);background:#fff}
-.note{background:#fff7e5;border:1px solid #ffe1a6;color:#5a4100;padding:12px;border-radius:10px}
-.btn{display:inline-block;background:var(--gold);color:#241e00;font-weight:700;padding:10px 14px;border-radius:10px}
-.btn:hover{filter:brightness(0.95);text-decoration:none}
-ul.clean{margin:0;padding-left:18px}
-.small{font-size:14px;color:var(--muted)}
-.section{margin:22px 0}
-img.full{width:100%;border-radius:14px}
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{border:1px solid #e6e9ef;padding:10px;text-align:left}
-.badge{display:inline-block;background:#e9eef7;border:1px solid #d4deee;border-radius:999px;padding:6px 10px;font-weight:600;color:#113a7a}
-.paybox{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.paybtn{display:inline-flex;align-items:center;gap:8px;background:#003087;color:#fff;border-radius:10px;padding:10px 14px;text-decoration:none;font-weight:700}
-.kbd{background:#eee;border-radius:6px;padding:2px 6px;border:1px solid #d0d7de}
-.tiles{display:grid;gap:16px}
-@media(min-width:900px){.tiles{grid-template-columns:repeat(3,1fr)}}
-</style><link rel='stylesheet' href='/css/styles.css'><link rel='icon' href='/assets/favicon.png'>  <link rel="stylesheet" href="/assets/wvu-brand.css?v=40">
-</head><body><header class="site">
-      <div class="brand-wrap">
-        <a class="brand" href="/index.html" aria-label="Central Virginia WVU Alumni">
-          <img src="/assets/logo.png" alt="CVCWVUAA logo">
-        </a>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CVCWVUAA • About</title>
+
+  <!-- Keep your existing site CSS if present -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- Lightweight WVU-style polish for spacing, buttons, footer -->
+  <style>
+    :root{
+      --wvu-blue:#002855; --wvu-gold:#ffd100;
+      --ink:#0b2545; --muted:#5b6777; --bg:#f7f9fc; --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#111;font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    a{color:#1b4d8a;text-decoration:none} a:hover{text-decoration:underline}
+    .wrapper{max-width:1120px;margin:0 auto;padding:0 22px}
+    /* Header */
+    header.site{background:linear-gradient(180deg,#0f3465 0%,#002855 100%);color:#fff}
+    .topbar{display:flex;align-items:center;gap:16px;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{max-height:56px;width:auto;height:auto;object-fit:contain}
+    nav a{color:#ffd56e;margin:0 .5rem;font-weight:700;display:inline-block;padding:.35rem .4rem;border-radius:6px}
+    nav a.active{box-shadow:inset 0 -3px 0 var(--wvu-gold)}
+    nav a.btn{background:var(--wvu-gold);color:var(--wvu-blue);border-radius:999px;padding:.45rem .8rem}
+    /* Page */
+    main{padding:22px 0 28px}
+    h1,h2,h3{color:#0b2a55;margin:16px 0 10px 0;font-weight:800}
+    .small{font-size:14px;color:var(--muted)}
+    .card{background:#fff;border:1px solid #e6e9ef;border-radius:12px;padding:18px}
+    .hero-img{width:100%;height:360px;object-fit:cover;border-radius:12px;margin:14px 0}
+    /* Footer */
+    footer.site-footer{background:linear-gradient(180deg,#0f3465 0%,#002855 100%);color:#fff;margin-top:28px}
+    footer.site-footer .links a{color:var(--wvu-gold);margin-right:14px;display:inline-block;padding:8px 0}
+    footer.site-footer .meta{color:#dfe7f5;font-size:14px;padding-bottom:12px}
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site">
+    <div class="wrapper topbar">
+      <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+        <img src="/assets/logo.png" alt="CVCWVUAA logo">
+      </a>
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/about.html" class="active">About</a>
+        <a href="/events.html">Events</a>
+        <a href="/scores.html">Scores</a>
+        <a href="/resources.html">Resources</a>
+        <a href="/scholarship.html">Scholarship</a>
+        <a href="/membership.html">Join / Renew</a>
+        <a href="/pay.html">Pay / Donate</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/programs.html">Programs</a>
+        <a href="/board.html">Board</a>
+        <a href="/news.html">News</a>
+        <a href="/minutes.html">Meeting Minutes</a>
+        <a class="btn" href="/bylaws.html">Bylaws · Proclamation</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main>
+    <div class="wrapper">
+      <!-- Your chapter banner photo directly under the site header -->
+      <img class="hero-img"
+           src="/assets/photos/550539255_10163868473745295_3650245405852649566_n.jpg"
+           alt="CVC WVU Alumni — Go Mountaineers banner">
+
+      <!-- About the Chapter -->
+      <section class="card">
+        <h2>About the Chapter</h2>
+        <p>
+          Central Virginia Chapter membership is open to all West Virginia University alumni, family, and friends.
+          You do not have to be an alumnus of WVU to join! Your local chapter is a strong network of alumni dedicated
+          to supporting WVU and providing opportunities for fellowship with Mountaineers in nearby Central Virginia.
+          The chapter offers various ways to show your alma mater spirit in the community through social events,
+          Mountaineer athletics, community fundraising and scholarships for new and existing students.
+        </p>
+      </section>
+
+      <!-- Mission -->
+      <section class="card" style="margin-top:16px">
+        <h2>Mission</h2>
+        <p>
+          To foster fellowship, promote Mountaineer spirit, and support the West Virginia University Foundation in its
+          mission to enrich lives and maximize charitable support, both through community fundraising and by providing
+          scholarships for local students attending WVU.
+        </p>
+      </section>
+
+      <!-- Activities -->
+      <section class="card" style="margin-top:16px">
+        <h2>Activities</h2>
+        <p>
+          The WVU Central Virginia chapter fosters professional and social connections for Mountaineers in our region
+          through career networking events, community service projects, and opportunities to engage with current students,
+          all while upholding the WVU values of service, curiosity, accountability, appreciation, and respect.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer (bottom banner with links) -->
+  <footer class="site-footer">
+    <div class="wrapper">
+      <nav class="links">
+        <a href="/index.html">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/events.html">Events</a>
+        <a href="/scores.html">Scores</a>
+        <a href="/resources.html">Resources</a>
+        <a href="/scholarship.html">Scholarship</a>
+        <a href="/membership.html">Join / Renew</a>
+        <a href="/pay.html">Pay / Donate</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/programs.html">Programs</a>
+        <a href="/board.html">Board</a>
+        <a href="/news.html">News</a>
+        <a href="/minutes.html">Meeting Minutes</a>
+        <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
+      </nav>
+      <div class="meta">
+        Central Virginia WVU Alumni Association •
+        <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a>
       </div>
-      <nav><a href="/index.html">Home</a><a href="/about.html" class="active">About</a><a href="/events.html">Events</a><a href="/scores.html">Scores</a><a href="/resources/">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html">Join/Renew</a><a href="/pay.html">Pay / Donate</a><a href="/contact.html">Contact</a><a href="/programs.html">Programs</a><a href="/board.html">Board</a><a href="/news.html">News</a><a href="/minutes.html">Meeting Minutes</a></nav>
-    </header><main class="wrapper">
-  <img class="full" src="/assets/wvu-stadium.jpg" alt="WVU crowd">
-  <section class="section"><h2>About the Chapter</h2>
-  <p>The Central Virginia Chapter connects WVU alumni, parents, and friends across Greater Richmond. We host game watches, community service, and networking events, and we fund scholarships for local students.</p>
-</section>
-</main><footer class="site-footer">
-  <div class="wrapper">
-    <nav class="links">
-      <a href="/index.html">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/events.html">Events</a>
-      <a href="/scores.html">Scores</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/scholarship.html">Scholarship</a>
-      <a href="/membership.html">Join / Renew</a>
-      <a href="/pay.html">Pay / Donate</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/programs.html">Programs</a>
-      <a href="/board.html">Board</a>
-      <a href="/news.html">News</a>
-      <a href="/minutes.html">Meeting Minutes</a>
-      <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
-    </nav>
-    <div class="meta small">Central Virginia WVU Alumni • <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a></div>
-  </div>
-</footer></body></html>
+    </div>
+  </footer>
+</body>
+</html>

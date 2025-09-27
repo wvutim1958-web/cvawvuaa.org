@@ -1,78 +1,205 @@
-<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Join / Renew • CVCWVUAA</title><style>:root{--ink:#0b2545; --blue:#1b4d8a; --gold:#ffb81c; --bg:#f6f8fb; --muted:#5b6777}
-*{box-sizing:border-box}html,body{margin:0;padding:0}
-body{font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:#0f172a}
-a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
-.wrapper{max-width:1100px;margin:auto;padding:20px}
-header.site{background:linear-gradient(180deg,#0b2545 0%,#153a6b 100%);color:#fff}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
-.brand-wrap{display:flex;justify-content:center;align-items:center;width:100%;padding:12px 0}
-.brand img{width:72px;height:72px;border-radius:12px;object-fit:cover;display:block;box-shadow:0 1px 3px rgba(0,0,0,.25)}
-nav{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding-bottom:10px}
-nav a{color:#ffd56e;margin:0 4px;font-weight:600}
-nav a.active{border-bottom:2px solid var(--gold)}
-.hero{padding:36px 20px;color:#fff;background:linear-gradient(90deg,#153a6b 0%, #1b4d8a 60%, #2b6cb0 100%)}
-.hero h2{margin:0 0 8px 0}
-.grid{display:grid;gap:18px}
-@media(min-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
-.card{background:#fff;border:1px solid #e6e9ef;border-radius:14px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.card h3{margin:0 0 10px 0;font-size:18px;color:var(--ink)}
-footer.site{margin-top:32px;padding:18px;border-top:1px solid #e6e9ef;color:var(--muted);background:#fff}
-.note{background:#fff7e5;border:1px solid #ffe1a6;color:#5a4100;padding:12px;border-radius:10px}
-.btn{display:inline-block;background:var(--gold);color:#241e00;font-weight:700;padding:10px 14px;border-radius:10px}
-.btn:hover{filter:brightness(0.95);text-decoration:none}
-ul.clean{margin:0;padding-left:18px}
-.small{font-size:14px;color:var(--muted)}
-.section{margin:22px 0}
-img.full{width:100%;border-radius:14px}
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{border:1px solid #e6e9ef;padding:10px;text-align:left}
-.badge{display:inline-block;background:#e9eef7;border:1px solid #d4deee;border-radius:999px;padding:6px 10px;font-weight:600;color:#113a7a}
-.paybox{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.paybtn{display:inline-flex;align-items:center;gap:8px;background:#003087;color:#fff;border-radius:10px;padding:10px 14px;text-decoration:none;font-weight:700}
-.kbd{background:#eee;border-radius:6px;padding:2px 6px;border:1px solid #d0d7de}
-.tiles{display:grid;gap:16px}
-@media(min-width:900px){.tiles{grid-template-columns:repeat(3,1fr)}}
-</style><link rel='stylesheet' href='/css/styles.css'><link rel='icon' href='/assets/favicon.png'>  <link rel="stylesheet" href="/assets/wvu-brand.css?v=40">
-</head><body><header class="site">
-      <div class="brand-wrap">
-        <a class="brand" href="/index.html" aria-label="Central Virginia WVU Alumni">
-          <img src="/assets/logo.png" alt="CVCWVUAA logo">
-        </a>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CVCWVUAA • Join / Renew</title>
+
+  <!-- Keep your global site CSS if you have it -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- Lightweight WVU-style polish -->
+  <style>
+    :root{
+      --wvu-blue:#002855; --wvu-gold:#ffd100;
+      --ink:#0b2545; --muted:#5b6777; --bg:#f7f9fc; --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#111;font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    a{color:#1b4d8a;text-decoration:none} a:hover{text-decoration:underline}
+    .wrapper{max-width:1120px;margin:0 auto;padding:0 22px}
+
+    /* Header / nav */
+    header.site{background:linear-gradient(180deg,#0f3465 0%,#002855 100%);color:#fff}
+    .topbar{display:flex;align-items:center;gap:16px;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{max-height:56px;width:auto;height:auto;object-fit:contain}
+    nav a{color:#ffd56e;margin:0 .5rem;font-weight:700;display:inline-block;padding:.35rem .4rem;border-radius:6px}
+    nav a.active{box-shadow:inset 0 -3px 0 var(--wvu-gold)}
+    nav a.btn{background:var(--wvu-gold);color:var(--wvu-blue);border-radius:999px;padding:.45rem .8rem}
+
+    /* Page */
+    main{padding:22px 0 28px}
+    h1,h2,h3{color:#0b2a55;margin:16px 0 10px 0;font-weight:800}
+    .small{font-size:14px;color:var(--muted)}
+    .card{background:#fff;border:1px solid #e6e9ef;border-radius:12px;padding:18px}
+    .btn{display:inline-block;background:var(--wvu-gold);color:var(--wvu-blue);border-radius:999px;padding:.6rem .9rem;font-weight:800;text-decoration:none}
+    .btn:hover{filter:brightness(.96);text-decoration:none}
+
+    /* Image above heading */
+    .drive-img{width:100%;max-height:260px;object-fit:contain;display:block;margin:6px 0 8px 0}
+
+    /* Form */
+    form .row{display:flex;gap:12px;flex-wrap:wrap}
+    form .row > *{flex:1 1 260px}
+    input[type=text],input[type=email],input[type=tel],input[type=number],textarea,select{
+      width:100%;padding:10px;border:1px solid #d0d7de;border-radius:10px;background:#fff;font:inherit
+    }
+    fieldset{border:1px solid #e6e9ef;border-radius:12px;padding:12px;margin:12px 0}
+    label{font-weight:600;color:var(--ink)}
+
+    /* Footer */
+    footer.site-footer{background:linear-gradient(180deg,#0f3465 0%,#002855 100%);color:#fff;margin-top:28px}
+    footer.site-footer .links a{color:var(--wvu-gold);margin-right:14px;display:inline-block;padding:8px 0}
+    footer.site-footer .meta{color:#dfe7f5;font-size:14px;padding-bottom:12px}
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site">
+    <div class="wrapper topbar">
+      <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+        <img src="/assets/logo.png" alt="CVCWVUAA logo">
+      </a>
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/events.html">Events</a>
+        <a href="/scores.html">Scores</a>
+        <a href="/resources.html">Resources</a>
+        <a href="/scholarship.html">Scholarship</a>
+        <a href="/membership.html" class="active">Join / Renew</a>
+        <a href="/pay.html">Pay / Donate</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/programs.html">Programs</a>
+        <a href="/board.html">Board</a>
+        <a href="/news.html">News</a>
+        <a href="/minutes.html">Meeting Minutes</a>
+        <a class="btn" href="/bylaws.html">Bylaws · Proclamation</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main>
+    <div class="wrapper">
+
+      <!-- Membership Drive image above the heading -->
+      <img class="drive-img" src="/assets/photos/membership-drive.png"
+           alt="WVU Alumni Central Virginia — Membership Drive">
+
+      <h2>Membership 2025–2026</h2>
+      <p class="small">
+        Annual dues are <strong>$25 per member</strong> and <strong>$15 per additional family member</strong>.
+        Submit the form below, then <a href="/pay.html">pay your dues / donate online</a> or mail a check.
+      </p>
+
+      <!-- Mail-a-check details -->
+      <div class="card" style="margin-bottom:14px">
+        <h3 style="margin-top:0">Mail a Check</h3>
+        <p class="small" style="margin:0">
+          Make checks payable to: <strong>CVCWVAA</strong><br>
+          Mail to: <strong>4701 Stoney Creek Parkway, Chester, VA 23831</strong>
+        </p>
       </div>
-      <nav><a href="/index.html">Home</a><a href="/about.html">About</a><a href="/events.html">Events</a><a href="/scores.html">Scores</a><a href="/resources/">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html" class="active">Join/Renew</a><a href="/pay.html">Pay / Donate</a><a href="/contact.html">Contact</a><a href="/programs.html">Programs</a><a href="/board.html">Board</a><a href="/news.html">News</a><a href="/minutes.html">Meeting Minutes</a></nav>
-    </header><main class="wrapper">
-  <h2>Membership 2025–2026</h2>
-  <div class="card">
-    <form name="membership" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/membership.html?success=true">
-      <input type="hidden" name="form-name" value="membership"><input type="hidden" name="bot-field">
-      <p><label>First Name<br><input name="first" required></label></p>
-      <p><label>Last Name<br><input name="last" required></label></p>
-      <p><label>Email<br><input type="email" name="email" required></label></p>
-      <p><label>Phone<br><input name="phone"></label></p>
-      <p><label>Address<br><input name="address"></label></p>
-      <p><label>Notes<br><textarea name="notes" rows="4"></textarea></label></p>
-      <p><button class="btn" type="submit">Submit Membership</button> <a class="btn" href="/pay.html">Pay Dues / Donate</a></p>
-    </form>
-  </div>
-</main><footer class="site-footer">
-  <div class="wrapper">
-    <nav class="links">
-      <a href="/index.html">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/events.html">Events</a>
-      <a href="/scores.html">Scores</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/scholarship.html">Scholarship</a>
-      <a href="/membership.html">Join / Renew</a>
-      <a href="/pay.html">Pay / Donate</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/programs.html">Programs</a>
-      <a href="/board.html">Board</a>
-      <a href="/news.html">News</a>
-      <a href="/minutes.html">Meeting Minutes</a>
-      <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
-    </nav>
-    <div class="meta small">Central Virginia WVU Alumni • <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a></div>
-  </div>
-</footer></body></html>
+
+      <!-- PDF-style form (aligned to your uploaded membership page and PDF) -->
+      <div class="card">
+        <form action="mailto:president@cvawvuaa.org?subject=CVCWVUAA%20Membership"
+              method="post" enctype="text/plain" id="membership-form">
+          <!-- 1) Type of Membership -->
+          <fieldset>
+            <legend><strong>Type of Membership</strong></legend>
+            <label style="margin-right:16px">
+              <input type="radio" name="Membership Type" value="Member — $25" required>
+              Member — $25
+            </label>
+            <label>
+              <input type="radio" name="Membership Type" value="Family Member — $15">
+              Family Member — $15
+            </label>
+            <div style="margin-top:10px">
+              Additional Donation $
+              <input type="number" name="Additional Donation" min="0" step="1" style="width:120px">
+            </div>
+          </fieldset>
+
+          <!-- 2) Contact -->
+          <div class="row">
+            <div><label>First Name<br><input type="text" name="First Name" required autocomplete="given-name"></label></div>
+            <div><label>Last Name<br><input type="text" name="Last Name" required autocomplete="family-name"></label></div>
+          </div>
+          <div class="row">
+            <div><label>Email<br><input type="email" name="Email" required autocomplete="email"></label></div>
+            <div><label>Phone<br><input type="tel" name="Phone" placeholder="(804) 555‑1234" autocomplete="tel"></label></div>
+          </div>
+          <div class="row">
+            <div style="flex:1 1 100%"><label>Address<br>
+              <input type="text" name="Address" placeholder="Street, City, State, ZIP" autocomplete="street-address"></label>
+            </div>
+          </div>
+
+          <!-- 3) Interested in Volunteering? -->
+          <fieldset>
+            <legend><strong>Interested in Volunteering?</strong></legend>
+            <div class="row" style="gap:16px">
+              <label><input type="checkbox" name="Volunteer" value="Game Watch (Set-up/Help)"> Game Watch (Set‑up / Help</label>
+              <label><input type="checkbox" name="Volunteer" value="Fund Raising"> Fund Raising</label>
+              <label><input type="checkbox" name="Volunteer" value="Networking Events"> Networking Events</label>
+              <label><input type="checkbox" name="Volunteer" value="Social Events"> Social Events</label>
+              <label><input type="checkbox" name="Volunteer" value="Membership"> Membership</label>
+              <label><input type="checkbox" name="Volunteer" value="Social Media"> Social Media</label>
+            </div>
+            <div style="margin-top:8px">
+              Other: <input type="text" name="Volunteer - Other" style="max-width:360px">
+            </div>
+          </fieldset>
+
+          <!-- 4) Family Membership -->
+          <label>Family Membership (Please list additional family member names below)<br>
+            <textarea name="Family Members" rows="3" placeholder="Name 1; Name 2; Name 3; …"></textarea>
+          </label>
+
+          <!-- 5) Notes -->
+          <label>Notes<br>
+            <textarea name="Notes" rows="4"></textarea>
+          </label>
+
+          <!-- Actions -->
+          <p style="margin-top:12px">
+            <button class="btn" type="submit">Submit Membership</button>
+            <a class="btn" style="margin-left:8px" href="/pay.html">Pay Dues / Donate</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="wrapper">
+      <nav class="links">
+        <a href="/index.html">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/events.html">Events</a>
+        <a href="/scores.html">Scores</a>
+        <a href="/resources.html">Resources</a>
+        <a href="/scholarship.html">Scholarship</a>
+        <a href="/membership.html">Join / Renew</a>
+        <a href="/pay.html">Pay / Donate</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/programs.html">Programs</a>
+        <a href="/board.html">Board</a>
+        <a href="/news.html">News</a>
+        <a href="/minutes.html">Meeting Minutes</a>
+        <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
+      </nav>
+      <div class="meta">
+        Central Virginia WVU Alumni Association •
+        <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

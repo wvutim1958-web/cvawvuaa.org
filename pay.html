@@ -1,83 +1,218 @@
-<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Donate & Pay Dues • CVCWVUAA</title><style>:root{--ink:#0b2545; --blue:#1b4d8a; --gold:#ffb81c; --bg:#f6f8fb; --muted:#5b6777}
-*{box-sizing:border-box}html,body{margin:0;padding:0}
-body{font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:#0f172a}
-a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
-.wrapper{max-width:1100px;margin:auto;padding:20px}
-header.site{background:linear-gradient(180deg,#0b2545 0%,#153a6b 100%);color:#fff}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
-.brand-wrap{display:flex;justify-content:center;align-items:center;width:100%;padding:12px 0}
-.brand img{width:72px;height:72px;border-radius:12px;object-fit:cover;display:block;box-shadow:0 1px 3px rgba(0,0,0,.25)}
-nav{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding-bottom:10px}
-nav a{color:#ffd56e;margin:0 4px;font-weight:600}
-nav a.active{border-bottom:2px solid var(--gold)}
-.hero{padding:36px 20px;color:#fff;background:linear-gradient(90deg,#153a6b 0%, #1b4d8a 60%, #2b6cb0 100%)}
-.hero h2{margin:0 0 8px 0}
-.grid{display:grid;gap:18px}
-@media(min-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
-.card{background:#fff;border:1px solid #e6e9ef;border-radius:14px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.card h3{margin:0 0 10px 0;font-size:18px;color:var(--ink)}
-footer.site{margin-top:32px;padding:18px;border-top:1px solid #e6e9ef;color:var(--muted);background:#fff}
-.note{background:#fff7e5;border:1px solid #ffe1a6;color:#5a4100;padding:12px;border-radius:10px}
-.btn{display:inline-block;background:var(--gold);color:#241e00;font-weight:700;padding:10px 14px;border-radius:10px}
-.btn:hover{filter:brightness(0.95);text-decoration:none}
-ul.clean{margin:0;padding-left:18px}
-.small{font-size:14px;color:var(--muted)}
-.section{margin:22px 0}
-img.full{width:100%;border-radius:14px}
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{border:1px solid #e6e9ef;padding:10px;text-align:left}
-.badge{display:inline-block;background:#e9eef7;border:1px solid #d4deee;border-radius:999px;padding:6px 10px;font-weight:600;color:#113a7a}
-.paybox{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.paybtn{display:inline-flex;align-items:center;gap:8px;background:#003087;color:#fff;border-radius:10px;padding:10px 14px;text-decoration:none;font-weight:700}
-.kbd{background:#eee;border-radius:6px;padding:2px 6px;border:1px solid #d0d7de}
-.tiles{display:grid;gap:16px}
-@media(min-width:900px){.tiles{grid-template-columns:repeat(3,1fr)}}
-</style><link rel='stylesheet' href='/css/styles.css'><link rel='icon' href='/assets/favicon.png'>  <link rel="stylesheet" href="/assets/wvu-brand.css?v=40">
-</head><body><header class="site">
-      <div class="brand-wrap">
-        <a class="brand" href="/index.html" aria-label="Central Virginia WVU Alumni">
-          <img src="/assets/logo.png" alt="CVCWVUAA logo">
-        </a>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CVCWVUAA • Pay / Donate</title>
+
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <style>
+    :root{
+      --wvu-blue:#002855; --wvu-gold:#ffd100;
+      --ink:#0b2545; --muted:#5b6777; --bg:#f7f9fc; --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#111;font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    a{color:#1b4d8a;text-decoration:none} a:hover{text-decoration:underline}
+    .wrapper{max-width:1120px;margin:0 auto;padding:0 22px}
+
+    /* Header / nav */
+    header.site{background:linear-gradient(180deg,#0f3465 0%,#002855 100%);color:#fff}
+    .topbar{display:flex;align-items:center;gap:16px;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{max-height:56px;width:auto;height:auto;object-fit:contain}
+    nav a{color:#ffd56e;margin:0 .5rem;font-weight:700;display:inline-block;padding:.35rem .4rem;border-radius:6px}
+    nav a.active{box-shadow:inset 0 -3px 0 var(--wvu-gold)}
+    nav a.btn{background:var(--wvu-gold);color:var(--wvu-blue);border-radius:999px;padding:.45rem .8rem}
+
+    /* Page */
+    main{padding:22px 0 28px}
+    h1,h2,h3{color:#0b2a55;margin:16px 0 10px 0;font-weight:800}
+    .lead{font-size:18px;color:var(--ink)}
+    .small{font-size:14px;color:var(--muted)}
+    .card{background:#fff;border:1px solid #e6e9ef;border-radius:12px;padding:18px}
+    .btn{display:inline-block;background:var(--wvu-gold);color:var(--wvu-blue);border-radius:999px;padding:.6rem .9rem;font-weight:800;text-decoration:none}
+    .btn:hover{filter:brightness(.96);text-decoration:none}
+
+    /* Grid of options */
+    .grid{display:grid;gap:16px}
+    @media (min-width: 860px){ .grid{grid-template-columns:1fr 1fr 1fr} }
+
+    /* PayPal (scholarship) button you provided */
+    .pp-W2QGQMAKX8TWN{
+      text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;
+      padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;
+      color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;
+    }
+
+    /* Footer */
+    footer.site-footer{background:linear-gradient(180deg,#0f3465 0%,#002855 100%);color:#fff;margin-top:28px}
+    footer.site-footer .links a{color:var(--wvu-gold);margin-right:14px;display:inline-block;padding:8px 0}
+    footer.site-footer .meta{color:#dfe7f5;font-size:14px;padding-bottom:12px}
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site">
+    <div class="wrapper topbar">
+      <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+        <img src="/assets/logo.png" alt="CVCWVUAA logo">
+      </a>
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/events.html">Events</a>
+        <a href="/scores.html">Scores</a>
+        <a href="/resources.html">Resources</a>
+        <a href="/scholarship.html">Scholarship</a>
+        <a href="/membership.html">Join / Renew</a>
+        <a href="/pay.html" class="active">Pay / Donate</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/programs.html">Programs</a>
+        <a href="/board.html">Board</a>
+        <a href="/news.html">News</a>
+        <a href="/minutes.html">Meeting Minutes</a>
+        <a class="btn" href="/bylaws.html">Bylaws · Proclamation</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main>
+    <div class="wrapper">
+      <h2>WVU Alumni &amp; Friends – Central Virginia Chapter</h2>
+      <p class="lead"><strong>Membership Benefits</strong></p>
+      <p>
+        Please consider joining our organization by making the contribution listed below.
+        Membership helps support our organization, provide scholarships to local deserving
+        students in our region, and provide resources to new and existing students attending
+        West Virginia University.
+      </p>
+      <p>
+        Our Chapter is hoping to obtain tickets to upcoming sporting events and we have plans to
+        bring in featured guests from the University. Members will receive first opportunities to
+        participate in these events.
+      </p>
+
+      <h3>Membership</h3>
+
+      <div class="grid">
+        <!-- Single Membership $25 -->
+        <section class="card">
+          <h4>’25 Single Membership – Central Virginia Alumni Chapter</h4>
+          <p class="small"><strong>$25 / yr</strong></p>
+          <p><a class="btn"
+                href="https://www.paypal.com/donate/?hosted_button_id=P2MJTS44SXS4U"
+                target="_blank" rel="noopener">Join Online</a></p>
+          <p class="small">Annual dues for one member.</p>
+        </section>
+
+        <!-- Family Member $15 -->
+        <section class="card">
+          <h4>’25 Family Membership – Central Virginia Alumni Chapter</h4>
+          <p class="small"><strong>$15 / yr</strong></p>
+          <p><a class="btn"
+                href="https://www.paypal.com/donate/?hosted_button_id=H6L88M4VBJS8W"
+                target="_blank" rel="noopener">Join Online</a></p>
+          <p class="small">Add family member(s) to an existing membership.</p>
+        </section>
+
+        <!-- Pay by Mail -->
+        <section class="card">
+          <h4>’25 Membership – Pay By Mail</h4>
+          <p class="small">Single: $25 / yr • Family Member: $15 / yr</p>
+          <p><a class="btn" href="/membership.html">Go to Membership Form</a></p>
+          <p class="small">Make checks payable to <strong>CVCWVAA</strong> and mail to:<br>
+            4701 Stoney Creek Parkway, Chester, VA 23831</p>
+        </section>
+
+        <!-- General Chapter Donation -->
+        <section class="card">
+          <h4>Additional Contribution to Assist the Organization</h4>
+          <p class="small">A donation to support the organization — you decide how much to give.</p>
+
+          <!-- If you have a specific PayPal “donate” button code for general donations,
+               paste it below and remove the <a> fallback. -->
+          <p><a class="btn" href="https://www.paypal.com/donate/?hosted_button_id=P2MJTS44SXS4U" target="_blank" rel="noopener">Donate</a></p>
+
+          <p class="small note" style="margin-top:10px">
+            On the PayPal page, please add a note: <em>“General donation.”</em>
+          </p>
+        </section>
+
+        <!-- Scholarship – your PayPal button code (as provided) -->
+        <section class="card">
+          <h4>Give to the Chapter Scholarship</h4>
+          <p class="small">Support the <strong>WVU Alumni Central Virginia Chapter Scholarship</strong>.</p>
+
+          <!-- BEGIN: PayPal Scholarship button (exactly as you provided) -->
+          <form action="https://www.paypal.com/ncp/payment/W2QGQMAKX8TWN" method="post" target="_blank"
+                style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
+            <input class="pp-W2QGQMAKX8TWN" type="submit" value="Buy Now" />
+            <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="cards" />
+            <section style="font-size:0.75rem;">
+              Powered by
+              <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg"
+                   alt="paypal" style="height:0.875rem;vertical-align:middle;"/>
+            </section>
+          </form>
+          <!-- END: PayPal Scholarship button -->
+
+          <!-- Optional: If/when you have the WVU Foundation link, add it here too -->
+          <!-- <p style="margin-top:10px"><a class="btn" href="https://secure.give.wvu.edu/YOUR-FOUNDATION-LINK" target="_blank" rel="noopener">Give via WVU Foundation</a></p> -->
+        </section>
+
+        <!-- Contact / Sponsorship -->
+        <section class="card">
+          <h4>Contact the Chapter About Support &amp; Volunteering</h4>
+          <p class="small">
+            I’d like to discuss how I can support your organization or provide sponsorship for an upcoming event.
+          </p>
+          <p><a class="btn" href="mailto:president@cvawvuaa.org">Click to Email the Chapter</a></p>
+        </section>
       </div>
-      <nav><a href="/index.html">Home</a><a href="/about.html">About</a><a href="/events.html">Events</a><a href="/scores.html">Scores</a><a href="/resources/">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html">Join/Renew</a><a href="/pay.html" class="active">Pay / Donate</a><a href="/contact.html">Contact</a><a href="/programs.html">Programs</a><a href="/board.html">Board</a><a href="/news.html">News</a><a href="/minutes.html">Meeting Minutes</a></nav>
-    </header><main class="wrapper">
-  <h2>Pay Dues / Donate</h2>
-  <div class="tiles">
-    <div class="card"><h3>Pay Annual Dues</h3>
-      <p>Dues are <strong>$25</strong> per person each year. After submitting your <a href="/membership.html">membership form</a>, pay here.</p>
-      <p class="paybox"><a class="paybtn" href="https://www.paypal.com/ncp/payment/T3KL8ZLPL25Q2">Open PayPal</a></p>
+
+      <p class="small" style="margin-top:12px">
+        <strong>If you wish to pay by check,</strong> please follow the membership form link above.
+      </p>
+
+      <div class="card" style="margin-top:12px">
+        <p class="small">
+          Membership fees support the organization’s goals and mission; we are a <strong>501(c)(3)</strong>
+          all‑volunteer organization and no compensation is received by any board member. Dues support the
+          cost to run our organization with the primary focus to continue to provide annual scholarships
+          through our <strong>WVU Alumni Central Virginia Chapter Scholarship</strong> (endowed).
+        </p>
+      </div>
     </div>
-    <div class="card"><h3>Make a General Donation</h3>
-      <p>Your gifts keep our chapter running—events, web, outreach.</p>
-      <p class="paybox"><a class="paybtn" href="https://www.paypal.com/ncp/payment/T3KL8ZLPL25Q2">Donate via PayPal</a></p>
-      <p class="small">Add a note like <span class="kbd">General Donation</span> on the PayPal page.</p>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="wrapper">
+      <nav class="links">
+        <a href="/index.html">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/events.html">Events</a>
+        <a href="/scores.html">Scores</a>
+        <a href="/resources.html">Resources</a>
+        <a href="/scholarship.html">Scholarship</a>
+        <a href="/membership.html">Join / Renew</a>
+        <a href="/pay.html">Pay / Donate</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/programs.html">Programs</a>
+        <a href="/board.html">Board</a>
+        <a href="/news.html">News</a>
+        <a href="/minutes.html">Meeting Minutes</a>
+        <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
+      </nav>
+      <div class="meta">
+        Central Virginia WVU Alumni Association •
+        <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a>
+      </div>
     </div>
-    <div class="card"><h3>Give to the Scholarship</h3>
-      <p>Use the same PayPal link and add a note <span class="kbd">Scholarship</span>. We’ll remit to WVU Foundation.</p>
-      <p class="paybox"><a class="paybtn" href="https://www.paypal.com/ncp/payment/T3KL8ZLPL25Q2">Donate via PayPal</a></p>
-      <img class="full" src="/assets/paypal-qr.png" alt="PayPal QR">
-      <p class="small">Or give via WVU Foundation: <a href="https://give.wvu.edu/campaign/central-virginia-alumni-chapter/c426286">Campaign page</a>.</p>
-    </div>
-  </div>
-</main><footer class="site-footer">
-  <div class="wrapper">
-    <nav class="links">
-      <a href="/index.html">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/events.html">Events</a>
-      <a href="/scores.html">Scores</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/scholarship.html">Scholarship</a>
-      <a href="/membership.html">Join / Renew</a>
-      <a href="/pay.html">Pay / Donate</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/programs.html">Programs</a>
-      <a href="/board.html">Board</a>
-      <a href="/news.html">News</a>
-      <a href="/minutes.html">Meeting Minutes</a>
-      <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
-    </nav>
-    <div class="meta small">Central Virginia WVU Alumni • <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a></div>
-  </div>
-</footer></body></html>
+  </footer>
+</body>
+</html>
