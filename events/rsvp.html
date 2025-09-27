@@ -1,23 +1,46 @@
-<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'>
+<!doctype html><html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RSVP</title>
-<link rel="stylesheet" href="/css/styles.css"><link rel="icon" href="/assets/favicon.png">
-<link rel="stylesheet" href="/assets/site-fixes.css">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/assets/wvu-brand.css?v=40">
 </head>
 <body>
-<header class='site'>
-  <div class='brand-wrap'><a class='brand' href='/index.html'><img src='/assets/logo.png' alt='CVCWVUAA'></a></div>
-  <nav><a href='/index.html'>Home</a><a href='/events.html' class='active'>Events</a></nav>
-</header>
+<header class="site"><div class="wrapper"><a class="brand" href="/"><img src="/assets/logo.png" alt="CVCWVUAA"></a></div></header>
 <main><div class="wrapper">
   <h2>RSVP</h2>
   <form action="mailto:president@cvawvuaa.org" method="post" enctype="text/plain">
-    <p><label>Name<br><input type="text" name="Name" required></label></p>
-    <p><label>Game / Event<br><input type="text" name="Game" required></label></p>
-    <p><label>How many?<br><input type="number" name="Count" min="1" value="1" required></label></p>
-    <p><label>Special requests<br><textarea name="Requests" rows="4"></textarea></label></p>
+    <div class="form-grid">
+      <div><label>Name<br><input type="text" name="Name" required></label></div>
+      <div><label>Game / Event<br><input id="game" type="text" name="Game" required></label></div>
+      <div><label>How many?<br><input type="number" name="Count" min="1" value="1" required></label></div>
+      <div><label>Special requests<br><input type="text" name="Requests"></label></div>
+    </div>
     <p><button type="submit" class="btn">Send RSVP</button> <a class="btn" href="/events.html">Back to Events</a></p>
-    <p class="small">Note: This uses your email app to send the RSVP. If you'd like a hosted form, I can wire it up.</p>
+    <p class="small">This opens your email app. Prefer a hosted form? We can publish one.</p>
   </form>
 </div></main>
-<footer class="site-footer"><div class="wrapper small">© CVCWVUAA</div></footer>
+<script>
+const params=new URLSearchParams(location.search);const g=params.get('game');if(g){document.getElementById('game').value=g;}
+</script>
+<footer class="site-footer">
+  <div class="wrapper">
+    <nav class="links">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/events.html">Events</a>
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/membership.html">Join / Renew</a>
+      <a href="/pay.html">Pay / Donate</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/board.html">Board</a>
+      <a href="/news.html">News</a>
+      <a href="/minutes.html">Meeting Minutes</a>
+      <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
+    </nav>
+    <div class="meta small">Central Virginia WVU Alumni • <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a></div>
+  </div>
+</footer>
 </body></html>

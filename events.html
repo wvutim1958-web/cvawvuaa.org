@@ -33,18 +33,17 @@ img.full{width:100%;border-radius:14px}
 .kbd{background:#eee;border-radius:6px;padding:2px 6px;border:1px solid #d0d7de}
 .tiles{display:grid;gap:16px}
 @media(min-width:900px){.tiles{grid-template-columns:repeat(3,1fr)}}
-</style><link rel='stylesheet' href='/css/styles.css'><link rel='icon' href='/assets/favicon.png'>  <link rel="stylesheet" href="/assets/wvu-brand.css?v=20250926">
-  <link rel="stylesheet" href="/assets/site-fixes.css?v=20250926">
+</style><link rel='stylesheet' href='/css/styles.css'><link rel='icon' href='/assets/favicon.png'>  <link rel="stylesheet" href="/assets/wvu-brand.css?v=40">
 </head><body><header class="site">
       <div class="brand-wrap">
         <a class="brand" href="/index.html" aria-label="Central Virginia WVU Alumni">
-          <img src="/assets/logo.png" alt="CVCWVUAA logo">
+          <img src="/assets/logo.png" alt="CVCWVUAA logo" style="max-height:280px;width:auto;height:auto">
         </a>
       </div>
-      <nav><a href="/index.html">Home</a><a href="/about.html">About</a><a href="/events.html" class="active">Events</a><a href="/scores.html">Scores</a><a href="/resources/">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html">Join/Renew</a><a href="/pay.html">Pay / Donate</a><a href="/contact.html">Contact</a></nav>
+      <nav><a href="/index.html">Home</a><a href="/about.html">About</a><a href="/events.html" class="active">Events</a><a href="/scores.html">Scores</a><a href="/resources/">Resources</a><a href="/scholarship.html">Scholarship</a><a href="/membership.html">Join/Renew</a><a href="/pay.html">Pay / Donate</a><a href="/contact.html">Contact</a><a href="/programs.html">Programs</a><a href="/board.html">Board</a><a href="/news.html">News</a><a href="/minutes.html">Meeting Minutes</a></nav>
     </header><main class="wrapper">
   <h2>Events & Watch Parties</h2>
-  <img class="full" src="/assets/activities-2025.png" alt="2025-26 chapter activities">
+  <img class="full" src="/assets/activities-2025.png" alt="2025-26 chapter activities" style="max-height:280px;width:auto;height:auto">
   <div class="card"><h3>2025–26 Game Watches</h3>
     <ul class="clean">
       <li><strong>Sat, Aug 30 — Robert Morris</strong> • 2:00 PM</li>
@@ -54,7 +53,33 @@ img.full{width:100%;border-radius:14px}
     </ul>
     <p class="small">Final times subject to TV. Watch location announced via email and Facebook.</p>
   </div>
-</main><footer class="site"><div class="wrapper">
-      Central Virginia WVU Alumni Association • <a href="mailto:president@cvawvuaa.org">president@cvawvuaa.org</a> • (804) 566-8058
-      <p class="small"><a href="/bylaws.html">Bylaws & Proclamation (PDF)</a> • <a href="/scholarship.html">Scholarship</a> • <a href="/pay.html">Donate / Pay Dues</a></p>
-    </div></footer></body></html>
+</main><footer class="site-footer">
+  <div class="wrapper">
+    <nav class="links">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/events.html">Events</a>
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/membership.html">Join / Renew</a>
+      <a href="/pay.html">Pay / Donate</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/board.html">Board</a>
+      <a href="/news.html">News</a>
+      <a href="/minutes.html">Meeting Minutes</a>
+      <a href="/bylaws.html">Bylaws &amp; Proclamation</a>
+    </nav>
+    <div class="meta small">Central Virginia WVU Alumni • <a href="mailto:president@cvawvuaa.org" style="color:#fff;text-decoration:underline">president@cvawvuaa.org</a></div>
+  </div>
+</footer>
+<script>
+function rsvp(game){
+  const subject = encodeURIComponent("RSVP: " + game);
+  const body = encodeURIComponent("Name:%0D%0AHow many:%0D%0ASpecial requests:%0D%0A");
+  window.location.href = "mailto:president@cvawvuaa.org?subject="+subject+"&body="+body;
+}
+</script>
+
+</body></html>
