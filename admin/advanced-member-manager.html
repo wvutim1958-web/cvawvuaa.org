@@ -304,7 +304,7 @@
       </select>
       <input type="number" class="filter-select" id="yearFilter" placeholder="2025" min="2020" max="2030" onchange="filterMembers()">
       <button class="action-btn" onclick="openAddMemberModal()">➕ Add Member</button>
-      <button class="action-btn" onclick="importFromCSV()" style="background: #10b981; margin-left: 10px;">📁 Import CSV</button>
+      <button class="action-btn" onclick="console.log('Import button clicked'); importFromCSV()" style="background: #10b981; margin-left: 10px;">📁 Import CSV</button>
     </div>
 
     <!-- Bulk Actions -->
@@ -613,21 +613,46 @@ function downloadMasterCSV() {
 
 // CSV Import functionality
 function importFromCSV() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.csv';
-  input.onchange = function(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const csvText = e.target.result;
-        parseCSVToMembers(csvText);
-      };
-      reader.readAsText(file);
-    }
-  };
-  input.click();
+  try {
+    console.log('🔍 Starting CSV import process...');
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.csv';
+    input.onchange = function(event) {
+      try {
+        console.log('📁 File selected:', event.target.files[0]?.name);
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            try {
+              console.log('📖 File read successfully, parsing CSV...');
+              const csvText = e.target.result;
+              parseCSVToMembers(csvText);
+            } catch (parseError) {
+              console.error('❌ Error parsing CSV:', parseError);
+              alert('Error parsing CSV file: ' + parseError.message);
+            }
+          };
+          reader.onerror = function(e) {
+            console.error('❌ Error reading file:', e);
+            alert('Error reading file. Please try again.');
+          };
+          reader.readAsText(file);
+        } else {
+          console.log('❌ No file selected');
+        }
+      } catch (fileError) {
+        console.error('❌ Error handling file selection:', fileError);
+        alert('Error selecting file: ' + fileError.message);
+      }
+    };
+    input.click();
+    console.log('✅ File dialog opened');
+  } catch (error) {
+    console.error('❌ Error in importFromCSV:', error);
+    alert('Import function error: ' + error.message);
+  }
 }
 
 function smartMergeMembers(csvMembers) {
@@ -875,22 +900,7 @@ function parseCSVToMembers(csvText) {
           hasAdminPaymentChanges: existingMember ? existingMember.hasAdminPaymentChanges : false
         };
         
-        newMembers.push(memberData);hone: phone,
-          type: type,
-          duesStatus: duesStatus,
-          lastPayment: lastPaid || null,
-          year: 2025,
-          streetAddress: streetAddress,
-          city: city,
-          state: state,
-          zip: zip,
-          fullAddress: fullAddress,
-          // New financial fields
-          totalAmountPaid: parseFloat(totalAmountPaid) || 0,
-          scholarshipAmount: parseFloat(scholarshipAmount) || 0,
-          duesAmount: parseFloat(duesAmount) || 0,
-          generalFundAmount: parseFloat(generalFundAmount) || 0
-        });
+        newMembers.push(memberData);
       }
     }
   }
