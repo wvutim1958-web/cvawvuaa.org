@@ -641,9 +641,15 @@ function renderMemberCards() {
           <div class="member-info-item">
             <span>🎓</span> Class of ${member.classYear} (${member.major})
           </div>
+          ${member.fullAddress ? `
+          <div class="member-info-item">
+            <span>🏠</span> ${member.fullAddress}
+          </div>
+          ` : `
           <div class="member-info-item">
             <span>📍</span> ${member.city}, VA
           </div>
+          `}
           <div class="member-info-item">
             <span>💳</span> ${member.type.charAt(0).toUpperCase() + member.type.slice(1)} Member
           </div>
@@ -875,6 +881,28 @@ function showEditModal(member) {
           <input type="tel" id="editPhone" value="${member.phone}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
         
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Street Address:</label>
+          <input type="text" id="editStreetAddress" value="${member.streetAddress || ''}" placeholder="123 Main St" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem;">
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">City:</label>
+            <input type="text" id="editCity" value="${member.city || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+          
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">State:</label>
+            <input type="text" id="editState" value="${member.state || 'VA'}" maxlength="2" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+          
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">ZIP:</label>
+            <input type="text" id="editZip" value="${member.zip || ''}" placeholder="12345" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+        </div>
+        
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div>
             <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Membership Type:</label>
@@ -896,16 +924,9 @@ function showEditModal(member) {
           </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div>
-            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Class Year:</label>
-            <input type="text" id="editClassYear" value="${member.classYear || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-          </div>
-          
-          <div>
-            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">City:</label>
-            <input type="text" id="editCity" value="${member.city || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-          </div>
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Class Year:</label>
+          <input type="text" id="editClassYear" value="${member.classYear || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
         
         <div>
@@ -935,8 +956,16 @@ function saveMemberEdits(memberId) {
   member.type = document.getElementById('editType').value;
   member.duesStatus = document.getElementById('editDuesStatus').value;
   member.classYear = document.getElementById('editClassYear').value;
+  member.streetAddress = document.getElementById('editStreetAddress').value;
   member.city = document.getElementById('editCity').value;
+  member.state = document.getElementById('editState').value;
+  member.zip = document.getElementById('editZip').value;
   member.lastPayment = document.getElementById('editLastPayment').value;
+  
+  // Update full address
+  member.fullAddress = [member.streetAddress, member.city, member.state, member.zip]
+    .filter(part => part && part.trim())
+    .join(', ');
   
   // Update status for consistency
   member.status = member.duesStatus;
@@ -1014,6 +1043,28 @@ function showAddModal() {
           <input type="tel" id="addPhone" placeholder="(555) 123-4567" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
         
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Street Address:</label>
+          <input type="text" id="addStreetAddress" placeholder="123 Main St" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem;">
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">City:</label>
+            <input type="text" id="addCity" placeholder="e.g. Richmond" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+          
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">State:</label>
+            <input type="text" id="addState" value="VA" maxlength="2" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+          
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">ZIP:</label>
+            <input type="text" id="addZip" placeholder="12345" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+        </div>
+        
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div>
             <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Membership Type:</label>
@@ -1035,16 +1086,9 @@ function showAddModal() {
           </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div>
-            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Class Year:</label>
-            <input type="text" id="addClassYear" placeholder="e.g. 2010" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-          </div>
-          
-          <div>
-            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">City:</label>
-            <input type="text" id="addCity" placeholder="e.g. Richmond" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-          </div>
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Class Year:</label>
+          <input type="text" id="addClassYear" placeholder="e.g. 2010" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
         
         <div>
@@ -1074,6 +1118,15 @@ function saveNewMember() {
     return;
   }
   
+  // Get address fields
+  const streetAddress = document.getElementById('addStreetAddress').value.trim();
+  const city = document.getElementById('addCity').value.trim() || 'Virginia';
+  const state = document.getElementById('addState').value.trim() || 'VA';
+  const zip = document.getElementById('addZip').value.trim();
+  
+  // Build full address
+  const fullAddress = [streetAddress, city, state, zip].filter(part => part).join(', ');
+  
   // Create new member
   const newId = Math.max(...members.map(m => m.id), 0) + 1;
   const newMember = {
@@ -1084,7 +1137,11 @@ function saveNewMember() {
     type: document.getElementById('addType').value,
     duesStatus: document.getElementById('addDuesStatus').value,
     classYear: document.getElementById('addClassYear').value.trim() || 'Alumni',
-    city: document.getElementById('addCity').value.trim() || 'Virginia',
+    streetAddress: streetAddress,
+    city: city,
+    state: state,
+    zip: zip,
+    fullAddress: fullAddress,
     lastPayment: document.getElementById('addLastPayment').value || null,
     year: parseInt(document.getElementById('addClassYear').value) || new Date().getFullYear()
   };
@@ -1168,6 +1225,14 @@ function parseCSVForDirectory(csvText) {
           duesStatus = 'pending';
         }
         
+        // Build full address from CSV fields
+        const streetAddress = record['Street Address'] || record['Address'] || '';
+        const city = record['City'] || '';
+        const state = record['State'] || record['State/Province'] || 'VA';
+        const zip = record['ZIP'] || record['Zip Code'] || record['Postal Code'] || '';
+        
+        const fullAddress = [streetAddress, city, state, zip].filter(part => part).join(', ');
+        
         newMembers.push({
           id: id++,
           name: name,
@@ -1179,7 +1244,11 @@ function parseCSVForDirectory(csvText) {
           year: new Date(lastPaid).getFullYear() || 2025,
           classYear: record['Class Year'] || "Alumni",
           major: record['Major'] || "Alumni",
-          city: record['City'] || "Virginia"
+          city: city || "Virginia",
+          streetAddress: streetAddress,
+          state: state,
+          zip: zip,
+          fullAddress: fullAddress
         });
       }
     }
