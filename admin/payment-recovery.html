@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Data Recovery Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d73027;
+            text-align: center;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .found {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .missing {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .data-preview {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn.danger {
+            background: #dc3545;
+        }
+        .btn.danger:hover {
+            background: #c82333;
+        }
+        .btn.success {
+            background: #28a745;
+        }
+        .btn.success:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 Payment Data Recovery Tool</h1>
+        
+        <div id="recoveryResults"></div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <button class="btn" onclick="scanForData()">🔍 Scan for Payment Data</button>
+            <button class="btn success" onclick="attemptRecovery()" id="recoveryBtn" style="display: none;">💾 Recover Payment Data</button>
+            <button class="btn" onclick="exportAllData()">📄 Export All Data</button>
+        </div>
+    </div>
+
+    <script>
+        let recoveryData = {};
+        
+        function scanForData() {
+            const results = document.getElementById('recoveryResults');
+            results.innerHTML = '<h3>🔍 Scanning localStorage for payment data...</h3>';
+            
+            recoveryData = {};
+            let html = '';
+            
+            // Check all possible localStorage keys
+            const keysToCheck = [
+                'cvcwvuaa-members',
+                'cvcwvuaa-directory-members', 
+                'members',
+                'cvcwvuaa-master-csv',
+                'cvcwvuaa-backup-members',
+                'savedMembers'
+            ];
+            
+            keysToCheck.forEach(key => {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        html += generateDataSection(key, parsed);
+                        recoveryData[key] = parsed;
+                    } catch (e) {
+                        html += `
+                            <div class="section missing">
+                                <h4>❌ ${key}</h4>
+                                <p>Found data but failed to parse as JSON</p>
+                                <div class="data-preview">${data.substring(0, 500)}...</div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    html += `
+                        <div class="section missing">
+                            <h4>❌ ${key}</h4>
+                            <p>No data found</p>
+                        </div>
+                    `;
+                }
+            });
+            
+            // Check for any payment-related data in the found datasets
+            let hasPaymentData = false;
+            Object.keys(recoveryData).forEach(key => {
+                const data = recoveryData[key];
+                if (Array.isArray(data)) {
+                    const sampleMember = data[0];
+                    if (sampleMember && (
+                        sampleMember.totalAmountPaid || 
+                        sampleMember.duesAmount || 
+                        sampleMember.scholarshipAmount ||
+                        sampleMember.hasAdminPaymentChanges
+                    )) {
+                        hasPaymentData = true;
+                    }
+                }
+            });
+            
+            if (hasPaymentData) {
+                html += `
+                    <div class="section found">
+                        <h4>✅ Payment Data Found!</h4>
+                        <p>Found payment data in localStorage. Recovery is possible!</p>
+                    </div>
+                `;
+                document.getElementById('recoveryBtn').style.display = 'inline-block';
+            } else {
+                html += `
+                    <div class="section missing">
+                        <h4>❌ No Payment Data Found</h4>
+                        <p>No payment data found in any localStorage backup. You may need to re-enter payment information.</p>
+                    </div>
+                `;
+            }
+            
+            results.innerHTML = html;
+        }
+        
+        function generateDataSection(key, data) {
+            if (!data) return '';
+            
+            let info = '';
+            let hasPaymentData = false;
+            
+            if (Array.isArray(data)) {
+                info = `Array with ${data.length} members`;
+                if (data.length > 0) {
+                    const sample = data[0];
+                    info += `\\nSample member: ${sample.name || 'Unknown'}`;
+                    
+                    // Check for payment fields
+                    if (sample.totalAmountPaid || sample.duesAmount || sample.scholarshipAmount) {
+                        hasPaymentData = true;
+                        info += `\\n💰 HAS PAYMENT DATA:`;
+                        if (sample.totalAmountPaid) info += ` Total: $${sample.totalAmountPaid}`;
+                        if (sample.duesAmount) info += ` Dues: $${sample.duesAmount}`;
+                        if (sample.scholarshipAmount) info += ` Scholarship: $${sample.scholarshipAmount}`;
+                    }
+                }
+            } else if (typeof data === 'string') {
+                info = `CSV/String data (${data.length} chars)`;
+            } else {
+                info = `Object with ${Object.keys(data).length} properties`;
+            }
+            
+            return `
+                <div class="section ${hasPaymentData ? 'found' : 'missing'}">
+                    <h4>${hasPaymentData ? '💰' : '📄'} ${key}</h4>
+                    <p>${info}</p>
+                    <div class="data-preview">${JSON.stringify(data, null, 2).substring(0, 500)}${JSON.stringify(data).length > 500 ? '...' : ''}</div>
+                </div>
+            `;
+        }
+        
+        function attemptRecovery() {
+            // Find the best source of payment data
+            let bestSource = null;
+            let bestData = null;
+            
+            // Priority order: look for data with payment info
+            const priorityKeys = ['cvcwvuaa-members', 'cvcwvuaa-directory-members', 'members'];
+            
+            for (const key of priorityKeys) {
+                if (recoveryData[key] && Array.isArray(recoveryData[key])) {
+                    const data = recoveryData[key];
+                    if (data.length > 0 && (
+                        data[0].totalAmountPaid || 
+                        data[0].duesAmount || 
+                        data[0].scholarshipAmount ||
+                        data.some(m => m.hasAdminPaymentChanges)
+                    )) {
+                        bestSource = key;
+                        bestData = data;
+                        break;
+                    }
+                }
+            }
+            
+            if (bestData) {
+                // Restore the payment data
+                localStorage.setItem('cvcwvuaa-members', JSON.stringify(bestData));
+                localStorage.setItem('cvcwvuaa-last-sync', new Date().toISOString());
+                
+                alert(`✅ Payment data recovered from ${bestSource}!\\n\\nFound payment data for ${bestData.filter(m => m.totalAmountPaid > 0).length} members.\\n\\nPlease refresh the Advanced Member Manager to see the restored data.`);
+            } else {
+                alert('❌ No recoverable payment data found. You may need to re-enter payment information.');
+            }
+        }
+        
+        function exportAllData() {
+            const exportData = {
+                timestamp: new Date().toISOString(),
+                recoveryData: recoveryData
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', `payment-data-recovery-${new Date().toISOString().split('T')[0]}.json`);
+            linkElement.click();
+        }
+        
+        // Auto-scan on load
+        document.addEventListener('DOMContentLoaded', scanForData);
+    </script>
+</body>
+</html>
