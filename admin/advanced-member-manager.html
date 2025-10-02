@@ -889,42 +889,118 @@ function sendDuesReminders() {
 
 function showEmailPreview(overdueMembers) {
   const emails = overdueMembers.map(m => m.email).join('; ');
-  const subject = 'CVCWVUAA - Membership Dues Reminder';
-  const body = `Dear Fellow Mountaineer,
+  const subject = 'CVCWVUAA - 2025 Membership Dues Reminder';
+  
+  // HTML formatted email body with actual payment links from pay.html
+  const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .header { background: #002855; color: #ffd100; padding: 20px; text-align: center; }
+    .content { padding: 20px; }
+    .payment-options { background: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 8px; }
+    .btn { display: inline-block; background: #002855; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px; }
+    .btn:hover { background: #ffd100; color: #002855; }
+    .footer { background: #f1f1f1; padding: 15px; text-align: center; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>🏔️ Central Virginia Chapter WVU Alumni Association</h2>
+    <p>Let's Go Mountaineers!</p>
+  </div>
+  
+  <div class="content">
+    <p>Dear Fellow Mountaineer,</p>
+    
+    <p>This is a friendly reminder that your <strong>2025 membership dues</strong> are overdue for the Central Virginia Chapter of West Virginia University Alumni Association.</p>
+    
+    <p>Your membership helps support our organization, provide scholarships to local deserving students, and provide resources to new and existing students attending WVU.</p>
+    
+    <div class="payment-options">
+      <h3>💳 Pay Your Dues Online:</h3>
+      <p><strong>Single Membership:</strong> $25/year</p>
+      <p><a href="https://www.paypal.com/donate/?hosted_button_id=P2MJTS44SXS4U" class="btn" target="_blank">Pay Single Membership - $25</a></p>
+      
+      <p><strong>Family Member Addition:</strong> $15/year</p>
+      <p><a href="https://www.paypal.com/donate/?hosted_button_id=H6L88M4VBJS8W" class="btn" target="_blank">Pay Family Addition - $15</a></p>
+      
+      <h3>📮 Pay by Mail:</h3>
+      <p>Make checks payable to <strong>CVCWVUAA</strong><br>
+      Mail to: <strong>4701 Stoney Creek Parkway, Chester, VA 23831</strong></p>
+    </div>
+    
+    <p>As a <strong>501(c)(3)</strong> all-volunteer organization, membership fees support our goals and mission with the primary focus to continue providing annual scholarships through our <strong>WVU Alumni Central Virginia Chapter Scholarship</strong> (endowed).</p>
+    
+    <p>Members receive first opportunities to participate in sporting events and special guest appearances from the University.</p>
+    
+    <p>Please renew at your earliest convenience to maintain your membership benefits and support our chapter activities.</p>
+    
+    <p>Thank you for your continued support!</p>
+    
+    <p><strong>Let's Go Mountaineers! 🔥🏔️</strong></p>
+    
+    <p>Central Virginia Chapter WVU Alumni Association<br>
+    <a href="https://cvawvuaa.org">cvawvuaa.org</a></p>
+  </div>
+  
+  <div class="footer">
+    <p>© 2025 CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved.<br>
+    WVU and West Virginia University are trademarks of West Virginia University.</p>
+  </div>
+</body>
+</html>`;
 
-This is a friendly reminder that your Central Virginia Chapter of West Virginia University Alumni Association membership dues are overdue for 2025.
+  // Plain text version for email clients that don't support HTML
+  const textBody = `Dear Fellow Mountaineer,
 
-Annual Dues: $25 (Individual) / $35 (Family)
+This is a friendly reminder that your 2025 membership dues are overdue for the Central Virginia Chapter of West Virginia University Alumni Association.
 
-You can pay your dues by:
-• Venmo: @CVCWVUAA
-• PayPal: treasurer@cvawvuaa.org
-• Check: Mail to CVCWVUAA, P.O. Box 12345, Richmond, VA 23230
+PAYMENT OPTIONS:
 
-Please renew at your earliest convenience to maintain your membership benefits and support our chapter activities.
+Online Payment:
+• Single Membership ($25): https://www.paypal.com/donate/?hosted_button_id=P2MJTS44SXS4U
+• Family Addition ($15): https://www.paypal.com/donate/?hosted_button_id=H6L88M4VBJS8W
+
+Mail Payment:
+Make checks payable to CVCWVUAA
+Mail to: 4701 Stoney Creek Parkway, Chester, VA 23831
+
+Your membership helps support scholarships and chapter activities.
 
 Thank you for your continued support!
 
 Let's Go Mountaineers! 🔥🏔️
 
-Central Virginia Chapter WVU Alumni Association`;
+Central Virginia Chapter WVU Alumni Association
+https://cvawvuaa.org`;
 
   // Create modal for email preview
   const modal = document.createElement('div');
   modal.className = 'modal';
   modal.innerHTML = `
-    <div class="modal-content" style="max-width: 800px;">
+    <div class="modal-content" style="max-width: 900px; height: 80vh;">
       <h2>📧 Dues Reminder Email Preview</h2>
       <p><strong>Recipients (${overdueMembers.length} members):</strong></p>
-      <div style="background: #f5f5f5; padding: 10px; border-radius: 5px; margin-bottom: 15px; max-height: 100px; overflow-y: auto;">
+      <div style="background: #f5f5f5; padding: 10px; border-radius: 5px; margin-bottom: 15px; max-height: 80px; overflow-y: auto; font-size: 12px;">
         ${emails}
       </div>
       
       <p><strong>Subject:</strong></p>
       <input type="text" id="emailSubject" value="${subject}" style="width: 100%; margin-bottom: 15px;">
       
-      <p><strong>Message:</strong></p>
-      <textarea id="emailBody" style="width: 100%; height: 300px; margin-bottom: 15px;">${body}</textarea>
+      <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+        <button onclick="showHtmlPreview()" class="btn-primary" style="padding: 5px 15px;">📄 HTML Preview</button>
+        <button onclick="showTextVersion()" class="btn-secondary" style="padding: 5px 15px;">📝 Text Version</button>
+      </div>
+      
+      <div id="emailPreview" style="border: 1px solid #ccc; height: 300px; overflow-y: auto; margin-bottom: 15px;">
+        ${htmlBody}
+      </div>
+      
+      <textarea id="emailBody" style="display: none; width: 100%; height: 300px; margin-bottom: 15px;">${textBody}</textarea>
       
       <div style="text-align: right;">
         <button onclick="closeEmailModal()" class="btn-secondary" style="margin-right: 10px;">Cancel</button>
@@ -936,15 +1012,42 @@ Central Virginia Chapter WVU Alumni Association`;
   
   document.body.appendChild(modal);
   modal.style.display = 'flex';
+  
+  // Store the HTML body for later use
+  modal.htmlBody = htmlBody;
+  modal.textBody = textBody;
+}
+
+function showHtmlPreview() {
+  const modal = document.querySelector('.modal');
+  const preview = document.getElementById('emailPreview');
+  const textarea = document.getElementById('emailBody');
+  
+  preview.style.display = 'block';
+  textarea.style.display = 'none';
+  preview.innerHTML = modal.htmlBody;
+}
+
+function showTextVersion() {
+  const modal = document.querySelector('.modal');
+  const preview = document.getElementById('emailPreview');
+  const textarea = document.getElementById('emailBody');
+  
+  preview.style.display = 'none';
+  textarea.style.display = 'block';
+  textarea.value = modal.textBody;
 }
 
 function openEmailClient() {
   const subject = document.getElementById('emailSubject').value;
-  const body = document.getElementById('emailBody').value;
   const overdueMembers = members.filter(m => m.duesStatus === 'overdue' && m.email);
   const emails = overdueMembers.map(m => m.email).join(';');
   
-  const mailtoLink = `mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  // Use text version for mailto links (HTML not supported in mailto)
+  const modal = document.querySelector('.modal');
+  const textBody = modal.textBody;
+  
+  const mailtoLink = `mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(textBody)}`;
   
   // Try multiple methods to open email
   try {
@@ -959,7 +1062,7 @@ function openEmailClient() {
     }, 100);
     
     closeEmailModal();
-    alert(`✅ Email client should open with ${overdueMembers.length} recipients.\n\nIf it doesn't open automatically, try the "Copy Email Info" button instead.`);
+    alert(`✅ Email client should open with ${overdueMembers.length} recipients.\n\nNote: The email will open in text format (HTML formatting not supported in mailto links).\n\nFor HTML email, use "Copy Email Info" and paste into your email program, then switch to HTML mode.`);
   } catch (error) {
     alert('❌ Could not open email client automatically. Please use the "Copy Email Info" button to copy the details and paste them manually into your email program.');
   }
@@ -967,15 +1070,31 @@ function openEmailClient() {
 
 function copyEmailInfo() {
   const subject = document.getElementById('emailSubject').value;
-  const body = document.getElementById('emailBody').value;
   const overdueMembers = members.filter(m => m.duesStatus === 'overdue' && m.email);
   const emails = overdueMembers.map(m => m.email).join('; ');
+  const modal = document.querySelector('.modal');
   
-  const emailInfo = `TO: ${emails}\n\nSUBJECT: ${subject}\n\nMESSAGE:\n${body}`;
+  // Create comprehensive email info with both versions
+  const emailInfo = `TO: ${emails}
+
+SUBJECT: ${subject}
+
+=================== HTML VERSION (Recommended) ===================
+${modal.htmlBody}
+
+=================== TEXT VERSION (Fallback) ===================
+${modal.textBody}
+
+INSTRUCTIONS:
+1. Copy the HTML version above
+2. Paste into your email program
+3. Switch your email to HTML/Rich Text mode
+4. The formatting and clickable links will appear
+5. If HTML doesn't work, use the text version instead`;
   
   navigator.clipboard.writeText(emailInfo).then(() => {
     closeEmailModal();
-    alert(`📋 Email information copied to clipboard!\n\nRecipients: ${overdueMembers.length} members\n\nYou can now paste this into your email program.`);
+    alert(`📋 Complete email information copied to clipboard!\n\nRecipients: ${overdueMembers.length} members\n\nIncludes both HTML (with clickable links) and text versions.\n\nPaste into your email program and use HTML mode for best results.`);
   }).catch(() => {
     // Fallback for browsers that don't support clipboard API
     const textArea = document.createElement('textarea');
@@ -985,7 +1104,7 @@ function copyEmailInfo() {
     document.execCommand('copy');
     document.body.removeChild(textArea);
     closeEmailModal();
-    alert(`📋 Email information copied to clipboard!\n\nRecipients: ${overdueMembers.length} members`);
+    alert(`📋 Email information copied to clipboard!\n\nRecipients: ${overdueMembers.length} members\n\nIncludes HTML and text versions.`);
   });
 }
 
