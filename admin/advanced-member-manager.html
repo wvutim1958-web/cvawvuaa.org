@@ -817,7 +817,7 @@ function parseCSVToMembers(csvText) {
   if (!proceed) return;
   
   console.log('CSV Headers found:', headers);
-  console.log('Missing optional fields:', missingOptional);
+  console.log('Starting CSV processing...');
   
   const newMembers = [];
   let id = Math.max(...members.map(m => m.id), 0) + 1;
