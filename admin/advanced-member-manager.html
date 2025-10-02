@@ -748,44 +748,48 @@ function smartMergeMembers(csvMembers) {
   };
 }
 
+// Helper function to find field value with flexible matching
+function findFieldValue(record, possibleNames) {
+  for (const name of possibleNames) {
+    // Try exact match first
+    if (record[name]) return record[name];
+    
+    // Try case-insensitive partial match
+    const found = Object.keys(record).find(key => 
+      key.toLowerCase().includes(name.toLowerCase())
+    );
+    if (found && record[found]) return record[found];
+  }
+  return '';
+}
+
 function parseCSVToMembers(csvText) {
   const lines = csvText.split('\n');
   const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
   
-  // Validate that CSV has required fields
-  const requiredFields = [
-    'First Name(s)',
-    'Last Name', 
-    'E-mail Address (Primary)'
-  ];
+  // More flexible CSV validation - accept whatever columns exist
+  console.log('🔍 CSV Headers found:', headers);
   
-  const optionalFields = [
-    'Primary Phone',
-    'Home Address',
-    'City',
-    'State', 
-    'Zip Code',
-    'Type of Membership',
-    'Membership Last Paid',
-    'Dues',
-    'Total Amount Paid',
-    'Scholarship',
-    'General Fund'
-  ];
+  // Look for name fields with flexible matching
+  const hasNames = headers.some(h => 
+    h.toLowerCase().includes('first') || 
+    h.toLowerCase().includes('last') ||
+    h.toLowerCase().includes('name')
+  );
   
-  // Check for required fields
-  const missingRequired = requiredFields.filter(field => !headers.includes(field));
-  if (missingRequired.length > 0) {
-    alert(`❌ CSV Import Error\n\nRequired fields missing:\n${missingRequired.join('\n')}\n\nPlease ensure your CSV has these exact column names.`);
+  if (!hasNames) {
+    alert(`❌ CSV Import Error\n\nNo name fields detected.\nHeaders found: ${headers.join(', ')}\n\nPlease ensure your CSV has name columns.`);
     return;
   }
   
-  // Check for recommended fields and warn if missing
-  const missingOptional = optionalFields.filter(field => !headers.includes(field));
-  if (missingOptional.length > 0) {
-    const proceed = confirm(`⚠️ CSV Import Warning\n\nOptional fields missing:\n${missingOptional.join('\n')}\n\nYou can continue importing, but these fields will be empty.\n\nContinue with import?`);
-    if (!proceed) return;
-  }
+  // Backup existing data before import
+  const backupKey = 'cvcwvuaa-members-backup-' + Date.now();
+  localStorage.setItem(backupKey, JSON.stringify(members));
+  console.log(`💾 Created backup: ${backupKey}`);
+  
+  // Show import preview
+  const proceed = confirm(`📋 CSV Import Preview\n\nFound ${lines.length - 1} member records\nHeaders: ${headers.slice(0, 6).join(', ')}${headers.length > 6 ? '...' : ''}\n\nThis will MERGE with existing data (preserving payments).\nBackup created: ${backupKey}\n\nContinue import?`);
+  if (!proceed) return;
   
   console.log('CSV Headers found:', headers);
   console.log('Missing optional fields:', missingOptional);
@@ -802,15 +806,18 @@ function parseCSVToMembers(csvText) {
         record[header] = values[index] ? values[index].trim().replace(/"/g, '') : '';
       });
       
-      // Only add if we have a name
-      if (record['Last Name'] || record['First Name(s)']) {
-        const name = `${record['First Name(s)']} ${record['Last Name']}`;
-        const email = record['E-mail Address (Primary)'] || '';
-        const phone = record['Primary Phone'] || '';
+      // Flexible field extraction - find fields regardless of exact names
+      const firstName = findFieldValue(record, ['first name', 'first', 'fname']) || '';
+      const lastName = findFieldValue(record, ['last name', 'last', 'lname', 'surname']) || '';
+      const name = `${firstName} ${lastName}`.trim();
+      
+      if (name) {
+        const email = findFieldValue(record, ['email', 'e-mail', 'mail']) || '';
+        const phone = findFieldValue(record, ['phone', 'telephone', 'tel']) || '';
         
         // Determine membership type
         let type = 'individual';
-        const membershipType = record['Type of Membership'] || '';
+        const membershipType = findFieldValue(record, ['membership', 'type']) || '';
         if (membershipType.toLowerCase().includes('joint') || membershipType.toLowerCase().includes('family')) {
           type = 'family';
         } else if (membershipType.toLowerCase().includes('student')) {
@@ -819,49 +826,56 @@ function parseCSVToMembers(csvText) {
           type = 'lifetime';
         }
         
-        // Determine dues status (you can customize this logic)
+        // Determine dues status
         let duesStatus = 'overdue';
-        const lastPaid = record['Membership Last Paid'] || '';
+        const lastPaid = findFieldValue(record, ['last paid', 'paid', 'payment']) || '';
         if (lastPaid && new Date(lastPaid).getFullYear() === 2025) {
           duesStatus = 'current';
-        } else if (record['Dues'] && record['Dues'] !== '0') {
+        } else if (findFieldValue(record, ['dues']) && findFieldValue(record, ['dues']) !== '0') {
           duesStatus = 'pending';
         }
         
-        // Get financial data fields
-        // membershipType already defined above, using it directly
-        const totalAmountPaid = record['Total Amount Paid'] || '0';
-        const scholarshipAmount = record['Scholarship'] || '0';
-        const duesAmount = record['Dues'] || '0';
-        const generalFundAmount = record['General Fund'] || '0';
+        // Get financial data fields (flexible matching)
+        const totalAmountPaid = parseFloat(findFieldValue(record, ['total amount paid', 'total paid', 'amount paid']) || '0') || 0;
+        const scholarshipAmount = parseFloat(findFieldValue(record, ['scholarship']) || '0') || 0;
+        const duesAmount = parseFloat(findFieldValue(record, ['dues', 'dues amount']) || '0') || 0;
+        const generalFundAmount = parseFloat(findFieldValue(record, ['general fund', 'fund']) || '0') || 0;
         
-        // Use exact field names from your CSV
-        const streetAddress = record['Home Address'] || '';
-        const city = record['City'] || '';
-        const state = record['State'] || '';
-        const zip = record['Zip Code'] || '';
+        // Get address fields (flexible matching)
+        const streetAddress = findFieldValue(record, ['home address', 'address', 'street']) || '';
+        const city = findFieldValue(record, ['city', 'town']) || '';
+        const state = findFieldValue(record, ['state', 'st']) || '';
+        const zip = findFieldValue(record, ['zip', 'zip code', 'postal']) || '';
         
         // Debug logging for address data
-        console.log(`Processing member ${name}:`);
-        console.log(`  Raw CSV record keys:`, Object.keys(record));
-        console.log(`  Home Address: "${record['Home Address']}" -> "${streetAddress}"`);
-        console.log(`  City: "${record['City']}" -> "${city}"`);
-        console.log(`  State: "${record['State']}" -> "${state}"`);
-        console.log(`  Zip Code: "${record['Zip Code']}" -> "${zip}"`);
+        // Check if member already exists
+        const existingMember = members.find(m => m.name === name || m.email === email);
         
-        if (streetAddress || city || state || zip) {
-          console.log(`✅ Address data found for ${name}:`, {streetAddress, city, state, zip});
-        } else {
-          console.log(`❌ No address data found for ${name}`);
-        }
-        
-        const fullAddress = [streetAddress, city, state, zip].filter(part => part).join(', ');
-        
-        newMembers.push({
-          id: id++,
+        const memberData = {
+          id: existingMember ? existingMember.id : id++,
           name: name,
           email: email,
           phone: phone,
+          type: type,
+          duesStatus: duesStatus,
+          lastPayment: lastPaid || null,
+          year: 2025,
+          streetAddress: streetAddress,
+          city: city,
+          state: state,
+          zip: zip,
+          fullAddress: fullAddress,
+          // Financial fields - preserve existing data if it exists and is higher
+          totalAmountPaid: existingMember ? Math.max(existingMember.totalAmountPaid || 0, totalAmountPaid) : totalAmountPaid,
+          scholarshipAmount: existingMember ? Math.max(existingMember.scholarshipAmount || 0, scholarshipAmount) : scholarshipAmount,
+          duesAmount: existingMember ? Math.max(existingMember.duesAmount || 0, duesAmount) : duesAmount,
+          generalFundAmount: existingMember ? Math.max(existingMember.generalFundAmount || 0, generalFundAmount) : generalFundAmount,
+          // Preserve admin change flags
+          hasAdminFinancialChanges: existingMember ? existingMember.hasAdminFinancialChanges : false,
+          hasAdminPaymentChanges: existingMember ? existingMember.hasAdminPaymentChanges : false
+        };
+        
+        newMembers.push(memberData);hone: phone,
           type: type,
           duesStatus: duesStatus,
           lastPayment: lastPaid || null,
