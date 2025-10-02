@@ -313,6 +313,7 @@
         <option value="older">Before 1980</option>
       </select>
       <button class="action-btn" onclick="openAddMemberModal()">➕ Add Member</button>
+      <button class="action-btn success" onclick="importCSVToDirectory()">📁 Import CSV</button>
     </div>
   </div>
 
@@ -539,92 +540,61 @@
 </div>
 
 <script>
-// Sample member data - matches the advanced member manager
-let members = [
-  {
-    id: 1,
-    name: "Tim & Karen Castelli",
-    email: "president@cvawvuaa.org",
-    phone: "(804) 555-0123",
-    type: "family",
-    duesStatus: "current",
-    lastPayment: "2025-01-15",
-    year: 1998,
-    classYear: "1998",
-    major: "Engineering",
-    city: "Richmond"
-  },
-  {
-    id: 2,
-    name: "Sarah Montgomery",
-    email: "sarah.montgomery@email.com", 
-    phone: "(757) 555-0456",
-    type: "individual",
-    duesStatus: "overdue",
-    lastPayment: "2024-08-20",
-    year: 2010,
-    classYear: "2010",
-    major: "Business",
-    city: "Virginia Beach"
-  },
-  {
-    id: 3,
-    name: "Jessica Williams",
-    email: "jwilliams@mix.wvu.edu",
-    phone: "(540) 555-0789",
-    type: "student",
-    duesStatus: "current",
-    lastPayment: "2025-01-10",
-    year: 2024,
-    classYear: "2024",
-    major: "Communications",
-    city: "Charlottesville"
-  },
-  {
-    id: 4,
-    name: "David & Linda Thompson",
-    email: "dthompson@email.com",
-    phone: "(703) 555-0321",
-    type: "family",
-    duesStatus: "overdue",
-    lastPayment: "2024-09-15",
-    year: 1985,
-    classYear: "1985",
-    major: "Medicine",
-    city: "Alexandria"
-  },
-  {
-    id: 5,
-    name: "Mark Roberts",
-    email: "mroberts@email.com",
-    phone: "(804) 555-0987",
-    type: "individual",
-    duesStatus: "current",
-    lastPayment: "2025-02-01",
-    year: 2005,
-    classYear: "2005",
-    major: "Computer Science",
-    city: "Richmond"
-  },
-  {
-    id: 6,
-    name: "Amanda & Chris Johnson",
-    email: "ajohnson@email.com",
-    phone: "(757) 555-0654",
-    type: "family",
-    duesStatus: "pending",
-    lastPayment: null,
-    year: 1992,
-    classYear: "1992",
-    major: "Education",
-    city: "Norfolk"
+// Real member data loaded from CSV - starts empty until imported
+let members = [];
+
+// Load real member data from localStorage (shared with advanced member manager)
+function loadRealMembers() {
+  const savedMembers = localStorage.getItem('cvcwvuaa-members');
+  if (savedMembers) {
+    try {
+      const memberData = JSON.parse(savedMembers);
+      // Convert advanced manager data to directory format
+      members = memberData.map(member => ({
+        ...member,
+        classYear: member.year || "Unknown",
+        major: "Alumni", // Default since CSV might not have major
+        city: "Virginia", // Default since CSV might not have city
+        status: member.duesStatus
+      }));
+    } catch (e) {
+      console.error('Error loading saved members:', e);
+      members = [];
+    }
   }
-];
+}
 
 // Initialize the member directory
 function initializeDirectory() {
-  updateMemberStats();
-  renderMemberCards();
+  loadRealMembers(); // Load real member data first
+  
+  if (members.length === 0) {
+    showEmptyDirectoryState();
+  } else {
+    updateMemberStats();
+    renderMemberCards();
+  }
+}
+
+// Show empty state when no real members are loaded
+function showEmptyDirectoryState() {
+  const grid = document.getElementById('memberGrid');
+  grid.innerHTML = `
+    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 12px;">
+      <h3>📋 No Members Loaded</h3>
+      <p>Import your CVCWVUAA membership database CSV to view all real members here.</p>
+      <p>Go to <strong>Advanced Member Manager</strong> to import your CSV file.</p>
+      <a href="/admin/advanced-member-manager.html" class="btn-primary" style="display: inline-block; padding: 12px 24px; text-decoration: none; margin-top: 10px;">
+        📁 Go to Member Manager
+      </a>
+    </div>
+  `;
+  
+  // Set stats to zero
+  document.querySelector('.stat-card:nth-child(1) .stat-number').textContent = 0;
+  document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = 0;
+  document.querySelector('.stat-card:nth-child(3) .stat-number').textContent = 0;
+  document.querySelector('.stat-card:nth-child(4) .stat-number').textContent = 0;
 }
 
 // Update statistics
@@ -884,6 +854,118 @@ function deleteMember(id) {
 
 function openAddMemberModal() {
   alert('➕ Add New Member\n\nThis would open a form to add:\n• Member information\n• Contact details\n• Membership type\n• Initial dues status');
+}
+
+function importCSVToDirectory() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.csv';
+  input.onchange = function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const csvText = e.target.result;
+        parseCSVForDirectory(csvText);
+      };
+      reader.readAsText(file);
+    }
+  };
+  input.click();
+}
+
+function parseCSVForDirectory(csvText) {
+  const lines = csvText.split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+  
+  const newMembers = [];
+  let id = 1;
+  
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim()) {
+      const values = parseCSVLine(lines[i]);
+      const record = {};
+      
+      headers.forEach((header, index) => {
+        record[header] = values[index] ? values[index].trim().replace(/"/g, '') : '';
+      });
+      
+      // Only add if we have a name
+      if (record['Last Name'] || record['First Name(s)']) {
+        const name = `${record['First Name(s)']} ${record['Last Name']}`.trim();
+        const email = record['E-mail Address (Primary)'] || '';
+        const phone = record['Primary Phone'] || '';
+        
+        // Determine membership type
+        let type = 'individual';
+        const membershipType = record['Type of Membership'] || '';
+        if (membershipType.toLowerCase().includes('joint') || membershipType.toLowerCase().includes('family')) {
+          type = 'family';
+        } else if (membershipType.toLowerCase().includes('student')) {
+          type = 'student';
+        } else if (membershipType.toLowerCase().includes('lifetime')) {
+          type = 'lifetime';
+        }
+        
+        // Determine dues status
+        let duesStatus = 'overdue';
+        const lastPaid = record['Membership Last Paid'] || '';
+        if (lastPaid && new Date(lastPaid).getFullYear() === 2025) {
+          duesStatus = 'current';
+        } else if (record['Dues'] && record['Dues'] !== '0') {
+          duesStatus = 'pending';
+        }
+        
+        newMembers.push({
+          id: id++,
+          name: name,
+          email: email,
+          phone: phone,
+          type: type,
+          duesStatus: duesStatus,
+          lastPayment: lastPaid || null,
+          year: new Date(lastPaid).getFullYear() || 2025,
+          classYear: record['Class Year'] || "Alumni",
+          major: record['Major'] || "Alumni",
+          city: record['City'] || "Virginia"
+        });
+      }
+    }
+  }
+  
+  if (newMembers.length > 0) {
+    const confirmImport = confirm(`Import ${newMembers.length} real members from CSV?`);
+    if (confirmImport) {
+      members = newMembers;
+      // Save to localStorage so it syncs with advanced member manager
+      localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+      initializeDirectory();
+      alert(`✅ Successfully imported ${newMembers.length} real CVCWVUAA members!`);
+    }
+  } else {
+    alert('No valid member records found in CSV file');
+  }
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current);
+  return result;
 }
 
 // Initialize directory when page loads

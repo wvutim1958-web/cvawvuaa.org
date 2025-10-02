@@ -409,7 +409,7 @@ let members = [];
 let currentEditingId = null;
 let pendingAction = null;
 
-// Initialize with sample data or load from CSV
+// Initialize with real member data from CSV or show empty state
 function initializeMembers() {
   // Check if we have saved member data from CSV upload
   const savedMembers = localStorage.getItem('cvcwvuaa-members');
@@ -423,70 +423,26 @@ function initializeMembers() {
     }
   }
   
-  // Default sample data - Real CVCWVUAA members for demonstration
-  members = [
-    {
-      id: 1,
-      name: "Tim & Karen Castelli",
-      email: "president@cvawvuaa.org",
-      phone: "(804) 555-0123",
-      type: "family",
-      duesStatus: "current",
-      lastPayment: "2025-01-15",
-      year: 2025
-    },
-    {
-      id: 2,
-      name: "Sarah Montgomery",
-      email: "sarah.montgomery@email.com", 
-      phone: "(757) 555-0456",
-      type: "individual",
-      duesStatus: "overdue",
-      lastPayment: "2024-08-20",
-      year: 2025
-    },
-    {
-      id: 3,
-      name: "Jessica Williams",
-      email: "jwilliams@mix.wvu.edu",
-      phone: "(540) 555-0789",
-      type: "student",
-      duesStatus: "current",
-      lastPayment: "2025-01-10",
-      year: 2025
-    },
-    {
-      id: 4,
-      name: "David & Linda Thompson",
-      email: "dthompson@email.com",
-      phone: "(703) 555-0321",
-      type: "family",
-      duesStatus: "overdue",
-      lastPayment: "2024-09-15",
-      year: 2025
-    },
-    {
-      id: 5,
-      name: "Mark Roberts",
-      email: "mroberts@email.com",
-      phone: "(804) 555-0987",
-      type: "individual",
-      duesStatus: "current",
-      lastPayment: "2025-02-01",
-      year: 2025
-    },
-    {
-      id: 6,
-      name: "Amanda & Chris Johnson",
-      email: "ajohnson@email.com",
-      phone: "(757) 555-0654",
-      type: "family",
-      duesStatus: "pending",
-      lastPayment: null,
-      year: 2025
-    }
-  ];
+  // No sample data - start empty until real CSV is imported
+  members = [];
+  showEmptyState();
+}
+
+function showEmptyState() {
+  const container = document.querySelector('.members-container');
+  if (container) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 12px; margin: 2rem 0;">
+        <h3>📋 No Members Loaded</h3>
+        <p>Import your CVCWVUAA membership database CSV to see all real members here.</p>
+        <button onclick="importFromCSV()" class="btn-primary" style="padding: 12px 24px; font-size: 16px;">
+          📁 Import Member Database CSV
+        </button>
+      </div>
+    `;
+  }
   
+  // Update stats to show zero
   updateDisplay();
 }
 
@@ -576,7 +532,7 @@ function parseCSVToMembers(csvText) {
       members = newMembers;
       saveMembers();
       updateDisplay();
-      alert(`✅ Successfully imported ${newMembers.length} members from CSV!`);
+      alert(`✅ Successfully imported ${newMembers.length} REAL CVCWVUAA members from CSV!\n\nYour real member database is now loaded and ready to use.`);
     }
   } else {
     alert('No valid member records found in CSV file');
