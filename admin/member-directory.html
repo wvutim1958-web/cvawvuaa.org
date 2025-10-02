@@ -1286,9 +1286,8 @@ function parseCSVForDirectory(csvText) {
   const lines = csvText.split('\n');
   const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
   
-  // Debug: Show what headers we found
+  // Debug: Log headers to console (check browser dev tools)
   console.log('CSV Headers found:', headers);
-  alert('CSV Headers found:\n' + headers.join('\n'));
   
   const newMembers = [];
   let id = 1;
@@ -1328,25 +1327,46 @@ function parseCSVForDirectory(csvText) {
           duesStatus = 'pending';
         }
         
-        // Build full address from CSV fields - check multiple possible field names
+        // Build full address from CSV fields - comprehensive field name search
         const streetAddress = record['Street Address'] || 
                              record['Address'] || 
                              record['Mailing Address'] || 
                              record['Home Address'] ||
-                             record['Physical Address'] || '';
+                             record['Physical Address'] ||
+                             record['Street'] ||
+                             record['Address Line 1'] ||
+                             record['Address1'] ||
+                             record['Addr'] || '';
+                             
         const city = record['City'] || 
                     record['Home City'] || 
-                    record['Mailing City'] || '';
+                    record['Mailing City'] ||
+                    record['Town'] ||
+                    record['Municipality'] || '';
+                    
         const state = record['State'] || 
                      record['State/Province'] || 
                      record['Home State'] ||
-                     record['Mailing State'] || 'VA';
+                     record['Mailing State'] ||
+                     record['ST'] ||
+                     record['Province'] || 'VA';
+                     
         const zip = record['ZIP'] || 
                    record['Zip Code'] || 
                    record['Postal Code'] ||
                    record['Home ZIP'] ||
                    record['Mailing ZIP'] ||
-                   record['ZIP Code'] || '';
+                   record['ZIP Code'] ||
+                   record['Zip'] ||
+                   record['PostalCode'] ||
+                   record['Postal'] || '';
+        
+        // Log what we found for debugging
+        if (streetAddress || city || zip) {
+          console.log(`Address found for ${name}:`, {streetAddress, city, state, zip});
+        } else {
+          console.log(`No address data found for ${name} in fields:`, Object.keys(record));
+        }
         
         const fullAddress = [streetAddress, city, state, zip].filter(part => part).join(', ');
         
