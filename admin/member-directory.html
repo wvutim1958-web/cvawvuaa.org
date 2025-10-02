@@ -834,8 +834,129 @@ function exportRenewalList() {
 function editMember(id) {
   const member = members.find(m => m.id === id);
   if (member) {
-    alert(`✏️ Edit Member: ${member.name}\n\nThis would open an edit form with:\n• Personal information\n• Contact details\n• Membership type\n• Payment history`);
+    showEditModal(member);
   }
+}
+
+function showEditModal(member) {
+  // Create edit modal
+  const modal = document.createElement('div');
+  modal.className = 'edit-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  `;
+  
+  modal.innerHTML = `
+    <div style="background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+      <h2>✏️ Edit Member: ${member.name}</h2>
+      
+      <div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Name:</label>
+          <input type="text" id="editName" value="${member.name}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Email:</label>
+          <input type="email" id="editEmail" value="${member.email}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Phone:</label>
+          <input type="tel" id="editPhone" value="${member.phone}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Membership Type:</label>
+            <select id="editType" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="individual" ${member.type === 'individual' ? 'selected' : ''}>Individual</option>
+              <option value="family" ${member.type === 'family' ? 'selected' : ''}>Family</option>
+              <option value="student" ${member.type === 'student' ? 'selected' : ''}>Student</option>
+              <option value="lifetime" ${member.type === 'lifetime' ? 'selected' : ''}>Lifetime</option>
+            </select>
+          </div>
+          
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Dues Status:</label>
+            <select id="editDuesStatus" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="current" ${member.duesStatus === 'current' ? 'selected' : ''}>Current</option>
+              <option value="overdue" ${member.duesStatus === 'overdue' ? 'selected' : ''}>Overdue</option>
+              <option value="pending" ${member.duesStatus === 'pending' ? 'selected' : ''}>Pending</option>
+            </select>
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Class Year:</label>
+            <input type="text" id="editClassYear" value="${member.classYear || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+          
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">City:</label>
+            <input type="text" id="editCity" value="${member.city || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+        </div>
+        
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Last Payment Date:</label>
+          <input type="date" id="editLastPayment" value="${member.lastPayment || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+      </div>
+      
+      <div style="text-align: right; margin-top: 1.5rem;">
+        <button onclick="closeEditModal()" style="background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 6px; margin-right: 10px; cursor: pointer;">Cancel</button>
+        <button onclick="saveMemberEdits(${member.id})" style="background: var(--wvu-blue, #002855); color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Save Changes</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+}
+
+function saveMemberEdits(memberId) {
+  const member = members.find(m => m.id === memberId);
+  if (!member) return;
+  
+  // Get updated values from form
+  member.name = document.getElementById('editName').value;
+  member.email = document.getElementById('editEmail').value;
+  member.phone = document.getElementById('editPhone').value;
+  member.type = document.getElementById('editType').value;
+  member.duesStatus = document.getElementById('editDuesStatus').value;
+  member.classYear = document.getElementById('editClassYear').value;
+  member.city = document.getElementById('editCity').value;
+  member.lastPayment = document.getElementById('editLastPayment').value;
+  
+  // Update status for consistency
+  member.status = member.duesStatus;
+  
+  // Save to localStorage so it syncs with advanced member manager
+  localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+  
+  // Refresh the display
+  renderMemberCards();
+  updateMemberStats();
+  
+  // Close modal
+  closeEditModal();
+  
+  alert(`✅ Successfully updated ${member.name}!`);
+}
+
+function closeEditModal() {
+  const modals = document.querySelectorAll('.edit-modal');
+  modals.forEach(modal => modal.remove());
 }
 
 function emailMember(email) {
@@ -853,7 +974,138 @@ function deleteMember(id) {
 }
 
 function openAddMemberModal() {
-  alert('➕ Add New Member\n\nThis would open a form to add:\n• Member information\n• Contact details\n• Membership type\n• Initial dues status');
+  showAddModal();
+}
+
+function showAddModal() {
+  // Create add modal
+  const modal = document.createElement('div');
+  modal.className = 'edit-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  `;
+  
+  modal.innerHTML = `
+    <div style="background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+      <h2>➕ Add New Member</h2>
+      
+      <div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Name: *</label>
+          <input type="text" id="addName" placeholder="e.g. John Smith or John & Jane Smith" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+        </div>
+        
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Email: *</label>
+          <input type="email" id="addEmail" placeholder="member@email.com" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+        </div>
+        
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Phone:</label>
+          <input type="tel" id="addPhone" placeholder="(555) 123-4567" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Membership Type:</label>
+            <select id="addType" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="individual">Individual</option>
+              <option value="family">Family</option>
+              <option value="student">Student</option>
+              <option value="lifetime">Lifetime</option>
+            </select>
+          </div>
+          
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Dues Status:</label>
+            <select id="addDuesStatus" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="pending">Pending</option>
+              <option value="current">Current</option>
+              <option value="overdue">Overdue</option>
+            </select>
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Class Year:</label>
+            <input type="text" id="addClassYear" placeholder="e.g. 2010" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+          
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">City:</label>
+            <input type="text" id="addCity" placeholder="e.g. Richmond" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+        </div>
+        
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Last Payment Date:</label>
+          <input type="date" id="addLastPayment" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+      </div>
+      
+      <div style="text-align: right; margin-top: 1.5rem;">
+        <button onclick="closeEditModal()" style="background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 6px; margin-right: 10px; cursor: pointer;">Cancel</button>
+        <button onclick="saveNewMember()" style="background: var(--wvu-blue, #002855); color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Add Member</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+}
+
+function saveNewMember() {
+  // Get values from form
+  const name = document.getElementById('addName').value.trim();
+  const email = document.getElementById('addEmail').value.trim();
+  
+  // Validate required fields
+  if (!name || !email) {
+    alert('❌ Please fill in at least Name and Email fields.');
+    return;
+  }
+  
+  // Create new member
+  const newId = Math.max(...members.map(m => m.id), 0) + 1;
+  const newMember = {
+    id: newId,
+    name: name,
+    email: email,
+    phone: document.getElementById('addPhone').value.trim(),
+    type: document.getElementById('addType').value,
+    duesStatus: document.getElementById('addDuesStatus').value,
+    classYear: document.getElementById('addClassYear').value.trim() || 'Alumni',
+    city: document.getElementById('addCity').value.trim() || 'Virginia',
+    lastPayment: document.getElementById('addLastPayment').value || null,
+    year: parseInt(document.getElementById('addClassYear').value) || new Date().getFullYear()
+  };
+  
+  // Add status for consistency
+  newMember.status = newMember.duesStatus;
+  
+  // Add to members array
+  members.push(newMember);
+  
+  // Save to localStorage so it syncs with advanced member manager
+  localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+  
+  // Refresh the display
+  renderMemberCards();
+  updateMemberStats();
+  
+  // Close modal
+  closeEditModal();
+  
+  alert(`✅ Successfully added new member: ${newMember.name}!`);
 }
 
 function importCSVToDirectory() {
