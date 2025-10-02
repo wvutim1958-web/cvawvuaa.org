@@ -688,20 +688,249 @@ function generateRealLabels() {
 }
 
 function exportRenewalReminders() {
-  const renewals = realMemberData
-    .filter(member => {
-      const memberType = member['Type of Membership'] || '';
-      return !memberType.toLowerCase().includes('lifetime');
-    })
-    .map(member => {
-      const name = `${member['First Name(s)']} ${member['Last Name']}`;
-      const email = member['E-mail Address (Primary)'] || '';
-      return `${name}\t${email}\t${member['Type of Membership'] || 'Member'}`;
-    })
-    .join('\n');
+  // Get overdue members from current data
+  const overdueMembers = realMembers.filter(m => m.duesStatus === 'overdue' && m.email);
   
-  downloadFile(`Name\tEmail\tMembership Type\n${renewals}`, `CVCWVUAA-Renewal-List-${new Date().toISOString().split('T')[0]}.txt`);
-  alert('⏰ Renewal reminders exported!\n\nList includes all members who need renewal notices.');
+  if (overdueMembers.length === 0) {
+    alert('📧 No overdue members found!\n\nAll members appear to be current with their dues.');
+    return;
+  }
+  
+  // Show email preview modal (same as advanced member manager)
+  showRenewalEmailPreview(overdueMembers);
+}
+
+function showRenewalEmailPreview(overdueMembers) {
+  const emails = overdueMembers.map(m => m.email).join('; ');
+  const subject = 'CVCWVUAA - 2025 Membership Dues Reminder';
+  
+  // HTML formatted email body with actual payment links from pay.html
+  const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .header { background: #002855; color: #ffd100; padding: 20px; text-align: center; }
+    .content { padding: 20px; }
+    .payment-options { background: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 8px; }
+    .btn { display: inline-block; background: #002855; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px; }
+    .btn:hover { background: #ffd100; color: #002855; }
+    .footer { background: #f1f1f1; padding: 15px; text-align: center; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>🏔️ Central Virginia Chapter WVU Alumni Association</h2>
+    <p>Let's Go Mountaineers!</p>
+  </div>
+  
+  <div class="content">
+    <p>Dear Fellow Mountaineer,</p>
+    
+    <p>This is a friendly reminder that your <strong>2025 membership dues</strong> are overdue for the Central Virginia Chapter of West Virginia University Alumni Association.</p>
+    
+    <p>Your membership helps support our organization, provide scholarships to local deserving students, and provide resources to new and existing students attending WVU.</p>
+    
+    <div class="payment-options">
+      <h3>💳 Pay Your Dues Online:</h3>
+      <p><strong>Single Membership:</strong> $25/year</p>
+      <p><a href="https://www.paypal.com/donate/?hosted_button_id=P2MJTS44SXS4U" class="btn" target="_blank">Pay Single Membership - $25</a></p>
+      
+      <p><strong>Family Member Addition:</strong> $15/year</p>
+      <p><a href="https://www.paypal.com/donate/?hosted_button_id=H6L88M4VBJS8W" class="btn" target="_blank">Pay Family Addition - $15</a></p>
+      
+      <h3>📮 Pay by Mail:</h3>
+      <p>Make checks payable to <strong>CVCWVUAA</strong><br>
+      Mail to: <strong>4701 Stoney Creek Parkway, Chester, VA 23831</strong></p>
+    </div>
+    
+    <p>As a <strong>501(c)(3)</strong> all-volunteer organization, membership fees support our goals and mission with the primary focus to continue providing annual scholarships through our <strong>WVU Alumni Central Virginia Chapter Scholarship</strong> (endowed).</p>
+    
+    <p>Members receive first opportunities to participate in sporting events and special guest appearances from the University.</p>
+    
+    <p>Please renew at your earliest convenience to maintain your membership benefits and support our chapter activities.</p>
+    
+    <p>Thank you for your continued support!</p>
+    
+    <p><strong>Let's Go Mountaineers! 🔥🏔️</strong></p>
+    
+    <p>Central Virginia Chapter WVU Alumni Association<br>
+    <a href="https://cvawvuaa.org">cvawvuaa.org</a></p>
+  </div>
+  
+  <div class="footer">
+    <p>© 2025 CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved.<br>
+    WVU and West Virginia University are trademarks of West Virginia University.</p>
+  </div>
+</body>
+</html>`;
+
+  // Plain text version for email clients that don't support HTML
+  const textBody = `Dear Fellow Mountaineer,
+
+This is a friendly reminder that your 2025 membership dues are overdue for the Central Virginia Chapter of West Virginia University Alumni Association.
+
+PAYMENT OPTIONS:
+
+Online Payment:
+• Single Membership ($25): https://www.paypal.com/donate/?hosted_button_id=P2MJTS44SXS4U
+• Family Addition ($15): https://www.paypal.com/donate/?hosted_button_id=H6L88M4VBJS8W
+
+Mail Payment:
+Make checks payable to CVCWVUAA
+Mail to: 4701 Stoney Creek Parkway, Chester, VA 23831
+
+Your membership helps support scholarships and chapter activities.
+
+Thank you for your continued support!
+
+Let's Go Mountaineers! 🔥🏔️
+
+Central Virginia Chapter WVU Alumni Association
+https://cvawvuaa.org`;
+
+  // Create modal for email preview
+  const modal = document.createElement('div');
+  modal.className = 'renewal-email-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  `;
+  
+  modal.innerHTML = `
+    <div style="background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 900px; height: 80vh;">
+      <h2>📧 Dues Reminder Email Preview</h2>
+      <p><strong>Recipients (${overdueMembers.length} overdue members):</strong></p>
+      <div style="background: #f5f5f5; padding: 10px; border-radius: 5px; margin-bottom: 15px; max-height: 80px; overflow-y: auto; font-size: 12px;">
+        ${emails}
+      </div>
+      
+      <p><strong>Subject:</strong></p>
+      <input type="text" id="renewalEmailSubject" value="${subject}" style="width: 100%; margin-bottom: 15px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+      
+      <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+        <button onclick="showRenewalHtmlPreview()" class="action-btn primary" style="padding: 5px 15px;">📄 HTML Preview</button>
+        <button onclick="showRenewalTextVersion()" class="action-btn secondary" style="padding: 5px 15px;">📝 Text Version</button>
+      </div>
+      
+      <div id="renewalEmailPreview" style="border: 1px solid #ccc; height: 300px; overflow-y: auto; margin-bottom: 15px;">
+        ${htmlBody}
+      </div>
+      
+      <textarea id="renewalEmailBody" style="display: none; width: 100%; height: 300px; margin-bottom: 15px;">${textBody}</textarea>
+      
+      <div style="text-align: right;">
+        <button onclick="closeRenewalEmailModal()" style="background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 6px; margin-right: 10px; cursor: pointer;">Cancel</button>
+        <button onclick="openRenewalEmailClient()" style="background: var(--wvu-blue, #002855); color: white; padding: 10px 20px; border: none; border-radius: 6px; margin-right: 10px; cursor: pointer;">📧 Open Email Client</button>
+        <button onclick="copyRenewalEmailInfo()" style="background: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">📋 Copy Email Info</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  // Store the HTML body for later use
+  modal.htmlBody = htmlBody;
+  modal.textBody = textBody;
+  modal.overdueMembers = overdueMembers;
+}
+
+function showRenewalHtmlPreview() {
+  const modal = document.querySelector('.renewal-email-modal');
+  const preview = document.getElementById('renewalEmailPreview');
+  const textarea = document.getElementById('renewalEmailBody');
+  
+  preview.style.display = 'block';
+  textarea.style.display = 'none';
+  preview.innerHTML = modal.htmlBody;
+}
+
+function showRenewalTextVersion() {
+  const modal = document.querySelector('.renewal-email-modal');
+  const preview = document.getElementById('renewalEmailPreview');
+  const textarea = document.getElementById('renewalEmailBody');
+  
+  preview.style.display = 'none';
+  textarea.style.display = 'block';
+  textarea.value = modal.textBody;
+}
+
+function openRenewalEmailClient() {
+  const subject = document.getElementById('renewalEmailSubject').value;
+  const modal = document.querySelector('.renewal-email-modal');
+  const overdueMembers = modal.overdueMembers;
+  const emails = overdueMembers.map(m => m.email).join(';');
+  const textBody = modal.textBody;
+  
+  const mailtoLink = `mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(textBody)}`;
+  
+  try {
+    const emailWindow = window.open(mailtoLink);
+    setTimeout(() => {
+      if (!emailWindow || emailWindow.closed) {
+        window.location.href = mailtoLink;
+      }
+    }, 100);
+    
+    closeRenewalEmailModal();
+    alert(`✅ Email client should open with ${overdueMembers.length} recipients.\n\nNote: The email will open in text format (HTML formatting not supported in mailto links).\n\nFor HTML email, use "Copy Email Info" and paste into your email program, then switch to HTML mode.`);
+  } catch (error) {
+    alert('❌ Could not open email client automatically. Please use the "Copy Email Info" button to copy the details and paste them manually into your email program.');
+  }
+}
+
+function copyRenewalEmailInfo() {
+  const subject = document.getElementById('renewalEmailSubject').value;
+  const modal = document.querySelector('.renewal-email-modal');
+  const overdueMembers = modal.overdueMembers;
+  const emails = overdueMembers.map(m => m.email).join('; ');
+  
+  // Create comprehensive email info with both versions
+  const emailInfo = `TO: ${emails}
+
+SUBJECT: ${subject}
+
+=================== HTML VERSION (Recommended) ===================
+${modal.htmlBody}
+
+=================== TEXT VERSION (Fallback) ===================
+${modal.textBody}
+
+INSTRUCTIONS:
+1. Copy the HTML version above
+2. Paste into your email program
+3. Switch your email to HTML/Rich Text mode
+4. The formatting and clickable links will appear
+5. If HTML doesn't work, use the text version instead`;
+  
+  navigator.clipboard.writeText(emailInfo).then(() => {
+    closeRenewalEmailModal();
+    alert(`📋 Complete renewal email copied to clipboard!\n\nRecipients: ${overdueMembers.length} overdue members\n\nIncludes both HTML (with clickable PayPal links) and text versions.\n\nPaste into your email program and use HTML mode for best results.`);
+  }).catch(() => {
+    // Fallback for browsers that don't support clipboard API
+    const textArea = document.createElement('textarea');
+    textArea.value = emailInfo;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    closeRenewalEmailModal();
+    alert(`📋 Renewal email information copied to clipboard!\n\nRecipients: ${overdueMembers.length} members\n\nIncludes HTML and text versions.`);
+  });
+}
+
+function closeRenewalEmailModal() {
+  const modals = document.querySelectorAll('.renewal-email-modal');
+  modals.forEach(modal => modal.remove());
 }
 
 function exportScholarshipDonors() {
