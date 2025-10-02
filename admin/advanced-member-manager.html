@@ -315,6 +315,7 @@
         <button class="action-btn warning" onclick="sendDuesReminders()">📧 Send Dues Reminders</button>
         <button class="action-btn" onclick="exportDuesReport()">📊 Export Dues Report</button>
         <button class="action-btn" onclick="exportMembersToCSV()" style="background: #3b82f6;">💾 Export to CSV</button>
+        <button class="action-btn" onclick="downloadMasterCSV()" style="background: #10b981;">📥 Master CSV</button>
         <button class="action-btn secondary" onclick="bulkDeleteOverdue()">🗑️ Remove Overdue (90+ days)</button>
       </div>
     </div>
@@ -476,6 +477,139 @@ function saveMembers() {
   localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
 }
 
+// Sync data to other admin interfaces
+function syncToOtherInterfaces() {
+  // Sync to member directory interface
+  localStorage.setItem('cvcwvuaa-directory-members', JSON.stringify(members.map(member => ({
+    ...member,
+    // Convert for directory display format if needed
+    major: member.major || "Alumni",
+    graduationYear: member.classYear || "Unknown",
+    location: member.fullAddress || `${member.city || ''}, ${member.state || 'VA'}`.trim().replace(/^,\s*/, '')
+  }))));
+  
+  // Set sync timestamp
+  localStorage.setItem('cvcwvuaa-last-sync', new Date().toISOString());
+  
+  // Auto-generate updated CSV data in localStorage for easy access
+  generateMasterCSV();
+}
+
+// Generate master CSV data that's always up-to-date
+function generateMasterCSV() {
+  if (members.length === 0) return;
+  
+  const headers = [
+    'First Name(s)',
+    'Last Name',
+    'E-mail Address (Primary)',
+    'Primary Phone',
+    'Home Address',
+    'City',
+    'State',
+    'Zip Code',
+    'Type of Membership',
+    'Membership Last Paid',
+    'Dues',
+    'Total Amount Paid',
+    'Scholarship',
+    'General Fund'
+  ];
+  
+  let csvContent = headers.join(',') + '\n';
+  
+  members.forEach(member => {
+    const nameParts = (member.name || '').split(' ');
+    const lastName = nameParts.pop() || '';
+    const firstName = nameParts.join(' ');
+    
+    const membershipType = getFullMembershipTypeForCSV(member.type);
+    const lastPayment = member.lastPayment ? formatDateForCSVExport(member.lastPayment) : '';
+    
+    const row = [
+      escapeCSVFieldForMaster(firstName),
+      escapeCSVFieldForMaster(lastName),
+      escapeCSVFieldForMaster(member.email || ''),
+      escapeCSVFieldForMaster(member.phone || ''),
+      escapeCSVFieldForMaster(member.streetAddress || ''),
+      escapeCSVFieldForMaster(member.city || ''),
+      escapeCSVFieldForMaster(member.state || ''),
+      escapeCSVFieldForMaster(member.zip || ''),
+      escapeCSVFieldForMaster(membershipType),
+      escapeCSVFieldForMaster(lastPayment),
+      escapeCSVFieldForMaster((member.duesAmount || 0).toString()),
+      escapeCSVFieldForMaster((member.totalAmountPaid || 0).toString()),
+      escapeCSVFieldForMaster((member.scholarshipAmount || 0).toString()),
+      escapeCSVFieldForMaster((member.generalFundAmount || 0).toString())
+    ];
+    
+    csvContent += row.join(',') + '\n';
+  });
+  
+  // Store the current CSV content in localStorage
+  localStorage.setItem('cvcwvuaa-master-csv', csvContent);
+  localStorage.setItem('cvcwvuaa-csv-last-updated', new Date().toISOString());
+  
+  console.log('Master CSV updated with', members.length, 'members');
+}
+
+function getFullMembershipTypeForCSV(type) {
+  const types = {
+    'individual': 'Individual Membership',
+    'family': 'Family Membership', 
+    'student': 'Student Membership',
+    'lifetime': 'Lifetime Membership'
+  };
+  return types[type] || (type || 'Individual Membership');
+}
+
+function escapeCSVFieldForMaster(field) {
+  if (field === null || field === undefined) field = '';
+  field = field.toString();
+  
+  if (field.includes(',') || field.includes('"') || field.includes('\n')) {
+    return '"' + field.replace(/"/g, '""') + '"';
+  }
+  return field;
+}
+
+function formatDateForCSVExport(dateString) {
+  if (!dateString) return '';
+  
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    
+    return (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
+           date.getDate().toString().padStart(2, '0') + '/' +
+           date.getFullYear();
+  } catch (e) {
+    return dateString;
+  }
+}
+
+// Function to download the current master CSV
+function downloadMasterCSV() {
+  const csvContent = localStorage.getItem('cvcwvuaa-master-csv');
+  if (!csvContent) {
+    alert('⚠️ No master CSV data available. Please add or import members first.');
+    return;
+  }
+  
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `CVCWVUAA-Master-Database-${new Date().toISOString().split('T')[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  
+  const lastUpdated = localStorage.getItem('cvcwvuaa-csv-last-updated');
+  alert(`✅ Master CSV downloaded!\n\nLast updated: ${lastUpdated ? new Date(lastUpdated).toLocaleString() : 'Unknown'}\nMembers: ${members.length}`);
+}
+
 // CSV Import functionality
 function importFromCSV() {
   const input = document.createElement('input');
@@ -529,13 +663,8 @@ function smartMergeMembers(csvMembers) {
       members.push(csvMember);
       added++;
     } else {
-      // Existing member - only update safe fields, preserve admin changes
+      // Existing member - carefully merge data preserving admin changes
       const existing = members[existingIndex];
-      
-      // Only update contact info and basic details - NEVER overwrite:
-      // - duesStatus (admin manages this)
-      // - lastPayment (admin manages this) 
-      // - any custom admin fields
       
       let hasChanges = false;
       
@@ -545,6 +674,7 @@ function smartMergeMembers(csvMembers) {
         hasChanges = true;
       }
       
+      // Update address info from CSV
       if (csvMember.fullAddress && csvMember.fullAddress !== existing.fullAddress) {
         existing.streetAddress = csvMember.streetAddress;
         existing.city = csvMember.city;
@@ -554,10 +684,51 @@ function smartMergeMembers(csvMembers) {
         hasChanges = true;
       }
       
+      // Update class year if provided
       if (csvMember.classYear && csvMember.classYear !== existing.classYear) {
         existing.classYear = csvMember.classYear;
         hasChanges = true;
       }
+      
+      // Update financial fields from CSV ONLY if admin hasn't manually changed them
+      // Check if existing member has admin-modified financial data
+      if (!existing.hasAdminFinancialChanges) {
+        if (csvMember.totalAmountPaid !== undefined && csvMember.totalAmountPaid !== existing.totalAmountPaid) {
+          existing.totalAmountPaid = csvMember.totalAmountPaid;
+          hasChanges = true;
+        }
+        
+        if (csvMember.scholarshipAmount !== undefined && csvMember.scholarshipAmount !== existing.scholarshipAmount) {
+          existing.scholarshipAmount = csvMember.scholarshipAmount;
+          hasChanges = true;
+        }
+        
+        if (csvMember.duesAmount !== undefined && csvMember.duesAmount !== existing.duesAmount) {
+          existing.duesAmount = csvMember.duesAmount;
+          hasChanges = true;
+        }
+        
+        if (csvMember.generalFundAmount !== undefined && csvMember.generalFundAmount !== existing.generalFundAmount) {
+          existing.generalFundAmount = csvMember.generalFundAmount;
+          hasChanges = true;
+        }
+        
+        // Update membership type from CSV if not manually changed
+        if (csvMember.type && csvMember.type !== existing.type) {
+          existing.type = csvMember.type;
+          hasChanges = true;
+        }
+        
+        // Update last payment date from CSV if not manually changed by admin
+        if (csvMember.lastPayment && csvMember.lastPayment !== existing.lastPayment && !existing.hasAdminPaymentChanges) {
+          existing.lastPayment = csvMember.lastPayment;
+          hasChanges = true;
+        }
+      }
+      
+      // NEVER overwrite admin-managed fields:
+      // - duesStatus (admin manages this through the interface)
+      // - Any field marked as hasAdminFinancialChanges or hasAdminPaymentChanges
       
       if (hasChanges) {
         updated++;
@@ -579,6 +750,44 @@ function smartMergeMembers(csvMembers) {
 function parseCSVToMembers(csvText) {
   const lines = csvText.split('\n');
   const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+  
+  // Validate that CSV has required fields
+  const requiredFields = [
+    'First Name(s)',
+    'Last Name', 
+    'E-mail Address (Primary)'
+  ];
+  
+  const optionalFields = [
+    'Primary Phone',
+    'Home Address',
+    'City',
+    'State', 
+    'Zip Code',
+    'Type of Membership',
+    'Membership Last Paid',
+    'Dues',
+    'Total Amount Paid',
+    'Scholarship',
+    'General Fund'
+  ];
+  
+  // Check for required fields
+  const missingRequired = requiredFields.filter(field => !headers.includes(field));
+  if (missingRequired.length > 0) {
+    alert(`❌ CSV Import Error\n\nRequired fields missing:\n${missingRequired.join('\n')}\n\nPlease ensure your CSV has these exact column names.`);
+    return;
+  }
+  
+  // Check for recommended fields and warn if missing
+  const missingOptional = optionalFields.filter(field => !headers.includes(field));
+  if (missingOptional.length > 0) {
+    const proceed = confirm(`⚠️ CSV Import Warning\n\nOptional fields missing:\n${missingOptional.join('\n')}\n\nYou can continue importing, but these fields will be empty.\n\nContinue with import?`);
+    if (!proceed) return;
+  }
+  
+  console.log('CSV Headers found:', headers);
+  console.log('Missing optional fields:', missingOptional);
   
   const newMembers = [];
   let id = Math.max(...members.map(m => m.id), 0) + 1;
@@ -955,22 +1164,46 @@ function saveMember() {
     totalAmountPaid,
     duesAmount,
     scholarshipAmount,
-    generalFundAmount
+    generalFundAmount,
+    // Mark that admin has made financial changes (prevents CSV overwrites)
+    hasAdminFinancialChanges: true,
+    hasAdminPaymentChanges: lastPayment ? true : false
   };
   
   if (currentEditingId) {
     // Update existing member
     const index = members.findIndex(m => m.id === currentEditingId);
     if (index !== -1) {
+      const existingMember = members[index];
+      
+      // Check if financial fields actually changed
+      const financialFieldsChanged = 
+        existingMember.totalAmountPaid !== totalAmountPaid ||
+        existingMember.duesAmount !== duesAmount ||
+        existingMember.scholarshipAmount !== scholarshipAmount ||
+        existingMember.generalFundAmount !== generalFundAmount;
+      
+      const paymentChanged = existingMember.lastPayment !== (lastPayment || null);
+      
+      // Only mark as admin-changed if values actually changed
+      memberData.hasAdminFinancialChanges = financialFieldsChanged || existingMember.hasAdminFinancialChanges;
+      memberData.hasAdminPaymentChanges = paymentChanged || existingMember.hasAdminPaymentChanges;
+      
       members[index] = { ...members[index], ...memberData };
       saveMembers();
       alert(`✅ Updated member: ${name}`);
+      
+      // Trigger sync to other admin interfaces
+      syncToOtherInterfaces();
     }
   } else {
     // Add new member
     const newId = Math.max(...members.map(m => m.id), 0) + 1;
     members.push({ id: newId, ...memberData });
     alert(`✅ Added new member: ${name}`);
+    
+    // Trigger sync to other admin interfaces
+    syncToOtherInterfaces();
   }
   
   saveMembers();

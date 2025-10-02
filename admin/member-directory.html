@@ -545,23 +545,70 @@ let members = [];
 
 // Load real member data from localStorage (shared with advanced member manager)
 function loadRealMembers() {
+  // Try to load from the main members storage first
   const savedMembers = localStorage.getItem('cvcwvuaa-members');
+  
+  // Also check for directory-specific storage (for bidirectional sync)
+  const directorySavedMembers = localStorage.getItem('cvcwvuaa-directory-members');
+  
+  // Get sync timestamp to determine which data is newer
+  const lastSync = localStorage.getItem('cvcwvuaa-last-sync');
+  const lastDirectoryUpdate = localStorage.getItem('cvcwvuaa-directory-last-update');
+  
+  let memberData = [];
+  
+  // Use the most recent data source
   if (savedMembers) {
     try {
-      const memberData = JSON.parse(savedMembers);
-      // Convert advanced manager data to directory format
-      members = memberData.map(member => ({
-        ...member,
-        classYear: member.year || "Unknown",
-        major: "Alumni", // Default since CSV might not have major
-        city: "Virginia", // Default since CSV might not have city
-        status: member.duesStatus
-      }));
+      memberData = JSON.parse(savedMembers);
+      console.log(`Loaded ${memberData.length} members from main storage`);
     } catch (e) {
       console.error('Error loading saved members:', e);
-      members = [];
     }
   }
+  
+  // If we have directory-specific data and it's newer, use that
+  if (directorySavedMembers && (!lastSync || (lastDirectoryUpdate && lastDirectoryUpdate > lastSync))) {
+    try {
+      const directoryData = JSON.parse(directorySavedMembers);
+      if (directoryData.length > 0) {
+        memberData = directoryData;
+        console.log(`Using directory-specific data: ${memberData.length} members`);
+      }
+    } catch (e) {
+      console.error('Error loading directory members:', e);
+    }
+  }
+  
+  // Convert advanced manager data to directory format
+  members = memberData.map(member => ({
+    ...member,
+    classYear: member.year || member.classYear || "Unknown",
+    major: member.major || "Alumni",
+    city: member.city || member.location || "Virginia",
+    status: member.duesStatus || member.status || "unknown",
+    // Preserve financial data
+    totalAmountPaid: member.totalAmountPaid || 0,
+    scholarshipAmount: member.scholarshipAmount || 0,
+    duesAmount: member.duesAmount || 0,
+    generalFundAmount: member.generalFundAmount || 0,
+    // Preserve admin change flags
+    hasAdminFinancialChanges: member.hasAdminFinancialChanges || false,
+    hasAdminPaymentChanges: member.hasAdminPaymentChanges || false
+  }));
+  
+  console.log(`Directory loaded: ${members.length} members total`);
+}
+
+// Save directory changes back to main storage
+function saveDirectoryChanges() {
+  // Update the main storage
+  localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+  
+  // Update directory timestamp
+  localStorage.setItem('cvcwvuaa-directory-last-update', new Date().toISOString());
+  
+  console.log('Directory changes saved to main storage');
 }
 
 // Initialize the member directory
