@@ -606,15 +606,16 @@ function loadRealMembers() {
       // Only use location if no individual city field exists
       displayLocation: member.city ? `${member.city}${member.state ? ', ' + member.state : ''}` : (member.location || ""),
       status: member.duesStatus || member.status || "unknown",
-    // Preserve financial data
-    totalAmountPaid: member.totalAmountPaid || 0,
-    scholarshipAmount: member.scholarshipAmount || 0,
-    duesAmount: member.duesAmount || 0,
-    generalFundAmount: member.generalFundAmount || 0,
-    // Preserve admin change flags
-    hasAdminFinancialChanges: member.hasAdminFinancialChanges || false,
-    hasAdminPaymentChanges: member.hasAdminPaymentChanges || false
-  }));
+      // Preserve financial data
+      totalAmountPaid: member.totalAmountPaid || 0,
+      scholarshipAmount: member.scholarshipAmount || 0,
+      duesAmount: member.duesAmount || 0,
+      generalFundAmount: member.generalFundAmount || 0,
+      // Preserve admin change flags
+      hasAdminFinancialChanges: member.hasAdminFinancialChanges || false,
+      hasAdminPaymentChanges: member.hasAdminPaymentChanges || false
+    };
+  });
   
   console.log(`Directory loaded: ${members.length} members total`);
 }
