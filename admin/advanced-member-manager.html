@@ -872,7 +872,9 @@ function parseCSVToMembers(csvText) {
         const state = findFieldValue(record, ['state', 'st']) || '';
         const zip = findFieldValue(record, ['zip', 'zip code', 'postal']) || '';
         
-        // Debug logging for address data
+        // Create full address from components
+        const fullAddress = [streetAddress, city, state, zip].filter(part => part && part.trim()).join(', ');
+        
         // Check if member already exists
         const existingMember = members.find(m => m.name === name || m.email === email);
         
