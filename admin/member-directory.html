@@ -1187,6 +1187,10 @@ function parseCSVForDirectory(csvText) {
   const lines = csvText.split('\n');
   const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
   
+  // Debug: Show what headers we found
+  console.log('CSV Headers found:', headers);
+  alert('CSV Headers found:\n' + headers.join('\n'));
+  
   const newMembers = [];
   let id = 1;
   
@@ -1225,11 +1229,25 @@ function parseCSVForDirectory(csvText) {
           duesStatus = 'pending';
         }
         
-        // Build full address from CSV fields
-        const streetAddress = record['Street Address'] || record['Address'] || '';
-        const city = record['City'] || '';
-        const state = record['State'] || record['State/Province'] || 'VA';
-        const zip = record['ZIP'] || record['Zip Code'] || record['Postal Code'] || '';
+        // Build full address from CSV fields - check multiple possible field names
+        const streetAddress = record['Street Address'] || 
+                             record['Address'] || 
+                             record['Mailing Address'] || 
+                             record['Home Address'] ||
+                             record['Physical Address'] || '';
+        const city = record['City'] || 
+                    record['Home City'] || 
+                    record['Mailing City'] || '';
+        const state = record['State'] || 
+                     record['State/Province'] || 
+                     record['Home State'] ||
+                     record['Mailing State'] || 'VA';
+        const zip = record['ZIP'] || 
+                   record['Zip Code'] || 
+                   record['Postal Code'] ||
+                   record['Home ZIP'] ||
+                   record['Mailing ZIP'] ||
+                   record['ZIP Code'] || '';
         
         const fullAddress = [streetAddress, city, state, zip].filter(part => part).join(', ');
         

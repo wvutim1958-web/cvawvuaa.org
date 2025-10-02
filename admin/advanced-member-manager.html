@@ -512,6 +512,28 @@ function parseCSVToMembers(csvText) {
           duesStatus = 'pending';
         }
         
+        // Build address from CSV fields
+        const streetAddress = record['Street Address'] || 
+                             record['Address'] || 
+                             record['Mailing Address'] || 
+                             record['Home Address'] ||
+                             record['Physical Address'] || '';
+        const city = record['City'] || 
+                    record['Home City'] || 
+                    record['Mailing City'] || '';
+        const state = record['State'] || 
+                     record['State/Province'] || 
+                     record['Home State'] ||
+                     record['Mailing State'] || 'VA';
+        const zip = record['ZIP'] || 
+                   record['Zip Code'] || 
+                   record['Postal Code'] ||
+                   record['Home ZIP'] ||
+                   record['Mailing ZIP'] ||
+                   record['ZIP Code'] || '';
+        
+        const fullAddress = [streetAddress, city, state, zip].filter(part => part).join(', ');
+        
         newMembers.push({
           id: id++,
           name: name,
@@ -520,7 +542,12 @@ function parseCSVToMembers(csvText) {
           type: type,
           duesStatus: duesStatus,
           lastPayment: lastPaid || null,
-          year: 2025
+          year: 2025,
+          streetAddress: streetAddress,
+          city: city,
+          state: state,
+          zip: zip,
+          fullAddress: fullAddress
         });
       }
     }
