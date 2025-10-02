@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MemberPortal Debug Test</title>
+</head>
+<body>
+  <h2>🔧 MemberPortal Debug Test</h2>
+  <div id="debug-info">Loading...</div>
+  
+  <script>
+    console.log('=== BEFORE LOADING MEMBER PORTAL ===');
+    console.log('MemberPortal available:', typeof MemberPortal);
+    console.log('memberPortal available:', typeof memberPortal);
+    
+    // Catch any script loading errors
+    window.addEventListener('error', (e) => {
+      console.error('Script Error:', e);
+      document.getElementById('debug-info').innerHTML = `
+        <div style="color: red;">
+          <strong>Script Loading Error:</strong><br>
+          ${e.message}<br>
+          File: ${e.filename}<br>
+          Line: ${e.lineno}<br>
+          Column: ${e.colno}
+        </div>
+      `;
+    });
+  </script>
+  
+  <!-- Load the member portal script -->
+  <script src="js/member-portal.js" 
+          onload="console.log('✅ Script loaded successfully')" 
+          onerror="console.error('❌ Script failed to load')"></script>
+  
+  <script>
+    console.log('=== AFTER LOADING MEMBER PORTAL ===');
+    console.log('MemberPortal available:', typeof MemberPortal);
+    console.log('memberPortal available:', typeof memberPortal);
+    console.log('window.memberPortal available:', typeof window.memberPortal);
+    
+    const debugInfo = document.getElementById('debug-info');
+    debugInfo.innerHTML = `
+      <strong>Debug Results:</strong><br>
+      MemberPortal class: ${typeof MemberPortal}<br>
+      memberPortal global: ${typeof memberPortal}<br>
+      window.memberPortal: ${typeof window.memberPortal}<br>
+      <br>
+      ${typeof memberPortal !== 'undefined' ? 
+        `Portal initialized: ${memberPortal.initialized}<br>
+         Portal methods: ${Object.getOwnPropertyNames(memberPortal.__proto__).join(', ')}` : 
+        'Portal not available'}
+    `;
+    
+    // Try to create an instance manually if class exists
+    if (typeof MemberPortal !== 'undefined' && typeof memberPortal === 'undefined') {
+      try {
+        console.log('Attempting to create MemberPortal manually...');
+        const testPortal = new MemberPortal();
+        console.log('Manual creation successful:', testPortal);
+        window.memberPortal = testPortal;
+        memberPortal = testPortal;
+      } catch (error) {
+        console.error('Manual creation failed:', error);
+        debugInfo.innerHTML += `<br><br><div style="color: red;">Manual creation error: ${error.message}</div>`;
+      }
+    }
+  </script>
+</body>
+</html>

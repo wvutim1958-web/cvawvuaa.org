@@ -1,0 +1,58 @@
+[
+  {
+    "position": "President",
+    "name": "Timothy Casten",
+    "phone": "\t(804) 566-8058",
+    "email": "president@cvawvuaa.org",
+    "degree": "BA Comm/Aviation"
+  },
+  {
+    "position": "Vice President",
+    "name": "David Murdock",
+    "phone": "(804) 349-2481",
+    "email": "DMURDOCK2014@OUTLOOK.COM",
+    "degree": " BIOLOGY MAJOR"
+  },
+  {
+    "position": "Secretary",
+    "name": "VACANT",
+    "phone": "",
+    "email": "",
+    "degree": ""
+  },
+  {
+    "position": "Treasurer",
+    "name": "David Haines",
+    "phone": "(804) 330-4189",
+    "email": "DLHRX@ME.COM",
+    "degree": " BS PHARMACY"
+  },
+  {
+    "position": "Activities",
+    "name": "Scott Phillips",
+    "phone": "\t(410) 960-6022",
+    "email": "LSPHILLIPS2@ME.COM",
+    "degree": " MBA FINANCE & ACCOUNTING"
+  },
+  {
+    "position": "Communications",
+    "name": "Seth Ball",
+    "phone": "(804) 307-6360",
+    "email": "SETHDBALL1@GMAIL.COM",
+    "degree": " BAS COMMUNICATIONS/MS IMC"
+  },
+  {
+    "position": "Member At Large",
+    "name": "Bob Whitehouse",
+    "phone": "(804) 513-5911",
+    "email": "RWHITEMAN@VERIZON.NET",
+    "degree": "\t BS CHEMICAL ENGINEERING"
+  },
+  {
+    "position": "Past President",
+    "name": "Jennifer Condaras",
+    "phone": "\t(401) 265-6739",
+    "email": "JENCONDARAS@HOTMAIL.COM",
+    "degree": "BS BUSINESS/MS SPORTS MANAGEMENT"
+  }
+]

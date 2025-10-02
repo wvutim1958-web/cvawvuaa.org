@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "sept-2025",
+    "title": "September Update: Watch Parties & Scholarship News",
+    "date": "2025-09-15",
+    "author": "CVCWVUAA",
+    "file": "/news/posts/sept-2025.md",
+    "published": true
+  },
+  {
+    "slug": "first-post",
+    "title": "Welcome to the CVCWVUAA News",
+    "date": "2025-09-27",
+    "author": "CVCWVUAA",
+    "file": "/news/posts/first-post.md",
+    "published": true
+  },
+  {
+    "slug": "second-post",
+    "title": "Fall Watch Parties Announced",
+    "date": "2025-10-01",
+    "author": "Events Team",
+    "file": "/news/posts/second-post.md",
+    "published": true
+  }
+]

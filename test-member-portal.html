@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Portal Test</title>
+</head>
+<body>
+  <h1>Member Portal System Test</h1>
+  
+  <div id="test-results"></div>
+  
+  <script src="/js/member-portal.js"></script>
+  <script>
+    // Simple test to validate member portal functionality
+    function runTests() {
+      const results = [];
+      
+      // Test 1: Check if MemberPortal class exists
+      if (typeof MemberPortal !== 'undefined') {
+        results.push("✅ MemberPortal class loaded successfully");
+      } else {
+        results.push("❌ MemberPortal class not found");
+        return;
+      }
+      
+      // Test 2: Initialize member portal
+      try {
+        window.memberPortal = new MemberPortal();
+        results.push("✅ MemberPortal initialized");
+      } catch (e) {
+        results.push("❌ MemberPortal initialization failed: " + e.message);
+        return;
+      }
+      
+      // Test 3: Check demo accounts exist
+      const demoMember = memberPortal.members['member@cvawvuaa.org'];
+      const premiumMember = memberPortal.members['premium@cvawvuaa.org'];
+      
+      if (demoMember) {
+        results.push("✅ Demo member account exists");
+      } else {
+        results.push("❌ Demo member account missing");
+      }
+      
+      if (premiumMember) {
+        results.push("✅ Premium demo account exists");
+      } else {
+        results.push("❌ Premium demo account missing");
+      }
+      
+      // Test 4: Test login functionality
+      try {
+        const loginResult = memberPortal.login('member@cvawvuaa.org', 'member123');
+        if (loginResult) {
+          results.push("✅ Login functionality works");
+          memberPortal.logout(); // Clean up
+        } else {
+          results.push("❌ Login functionality failed");
+        }
+      } catch (e) {
+        results.push("❌ Login test error: " + e.message);
+      }
+      
+      // Test 5: Test member benefits
+      try {
+        memberPortal.login('premium@cvawvuaa.org', 'premium123');
+        const hasDirectory = memberPortal.hasBenefit('directory');
+        const hasExclusive = memberPortal.hasBenefit('exclusive');
+        
+        if (hasDirectory && hasExclusive) {
+          results.push("✅ Premium member benefits work correctly");
+        } else {
+          results.push("❌ Premium member benefits not working");
+        }
+        
+        memberPortal.logout();
+      } catch (e) {
+        results.push("❌ Benefits test error: " + e.message);
+      }
+      
+      // Test 6: Test member stats
+      try {
+        const stats = memberPortal.getMemberStats();
+        if (stats && stats.total >= 2) {
+          results.push("✅ Member statistics calculation works");
+        } else {
+          results.push("❌ Member statistics not working");
+        }
+      } catch (e) {
+        results.push("❌ Statistics test error: " + e.message);
+      }
+      
+      // Display results
+      document.getElementById('test-results').innerHTML = results.map(result => 
+        `<p style="font-family: monospace; margin: 8px 0;">${result}</p>`
+      ).join('');
+      
+      // Summary
+      const passed = results.filter(r => r.startsWith('✅')).length;
+      const total = results.length;
+      document.getElementById('test-results').innerHTML += `
+        <hr>
+        <h3>Test Summary: ${passed}/${total} tests passed</h3>
+        ${passed === total ? '<p style="color: green; font-weight: bold;">🎉 All tests passed! Member Portal system is working correctly.</p>' : '<p style="color: red; font-weight: bold;">⚠️ Some tests failed. Check the console for more details.</p>'}
+      `;
+    }
+    
+    // Run tests when page loads
+    document.addEventListener('DOMContentLoaded', runTests);
+  </script>
+</body>
+</html>

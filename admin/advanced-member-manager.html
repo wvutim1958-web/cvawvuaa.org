@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVCWVUAA Advanced Member Management</title>
+<link rel="stylesheet" href="/css/styles.css">
+<style>
+  .member-manager-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+
+  .manager-header {
+    background: linear-gradient(135deg, var(--wvu-blue), #1e40af);
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .controls-panel {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+  }
+
+  .control-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .member-table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .member-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .member-table th {
+    background: var(--wvu-blue);
+    color: white;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .member-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+  }
+
+  .member-table tr:hover {
+    background: #f8fafc;
+  }
+
+  .member-row.dues-current {
+    background: #f0fdf4;
+    border-left: 4px solid #10b981;
+  }
+
+  .member-row.dues-overdue {
+    background: #fef2f2;
+    border-left: 4px solid #ef4444;
+  }
+
+  .member-row.dues-pending {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+  }
+
+  .dues-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dues-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #10b981;
+  }
+
+  .dues-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .badge-current {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .badge-overdue {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .badge-pending {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-edit {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  .btn-delete {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  .btn-contact {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  .bulk-actions {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
+
+  .bulk-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-current { color: #10b981; }
+  .stat-overdue { color: #ef4444; }
+  .stat-pending { color: #f59e0b; }
+  .stat-total { color: var(--wvu-blue); }
+
+  .search-input {
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+  }
+
+  .filter-select {
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+  }
+
+  .modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="member-manager-container">
+  
+  <!-- Header -->
+  <div class="manager-header">
+    <h1>👥 Advanced Member Management</h1>
+    <p>Comprehensive member database with dues tracking and deletion tools</p>
+  </div>
+
+  <!-- Statistics Bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-number stat-total" id="totalMembers">0</div>
+      <div>Total Members</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number stat-current" id="currentMembers">0</div>
+      <div>Current on Dues</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number stat-overdue" id="overdueMembers">0</div>
+      <div>Overdue Dues</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number stat-pending" id="pendingMembers">0</div>
+      <div>Pending Payment</div>
+    </div>
+  </div>
+
+  <!-- Controls Panel -->
+  <div class="controls-panel">
+    <div class="control-grid">
+      <input type="text" class="search-input" id="memberSearch" placeholder="🔍 Search members..." onkeyup="filterMembers()">
+      <select class="filter-select" id="duesFilter" onchange="filterMembers()">
+        <option value="">All Dues Status</option>
+        <option value="current">Current</option>
+        <option value="overdue">Overdue</option>
+        <option value="pending">Pending</option>
+      </select>
+      <select class="filter-select" id="typeFilter" onchange="filterMembers()">
+        <option value="">All Types</option>
+        <option value="individual">Individual</option>
+        <option value="family">Family</option>
+        <option value="student">Student</option>
+        <option value="lifetime">Lifetime</option>
+      </select>
+      <input type="number" class="filter-select" id="yearFilter" placeholder="2025" min="2020" max="2030" onchange="filterMembers()">
+      <button class="action-btn" onclick="openAddMemberModal()">➕ Add Member</button>
+      <button class="action-btn" onclick="importFromCSV()" style="background: #10b981; margin-left: 10px;">📁 Import CSV</button>
+    </div>
+
+    <!-- Bulk Actions -->
+    <div class="bulk-actions">
+      <strong>🛠️ Bulk Actions:</strong>
+      <div class="bulk-actions-grid" style="margin-top: 0.5rem;">
+        <button class="action-btn success" onclick="markAllCurrentDues()">✅ Mark All Current</button>
+        <button class="action-btn warning" onclick="sendDuesReminders()">📧 Send Dues Reminders</button>
+        <button class="action-btn" onclick="exportDuesReport()">📊 Export Dues Report</button>
+        <button class="action-btn secondary" onclick="bulkDeleteOverdue()">🗑️ Remove Overdue (90+ days)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Member Table -->
+  <div class="member-table-container">
+    <table class="member-table">
+      <thead>
+        <tr>
+          <th>
+            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()"> 
+            Member Name
+          </th>
+          <th>Email & Phone</th>
+          <th>Membership Type</th>
+          <th>Dues Status 2025</th>
+          <th>Last Payment</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="memberTableBody">
+        <!-- Members will be populated here -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add/Edit Member Modal -->
+<div id="memberModal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle">Add New Member</h3>
+    
+    <div class="form-group">
+      <label>Full Name:</label>
+      <input type="text" id="memberName" placeholder="John Smith">
+    </div>
+    
+    <div class="form-group">
+      <label>Email:</label>
+      <input type="email" id="memberEmail" placeholder="john@email.com">
+    </div>
+    
+    <div class="form-group">
+      <label>Phone:</label>
+      <input type="tel" id="memberPhone" placeholder="(555) 123-4567">
+    </div>
+    
+    <div class="form-group">
+      <label>Membership Type:</label>
+      <select id="memberType">
+        <option value="individual">Individual ($25/year)</option>
+        <option value="family">Family ($40/year)</option>
+        <option value="student">Student ($15/year)</option>
+        <option value="lifetime">Lifetime ($500)</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>Dues Status for 2025:</label>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <label><input type="radio" name="duesStatus" value="current"> ✅ Current</label>
+        <label><input type="radio" name="duesStatus" value="pending"> ⏳ Pending</label>
+        <label><input type="radio" name="duesStatus" value="overdue" checked> ❌ Overdue</label>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>Last Payment Date:</label>
+      <input type="date" id="lastPayment">
+    </div>
+    
+    <div style="text-align: right; margin-top: 2rem;">
+      <button class="action-btn secondary" onclick="closeMemberModal()">Cancel</button>
+      <button class="action-btn" onclick="saveMember()" id="saveBtn">Save Member</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <h3>⚠️ Confirm Action</h3>
+    <p id="confirmMessage">Are you sure?</p>
+    <div style="text-align: right; margin-top: 2rem;">
+      <button class="action-btn secondary" onclick="closeConfirmModal()">Cancel</button>
+      <button class="action-btn btn-delete" onclick="confirmAction()" id="confirmBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let members = [];
+let currentEditingId = null;
+let pendingAction = null;
+
+// Initialize with sample data or load from CSV
+function initializeMembers() {
+  // Check if we have saved member data from CSV upload
+  const savedMembers = localStorage.getItem('cvcwvuaa-members');
+  if (savedMembers) {
+    try {
+      members = JSON.parse(savedMembers);
+      updateDisplay();
+      return;
+    } catch (e) {
+      console.error('Error loading saved members:', e);
+    }
+  }
+  
+  // Default sample data
+  members = [
+    {
+      id: 1,
+      name: "John & Sarah Smith",
+      email: "john.smith@email.com",
+      phone: "(804) 555-0123",
+      type: "family",
+      duesStatus: "current",
+      lastPayment: "2025-01-15",
+      year: 2025
+    },
+    {
+      id: 2,
+      name: "Michael Johnson",
+      email: "m.johnson@email.com", 
+      phone: "(757) 555-0456",
+      type: "individual",
+      duesStatus: "overdue",
+      lastPayment: "2024-11-20",
+      year: 2025
+    },
+    {
+      id: 3,
+      name: "Emily Davis",
+      email: "edavis@mix.wvu.edu",
+      phone: "(540) 555-0789",
+      type: "student",
+      duesStatus: "pending",
+      lastPayment: "2024-12-01",
+      year: 2025
+    },
+    {
+      id: 4,
+      name: "Robert Wilson",
+      email: "rwilson@email.com",
+      phone: "(703) 555-0321",
+      type: "lifetime",
+      duesStatus: "current",
+      lastPayment: "2020-01-01",
+      year: 2025
+    }
+  ];
+  
+  updateDisplay();
+}
+
+// Save members to localStorage whenever data changes
+function saveMembers() {
+  localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+}
+
+// CSV Import functionality
+function importFromCSV() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.csv';
+  input.onchange = function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const csvText = e.target.result;
+        parseCSVToMembers(csvText);
+      };
+      reader.readAsText(file);
+    }
+  };
+  input.click();
+}
+
+function parseCSVToMembers(csvText) {
+  const lines = csvText.split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+  
+  const newMembers = [];
+  let id = Math.max(...members.map(m => m.id), 0) + 1;
+  
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim()) {
+      const values = parseCSVLine(lines[i]);
+      const record = {};
+      
+      headers.forEach((header, index) => {
+        record[header] = values[index] ? values[index].trim().replace(/"/g, '') : '';
+      });
+      
+      // Only add if we have a name
+      if (record['Last Name'] || record['First Name(s)']) {
+        const name = `${record['First Name(s)']} ${record['Last Name']}`;
+        const email = record['E-mail Address (Primary)'] || '';
+        const phone = record['Primary Phone'] || '';
+        
+        // Determine membership type
+        let type = 'individual';
+        const membershipType = record['Type of Membership'] || '';
+        if (membershipType.toLowerCase().includes('joint') || membershipType.toLowerCase().includes('family')) {
+          type = 'family';
+        } else if (membershipType.toLowerCase().includes('student')) {
+          type = 'student';
+        } else if (membershipType.toLowerCase().includes('lifetime')) {
+          type = 'lifetime';
+        }
+        
+        // Determine dues status (you can customize this logic)
+        let duesStatus = 'overdue';
+        const lastPaid = record['Membership Last Paid'] || '';
+        if (lastPaid && new Date(lastPaid).getFullYear() === 2025) {
+          duesStatus = 'current';
+        } else if (record['Dues'] && record['Dues'] !== '0') {
+          duesStatus = 'pending';
+        }
+        
+        newMembers.push({
+          id: id++,
+          name: name,
+          email: email,
+          phone: phone,
+          type: type,
+          duesStatus: duesStatus,
+          lastPayment: lastPaid || null,
+          year: 2025
+        });
+      }
+    }
+  }
+  
+  if (newMembers.length > 0) {
+    const confirmImport = confirm(`Import ${newMembers.length} members from CSV? This will replace existing data.`);
+    if (confirmImport) {
+      members = newMembers;
+      saveMembers();
+      updateDisplay();
+      alert(`✅ Successfully imported ${newMembers.length} members from CSV!`);
+    }
+  } else {
+    alert('No valid member records found in CSV file');
+  }
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+// Update statistics and table
+function updateDisplay() {
+  updateStatistics();
+  updateMemberTable();
+}
+
+function updateStatistics() {
+  const total = members.length;
+  const current = members.filter(m => m.duesStatus === 'current').length;
+  const overdue = members.filter(m => m.duesStatus === 'overdue').length;
+  const pending = members.filter(m => m.duesStatus === 'pending').length;
+  
+  document.getElementById('totalMembers').textContent = total;
+  document.getElementById('currentMembers').textContent = current;
+  document.getElementById('overdueMembers').textContent = overdue;
+  document.getElementById('pendingMembers').textContent = pending;
+}
+
+function updateMemberTable() {
+  const tbody = document.getElementById('memberTableBody');
+  tbody.innerHTML = '';
+  
+  const filteredMembers = getFilteredMembers();
+  
+  filteredMembers.forEach(member => {
+    const row = document.createElement('tr');
+    row.className = `member-row dues-${member.duesStatus}`;
+    row.dataset.memberId = member.id;
+    
+    const statusBadge = getStatusBadge(member.duesStatus);
+    const typeDisplay = getTypeDisplay(member.type);
+    
+    row.innerHTML = `
+      <td>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <input type="checkbox" class="member-checkbox" value="${member.id}">
+          <strong>${member.name}</strong>
+        </div>
+      </td>
+      <td>
+        <div>${member.email}</div>
+        <div style="color: #64748b; font-size: 0.9rem;">${member.phone}</div>
+      </td>
+      <td>${typeDisplay}</td>
+      <td>
+        <div class="dues-status">
+          <input type="checkbox" class="dues-checkbox" ${member.duesStatus === 'current' ? 'checked' : ''} 
+                 onchange="toggleDuesStatus(${member.id})">
+          <span class="dues-badge badge-${member.duesStatus}">${statusBadge}</span>
+        </div>
+      </td>
+      <td>${formatDate(member.lastPayment)}</td>
+      <td>
+        <div class="action-buttons">
+          <button class="btn-contact" onclick="contactMember('${member.email}')">📧</button>
+          <button class="btn-edit" onclick="editMember(${member.id})">✏️</button>
+          <button class="btn-delete" onclick="deleteMember(${member.id})">🗑️</button>
+        </div>
+      </td>
+    `;
+    
+    tbody.appendChild(row);
+  });
+}
+
+function getStatusBadge(status) {
+  const badges = {
+    current: '✅ Current',
+    overdue: '❌ Overdue', 
+    pending: '⏳ Pending'
+  };
+  return badges[status] || status;
+}
+
+function getTypeDisplay(type) {
+  const types = {
+    individual: 'Individual',
+    family: 'Family',
+    student: 'Student', 
+    lifetime: 'Lifetime'
+  };
+  return types[type] || type;
+}
+
+function formatDate(dateString) {
+  if (!dateString) return 'No payment';
+  const date = new Date(dateString);
+  return date.toLocaleDateString();
+}
+
+// Filtering functions
+function getFilteredMembers() {
+  const search = document.getElementById('memberSearch').value.toLowerCase();
+  const duesFilter = document.getElementById('duesFilter').value;
+  const typeFilter = document.getElementById('typeFilter').value;
+  const yearFilter = document.getElementById('yearFilter').value;
+  
+  return members.filter(member => {
+    let matches = true;
+    
+    if (search && !member.name.toLowerCase().includes(search) && 
+        !member.email.toLowerCase().includes(search)) {
+      matches = false;
+    }
+    
+    if (duesFilter && member.duesStatus !== duesFilter) {
+      matches = false;
+    }
+    
+    if (typeFilter && member.type !== typeFilter) {
+      matches = false;
+    }
+    
+    if (yearFilter && member.year.toString() !== yearFilter) {
+      matches = false;
+    }
+    
+    return matches;
+  });
+}
+
+function filterMembers() {
+  updateMemberTable();
+}
+
+// Dues management functions
+function toggleDuesStatus(memberId) {
+  const member = members.find(m => m.id === memberId);
+  if (member) {
+    if (member.duesStatus === 'current') {
+      member.duesStatus = 'overdue';
+      member.lastPayment = null;
+    } else {
+      member.duesStatus = 'current';
+      member.lastPayment = new Date().toISOString().split('T')[0];
+    }
+    saveMembers();
+    updateDisplay();
+  }
+}
+
+function markAllCurrentDues() {
+  const selected = getSelectedMembers();
+  if (selected.length === 0) {
+    alert('Please select members to mark as current');
+    return;
+  }
+  
+  selected.forEach(id => {
+    const member = members.find(m => m.id === parseInt(id));
+    if (member) {
+      member.duesStatus = 'current';
+      member.lastPayment = new Date().toISOString().split('T')[0];
+    }
+  });
+  
+  updateDisplay();
+  alert(`✅ Marked ${selected.length} members as current on dues`);
+}
+
+// Member CRUD operations
+function openAddMemberModal() {
+  currentEditingId = null;
+  document.getElementById('modalTitle').textContent = 'Add New Member';
+  document.getElementById('saveBtn').textContent = 'Add Member';
+  clearMemberForm();
+  document.getElementById('memberModal').style.display = 'block';
+}
+
+function editMember(id) {
+  const member = members.find(m => m.id === id);
+  if (member) {
+    currentEditingId = id;
+    document.getElementById('modalTitle').textContent = 'Edit Member';
+    document.getElementById('saveBtn').textContent = 'Update Member';
+    
+    document.getElementById('memberName').value = member.name;
+    document.getElementById('memberEmail').value = member.email;
+    document.getElementById('memberPhone').value = member.phone;
+    document.getElementById('memberType').value = member.type;
+    document.querySelector(`input[name="duesStatus"][value="${member.duesStatus}"]`).checked = true;
+    document.getElementById('lastPayment').value = member.lastPayment || '';
+    
+    document.getElementById('memberModal').style.display = 'block';
+  }
+}
+
+function deleteMember(id) {
+  const member = members.find(m => m.id === id);
+  if (member) {
+    showConfirmation(
+      `Delete member "${member.name}"?`,
+      `This will permanently remove ${member.name} from your database. This action cannot be undone.`,
+      () => {
+        members = members.filter(m => m.id !== id);
+        saveMembers();
+        updateDisplay();
+        alert(`🗑️ Deleted member: ${member.name}`);
+      }
+    );
+  }
+}
+
+function saveMember() {
+  const name = document.getElementById('memberName').value.trim();
+  const email = document.getElementById('memberEmail').value.trim();
+  const phone = document.getElementById('memberPhone').value.trim();
+  const type = document.getElementById('memberType').value;
+  const duesStatus = document.querySelector('input[name="duesStatus"]:checked').value;
+  const lastPayment = document.getElementById('lastPayment').value;
+  
+  if (!name || !email) {
+    alert('Name and email are required');
+    return;
+  }
+  
+  const memberData = {
+    name,
+    email,
+    phone,
+    type,
+    duesStatus,
+    lastPayment: lastPayment || null,
+    year: 2025
+  };
+  
+  if (currentEditingId) {
+    // Update existing member
+    const index = members.findIndex(m => m.id === currentEditingId);
+    if (index !== -1) {
+      members[index] = { ...members[index], ...memberData };
+      saveMembers();
+      alert(`✅ Updated member: ${name}`);
+    }
+  } else {
+    // Add new member
+    const newId = Math.max(...members.map(m => m.id), 0) + 1;
+    members.push({ id: newId, ...memberData });
+    alert(`✅ Added new member: ${name}`);
+  }
+  
+  saveMembers();
+  closeMemberModal();
+  updateDisplay();
+}
+
+function clearMemberForm() {
+  document.getElementById('memberName').value = '';
+  document.getElementById('memberEmail').value = '';
+  document.getElementById('memberPhone').value = '';
+  document.getElementById('memberType').value = 'individual';
+  document.querySelector('input[name="duesStatus"][value="overdue"]').checked = true;
+  document.getElementById('lastPayment').value = '';
+}
+
+// Modal functions
+function closeMemberModal() {
+  document.getElementById('memberModal').style.display = 'none';
+}
+
+function showConfirmation(title, message, callback) {
+  document.getElementById('confirmModal').querySelector('h3').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+  pendingAction = callback;
+  document.getElementById('confirmModal').style.display = 'block';
+}
+
+function closeConfirmModal() {
+  document.getElementById('confirmModal').style.display = 'none';
+  pendingAction = null;
+}
+
+function confirmAction() {
+  if (pendingAction) {
+    pendingAction();
+  }
+  closeConfirmModal();
+}
+
+// Bulk operations
+function getSelectedMembers() {
+  const checkboxes = document.querySelectorAll('.member-checkbox:checked');
+  return Array.from(checkboxes).map(cb => cb.value);
+}
+
+function toggleSelectAll() {
+  const selectAll = document.getElementById('selectAll');
+  const checkboxes = document.querySelectorAll('.member-checkbox');
+  checkboxes.forEach(cb => cb.checked = selectAll.checked);
+}
+
+function sendDuesReminders() {
+  const overdueMembers = members.filter(m => m.duesStatus === 'overdue');
+  if (overdueMembers.length === 0) {
+    alert('No overdue members found');
+    return;
+  }
+  
+  const emails = overdueMembers.map(m => m.email).join(';');
+  const subject = 'CVCWVUAA - Membership Dues Reminder';
+  const body = `Dear Fellow Mountaineer,\n\nThis is a friendly reminder that your Central Virginia Chapter membership dues are overdue.\n\nPlease renew at your earliest convenience.\n\nLet's Go Mountaineers!`;
+  
+  window.open(`mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+  alert(`📧 Opening email to ${overdueMembers.length} overdue members`);
+}
+
+function exportDuesReport() {
+  const report = members.map(m => 
+    `${m.name}\t${m.email}\t${m.type}\t${m.duesStatus}\t${formatDate(m.lastPayment)}`
+  ).join('\n');
+  
+  const csvContent = `Name\tEmail\tType\tDues Status\tLast Payment\n${report}`;
+  const blob = new Blob([csvContent], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `CVCWVUAA-Dues-Report-${new Date().toISOString().split('T')[0]}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  alert('📊 Dues report exported!');
+}
+
+function bulkDeleteOverdue() {
+  const overdueMembers = members.filter(m => m.duesStatus === 'overdue');
+  if (overdueMembers.length === 0) {
+    alert('No overdue members found');
+    return;
+  }
+  
+  showConfirmation(
+    `Delete ${overdueMembers.length} overdue members?`,
+    `This will permanently remove all members marked as overdue. This action cannot be undone.`,
+    () => {
+      members = members.filter(m => m.duesStatus !== 'overdue');
+      updateDisplay();
+      alert(`🗑️ Deleted ${overdueMembers.length} overdue members`);
+    }
+  );
+}
+
+function contactMember(email) {
+  window.open(`mailto:${email}?subject=From CVCWVUAA President`);
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  initializeMembers();
+});
+</script>
+
+</body>
+</html>

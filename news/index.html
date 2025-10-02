@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>News • CVCWVUAA</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    .news-grid{display:grid;gap:16px;grid-template-columns:1fr}
+    @media(min-width:980px){.news-layout{display:grid;grid-template-columns:320px 1fr;gap:18px}}
+    .post-list .item{padding:10px;border-radius:10px;border:1px solid #e6e9ef;background:#fff}
+    .post-list .item a{font-weight:800}
+    .post-body{background:#fff;border:1px solid #e6e9ef;border-radius:12px;padding:18px}
+    .post-meta{font-size:14px;color:#5b6777;margin-bottom:8px}
+  </style>
+</head>
+<body>
+  <!-- header -->
+  <header class="site">
+    <div class="wrapper topbar">
+      <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+        <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+      </a>
+
+      <!-- Mobile menu button -->
+      <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+
+      <nav id="site-nav" class="nav">
+        <a href="/index.html">Home</a>
+
+        <!-- Dropdown -->
+        <div class="menu dropdown">
+          <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+          <div class="dropdown-panel" role="menu" aria-label="About">
+            <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+            <a role="menuitem" href="/pay.html">Membership</a>
+            <a role="menuitem" href="/board.html">Board Members</a>
+            <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+            <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+          </div>
+        </div>
+
+        <a href="/events.html">Events</a>
+        <a href="/news.html">News</a>
+        <a href="/newsletters/">Newsletters</a>
+        <a href="/scores.html">Scores</a>
+        <a href="/resources.html">Resources</a>
+        <a href="/programs.html">Programs</a>
+        <a href="/scholarship.html">Scholarship</a>
+        <a href="/media.html">Media</a>
+        <a href="/search.html">🔍 Search</a>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrapper news-layout">
+      <aside>
+        <h2>News</h2>
+        <div id="post-list" class="post-list"></div>
+      </aside>
+      <article class="post-body">
+        <div id="post-meta" class="post-meta"></div>
+        <div id="post-content">Select a post…</div>
+      </article>
+    </div>
+  </main>
+
+  <!-- footer -->
+  <footer class="site-footer">
+    <div class="wrapper">
+      <div class="footer-bar">
+        <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+      </div>
+      <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+    </div>
+  </footer>
+
+  <script>
+    const qs = new URLSearchParams(location.search);
+    const slug = qs.get('p');
+
+    async function loadList(){
+      const res = await fetch('/news/posts.json', {cache:'no-store'});
+      const posts = await res.json();
+      const list = document.getElementById('post-list');
+      list.innerHTML = '';
+      const view = posts.filter(p => p && (p.published || qs.get('p') === p.slug));
+      view.forEach(p=>{
+        const a = document.createElement('a');
+        a.href = '/news/index.html?p=' + encodeURIComponent(p.slug);
+        a.textContent = p.title;
+        const item = document.createElement('div');
+        item.className = 'item';
+        item.appendChild(a);
+        const meta = document.createElement('div');
+        meta.className = 'post-meta';
+        meta.textContent = `${p.date} • ${p.author}`;
+        item.appendChild(meta);
+        list.appendChild(item);
+      });
+      // Load first post by default
+      if(!slug && view[0]) render(view[0]);
+      if(slug){
+        const match = view.find(p=>p.slug===slug) || posts.find(p=>p.slug===slug);
+        render(match || posts[0]);
+      }
+    }
+
+    async function render(post){
+      if(!post) return;
+      const r = await fetch(post.file, {cache:'no-store'});
+      const md = await r.text();
+      document.getElementById('post-meta').textContent = `${post.date} • ${post.author}`;
+      document.getElementById('post-content').innerHTML = marked.parse(md);
+    }
+
+    // year stamp
+    document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+
+    loadList();
+
+    // Mobile: open/close main nav
+    const navBtn = document.querySelector('.nav-toggle');
+    const nav = document.getElementById('site-nav');
+    if (navBtn && nav) {
+      navBtn.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+
+    // Mobile: tap to open About dropdown
+    const aboutMenu = document.querySelector('.menu.dropdown');
+    const aboutBtn = document.querySelector('.menu.dropdown .dropbtn');
+    if (aboutBtn && aboutMenu) {
+      aboutBtn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 900px)').matches) {
+          e.preventDefault();
+          aboutMenu.classList.toggle('open');
+          aboutBtn.setAttribute('aria-expanded', aboutMenu.classList.contains('open') ? 'true' : 'false');
+        }
+      });
+    }
+  </script>
+  <script src="/js/theme-toggle.js"></script>
+</body>
+</html>

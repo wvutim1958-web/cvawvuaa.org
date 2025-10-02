@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Jane Doe (’12)",
+    "meta": "Community Leadership • Richmond, VA",
+    "text": "Jane leads quarterly career networking nights for area Mountaineers and helped organize our scholarship fundraiser.",
+    "image": "/assets/photos/spotlight-sample-1.jpg",
+    "alt": "Alumnus at event"
+  },
+  {
+    "title": "Chris Smith (’08)",
+    "meta": "Service & Fundraising • Chester, VA",
+    "text": "Chris coordinates Bears & Blankets drives—collecting 150+ items for WVU Medicine Children’s Hospital.",
+    "image": "/assets/photos/spotlight-sample-2.jpg",
+    "alt": "Alumnus volunteering"
+  }
+]

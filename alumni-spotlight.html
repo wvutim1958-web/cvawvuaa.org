@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alumni Spotlight • CVCWVUAA</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    .spot-grid{display:grid;gap:18px;grid-template-columns:1fr}
+    @media(min-width:960px){.spot-grid{grid-template-columns:1fr 1fr}}
+    .spot-card img{width:100%;height:220px;object-fit:cover;border-radius:12px}
+    .spot-meta{font-size:14px;color:#5b6777}
+  </style>
+</head>
+<body>
+  <!-- HEADER (match your current header markup) -->
+  <header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">🔍</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+    </nav>
+  </div>
+</header>
+
+
+  <main>
+    <div class="wrapper">
+      <h2>Alumni Spotlight</h2>
+      <p class="small">Celebrating Mountaineers in Central Virginia—share a nomination via our <a href="/contact.html">contact form</a>.</p>
+
+      <div id="spot-grid" class="spot-grid"></div>
+      <div id="spot-empty" class="card" style="display:none"><p>No spotlights yet. Add entries to <code>/content/spotlight.json</code>.</p></div>
+    </div>
+  </main>
+
+  <!-- FOOTER (match your current footer markup) -->
+  <footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
+
+<script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+<script>
+  // Load spotlight entries from JSON
+  (async function(){
+    try {
+      const res = await fetch('/content/spotlight.json', {cache:'no-store'});
+      if(!res.ok) throw new Error('missing spotlight.json');
+      const items = await res.json();
+      const grid = document.getElementById('spot-grid');
+      if(!Array.isArray(items) || items.length === 0){
+        document.getElementById('spot-empty').style.display = 'block';
+        return;
+      }
+      items.forEach(s => {
+        const card = document.createElement('article');
+        card.className = 'card spot-card';
+        if(s.image){
+          const img = document.createElement('img');
+          img.src = s.image; img.alt = s.alt || s.name || 'Alumni spotlight photo';
+          card.appendChild(img);
+        }
+        const h3 = document.createElement('h3');
+        h3.textContent = s.title || s.name || 'Alumni Spotlight';
+        const meta = document.createElement('div');
+        meta.className = 'spot-meta';
+        meta.textContent = s.meta || '';
+        const p = document.createElement('p');
+        p.textContent = s.text || '';
+        card.appendChild(h3);
+        if(meta.textContent) card.appendChild(meta);
+        if(p.textContent) card.appendChild(p);
+        grid.appendChild(card);
+      });
+    } catch(e){
+      document.getElementById('spot-empty').style.display = 'block';
+    }
+  })();
+</script>
+<script>
+  // Mobile: open/close main nav
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+  // Mobile: tap to open dropdowns
+  document.querySelectorAll('.menu.dropdown').forEach(menu => {
+    const btn = menu.querySelector('.dropbtn');
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 900px)').matches) {
+          e.preventDefault();
+          menu.classList.toggle('open');
+          btn.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
+        }
+      });
+    }
+  });
+
+  // Theme toggle functionality
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    });
+  }
+</script>
+
+</body>
+</html>

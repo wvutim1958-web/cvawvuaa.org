@@ -1,0 +1,289 @@
+<!doctype html><html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSVP</title>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/assets/wvu-brand.css?v=40">
+</head>
+<body>
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+      <a href="/events.html">Events</a>
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/news.html">News</a>
+    </nav>
+  </div>
+</header>
+<main><div class="wrapper">
+  <h2>RSVP</h2>
+  <div id="event-info" class="card" style="margin-bottom: 24px; display: none;">
+    <h3 id="event-title">Event Details</h3>
+    <p id="event-details"></p>
+  </div>
+  
+  <form id="rsvp-form" class="stack" action="https://formsubmit.co/president@cvawvuaa.org" method="POST" novalidate>
+    <!-- FormSubmit settings -->
+    <input type="hidden" name="_subject" value="CVCWVUAA RSVP">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://cvawvuaa.org/thanks.html">
+    <!-- Honeypot: bots will fill this, humans won't (hidden via CSS) -->
+    <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">
+      <label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <div class="form-grid">
+      <div class="card" style="grid-column:1/-1">
+        <label>Pick Event (optional)
+          <select id="event-picker"><option value="">-- Select an event --</option></select>
+        </label>
+        <div class="small" style="color:#5b6777">Choosing an event will fill in the fields below.</div>
+      </div>
+      
+      <!-- Contact Information -->
+      <label>Name *
+        <input type="text" name="Name" autocomplete="name" required>
+      </label>
+      <label>Email (for confirmation) *
+        <input type="email" name="Email" autocomplete="email" required>
+      </label>
+      <label>Phone (optional)
+        <input type="tel" name="Phone" autocomplete="tel">
+      </label>
+      
+      <!-- Event Details -->
+      <label>Event Name *
+        <input id="event-name" type="text" name="Event" required>
+      </label>
+      
+      <!-- RSVP Response -->
+      <div style="grid-column: 1/-1;">
+        <fieldset style="border: 1px solid #ddd; padding: 16px; border-radius: 6px;">
+          <legend style="padding: 0 8px; font-weight: 600;">Will you attend? *</legend>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px;">
+            <label style="display: flex; align-items: center; gap: 6px; font-weight: normal;">
+              <input type="radio" name="attending" value="yes" required>
+              <span>✅ Yes, I'll be there!</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-weight: normal;">
+              <input type="radio" name="attending" value="no" required>
+              <span>❌ Can't make it</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-weight: normal;">
+              <input type="radio" name="attending" value="maybe" required>
+              <span>❓ Maybe</span>
+            </label>
+          </div>
+        </fieldset>
+      </div>
+      
+      <!-- Guest Information -->
+      <label>Number of Guests
+        <input type="number" name="guests" min="0" max="10" value="0">
+        <div class="small">How many additional guests will you bring?</div>
+      </label>
+      
+      <!-- Member Type -->
+      <label>Member Type
+        <select name="member-type">
+          <option value="member">Chapter Member</option>
+          <option value="alumni">WVU Alumni (Non-member)</option>
+          <option value="friend">Friend/Family</option>
+          <option value="student">Current Student</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      
+      <!-- Comments -->
+      <label style="grid-column: 1/-1;">Comments or Special Requests
+        <textarea name="comments" rows="3" placeholder="Dietary restrictions, accessibility needs, questions, etc."></textarea>
+      </label>
+    </div>
+  <input type="hidden" name="eventId" id="eventId">
+    <p>
+      <button type="submit" class="btn">Send RSVP</button>
+      <a class="btn" href="/events.html">Back to Events</a>
+    </p>
+    <p class="small">Your RSVP is sent to the chapter inbox and saved locally in your browser (admin can export).</p>
+  </form>
+
+  <!-- Admin/local view (shows only with ?admin=1) -->
+  <section id="rsvp-admin" class="card" style="display:none; margin-top:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap">
+      <h3 style="margin:0">Local RSVPs (Private View)</h3>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button id="export-json" class="btn" type="button">Export JSON</button>
+  <button id="export-csv" class="btn" type="button">Export CSV</button>
+  <button id="export-emails" class="btn" type="button">Export Emails</button>
+        <label class="btn" for="import-json" style="cursor:pointer">Import JSON</label>
+        <input id="import-json" type="file" accept="application/json" style="display:none">
+        <button id="clear-local" class="btn" type="button">Clear Local</button>
+      </div>
+    </div>
+    <div class="small" style="color:#5b6777;margin:.5rem 0">Tip: Append <code>?admin=1</code> to the URL to show this panel.</div>
+    <div class="table-wrap" style="overflow:auto">
+      <table id="rsvp-table" style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="text-align:left;border-bottom:1px solid var(--border-color)">When</th>
+            <th style="text-align:left;border-bottom:1px solid var(--border-color)">Name</th>
+            <th style="text-align:left;border-bottom:1px solid var(--border-color)">Email</th>
+            <th style="text-align:left;border-bottom:1px solid var(--border-color)">Game</th>
+            <th style="text-align:left;border-bottom:1px solid var(--border-color)">Count</th>
+            <th style="text-align:left;border-bottom:1px solid var(--border-color)">Requests</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</div></main>
+<script src="/js/rsvp.js"></script>
+<script>
+  // Load events and wire the event picker to fill Game and eventId
+  (async function(){
+    try{
+      const res = await fetch('/events/events.json', {cache:'no-store'});
+      const events = await res.json();
+      if(!Array.isArray(events)) return;
+      const sel = document.getElementById('event-picker'); if(!sel) return;
+      // sort by date asc
+      events.sort((a,b)=> String(a.date||'').localeCompare(String(b.date||'')));
+      for(const e of events){
+        const o = document.createElement('option');
+        const d = e.date ? new Date(e.date).toLocaleDateString(undefined, {month:'short', day:'numeric'}) : '';
+        o.value = e.slug || '';
+        o.textContent = `${e.title||''}${d ? ' — '+d : ''}`;
+        o.dataset.title = e.title||'';
+        sel.appendChild(o);
+      }
+      sel.addEventListener('change', ()=>{
+        const opt = sel.options[sel.selectedIndex]; if(!opt || !opt.value) { document.getElementById('eventId').value=''; return; }
+        document.getElementById('eventId').value = opt.value;
+        const title = opt.dataset.title || '';
+        const game = document.getElementById('game'); if(game){ game.value = title; }
+      });
+      // If URL already has eventId, preselect it
+      const qs = new URLSearchParams(location.search);
+      const eid = qs.get('eventId');
+      const game = qs.get('game');
+      if(eid){ sel.value = eid; document.getElementById('eventId').value = eid; }
+      if(game){ const g=document.getElementById('game'); if(g) g.value = game; }
+    }catch{}
+  })();
+</script>
+
+<!-- Enhanced RSVP Management System -->
+<script src="/js/rsvp-manager.js"></script>
+<script>
+  // Enhanced event picker functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const eventPicker = document.getElementById('event-picker');
+    const eventName = document.getElementById('event-name');
+    const eventInfo = document.getElementById('event-info');
+    const eventTitle = document.getElementById('event-title');
+    const eventDetails = document.getElementById('event-details');
+    
+    // Update event picker to work with new system
+    if (eventPicker) {
+      eventPicker.addEventListener('change', async () => {
+        const selectedSlug = eventPicker.value;
+        if (selectedSlug && rsvpManager.events.length > 0) {
+          const event = rsvpManager.events.find(e => e.slug === selectedSlug);
+          if (event) {
+            // Fill event name
+            if (eventName) eventName.value = event.title;
+            
+            // Show event details
+            if (eventInfo && eventTitle && eventDetails) {
+              eventTitle.textContent = event.title;
+              const dateStr = event.date ? new Date(event.date).toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+              }) : '';
+              const timeStr = event.time ? new Date(`2000-01-01 ${event.time}`).toLocaleTimeString('en-US', {
+                hour: 'numeric', minute: '2-digit', hour12: true
+              }) : '';
+              
+              eventDetails.innerHTML = `
+                ${event.description ? `<p><strong>Description:</strong> ${event.description}</p>` : ''}
+                ${dateStr ? `<p><strong>Date:</strong> ${dateStr}</p>` : ''}
+                ${timeStr ? `<p><strong>Time:</strong> ${timeStr}</p>` : ''}
+                ${event.location ? `<p><strong>Location:</strong> ${event.location}</p>` : ''}
+              `;
+              eventInfo.style.display = 'block';
+            }
+          }
+        } else {
+          if (eventName) eventName.value = '';
+          if (eventInfo) eventInfo.style.display = 'none';
+        }
+      });
+    }
+
+    // Auto-select event from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventFromURL = urlParams.get('event');
+    if (eventFromURL && eventPicker) {
+      // Wait a moment for events to load
+      setTimeout(() => {
+        eventPicker.value = eventFromURL;
+        eventPicker.dispatchEvent(new Event('change'));
+      }, 500);
+    }
+  });
+</script>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
+</body>
+<script>
+  (function(){
+    const navBtn = document.querySelector('.nav-toggle');
+    const nav = document.getElementById('site-nav');
+    if (navBtn && nav) {
+      navBtn.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+    const aboutMenu = document.querySelector('.menu.dropdown');
+    const aboutBtn  = document.querySelector('.menu.dropdown .dropbtn');
+    if (aboutBtn && aboutMenu) {
+      aboutBtn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 900px)').matches) {
+          e.preventDefault();
+          aboutMenu.classList.toggle('open');
+          aboutBtn.setAttribute('aria-expanded', aboutMenu.classList.contains('open') ? 'true' : 'false');
+        }
+      });
+    }
+  })();
+</script>
+</html>

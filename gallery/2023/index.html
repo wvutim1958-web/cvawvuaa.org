@@ -1,0 +1,36 @@
+<!doctype html><html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CVCWVUAA • Gallery 2023</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="/assets/favicon.png">
+  <meta name="theme-color" content="#002855">
+  <meta name="description" content="CVCWVUAA photo gallery for 2023.">
+</head>
+<body>
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA"><img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo"></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+      <a href="/gallery/">All Years</a>
+    </nav>
+  </div>
+  
+</header>
+<main><div class="wrapper">
+  <h2>Gallery • 2023</h2>
+  <div id="gallery-grid" class="gallery-grid" style="display:grid;gap:16px;grid-template-columns:1fr;">Loading…</div>
+</div></main>
+<footer class="site-footer"><div class="wrapper"><div class="footer-bar"><div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div><div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div></div></footer>
+<script> if(location.search.indexOf('year=')===-1){ const u=new URL(location.href); u.searchParams.set('year','2023'); location.replace(u.toString()); }</script>
+<script src="/js/gallery.js"></script>
+<script>
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+  (function(){const b=document.querySelector('.nav-toggle'),n=document.getElementById('site-nav');if(b&&n){b.addEventListener('click',()=>{const o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});}})();
+  
+</script>
+</body></html>

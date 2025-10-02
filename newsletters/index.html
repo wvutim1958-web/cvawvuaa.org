@@ -1,0 +1,262 @@
+<!doctype html><html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CVCWVUAA • Newsletter Archive</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .post-list { display:grid; gap:12px }
+    .post-item { padding:12px }
+  </style>
+  </head>
+<body>
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA"><img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo"></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+      <a href="/news.html">News</a>
+      <a href="/newsletters/">Newsletters</a>
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/search.html">🔍 Search</a>
+      <button class="theme-toggle" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </nav>
+  </div>
+</header>
+<main><div class="wrapper">
+  <h2>📧 Newsletter Archive</h2>
+  <p class="lead">Browse past newsletters from the Central Virginia Chapter. Stay connected with event recaps, upcoming activities, and chapter news.</p>
+
+  <div class="card" style="margin-bottom: 24px; background: #f8f9fa;">
+    <h3>Subscribe to Our Newsletter</h3>
+    <p>Want to receive our newsletters directly in your inbox? <a href="/contact.html">Contact us</a> to join our mailing list and stay updated on all chapter activities.</p>
+  </div>
+
+  <!-- Generated Newsletters -->
+  <div id="generated-newsletters">
+    <div class="card">
+      <p style="text-align: center; color: #5b6777; font-style: italic;">Loading generated newsletters...</p>
+    </div>
+  </div>
+
+  <!-- Static Newsletter Posts -->
+  <div style="margin-top: 32px;">
+    <h3>Published Newsletters</h3>
+    <div id="posts" class="post-list"></div>
+  </div>
+
+  <!-- Generate Newsletter (Admin Only) -->
+  <div id="admin-newsletter-actions" style="display: none; margin-top: 24px;">
+    <div class="card" style="background: #e3f2fd;">
+      <h3>🔧 Admin Actions</h3>
+      <p>Generate and manage newsletters for the chapter.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button class="btn" onclick="generateNewsletterFromArchive()">✨ Generate New Newsletter</button>
+        <a class="btn outline" href="/admin/index.html">📊 Admin Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+</div></main>
+<footer class="site-footer"><div class="wrapper"><div class="footer-bar"><div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div><div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div></div></footer>
+<!-- Newsletter System -->
+<script src="/js/newsletter-generator.js"></script>
+<script src="/js/newsletters.js"></script>
+<script>
+  // Load generated newsletters
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(loadGeneratedNewsletters, 500);
+    
+    // Show admin actions if in admin mode
+    const isAdmin = window.location.search.includes('admin=1') || 
+                    window.location.hostname === 'localhost' ||
+                    window.location.hostname === '127.0.0.1';
+    
+    if (isAdmin) {
+      document.getElementById('admin-newsletter-actions').style.display = 'block';
+    }
+  });
+
+  function loadGeneratedNewsletters() {
+    const container = document.getElementById('generated-newsletters');
+    
+    if (typeof window.newsletterGenerator === 'undefined') {
+      container.innerHTML = `
+        <div class="card">
+          <p style="text-align: center; color: #5b6777;">Newsletter system is loading...</p>
+        </div>
+      `;
+      return;
+    }
+
+    const newsletters = window.newsletterGenerator.getNewsletters();
+    
+    if (newsletters.length === 0) {
+      container.innerHTML = `
+        <div class="card">
+          <h3>Auto-Generated Newsletters</h3>
+          <p>No automatically generated newsletters yet. Use the admin panel to create your first newsletter!</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Sort newsletters by date (newest first)
+    const sortedNewsletters = newsletters.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    const newsletterCards = sortedNewsletters.map(newsletter => {
+      const date = new Date(newsletter.date);
+      const dateStr = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      
+      const typeLabels = {
+        monthly: '📅 Monthly Newsletter',
+        events: '🎉 Event Announcement', 
+        news: '📰 News Update',
+        quarterly: '📊 Quarterly Report'
+      };
+      
+      return `
+        <div class="card post-item" style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 8px 0;">
+                <a href="#" onclick="viewNewsletterModal('${newsletter.id}'); return false;" style="text-decoration: none;">
+                  ${newsletter.title}
+                </a>
+              </h4>
+              <div style="display: flex; gap: 16px; margin-bottom: 8px; color: #5b6777; font-size: 14px;">
+                <span>${dateStr}</span>
+                <span>${typeLabels[newsletter.type] || newsletter.type}</span>
+              </div>
+              <p style="margin: 0; color: #5b6777;">
+                Auto-generated newsletter with event updates, news, and chapter information.
+              </p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <button class="btn outline" style="padding: 4px 8px; font-size: 12px;" onclick="viewNewsletterModal('${newsletter.id}')">👁️ Read</button>
+              <button class="btn outline" style="padding: 4px 8px; font-size: 12px;" onclick="downloadNewsletterFromArchive('${newsletter.id}')">💾 Download</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    container.innerHTML = `
+      <div>
+        <h3>Auto-Generated Newsletters</h3>
+        ${newsletterCards}
+      </div>
+    `;
+  }
+
+  function viewNewsletterModal(newsletterId) {
+    const newsletter = window.newsletterGenerator.getNewsletters().find(n => n.id === newsletterId);
+    if (!newsletter) return;
+
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8); z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; box-sizing: border-box;
+    `;
+
+    modal.innerHTML = `
+      <div style="
+        background: white; border-radius: 12px; max-width: 800px; width: 100%;
+        max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column;
+      ">
+        <div style="padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0;">${newsletter.title}</h3>
+          <button onclick="this.closest('[style*=\"fixed\"]').remove()" style="
+            background: none; border: none; font-size: 24px; cursor: pointer;
+            color: #999; padding: 0; width: 32px; height: 32px; display: flex;
+            align-items: center; justify-content: center;
+          ">×</button>
+        </div>
+        <div style="flex: 1; overflow-y: auto;">
+          <iframe srcdoc="${newsletter.htmlContent.replace(/"/g, '&quot;')}" style="width: 100%; height: 600px; border: none;"></iframe>
+        </div>
+        <div style="padding: 16px; border-top: 1px solid #eee; display: flex; gap: 8px; justify-content: flex-end;">
+          <button onclick="downloadNewsletterFromArchive('${newsletter.id}')" style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">💾 Download HTML</button>
+          <button onclick="this.closest('[style*=\"fixed\"]').remove()" style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+        </div>
+      </div>
+    `;
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.remove();
+      }
+    });
+
+    document.body.appendChild(modal);
+  }
+
+  function downloadNewsletterFromArchive(newsletterId) {
+    const newsletter = window.newsletterGenerator.getNewsletters().find(n => n.id === newsletterId);
+    if (newsletter) {
+      window.newsletterGenerator.exportNewsletterHTML(newsletter);
+    }
+  }
+
+  function generateNewsletterFromArchive() {
+    window.location.href = '/admin/index.html#newsletters';
+  }
+</script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+
+  // Mobile: open/close main nav
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+
+  // Mobile: tap to open About dropdown
+  const aboutMenu = document.querySelector('.menu.dropdown');
+  const aboutBtn = document.querySelector('.menu.dropdown .dropbtn');
+  if (aboutBtn && aboutMenu) {
+    aboutBtn.addEventListener('click', (e) => {
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        e.preventDefault();
+        aboutMenu.classList.toggle('open');
+        aboutBtn.setAttribute('aria-expanded', aboutMenu.classList.contains('open') ? 'true' : 'false');
+      }
+    });
+  }
+</script>
+<script src="/js/theme-toggle.js"></script>
+</body></html>

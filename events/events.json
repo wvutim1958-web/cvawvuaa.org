@@ -1,0 +1,20 @@
+[
+	{
+		"slug": "watch-party-robert-morris",
+		"title": "Watch Party — Robert Morris",
+		"date": "2025-08-30",
+		"time": "14:00",
+		"location": "Carolina Ale House, Short Pump",
+		"description": "Join fellow Mountaineers for our season opener watch party. Family friendly!",
+		"published": true
+	},
+	{
+		"slug": "watch-party-pittsburgh",
+		"title": "Watch Party — at Pittsburgh",
+		"date": "2025-09-13",
+		"time": "15:30",
+		"location": "Carolina Ale House, Short Pump",
+		"description": "Bring your gold and blue! Raffles and giveaways during halftime.",
+		"published": true
+	}
+]

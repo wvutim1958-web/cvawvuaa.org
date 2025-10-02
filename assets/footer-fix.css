@@ -1,0 +1,10 @@
+
+/* === v36 minimal overrides (do-not-break) === */
+.brand img{max-height:56px !important; height:auto !important; width:auto !important; border-radius:0 !important; object-fit:contain !important; box-shadow:none !important; filter:none !important; opacity:1 !important}
+nav a.btn{background:#ffd100;color:#002855;border-radius:999px;padding:6px 10px;font-weight:700}
+nav a.btn:hover{text-decoration:none;filter:brightness(.95)}
+/* Scores grid for side-by-side */
+.scores-grid{display:grid;gap:18px}
+@media(min-width:900px){.scores-grid{grid-template-columns:1fr 1fr}}
+.scores-grid section{background:#fff;border:1px solid #e6e9ef;border-radius:10px;padding:12px}
+.small{font-size:14px;color:#5b6777}
