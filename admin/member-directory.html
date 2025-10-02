@@ -994,11 +994,26 @@ function emailMember(email) {
 
 function deleteMember(id) {
   const member = members.find(m => m.id === id);
-  if (member && confirm(`Delete member "${member.name}"?\n\nThis action cannot be undone.`)) {
+  if (member && confirm(`Delete member "${member.name}"?\n\nThis member will be removed and won't be re-added from future CSV imports.`)) {
+    // Add to deleted members list (so they don't come back from CSV)
+    const deletedMembers = JSON.parse(localStorage.getItem('cvcwvuaa-deleted-members') || '[]');
+    deletedMembers.push({
+      name: member.name,
+      email: member.email,
+      deletedDate: new Date().toISOString(),
+      deletedBy: 'admin'
+    });
+    localStorage.setItem('cvcwvuaa-deleted-members', JSON.stringify(deletedMembers));
+    
+    // Remove from current members
     members = members.filter(m => m.id !== id);
+    
+    // Save updated members list
+    localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+    
     renderMemberCards();
     updateMemberStats();
-    alert(`🗑️ Deleted member: ${member.name}`);
+    alert(`🗑️ Deleted member: ${member.name}\n\nThey won't be re-added from future CSV imports.`);
   }
 }
 
@@ -1183,6 +1198,90 @@ function importCSVToDirectory() {
   input.click();
 }
 
+function smartMergeMembers(csvMembers) {
+  // Get deleted members list (so they don't come back)
+  const deletedMembers = JSON.parse(localStorage.getItem('cvcwvuaa-deleted-members') || '[]');
+  
+  let added = 0;
+  let updated = 0;
+  let preserved = 0;
+  let deletedStayDeleted = 0;
+  
+  csvMembers.forEach(csvMember => {
+    // Check if this member was previously deleted (by email or name)
+    const wasDeleted = deletedMembers.some(deleted => 
+      deleted.email === csvMember.email || 
+      deleted.name === csvMember.name
+    );
+    
+    if (wasDeleted) {
+      deletedStayDeleted++;
+      return; // Skip - this member was intentionally deleted
+    }
+    
+    // Look for existing member by email (most reliable) or name
+    const existingIndex = members.findIndex(m => 
+      m.email === csvMember.email || 
+      (m.name === csvMember.name && csvMember.email)
+    );
+    
+    if (existingIndex === -1) {
+      // New member - add them
+      const newId = Math.max(...members.map(m => m.id), 0) + 1;
+      csvMember.id = newId;
+      members.push(csvMember);
+      added++;
+    } else {
+      // Existing member - only update safe fields, preserve admin changes
+      const existing = members[existingIndex];
+      
+      // Only update contact info and basic details - NEVER overwrite:
+      // - duesStatus (admin manages this)
+      // - lastPayment (admin manages this) 
+      // - any custom admin fields
+      
+      let hasChanges = false;
+      
+      // Update contact info if CSV has newer/better data
+      if (csvMember.phone && csvMember.phone !== existing.phone) {
+        existing.phone = csvMember.phone;
+        hasChanges = true;
+      }
+      
+      if (csvMember.fullAddress && csvMember.fullAddress !== existing.fullAddress) {
+        existing.streetAddress = csvMember.streetAddress;
+        existing.city = csvMember.city;
+        existing.state = csvMember.state;
+        existing.zip = csvMember.zip;
+        existing.fullAddress = csvMember.fullAddress;
+        hasChanges = true;
+      }
+      
+      if (csvMember.classYear && csvMember.classYear !== existing.classYear) {
+        existing.classYear = csvMember.classYear;
+        hasChanges = true;
+      }
+      
+      if (hasChanges) {
+        updated++;
+      } else {
+        preserved++;
+      }
+    }
+  });
+  
+  // Save updated members list
+  localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+  
+  return {
+    added,
+    updated, 
+    preserved,
+    deletedStayDeleted,
+    changes: added + updated
+  };
+}
+
 function parseCSVForDirectory(csvText) {
   const lines = csvText.split('\n');
   const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
@@ -1273,13 +1372,23 @@ function parseCSVForDirectory(csvText) {
   }
   
   if (newMembers.length > 0) {
-    const confirmImport = confirm(`Import ${newMembers.length} real members from CSV?`);
-    if (confirmImport) {
-      members = newMembers;
-      // Save to localStorage so it syncs with advanced member manager
-      localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+    // Smart merge: preserve existing data, only add/update carefully
+    const result = smartMergeMembers(newMembers);
+    
+    if (result.changes > 0) {
+      const message = `Smart CSV Import Results:
+      
+✅ New members added: ${result.added}
+📝 Members updated: ${result.updated} 
+🔒 Existing members preserved: ${result.preserved}
+🚫 Deleted members stayed deleted: ${result.deletedStayDeleted}
+
+Your manual changes (payments, dues status) have been preserved!`;
+      
+      alert(message);
       initializeDirectory();
-      alert(`✅ Successfully imported ${newMembers.length} real CVCWVUAA members!`);
+    } else {
+      alert('No new members found in CSV. All existing data preserved.');
     }
   } else {
     alert('No valid member records found in CSV file');
