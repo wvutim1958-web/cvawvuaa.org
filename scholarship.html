@@ -1,6 +1,15 @@
-<!doctype html><html lang="en"><head>
+﻿<!doctype html><html lang="en"><head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CVCWVUAA • Scholarship</title>
+<title>CVCWVUAA â€¢ Scholarship</title>
 <link rel="stylesheet" href="/css/styles.css">
 </head><body>
 
@@ -11,7 +20,7 @@
     </a>
 
     <!-- Mobile menu button -->
-    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">â˜°</button>
 
     <nav id="site-nav" class="nav">
       <a href="/index.html">Home</a>
@@ -24,7 +33,7 @@
           <a role="menuitem" href="/pay.html">Membership</a>
           <a role="menuitem" href="/board.html">Board Members</a>
           <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
-          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws Â· Proclamation</a>
         </div>
       </div>
 
@@ -46,10 +55,10 @@
       <a href="/scholarship.html">Scholarship</a>
       <a href="/media.html">Media</a>
       <a href="/contact.html">Contact</a>
-      <a href="/search.html" class="search-btn">🔍</a>
+      <a href="/search.html" class="search-btn">ðŸ”</a>
       
       <!-- Theme toggle -->
-      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button class="theme-toggle" aria-label="Toggle theme">ðŸŒ™</button>
     </nav>
   </div>
 </header>
@@ -115,11 +124,11 @@
     <h3>Recognition and How to Contribute</h3>
     <div class="grid grid-2" style="gap: 16px;">
       <div>
-        <h4 style="color: #059669; margin: 0 0 8px 0;">🏆 Scholarship Brick Recognition</h4>
-        <p>In <strong>2007</strong>, the CVCWVUAA was recognized with a <strong>Scholarship Brick</strong> to honor donors of endowed funds benefiting students. The Foundation engraved the name of the CVCWVUAA endowed scholarship into a brick on the <strong>Ernest L. Hogan Scholars Walk</strong>, located directly in front of WVU's Downtown Library Complex—a visible and permanent way to honor our commitment to student success.</p>
+        <h4 style="color: #059669; margin: 0 0 8px 0;">ðŸ† Scholarship Brick Recognition</h4>
+        <p>In <strong>2007</strong>, the CVCWVUAA was recognized with a <strong>Scholarship Brick</strong> to honor donors of endowed funds benefiting students. The Foundation engraved the name of the CVCWVUAA endowed scholarship into a brick on the <strong>Ernest L. Hogan Scholars Walk</strong>, located directly in front of WVU's Downtown Library Complexâ€”a visible and permanent way to honor our commitment to student success.</p>
       </div>
       <div>
-        <h4 style="color: #059669; margin: 0 0 8px 0;">💝 Make a Contribution</h4>
+        <h4 style="color: #059669; margin: 0 0 8px 0;">ðŸ’ Make a Contribution</h4>
         <p>You can contribute directly to the Blake E. Fought Memorial Scholarship fund:</p>
         <ul style="margin: 8px 0;">
           <li><strong>By Check:</strong> Make payable to "WVU Foundation" with notation "Blake E. Fought Memorial Scholarship/3S844"</li>
@@ -141,10 +150,10 @@
 <footer class="site-footer">
   <div class="wrapper">
     <div class="footer-bar">
-      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+      <div class="brandline">CVCWVUAA â€” Central Virginia Chapter</div>
   <a href="/contact.html">Contact Us</a>
     </div>
-    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+    <div class="small footer-meta">Â© <span id="year"></span> CVCWVUAA â€” Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
   </div>
 </footer>
 
@@ -167,7 +176,7 @@
       const div = document.createElement('div'); div.className='card'; div.style.padding='12px';
       const img = document.createElement('img'); img.src = r.photo || '/assets/logo.png'; img.alt = r.name; img.style.cssText='width:100%;height:200px;object-fit:cover;border-radius:8px;';
       const meta = document.createElement('div'); meta.innerHTML = `<h4 style="margin:.5rem 0 0">${r.name}</h4>
-        <div class="small" style="color:#5b6777">${r.program||''} • ${r.hometown||''} • ${r.year||''}</div>
+        <div class="small" style="color:#5b6777">${r.program||''} â€¢ ${r.hometown||''} â€¢ ${r.year||''}</div>
         <p style="margin:.5rem 0 0">${r.blurb||''}</p>`;
       div.appendChild(img); div.appendChild(meta); return div;
     }
@@ -207,7 +216,7 @@
     // Load saved theme or default to light
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    themeToggle.textContent = savedTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
     
     themeToggle.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -215,9 +224,10 @@
       
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
-      themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      themeToggle.textContent = newTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
     });
   }
 </script>
 
 </body></html>
+

@@ -1,6 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Member Portal Test</title>
@@ -18,18 +27,18 @@
       
       // Test 1: Check if MemberPortal class exists
       if (typeof MemberPortal !== 'undefined') {
-        results.push("✅ MemberPortal class loaded successfully");
+        results.push("âœ… MemberPortal class loaded successfully");
       } else {
-        results.push("❌ MemberPortal class not found");
+        results.push("âŒ MemberPortal class not found");
         return;
       }
       
       // Test 2: Initialize member portal
       try {
         window.memberPortal = new MemberPortal();
-        results.push("✅ MemberPortal initialized");
+        results.push("âœ… MemberPortal initialized");
       } catch (e) {
-        results.push("❌ MemberPortal initialization failed: " + e.message);
+        results.push("âŒ MemberPortal initialization failed: " + e.message);
         return;
       }
       
@@ -38,28 +47,28 @@
       const premiumMember = memberPortal.members['premium@cvawvuaa.org'];
       
       if (demoMember) {
-        results.push("✅ Demo member account exists");
+        results.push("âœ… Demo member account exists");
       } else {
-        results.push("❌ Demo member account missing");
+        results.push("âŒ Demo member account missing");
       }
       
       if (premiumMember) {
-        results.push("✅ Premium demo account exists");
+        results.push("âœ… Premium demo account exists");
       } else {
-        results.push("❌ Premium demo account missing");
+        results.push("âŒ Premium demo account missing");
       }
       
       // Test 4: Test login functionality
       try {
         const loginResult = memberPortal.login('member@cvawvuaa.org', 'member123');
         if (loginResult) {
-          results.push("✅ Login functionality works");
+          results.push("âœ… Login functionality works");
           memberPortal.logout(); // Clean up
         } else {
-          results.push("❌ Login functionality failed");
+          results.push("âŒ Login functionality failed");
         }
       } catch (e) {
-        results.push("❌ Login test error: " + e.message);
+        results.push("âŒ Login test error: " + e.message);
       }
       
       // Test 5: Test member benefits
@@ -69,26 +78,26 @@
         const hasExclusive = memberPortal.hasBenefit('exclusive');
         
         if (hasDirectory && hasExclusive) {
-          results.push("✅ Premium member benefits work correctly");
+          results.push("âœ… Premium member benefits work correctly");
         } else {
-          results.push("❌ Premium member benefits not working");
+          results.push("âŒ Premium member benefits not working");
         }
         
         memberPortal.logout();
       } catch (e) {
-        results.push("❌ Benefits test error: " + e.message);
+        results.push("âŒ Benefits test error: " + e.message);
       }
       
       // Test 6: Test member stats
       try {
         const stats = memberPortal.getMemberStats();
         if (stats && stats.total >= 2) {
-          results.push("✅ Member statistics calculation works");
+          results.push("âœ… Member statistics calculation works");
         } else {
-          results.push("❌ Member statistics not working");
+          results.push("âŒ Member statistics not working");
         }
       } catch (e) {
-        results.push("❌ Statistics test error: " + e.message);
+        results.push("âŒ Statistics test error: " + e.message);
       }
       
       // Display results
@@ -97,12 +106,12 @@
       ).join('');
       
       // Summary
-      const passed = results.filter(r => r.startsWith('✅')).length;
+      const passed = results.filter(r => r.startsWith('âœ…')).length;
       const total = results.length;
       document.getElementById('test-results').innerHTML += `
         <hr>
         <h3>Test Summary: ${passed}/${total} tests passed</h3>
-        ${passed === total ? '<p style="color: green; font-weight: bold;">🎉 All tests passed! Member Portal system is working correctly.</p>' : '<p style="color: red; font-weight: bold;">⚠️ Some tests failed. Check the console for more details.</p>'}
+        ${passed === total ? '<p style="color: green; font-weight: bold;">ðŸŽ‰ All tests passed! Member Portal system is working correctly.</p>' : '<p style="color: red; font-weight: bold;">âš ï¸ Some tests failed. Check the console for more details.</p>'}
       `;
     }
     

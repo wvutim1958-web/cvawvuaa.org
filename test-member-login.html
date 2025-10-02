@@ -1,6 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Member Login</title>
@@ -51,7 +60,7 @@
 </head>
 <body>
     <div class="test-container">
-        <h1>🔐 Member Portal Login Test</h1>
+        <h1>ðŸ” Member Portal Login Test</h1>
         <p>This page tests the member portal login functionality independently.</p>
         
         <div id="status" class="status info">
@@ -63,10 +72,10 @@
         </div>
 
         <h3>Test Actions:</h3>
-        <button class="button" onclick="testMemberPortalAvailability()">🔍 Check Portal Availability</button>
-        <button class="button" onclick="testShowLoginModal()">🔐 Test Login Modal</button>
-        <button class="button" onclick="testRegistrationModal()">📝 Test Registration Modal</button>
-        <button class="button" onclick="runFullTest()">🚀 Run Full Test Suite</button>
+        <button class="button" onclick="testMemberPortalAvailability()">ðŸ” Check Portal Availability</button>
+        <button class="button" onclick="testShowLoginModal()">ðŸ” Test Login Modal</button>
+        <button class="button" onclick="testRegistrationModal()">ðŸ“ Test Registration Modal</button>
+        <button class="button" onclick="runFullTest()">ðŸš€ Run Full Test Suite</button>
 
         <h3>Demo Accounts:</h3>
         <div style="background: #e3f2fd; padding: 15px; border-radius: 4px; margin: 10px 0;">
@@ -139,25 +148,25 @@
             updateDebugInfo();
             
             if (typeof MemberPortal === 'undefined') {
-                updateStatus('❌ MemberPortal class not available', 'error');
+                updateStatus('âŒ MemberPortal class not available', 'error');
                 console.error('MemberPortal class not loaded');
                 return false;
             }
             
-            console.log('✓ MemberPortal class available');
+            console.log('âœ“ MemberPortal class available');
             
             const portal = memberPortal || window.memberPortal;
             if (!portal) {
-                updateStatus('❌ No memberPortal instance found', 'error');
+                updateStatus('âŒ No memberPortal instance found', 'error');
                 console.error('memberPortal instance not found');
                 return false;
             }
             
-            console.log('✓ memberPortal instance found');
+            console.log('âœ“ memberPortal instance found');
             console.log('Portal object:', portal);
             console.log('Portal initialized:', portal.initialized);
             
-            updateStatus('✅ Member Portal is available and ready', 'success');
+            updateStatus('âœ… Member Portal is available and ready', 'success');
             return true;
         }
 
@@ -171,7 +180,7 @@
             const portal = memberPortal || window.memberPortal;
             
             if (typeof portal.showLoginModal !== 'function') {
-                updateStatus('❌ showLoginModal method not available', 'error');
+                updateStatus('âŒ showLoginModal method not available', 'error');
                 console.error('showLoginModal is not a function');
                 return;
             }
@@ -179,10 +188,10 @@
             try {
                 console.log('Calling showLoginModal...');
                 portal.showLoginModal();
-                updateStatus('✅ Login modal opened successfully', 'success');
-                console.log('✓ Login modal opened');
+                updateStatus('âœ… Login modal opened successfully', 'success');
+                console.log('âœ“ Login modal opened');
             } catch (error) {
-                updateStatus('❌ Error opening login modal', 'error');
+                updateStatus('âŒ Error opening login modal', 'error');
                 console.error('Error calling showLoginModal:', error);
             }
         }
@@ -197,7 +206,7 @@
             const portal = memberPortal || window.memberPortal;
             
             if (typeof portal.showRegistrationModal !== 'function') {
-                updateStatus('❌ showRegistrationModal method not available', 'error');
+                updateStatus('âŒ showRegistrationModal method not available', 'error');
                 console.error('showRegistrationModal is not a function');
                 return;
             }
@@ -205,10 +214,10 @@
             try {
                 console.log('Calling showRegistrationModal...');
                 portal.showRegistrationModal();
-                updateStatus('✅ Registration modal opened successfully', 'success');
-                console.log('✓ Registration modal opened');
+                updateStatus('âœ… Registration modal opened successfully', 'success');
+                console.log('âœ“ Registration modal opened');
             } catch (error) {
-                updateStatus('❌ Error opening registration modal', 'error');
+                updateStatus('âŒ Error opening registration modal', 'error');
                 console.error('Error calling showRegistrationModal:', error);
             }
         }
@@ -234,9 +243,9 @@
             setTimeout(() => {
                 updateDebugInfo();
                 if (testMemberPortalAvailability()) {
-                    console.log('✓ Member Portal system ready');
+                    console.log('âœ“ Member Portal system ready');
                 } else {
-                    console.log('✗ Member Portal system not ready');
+                    console.log('âœ— Member Portal system not ready');
                 }
             }, 500);
         });

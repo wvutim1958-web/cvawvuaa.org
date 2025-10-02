@@ -1,6 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mailchimp - No Server Test</title>
@@ -50,23 +59,23 @@
     </style>
 </head>
 <body>
-    <h1>🔧 Mailchimp Test - CORS Workaround</h1>
+    <h1>ðŸ”§ Mailchimp Test - CORS Workaround</h1>
     
     <div class="alert alert-warning">
-        <strong>⚠️ CORS Error Detected!</strong><br>
+        <strong>âš ï¸ CORS Error Detected!</strong><br>
         The "Failed to fetch" error means your browser is blocking API calls from file:// URLs.
         This is normal browser security behavior.
     </div>
 
     <div class="section">
-        <h2>🚀 Quick Fix: Start a Web Server</h2>
+        <h2>ðŸš€ Quick Fix: Start a Web Server</h2>
         
         <div class="alert alert-info">
-            <strong>💡 Easy Solution:</strong> Double-click <code>start-server.bat</code> in your folder, 
+            <strong>ðŸ’¡ Easy Solution:</strong> Double-click <code>start-server.bat</code> in your folder, 
             then visit <strong>http://localhost:8080/mailchimp-debug.html</strong>
         </div>
 
-        <h3>📋 Manual Server Options:</h3>
+        <h3>ðŸ“‹ Manual Server Options:</h3>
         
         <p><strong>Option 1 - Python:</strong></p>
         <div class="code-block">1. Open PowerShell in your website folder
@@ -85,7 +94,7 @@
     </div>
 
     <div class="section">
-        <h2>🧪 Test Your API Key (Browser Console Method)</h2>
+        <h2>ðŸ§ª Test Your API Key (Browser Console Method)</h2>
         <p>As a workaround, you can test your API key directly in the browser console:</p>
         
         <div>
@@ -93,26 +102,26 @@
             <br>
             <input type="text" id="test-server" placeholder="Server (e.g., us12)" style="width: 150px;">
             <br>
-            <button onclick="generateConsoleTest()">🧪 Generate Console Test Code</button>
+            <button onclick="generateConsoleTest()">ðŸ§ª Generate Console Test Code</button>
         </div>
         
         <div id="console-test-output" style="display: none;">
-            <h3>📋 Copy this code to your browser console:</h3>
-            <p><strong>Steps:</strong> Press F12 → Go to Console tab → Paste the code below → Press Enter</p>
+            <h3>ðŸ“‹ Copy this code to your browser console:</h3>
+            <p><strong>Steps:</strong> Press F12 â†’ Go to Console tab â†’ Paste the code below â†’ Press Enter</p>
             <textarea id="console-code" readonly style="width: 100%; height: 200px;"></textarea>
         </div>
     </div>
 
     <div class="section">
-        <h2>✅ Why This Happens & How to Fix</h2>
+        <h2>âœ… Why This Happens & How to Fix</h2>
         
         <div class="alert alert-info">
-            <strong>🔒 CORS (Cross-Origin Resource Sharing) Protection</strong><br>
+            <strong>ðŸ”’ CORS (Cross-Origin Resource Sharing) Protection</strong><br>
             Browsers prevent file:// pages from making requests to external APIs for security.
             This is why you get "Failed to fetch" errors.
         </div>
 
-        <h3>🎯 Solutions by Use Case:</h3>
+        <h3>ðŸŽ¯ Solutions by Use Case:</h3>
         
         <p><strong>For Testing Locally:</strong></p>
         <ul>
@@ -130,7 +139,7 @@
     </div>
 
     <div class="section">
-        <h2>🎉 Next Steps</h2>
+        <h2>ðŸŽ‰ Next Steps</h2>
         <ol>
             <li><strong>Start web server</strong> using one of the methods above</li>
             <li><strong>Open</strong> http://localhost:8080/mailchimp-debug.html</li>
@@ -177,11 +186,11 @@ fetch(\`\${baseUrl}/ping\`, {
     }
 })
 .then(result => {
-    console.log('✅ Ping successful:', result);
+    console.log('âœ… Ping successful:', result);
     console.log('Your API key and server are working!');
 })
 .catch(error => {
-    console.log('❌ Ping failed:', error);
+    console.log('âŒ Ping failed:', error);
     console.log('Check your API key and server settings');
 });
 

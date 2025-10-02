@@ -1,6 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Theme Toggle Test</title>
@@ -46,7 +55,7 @@
 
 <nav class="nav">
   <button class="theme-toggle" aria-label="Toggle theme">
-    <span class="theme-icon">🌙</span>
+    <span class="theme-icon">ðŸŒ™</span>
     <span class="theme-text">Dark</span>
   </button>
 </nav>
@@ -90,10 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const text = button.querySelector('.theme-text');
       
       if (newTheme === 'dark') {
-        if (icon) icon.textContent = '☀️';
+        if (icon) icon.textContent = 'â˜€ï¸';
         if (text) text.textContent = 'Light';
       } else {
-        if (icon) icon.textContent = '🌙';
+        if (icon) icon.textContent = 'ðŸŒ™';
         if (text) text.textContent = 'Dark';
       }
     });
@@ -113,3 +122,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+

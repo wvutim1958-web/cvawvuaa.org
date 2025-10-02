@@ -9,16 +9,16 @@ $BackupFiles = $true # Create backup of files before modifying
 # Analytics ID
 $analyticsID = "G-G14Q10H6Y2"
 
-# Google Analytics Code
+# Google Analytics Code - Exact format from Google Analytics
 $googleAnalyticsCode = @"
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=$analyticsID"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '$analyticsID');
+  gtag('config', 'G-G14Q10H6Y2');
 </script>
 "@
 

@@ -1,6 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
   <meta charset="utf-8">
   <title>Button Click Test</title>
 </head>
@@ -9,36 +18,37 @@
 <h1>Button Click Test</h1>
 <p>Testing if onclick handlers work properly:</p>
 
-<button onclick="alert('Direct onclick works!')" style="margin: 5px; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px;">✅ Test Direct Alert</button>
-<button onclick="testFunc()" style="margin: 5px; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px;">🔧 Test Function</button>
-<button onclick="window.testFunc2()" style="margin: 5px; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 4px;">🌐 Test Window Function</button>
+<button onclick="alert('Direct onclick works!')" style="margin: 5px; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px;">âœ… Test Direct Alert</button>
+<button onclick="testFunc()" style="margin: 5px; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px;">ðŸ”§ Test Function</button>
+<button onclick="window.testFunc2()" style="margin: 5px; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 4px;">ðŸŒ Test Window Function</button>
 
 <div id="output" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px;"></div>
 
 <script>
-console.log('🔄 Script loading...');
+console.log('ðŸ”„ Script loading...');
 
 function testFunc() {
-  console.log('✅ testFunc called');
+  console.log('âœ… testFunc called');
   alert('Function testFunc() works!');
-  document.getElementById('output').innerHTML += '<p>✅ testFunc() executed at ' + new Date().toLocaleTimeString() + '</p>';
+  document.getElementById('output').innerHTML += '<p>âœ… testFunc() executed at ' + new Date().toLocaleTimeString() + '</p>';
 }
 
 window.testFunc2 = function() {
-  console.log('✅ window.testFunc2 called');
+  console.log('âœ… window.testFunc2 called');
   alert('Window function testFunc2() works!');
-  document.getElementById('output').innerHTML += '<p>✅ window.testFunc2() executed at ' + new Date().toLocaleTimeString() + '</p>';
+  document.getElementById('output').innerHTML += '<p>âœ… window.testFunc2() executed at ' + new Date().toLocaleTimeString() + '</p>';
 };
 
-console.log('✅ Functions defined');
+console.log('âœ… Functions defined');
 console.log('testFunc available:', typeof testFunc);
 console.log('window.testFunc2 available:', typeof window.testFunc2);
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('✅ DOM ready');
-  document.getElementById('output').innerHTML = '<p><strong>✅ Script loaded and DOM ready at ' + new Date().toLocaleTimeString() + '</strong></p><p>Click the buttons above to test onclick functionality.</p>';
+  console.log('âœ… DOM ready');
+  document.getElementById('output').innerHTML = '<p><strong>âœ… Script loaded and DOM ready at ' + new Date().toLocaleTimeString() + '</strong></p><p>Click the buttons above to test onclick functionality.</p>';
 });
 </script>
 
 </body>
 </html>
+

@@ -1,6 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Member Portal Test - File Protocol Compatible</title>
@@ -61,21 +70,21 @@
 </head>
 <body>
   <div class="container">
-    <h1>🔐 Member Portal - File Protocol Test</h1>
+    <h1>ðŸ” Member Portal - File Protocol Test</h1>
     <p>This page is designed to work perfectly with the <code>file://</code> protocol!</p>
     
     <div id="status-display" class="status info">
-      🔄 Initializing member portal...
+      ðŸ”„ Initializing member portal...
     </div>
     
     <div style="margin: 30px 0;">
-      <button class="btn" onclick="testLogin()">🔐 Test Login</button>
-      <button class="btn outline" onclick="testRegistration()">📝 Test Registration</button>
-      <button class="btn outline" onclick="showDebugInfo()">🔧 Debug Info</button>
+      <button class="btn" onclick="testLogin()">ðŸ” Test Login</button>
+      <button class="btn outline" onclick="testRegistration()">ðŸ“ Test Registration</button>
+      <button class="btn outline" onclick="showDebugInfo()">ðŸ”§ Debug Info</button>
     </div>
     
     <div id="demo-info" style="background: #e3f2fd; padding: 20px; border-radius: 5px; margin-top: 20px;">
-      <h3>🎯 Demo Accounts (for testing):</h3>
+      <h3>ðŸŽ¯ Demo Accounts (for testing):</h3>
       <p><strong>Account 1:</strong> member@cvawvuaa.org / member123</p>
       <p><strong>Account 2:</strong> john.doe@email.com / password123</p>
     </div>
@@ -85,7 +94,7 @@
 
   <script>
     // Comprehensive member portal system that works with file:// protocol
-    console.log('🚀 Starting member portal for file:// protocol...');
+    console.log('ðŸš€ Starting member portal for file:// protocol...');
     
     // Member portal object with all functionality
     window.memberPortal = {
@@ -111,14 +120,14 @@
       // Initialize the portal
       init: function() {
         this.initialized = true;
-        this.updateStatus('✅ Member portal initialized successfully!', 'success');
-        console.log('✅ Member portal ready');
+        this.updateStatus('âœ… Member portal initialized successfully!', 'success');
+        console.log('âœ… Member portal ready');
         return this;
       },
       
       // Show login modal
       showLoginModal: function() {
-        console.log('📋 Opening login modal...');
+        console.log('ðŸ“‹ Opening login modal...');
         
         // Remove existing modal
         const existing = document.getElementById('login-modal');
@@ -136,11 +145,11 @@
               width: 90%; max-width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             ">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin: 0;">🔐 Member Login</h3>
+                <h3 style="margin: 0;">ðŸ” Member Login</h3>
                 <button onclick="closeModal()" style="
                   background: none; border: none; font-size: 24px; cursor: pointer;
                   color: #999; width: 30px; height: 30px;
-                ">×</button>
+                ">Ã—</button>
               </div>
               
               <form onsubmit="handleLogin(event); return false;">
@@ -186,10 +195,10 @@
         const member = this.members[email];
         if (member && member.password === password) {
           this.currentUser = member;
-          this.updateStatus('✅ Login successful! Welcome ' + member.name, 'success');
+          this.updateStatus('âœ… Login successful! Welcome ' + member.name, 'success');
           return true;
         } else {
-          this.updateStatus('❌ Invalid credentials. Try: member@cvawvuaa.org / member123', 'error');
+          this.updateStatus('âŒ Invalid credentials. Try: member@cvawvuaa.org / member123', 'error');
           return false;
         }
       },
@@ -197,12 +206,12 @@
       // Logout
       logout: function() {
         this.currentUser = null;
-        this.updateStatus('👋 Logged out successfully', 'info');
+        this.updateStatus('ðŸ‘‹ Logged out successfully', 'info');
       },
       
       // Show registration info
       showRegistrationModal: function() {
-        this.updateStatus('📝 Registration coming soon! Use demo accounts for testing.', 'info');
+        this.updateStatus('ðŸ“ Registration coming soon! Use demo accounts for testing.', 'info');
       },
       
       // Update status display
@@ -259,7 +268,7 @@
       const debugOutput = document.getElementById('debug-output');
       
       debugOutput.innerHTML = `
-<strong>🔧 Debug Information:</strong>
+<strong>ðŸ”§ Debug Information:</strong>
 
 Portal Initialized: ${debugInfo.initialized}
 Current User: ${debugInfo.currentUser}
@@ -272,11 +281,11 @@ Available Functions:
 ${debugInfo.functions.map(f => '  - ' + f).join('\n')}
 
 <strong>Test Results:</strong>
-✅ JavaScript execution: Working
-✅ DOM manipulation: Working  
-✅ Event handlers: Working
-✅ Modal creation: Working
-✅ Form handling: Working
+âœ… JavaScript execution: Working
+âœ… DOM manipulation: Working  
+âœ… Event handlers: Working
+âœ… Modal creation: Working
+âœ… Form handling: Working
       `;
       
       debugOutput.style.display = debugOutput.style.display === 'none' ? 'block' : 'none';
@@ -284,19 +293,19 @@ ${debugInfo.functions.map(f => '  - ' + f).join('\n')}
     
     // Initialize when page loads
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🎯 DOM loaded, initializing member portal...');
+      console.log('ðŸŽ¯ DOM loaded, initializing member portal...');
       window.memberPortal.init();
     });
     
     // Also initialize immediately (in case DOMContentLoaded already fired)
     if (document.readyState === 'loading') {
-      console.log('📄 Document still loading...');
+      console.log('ðŸ“„ Document still loading...');
     } else {
-      console.log('📄 Document already loaded, initializing now...');
+      console.log('ðŸ“„ Document already loaded, initializing now...');
       window.memberPortal.init();
     }
     
-    console.log('🏁 Script setup complete');
+    console.log('ðŸ Script setup complete');
   </script>
 </body>
 </html>

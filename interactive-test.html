@@ -1,9 +1,18 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🧪 Member Portal Interactive Test</title>
+  <title>ðŸ§ª Member Portal Interactive Test</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; }
     .test-section { margin: 20px 0; padding: 20px; border: 2px solid #e9ecef; border-radius: 8px; }
@@ -21,19 +30,19 @@
   </style>
 </head>
 <body>
-  <h1>🧪 Member Portal System - Interactive Test Suite</h1>
+  <h1>ðŸ§ª Member Portal System - Interactive Test Suite</h1>
   <p><strong>Test Date:</strong> September 29, 2025</p>
 
   <!-- System Status -->
   <div id="system-status" class="test-section info">
-    <h3>📊 System Status</h3>
+    <h3>ðŸ“Š System Status</h3>
     <p>Checking Member Portal system initialization...</p>
     <div id="status-results" class="test-results"></div>
   </div>
 
   <!-- Demo Accounts -->
   <div class="test-section">
-    <h3>🔑 Demo Accounts Available</h3>
+    <h3>ðŸ”‘ Demo Accounts Available</h3>
     <div class="demo-account">
       <strong>Regular Member:</strong> member@cvawvuaa.org / member123
     </div>
@@ -47,14 +56,14 @@
 
   <!-- Current User Status -->
   <div id="user-status" class="test-section">
-    <h3>👤 Current User Status</h3>
+    <h3>ðŸ‘¤ Current User Status</h3>
     <div id="current-user-info">Not logged in</div>
-    <button onclick="refreshUserStatus()">🔄 Refresh Status</button>
+    <button onclick="refreshUserStatus()">ðŸ”„ Refresh Status</button>
   </div>
 
   <!-- Test 1: Basic Authentication -->
   <div id="test1" class="test-section">
-    <h3>🔐 Test 1: Authentication System</h3>
+    <h3>ðŸ” Test 1: Authentication System</h3>
     <p>Test login functionality with different account types:</p>
     
     <div style="margin: 10px 0;">
@@ -69,57 +78,57 @@
 
   <!-- Test 2: Membership Benefits -->
   <div id="test2" class="test-section">
-    <h3>💎 Test 2: Membership Benefits System</h3>
+    <h3>ðŸ’Ž Test 2: Membership Benefits System</h3>
     <p>Test benefit access for different membership levels:</p>
     
-    <button onclick="testBenefits()">🧪 Test All Benefits</button>
-    <button onclick="testMemberDirectory()">👥 Test Directory Access</button>
-    <button onclick="testExclusiveContent()">💎 Test Exclusive Content</button>
+    <button onclick="testBenefits()">ðŸ§ª Test All Benefits</button>
+    <button onclick="testMemberDirectory()">ðŸ‘¥ Test Directory Access</button>
+    <button onclick="testExclusiveContent()">ðŸ’Ž Test Exclusive Content</button>
     
     <div id="benefits-results" class="test-results"></div>
   </div>
 
   <!-- Test 3: Admin Functions -->
   <div id="test3" class="test-section">
-    <h3>🔧 Test 3: Administrative Functions</h3>
+    <h3>ðŸ”§ Test 3: Administrative Functions</h3>
     <p>Test board member administrative capabilities:</p>
     
-    <button onclick="testMemberStats()">📊 Test Member Statistics</button>
-    <button onclick="testMemberManagement()">👥 Test Member Management</button>
-    <button onclick="testRegistrationFlow()">📝 Test Registration</button>
+    <button onclick="testMemberStats()">ðŸ“Š Test Member Statistics</button>
+    <button onclick="testMemberManagement()">ðŸ‘¥ Test Member Management</button>
+    <button onclick="testRegistrationFlow()">ðŸ“ Test Registration</button>
     
     <div id="admin-results" class="test-results"></div>
   </div>
 
   <!-- Test 4: Data Persistence -->
   <div id="test4" class="test-section">
-    <h3>💾 Test 4: Data Persistence</h3>
+    <h3>ðŸ’¾ Test 4: Data Persistence</h3>
     <p>Test data storage and session management:</p>
     
-    <button onclick="testDataStorage()">💾 Test LocalStorage</button>
-    <button onclick="testSessionPersistence()">🔄 Test Session Persistence</button>
-    <button onclick="clearAllData()">🗑️ Clear All Data</button>
+    <button onclick="testDataStorage()">ðŸ’¾ Test LocalStorage</button>
+    <button onclick="testSessionPersistence()">ðŸ”„ Test Session Persistence</button>
+    <button onclick="clearAllData()">ðŸ—‘ï¸ Clear All Data</button>
     
     <div id="storage-results" class="test-results"></div>
   </div>
 
   <!-- Test 5: Integration Testing -->
   <div id="test5" class="test-section">
-    <h3>🔗 Test 5: System Integration</h3>
+    <h3>ðŸ”— Test 5: System Integration</h3>
     <p>Test integration with existing systems:</p>
     
-    <button onclick="testRSVPIntegration()">🎫 Test RSVP Integration</button>
-    <button onclick="testNewsletterIntegration()">📧 Test Newsletter Integration</button>
-    <button onclick="testNotifications()">🔔 Test Notifications</button>
+    <button onclick="testRSVPIntegration()">ðŸŽ« Test RSVP Integration</button>
+    <button onclick="testNewsletterIntegration()">ðŸ“§ Test Newsletter Integration</button>
+    <button onclick="testNotifications()">ðŸ”” Test Notifications</button>
     
     <div id="integration-results" class="test-results"></div>
   </div>
 
   <!-- Overall Results -->
   <div id="overall-results" class="test-section">
-    <h3>🎯 Overall Test Results</h3>
-    <button onclick="runAllTests()" class="btn-success">🚀 Run All Tests</button>
-    <button onclick="generateReport()" class="btn-primary">📊 Generate Report</button>
+    <h3>ðŸŽ¯ Overall Test Results</h3>
+    <button onclick="runAllTests()" class="btn-success">ðŸš€ Run All Tests</button>
+    <button onclick="generateReport()" class="btn-primary">ðŸ“Š Generate Report</button>
     
     <div id="final-results" class="test-results"></div>
   </div>
@@ -134,16 +143,16 @@
     function initializeSystem() {
       try {
         if (typeof MemberPortal === 'undefined') {
-          document.getElementById('status-results').innerHTML = '❌ MemberPortal class not loaded';
+          document.getElementById('status-results').innerHTML = 'âŒ MemberPortal class not loaded';
           return false;
         }
 
         memberPortal = new MemberPortal();
-        document.getElementById('status-results').innerHTML = '✅ Member Portal system initialized successfully';
+        document.getElementById('status-results').innerHTML = 'âœ… Member Portal system initialized successfully';
         document.getElementById('system-status').className = 'test-section success';
         return true;
       } catch (error) {
-        document.getElementById('status-results').innerHTML = '❌ System initialization failed: ' + error.message;
+        document.getElementById('status-results').innerHTML = 'âŒ System initialization failed: ' + error.message;
         document.getElementById('system-status').className = 'test-section error';
         return false;
       }
@@ -158,14 +167,14 @@
         const user = memberPortal.currentUser;
         userInfo.innerHTML = `
           <div class="current-user">
-            <strong>✅ Logged in as:</strong> ${user.name} (${user.email})<br>
+            <strong>âœ… Logged in as:</strong> ${user.name} (${user.email})<br>
             <strong>Membership Type:</strong> ${user.memberType}<br>
             <strong>Member Since:</strong> ${user.joinDate}<br>
             <strong>Status:</strong> ${user.status}
           </div>
         `;
       } else {
-        userInfo.innerHTML = '<div style="color: #6c757d;">❌ Not logged in</div>';
+        userInfo.innerHTML = '<div style="color: #6c757d;">âŒ Not logged in</div>';
       }
     }
 
@@ -178,15 +187,15 @@
         const results = document.getElementById('auth-results');
         
         if (success) {
-          results.innerHTML += `✅ Login successful for ${email} (${memberPortal.currentUser.memberType})<br>`;
+          results.innerHTML += `âœ… Login successful for ${email} (${memberPortal.currentUser.memberType})<br>`;
           refreshUserStatus();
           testResults.auth = true;
         } else {
-          results.innerHTML += `❌ Login failed for ${email}<br>`;
+          results.innerHTML += `âŒ Login failed for ${email}<br>`;
           testResults.auth = false;
         }
       } catch (error) {
-        document.getElementById('auth-results').innerHTML += `❌ Login error: ${error.message}<br>`;
+        document.getElementById('auth-results').innerHTML += `âŒ Login error: ${error.message}<br>`;
         testResults.auth = false;
       }
     }
@@ -196,24 +205,24 @@
 
       try {
         memberPortal.logout();
-        document.getElementById('auth-results').innerHTML += '✅ Logout successful<br>';
+        document.getElementById('auth-results').innerHTML += 'âœ… Logout successful<br>';
         refreshUserStatus();
       } catch (error) {
-        document.getElementById('auth-results').innerHTML += `❌ Logout error: ${error.message}<br>`;
+        document.getElementById('auth-results').innerHTML += `âŒ Logout error: ${error.message}<br>`;
       }
     }
 
     // Test benefits system
     function testBenefits() {
       if (!memberPortal || !memberPortal.isLoggedIn()) {
-        document.getElementById('benefits-results').innerHTML = '❌ Please log in first to test benefits<br>';
+        document.getElementById('benefits-results').innerHTML = 'âŒ Please log in first to test benefits<br>';
         return;
       }
 
       const results = document.getElementById('benefits-results');
       const user = memberPortal.currentUser;
       
-      results.innerHTML += `🧪 Testing benefits for ${user.memberType} member:<br>`;
+      results.innerHTML += `ðŸ§ª Testing benefits for ${user.memberType} member:<br>`;
       
       // Test basic benefits
       const hasEvents = memberPortal.hasBenefit('events');
@@ -222,40 +231,40 @@
       const hasExclusive = memberPortal.hasBenefit('exclusive');
       const hasAdmin = memberPortal.hasBenefit('admin');
 
-      results.innerHTML += `- Events: ${hasEvents ? '✅' : '❌'}<br>`;
-      results.innerHTML += `- Newsletter: ${hasNewsletter ? '✅' : '❌'}<br>`;
-      results.innerHTML += `- Directory: ${hasDirectory ? '✅' : '❌'}<br>`;
-      results.innerHTML += `- Exclusive: ${hasExclusive ? '✅' : '❌'}<br>`;
-      results.innerHTML += `- Admin: ${hasAdmin ? '✅' : '❌'}<br>`;
+      results.innerHTML += `- Events: ${hasEvents ? 'âœ…' : 'âŒ'}<br>`;
+      results.innerHTML += `- Newsletter: ${hasNewsletter ? 'âœ…' : 'âŒ'}<br>`;
+      results.innerHTML += `- Directory: ${hasDirectory ? 'âœ…' : 'âŒ'}<br>`;
+      results.innerHTML += `- Exclusive: ${hasExclusive ? 'âœ…' : 'âŒ'}<br>`;
+      results.innerHTML += `- Admin: ${hasAdmin ? 'âœ…' : 'âŒ'}<br>`;
 
       testResults.benefits = true;
     }
 
     function testMemberDirectory() {
       if (!memberPortal || !memberPortal.isLoggedIn()) {
-        document.getElementById('benefits-results').innerHTML += '❌ Login required for directory access<br>';
+        document.getElementById('benefits-results').innerHTML += 'âŒ Login required for directory access<br>';
         return;
       }
 
       if (memberPortal.hasBenefit('directory')) {
-        document.getElementById('benefits-results').innerHTML += '✅ Member directory access granted<br>';
+        document.getElementById('benefits-results').innerHTML += 'âœ… Member directory access granted<br>';
         // Simulate showing directory
         memberPortal.showMemberDirectory();
       } else {
-        document.getElementById('benefits-results').innerHTML += '❌ Member directory access denied (upgrade required)<br>';
+        document.getElementById('benefits-results').innerHTML += 'âŒ Member directory access denied (upgrade required)<br>';
       }
     }
 
     function testExclusiveContent() {
       if (!memberPortal || !memberPortal.isLoggedIn()) {
-        document.getElementById('benefits-results').innerHTML += '❌ Login required for exclusive content<br>';
+        document.getElementById('benefits-results').innerHTML += 'âŒ Login required for exclusive content<br>';
         return;
       }
 
       if (memberPortal.hasBenefit('exclusive')) {
-        document.getElementById('benefits-results').innerHTML += '✅ Exclusive content access granted<br>';
+        document.getElementById('benefits-results').innerHTML += 'âœ… Exclusive content access granted<br>';
       } else {
-        document.getElementById('benefits-results').innerHTML += '❌ Exclusive content access denied (premium required)<br>';
+        document.getElementById('benefits-results').innerHTML += 'âŒ Exclusive content access denied (premium required)<br>';
       }
     }
 
@@ -266,26 +275,26 @@
       try {
         const stats = memberPortal.getMemberStats();
         const results = document.getElementById('admin-results');
-        results.innerHTML += `📊 Member Statistics:<br>`;
+        results.innerHTML += `ðŸ“Š Member Statistics:<br>`;
         results.innerHTML += `- Total: ${stats.total}<br>`;
         results.innerHTML += `- Active: ${stats.active}<br>`;
         results.innerHTML += `- Pending: ${stats.pending}<br>`;
         testResults.admin = true;
       } catch (error) {
-        document.getElementById('admin-results').innerHTML += `❌ Stats error: ${error.message}<br>`;
+        document.getElementById('admin-results').innerHTML += `âŒ Stats error: ${error.message}<br>`;
       }
     }
 
     function testMemberManagement() {
       if (!memberPortal || !memberPortal.isLoggedIn()) {
-        document.getElementById('admin-results').innerHTML += '❌ Login required for member management<br>';
+        document.getElementById('admin-results').innerHTML += 'âŒ Login required for member management<br>';
         return;
       }
 
       if (memberPortal.currentUser.memberType === 'board') {
-        document.getElementById('admin-results').innerHTML += '✅ Board member access - management available<br>';
+        document.getElementById('admin-results').innerHTML += 'âœ… Board member access - management available<br>';
       } else {
-        document.getElementById('admin-results').innerHTML += '❌ Management access denied (board members only)<br>';
+        document.getElementById('admin-results').innerHTML += 'âŒ Management access denied (board members only)<br>';
       }
     }
 
@@ -296,9 +305,9 @@
       try {
         // Test registration validation
         const canRegister = !memberPortal.members[testEmail];
-        document.getElementById('admin-results').innerHTML += `📝 Registration test: ${canRegister ? '✅ Available' : '❌ Email taken'}<br>`;
+        document.getElementById('admin-results').innerHTML += `ðŸ“ Registration test: ${canRegister ? 'âœ… Available' : 'âŒ Email taken'}<br>`;
       } catch (error) {
-        document.getElementById('admin-results').innerHTML += `❌ Registration error: ${error.message}<br>`;
+        document.getElementById('admin-results').innerHTML += `âŒ Registration error: ${error.message}<br>`;
       }
     }
 
@@ -312,14 +321,14 @@
         const retrieved = JSON.parse(localStorage.getItem(testKey));
         
         if (retrieved && retrieved.test) {
-          document.getElementById('storage-results').innerHTML += '✅ LocalStorage working correctly<br>';
+          document.getElementById('storage-results').innerHTML += 'âœ… LocalStorage working correctly<br>';
           localStorage.removeItem(testKey);
           testResults.storage = true;
         } else {
-          document.getElementById('storage-results').innerHTML += '❌ LocalStorage test failed<br>';
+          document.getElementById('storage-results').innerHTML += 'âŒ LocalStorage test failed<br>';
         }
       } catch (error) {
-        document.getElementById('storage-results').innerHTML += `❌ Storage error: ${error.message}<br>`;
+        document.getElementById('storage-results').innerHTML += `âŒ Storage error: ${error.message}<br>`;
       }
     }
 
@@ -328,9 +337,9 @@
 
       const sessionData = localStorage.getItem('memberPortalSession');
       if (sessionData) {
-        document.getElementById('storage-results').innerHTML += '✅ Session data found in storage<br>';
+        document.getElementById('storage-results').innerHTML += 'âœ… Session data found in storage<br>';
       } else {
-        document.getElementById('storage-results').innerHTML += '⚠️ No session data (expected if not logged in)<br>';
+        document.getElementById('storage-results').innerHTML += 'âš ï¸ No session data (expected if not logged in)<br>';
       }
     }
 
@@ -338,26 +347,26 @@
       try {
         localStorage.removeItem('memberPortalMembers');
         localStorage.removeItem('memberPortalSession');
-        document.getElementById('storage-results').innerHTML += '🗑️ All member portal data cleared<br>';
+        document.getElementById('storage-results').innerHTML += 'ðŸ—‘ï¸ All member portal data cleared<br>';
         refreshUserStatus();
       } catch (error) {
-        document.getElementById('storage-results').innerHTML += `❌ Clear error: ${error.message}<br>`;
+        document.getElementById('storage-results').innerHTML += `âŒ Clear error: ${error.message}<br>`;
       }
     }
 
     // Test integrations
     function testRSVPIntegration() {
-      document.getElementById('integration-results').innerHTML += '✅ RSVP system integration ready<br>';
+      document.getElementById('integration-results').innerHTML += 'âœ… RSVP system integration ready<br>';
     }
 
     function testNewsletterIntegration() {
-      document.getElementById('integration-results').innerHTML += '✅ Newsletter system integration ready<br>';
+      document.getElementById('integration-results').innerHTML += 'âœ… Newsletter system integration ready<br>';
     }
 
     function testNotifications() {
       if (memberPortal) {
-        memberPortal.showNotification('🧪 Test notification working!', 'success');
-        document.getElementById('integration-results').innerHTML += '✅ Notification system working<br>';
+        memberPortal.showNotification('ðŸ§ª Test notification working!', 'success');
+        document.getElementById('integration-results').innerHTML += 'âœ… Notification system working<br>';
       }
     }
 
@@ -402,17 +411,17 @@
       const passed = Object.values(testResults).filter(r => r === true).length;
       const total = Object.keys(testResults).length;
       
-      let report = `<h4>🎯 Test Summary</h4>`;
+      let report = `<h4>ðŸŽ¯ Test Summary</h4>`;
       report += `<p><strong>Tests Passed:</strong> ${passed}/${total}</p>`;
       
       if (passed === total) {
         report += `<div style="background: #d4edda; padding: 12px; border-radius: 4px; color: #155724;">`;
-        report += `🎉 <strong>All systems operational!</strong><br>`;
+        report += `ðŸŽ‰ <strong>All systems operational!</strong><br>`;
         report += `The Member Portal is fully functional and ready for production use.`;
         report += `</div>`;
       } else {
         report += `<div style="background: #f8d7da; padding: 12px; border-radius: 4px; color: #721c24;">`;
-        report += `⚠️ <strong>Some tests failed.</strong><br>`;
+        report += `âš ï¸ <strong>Some tests failed.</strong><br>`;
         report += `Please review the individual test results above.`;
         report += `</div>`;
       }

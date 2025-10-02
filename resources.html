@@ -1,9 +1,18 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CVCWVUAA • Resources & Links</title>
+  <title>CVCWVUAA â€¢ Resources & Links</title>
   <link rel="stylesheet" href="/css/styles.css" />
   <style>
     /* Page-specific polish for resource cards */
@@ -22,7 +31,7 @@
     </a>
 
     <!-- Mobile menu button -->
-    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">â˜°</button>
 
     <nav id="site-nav" class="nav">
       <a href="/index.html">Home</a>
@@ -35,7 +44,7 @@
           <a role="menuitem" href="/pay.html">Membership</a>
           <a role="menuitem" href="/board.html">Board Members</a>
           <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
-          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws Â· Proclamation</a>
         </div>
       </div>
 
@@ -57,10 +66,10 @@
       <a href="/scholarship.html">Scholarship</a>
       <a href="/media.html">Media</a>
       <a href="/contact.html">Contact</a>
-      <a href="/search.html" class="search-btn">🔍</a>
+      <a href="/search.html" class="search-btn">ðŸ”</a>
       
       <!-- Theme toggle -->
-      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button class="theme-toggle" aria-label="Toggle theme">ðŸŒ™</button>
     </nav>
   </div>
 </header>
@@ -136,8 +145,8 @@
         <section class="card">
           <h3>Fan / Coverage</h3>
           <ul>
-            <li><a href="https://www.on3.com/teams/west-virginia-mountaineers/" target="_blank" rel="noopener">On3 — WVU</a></li>
-            <li><a href="https://247sports.com/college/west-virginia/" target="_blank" rel="noopener">247Sports — WVU</a></li>
+            <li><a href="https://www.on3.com/teams/west-virginia-mountaineers/" target="_blank" rel="noopener">On3 â€” WVU</a></li>
+            <li><a href="https://247sports.com/college/west-virginia/" target="_blank" rel="noopener">247Sports â€” WVU</a></li>
             <li><a href="https://bluegoldnews.com/" target="_blank" rel="noopener">Blue &amp; Gold News</a></li>
           </ul>
         </section>
@@ -160,10 +169,10 @@
  <footer class="site-footer">
   <div class="wrapper">
     <div class="footer-bar">
-      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+      <div class="brandline">CVCWVUAA â€” Central Virginia Chapter</div>
   <a href="/contact.html">Contact Us</a>
     </div>
-    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+    <div class="small footer-meta">Â© <span id="year"></span> CVCWVUAA â€” Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
   </div>
 </footer>
 
@@ -201,7 +210,7 @@
     // Load saved theme or default to light
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    themeToggle.textContent = savedTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
     
     themeToggle.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -209,7 +218,7 @@
       
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
-      themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      themeToggle.textContent = newTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
     });
   }
 </script>
@@ -217,3 +226,4 @@
 
 </body>
 </html>
+

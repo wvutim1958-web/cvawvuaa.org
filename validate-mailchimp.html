@@ -1,6 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mailchimp Credentials Validator</title>
@@ -94,35 +103,35 @@
 </head>
 <body>
     <div class="card">
-        <h1>🔧 Mailchimp API Key Validator</h1>
+        <h1>ðŸ”§ Mailchimp API Key Validator</h1>
         
         <div class="alert alert-success">
-            <strong>✅ API Response Detected!</strong><br>
+            <strong>âœ… API Response Detected!</strong><br>
             Good news! Your API is responding. The error shows authentication needs proper headers (not URL parameters). This tool will test with correct authentication.
         </div>
 
         <div class="form-group">
             <label for="api-key">Mailchimp API Key:</label>
             <input type="text" id="api-key" placeholder="e.g., your-api-key-here-us12" style="width: 100%; max-width: 500px;">
-            <div class="input-help">Get from Mailchimp → Account → Extras → API keys</div>
+            <div class="input-help">Get from Mailchimp â†’ Account â†’ Extras â†’ API keys</div>
         </div>
 
         <div class="form-group">
             <label for="list-id">Audience/List ID:</label>
             <input type="text" id="list-id" placeholder="e.g., a1b2c3d4e5" style="width: 200px;">
-            <div class="input-help">Get from Mailchimp → Audience → Settings → Audience name and defaults</div>
+            <div class="input-help">Get from Mailchimp â†’ Audience â†’ Settings â†’ Audience name and defaults</div>
         </div>
 
-        <button onclick="validateAndGenerate()" id="validate-btn">🔍 Validate & Generate Test URLs</button>
+        <button onclick="validateAndGenerate()" id="validate-btn">ðŸ” Validate & Generate Test URLs</button>
 
         <div id="results" style="display: none;">
-            <h2>✅ Validation Results</h2>
+            <h2>âœ… Validation Results</h2>
             <div id="validation-results"></div>
         </div>
     </div>
 
     <div class="card steps" id="instructions" style="display: none;">
-        <h2>🚀 Testing Instructions</h2>
+        <h2>ðŸš€ Testing Instructions</h2>
         
         <div class="step">
             <strong>Validate Format:</strong> Your API key format and List ID have been checked.
@@ -136,7 +145,7 @@
                 <li>Copy and paste this code:</li>
             </ol>
             <div class="test-url" id="console-test"></div>
-            <button class="copy-button" onclick="copyToClipboard('console-test')">📋 Copy Code</button>
+            <button class="copy-button" onclick="copyToClipboard('console-test')">ðŸ“‹ Copy Code</button>
             <div class="input-help">
                 <strong>Expected Result:</strong> Should log your account info and list details<br>
                 <strong>If you see errors:</strong> Check your API key and List ID
@@ -150,7 +159,7 @@
             <ol>
                 <li>Install Visual Studio Code</li>
                 <li>Install "Live Server" extension</li>
-                <li>Right-click any HTML file → "Open with Live Server"</li>
+                <li>Right-click any HTML file â†’ "Open with Live Server"</li>
             </ol>
             
             <strong>Option B - Online Tool:</strong>
@@ -167,15 +176,15 @@
     </div>
 
     <div class="card">
-        <h2>🎯 Quick Solutions</h2>
+        <h2>ðŸŽ¯ Quick Solutions</h2>
         
         <div class="alert alert-info">
-            <strong>💡 Immediate Testing:</strong><br>
+            <strong>ðŸ’¡ Immediate Testing:</strong><br>
             The URLs generated above will work immediately in your browser to test your API credentials without any server setup.
         </div>
 
         <div class="alert alert-success">
-            <strong>🚀 For Full Functionality:</strong><br>
+            <strong>ðŸš€ For Full Functionality:</strong><br>
             Use VS Code with Live Server extension - it's the easiest way to run your website locally with full Mailchimp integration.
         </div>
     </div>
@@ -192,13 +201,13 @@
             }
 
             btn.disabled = true;
-            btn.textContent = '🔄 Validating...';
+            btn.textContent = 'ðŸ”„ Validating...';
 
             setTimeout(() => {
                 const results = validateCredentials(apiKey, listId);
                 displayResults(results, apiKey, listId);
                 btn.disabled = false;
-                btn.textContent = '🔍 Validate & Generate Test URLs';
+                btn.textContent = 'ðŸ” Validate & Generate Test URLs';
             }, 1000);
         }
 
@@ -236,9 +245,9 @@
             let html = '';
 
             if (results.valid) {
-                html += '<div class="alert alert-success">✅ Credentials format looks valid!</div>';
+                html += '<div class="alert alert-success">âœ… Credentials format looks valid!</div>';
             } else {
-                html += '<div class="alert alert-error">❌ Issues found:<ul>';
+                html += '<div class="alert alert-error">âŒ Issues found:<ul>';
                 results.issues.forEach(issue => {
                     html += `<li>${issue}</li>`;
                 });
@@ -246,7 +255,7 @@
             }
 
             if (results.warnings.length > 0) {
-                html += '<div class="alert alert-warning">⚠️ Warnings:<ul>';
+                html += '<div class="alert alert-warning">âš ï¸ Warnings:<ul>';
                 results.warnings.forEach(warning => {
                     html += `<li>${warning}</li>`;
                 });
@@ -270,9 +279,9 @@ fetch('https://' + server + '.api.mailchimp.com/3.0/ping', {
         'Authorization': 'Basic ' + btoa('anystring:' + apiKey)
     }
 }).then(r => r.json()).then(data => {
-    console.log('✅ API Ping Result:', data);
+    console.log('âœ… API Ping Result:', data);
     if (data.health_status) {
-        console.log('🎉 API Key is WORKING!');
+        console.log('ðŸŽ‰ API Key is WORKING!');
         
         // Test 2: Get List Info
         fetch('https://' + server + '.api.mailchimp.com/3.0/lists/' + listId, {
@@ -280,18 +289,18 @@ fetch('https://' + server + '.api.mailchimp.com/3.0/ping', {
                 'Authorization': 'Basic ' + btoa('anystring:' + apiKey)
             }
         }).then(r => r.json()).then(listData => {
-            console.log('✅ List Result:', listData);
+            console.log('âœ… List Result:', listData);
             if (listData.name) {
-                console.log('🎉 List "' + listData.name + '" found with ' + listData.stats.member_count + ' members!');
-                console.log('✅ BOTH API KEY AND LIST ID ARE WORKING!');
+                console.log('ðŸŽ‰ List "' + listData.name + '" found with ' + listData.stats.member_count + ' members!');
+                console.log('âœ… BOTH API KEY AND LIST ID ARE WORKING!');
             } else {
-                console.log('❌ List not found - check your List ID');
+                console.log('âŒ List not found - check your List ID');
             }
-        }).catch(e => console.log('❌ List Error:', e));
+        }).catch(e => console.log('âŒ List Error:', e));
     } else {
-        console.log('❌ API Key Error:', data);
+        console.log('âŒ API Key Error:', data);
     }
-}).catch(e => console.log('❌ API Error:', e));`;
+}).catch(e => console.log('âŒ API Error:', e));`;
                 
                 document.getElementById('console-test').textContent = consoleTest;
                 document.getElementById('instructions').style.display = 'block';
@@ -305,7 +314,7 @@ fetch('https://' + server + '.api.mailchimp.com/3.0/ping', {
             navigator.clipboard.writeText(text).then(() => {
                 const btn = event.target;
                 const originalText = btn.textContent;
-                btn.textContent = '✅ Copied!';
+                btn.textContent = 'âœ… Copied!';
                 setTimeout(() => {
                     btn.textContent = originalText;
                 }, 2000);

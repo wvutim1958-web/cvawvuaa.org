@@ -1,6 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Modal Close Button Test</title>
@@ -10,12 +19,12 @@
   </style>
 </head>
 <body>
-  <h2>🧪 Modal Close Button Test</h2>
+  <h2>ðŸ§ª Modal Close Button Test</h2>
   <p>Test the member portal modal close functionality</p>
   
-  <button class="test-btn" onclick="testLoginModal()">🔐 Test Login Modal</button>
-  <button class="test-btn" onclick="testRegistrationModal()">📝 Test Registration Modal</button>
-  <button class="test-btn" onclick="testMemberDashboard()">👤 Test Member Dashboard</button>
+  <button class="test-btn" onclick="testLoginModal()">ðŸ” Test Login Modal</button>
+  <button class="test-btn" onclick="testRegistrationModal()">ðŸ“ Test Registration Modal</button>
+  <button class="test-btn" onclick="testMemberDashboard()">ðŸ‘¤ Test Member Dashboard</button>
   
   <div id="test-results" style="margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 4px;">
     <strong>Test Results:</strong>
@@ -36,7 +45,7 @@
       const list = document.getElementById('results-list');
       list.innerHTML = testResults.map(r => 
         `<li style="color: ${r.result ? 'green' : 'red'};">
-          ${r.result ? '✅' : '❌'} ${r.test}
+          ${r.result ? 'âœ…' : 'âŒ'} ${r.test}
         </li>`
       ).join('');
     }
