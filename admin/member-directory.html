@@ -1327,41 +1327,12 @@ function parseCSVForDirectory(csvText) {
           duesStatus = 'pending';
         }
         
-        // Build full address from CSV fields - comprehensive field name search
-        const streetAddress = record['Street Address'] || 
-                             record['Address'] || 
-                             record['Mailing Address'] || 
-                             record['Home Address'] ||
-                             record['Physical Address'] ||
-                             record['Street'] ||
-                             record['Address Line 1'] ||
-                             record['Address1'] ||
-                             record['Addr'] || '';
-                             
-        const city = record['City'] || 
-                    record['Home City'] || 
-                    record['Mailing City'] ||
-                    record['Town'] ||
-                    record['Municipality'] || '';
-                    
-        const state = record['State'] || 
-                     record['State/Province'] || 
-                     record['Home State'] ||
-                     record['Mailing State'] ||
-                     record['ST'] ||
-                     record['Province'] || 'VA';
-                     
-        const zip = record['ZIP'] || 
-                   record['Zip Code'] || 
-                   record['Postal Code'] ||
-                   record['Home ZIP'] ||
-                   record['Mailing ZIP'] ||
-                   record['ZIP Code'] ||
-                   record['Zip'] ||
-                   record['PostalCode'] ||
-                   record['Postal'] || '';
-        
-        // Log what we found for debugging
+        // Use exact field names from your CSV
+        const streetAddress = record['Home Address'] || '';
+        const city = record['City'] || '';
+        const state = record['State'] || 'VA';
+        const zip = record['Zip Code'] || '';
+        // Log for debugging
         if (streetAddress || city || zip) {
           console.log(`Address found for ${name}:`, {streetAddress, city, state, zip});
         } else {

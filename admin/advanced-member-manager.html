@@ -593,25 +593,15 @@ function parseCSVToMembers(csvText) {
           duesStatus = 'pending';
         }
         
-        // Build address from CSV fields
-        const streetAddress = record['Street Address'] || 
-                             record['Address'] || 
-                             record['Mailing Address'] || 
-                             record['Home Address'] ||
-                             record['Physical Address'] || '';
-        const city = record['City'] || 
-                    record['Home City'] || 
-                    record['Mailing City'] || '';
-        const state = record['State'] || 
-                     record['State/Province'] || 
-                     record['Home State'] ||
-                     record['Mailing State'] || 'VA';
-        const zip = record['ZIP'] || 
-                   record['Zip Code'] || 
-                   record['Postal Code'] ||
-                   record['Home ZIP'] ||
-                   record['Mailing ZIP'] ||
-                   record['ZIP Code'] || '';
+        // Use exact field names from your CSV
+        const streetAddress = record['Home Address'] || '';
+        const city = record['City'] || '';
+        const state = record['State'] || 'VA';
+        const zip = record['Zip Code'] || '';
+        // Log for debugging
+        if (streetAddress || city || zip) {
+          console.log(`Address found for ${name}:`, {streetAddress, city, state, zip});
+        }
         
         const fullAddress = [streetAddress, city, state, zip].filter(part => part).join(', ');
         
