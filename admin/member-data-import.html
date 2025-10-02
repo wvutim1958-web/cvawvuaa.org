@@ -222,58 +222,7 @@
           </tr>
         </thead>
         <tbody id="memberTableBody">
-          <!-- Sample data based on CSV -->
-          <tr class="scholarship-contributor">
-            <td><strong>Mark & Vicki Allen</strong></td>
-            <td>Midlothian, VA 23112</td>
-            <td><a href="mailto:vla24fan@verizon.net" class="email-link">vla24fan@verizon.net</a></td>
-            <td>(804) 240-6147</td>
-            <td><span class="status-badge status-joint">Joint</span></td>
-            <td>Active</td>
-            <td>
-              <button class="member-btn primary" onclick="contactMember('vla24fan@verizon.net')">📧</button>
-              <button class="member-btn secondary" onclick="viewMemberDetails('allen_mark')">👁️</button>
-            </td>
-          </tr>
-          
-          <tr>
-            <td><strong>Sample Member 2</strong></td>
-            <td>Richmond, VA 23233</td>
-            <td><a href="mailto:sample@email.com" class="email-link">sample@email.com</a></td>
-            <td>(555) 123-4567</td>
-            <td><span class="status-badge status-individual">Individual</span></td>
-            <td><div class="renewal-alert">Renewal Due</div></td>
-            <td>
-              <button class="member-btn warning" onclick="sendRenewal('sample@email.com')">⏰</button>
-              <button class="member-btn secondary" onclick="viewMemberDetails('sample_2')">👁️</button>
-            </td>
-          </tr>
-
-          <tr class="scholarship-contributor">
-            <td><strong>Sample Family</strong></td>
-            <td>Virginia Beach, VA 23451</td>
-            <td><a href="mailto:family@email.com" class="email-link">family@email.com</a></td>
-            <td>(757) 456-7890</td>
-            <td><span class="status-badge status-family">Family</span></td>
-            <td>Active</td>
-            <td>
-              <button class="member-btn primary" onclick="contactMember('family@email.com')">📧</button>
-              <button class="member-btn secondary" onclick="viewMemberDetails('family_sample')">👁️</button>
-            </td>
-          </tr>
-
-          <tr>
-            <td><strong>Student Member</strong></td>
-            <td>Norfolk, VA 23529</td>
-            <td><a href="mailto:student@mix.wvu.edu" class="email-link">student@mix.wvu.edu</a></td>
-            <td>(757) 321-0987</td>
-            <td><span class="status-badge status-student">Student</span></td>
-            <td>Active</td>
-            <td>
-              <button class="member-btn success" onclick="welcomeStudent('student@mix.wvu.edu')">🎓</button>
-              <button class="member-btn secondary" onclick="viewMemberDetails('student_1')">👁️</button>
-            </td>
-          </tr>
+          <!-- Real member data will be populated by JavaScript -->
         </tbody>
       </table>
     </div>
@@ -372,21 +321,112 @@
 </div>
 
 <script>
-// Simulate CSV data processing
-const memberData = {
-  total: 127,
-  joint: 45,
-  scholarshipContributors: 28,
-  newMembers: 12,
-  renewals: 89
-};
+// Load real member data from localStorage
+let realMembers = [];
 
-// Update statistics
-document.getElementById('totalMembers').textContent = memberData.total;
-document.getElementById('jointMembers').textContent = memberData.joint;
-document.getElementById('scholarshipContributors').textContent = memberData.scholarshipContributors;
-document.getElementById('newMembers').textContent = memberData.newMembers;
-document.getElementById('renewalMembers').textContent = memberData.renewals;
+function loadRealMemberData() {
+  const savedMembers = localStorage.getItem('cvcwvuaa-members');
+  if (savedMembers) {
+    try {
+      realMembers = JSON.parse(savedMembers);
+      updateMemberStats();
+      displayRealMembers();
+    } catch (e) {
+      console.error('Error loading members:', e);
+      showEmptyState();
+    }
+  } else {
+    showEmptyState();
+  }
+}
+
+function updateMemberStats() {
+  const total = realMembers.length;
+  const joint = realMembers.filter(m => m.type === 'family').length;
+  const current = realMembers.filter(m => m.duesStatus === 'current').length;
+  const overdue = realMembers.filter(m => m.duesStatus === 'overdue').length;
+  const pending = realMembers.filter(m => m.duesStatus === 'pending').length;
+  
+  document.getElementById('totalMembers').textContent = total;
+  document.getElementById('jointMembers').textContent = joint;
+  document.getElementById('scholarshipContributors').textContent = current;
+  document.getElementById('newMembers').textContent = pending;
+  document.getElementById('renewalMembers').textContent = overdue;
+}
+
+function displayRealMembers() {
+  const tbody = document.getElementById('memberTableBody');
+  tbody.innerHTML = '';
+  
+  if (realMembers.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 2rem; color: #666;">
+          <h3>📋 No Members Found</h3>
+          <p>Import your CSV file to see real member data here.</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+  
+  realMembers.forEach(member => {
+    const row = document.createElement('tr');
+    if (member.duesStatus === 'current') {
+      row.classList.add('scholarship-contributor');
+    }
+    
+    const statusText = member.duesStatus === 'current' ? 'Active' : 
+                     member.duesStatus === 'overdue' ? 'Renewal Due' : 'Pending';
+    
+    const typeClass = member.type === 'family' ? 'status-joint' : 
+                     member.type === 'student' ? 'status-student' : 
+                     member.type === 'lifetime' ? 'status-lifetime' : 'status-individual';
+    
+    const statusDisplay = member.duesStatus === 'overdue' ? 
+      `<div class="renewal-alert">${statusText}</div>` : statusText;
+    
+    row.innerHTML = `
+      <td><strong>${member.name}</strong></td>
+      <td>${member.city || 'Virginia'}, VA</td>
+      <td><a href="mailto:${member.email}" class="email-link">${member.email}</a></td>
+      <td>${member.phone || 'N/A'}</td>
+      <td><span class="status-badge ${typeClass}">${member.type.charAt(0).toUpperCase() + member.type.slice(1)}</span></td>
+      <td>${statusDisplay}</td>
+      <td>
+        <button class="member-btn ${member.duesStatus === 'overdue' ? 'warning' : 'primary'}" onclick="contactMember('${member.email}')">
+          ${member.duesStatus === 'overdue' ? '⏰' : '📧'}
+        </button>
+        <button class="member-btn secondary" onclick="viewMemberDetails('${member.id}')">👁️</button>
+      </td>
+    `;
+    
+    tbody.appendChild(row);
+  });
+}
+
+function showEmptyState() {
+  const tbody = document.getElementById('memberTableBody');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="7" style="text-align: center; padding: 3rem; color: #666;">
+        <h3>📋 No Member Database Loaded</h3>
+        <p>Upload your CVCWVUAA membership CSV file to view real member data.</p>
+        <p>Go to <strong>Advanced Member Manager</strong> to import your CSV database.</p>
+      </td>
+    </tr>
+  `;
+  
+  // Set stats to zero
+  document.getElementById('totalMembers').textContent = 0;
+  document.getElementById('jointMembers').textContent = 0;
+  document.getElementById('scholarshipContributors').textContent = 0;
+  document.getElementById('newMembers').textContent = 0;
+  document.getElementById('renewalMembers').textContent = 0;
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', loadRealMemberData);
 
 // Real CSV processing variables
 let realMemberData = [];
