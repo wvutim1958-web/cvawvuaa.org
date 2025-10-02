@@ -1,0 +1,149 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVCWVUAA • Pay / Donate</title>
+<meta name="description" content="Support CVCWVUAA through membership dues or donations. Help fund scholarships, events, and programs for West Virginia University students and alumni.">
+<link rel="stylesheet" href="/css/styles.css">
+</head><body>
+
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">🔍</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+
+    </nav>
+  </div>
+</header>
+<main><div class="wrapper">
+  <h2>WVU Alumni &amp; Friends – Central Virginia Chapter</h2>
+  <p class="lead"><strong>Membership Benefits</strong></p>
+  <p>Please consider joining our organization by making the contribution listed below. Membership helps support our organization, provide scholarships to local deserving students in our region, and provide resources to new and existing students attending West Virginia University.</p>
+  <p>Our Chapter is hoping to obtain tickets to upcoming sporting events and we have plans to bring in featured guests from the University. Members will receive first opportunities to participate in these events.</p>
+
+  <div class="grid grid-3">
+    <section class="card">
+      <h3>’25 Single Membership — $25/yr</h3>
+      <p><a class="btn" href="https://www.paypal.com/donate/?hosted_button_id=P2MJTS44SXS4U" target="_blank" rel="noopener">Join Online</a></p>
+      <p class="small">Annual dues for one member.</p>
+    </section>
+    <section class="card">
+      <h3>’25 Family Membership — $15/yr</h3>
+      <p><a class="btn" href="https://www.paypal.com/donate/?hosted_button_id=H6L88M4VBJS8W" target="_blank" rel="noopener">Join Online</a></p>
+      <p class="small">Add family member(s) to an existing membership.</p>
+    </section>
+    <section class="card">
+      <h3>’25 Membership — Pay By Mail</h3>
+      <p class="small">Single: $25 / yr • Family Member: $15 / yr</p>
+      <p><a class="btn" href="/membership.html">Go to Membership Form</a></p>
+      <p class="small">Make checks payable to <strong>CVCWVAA</strong> and mail to 4701 Stoney Creek Parkway, Chester, VA 23831.</p>
+    </section>
+    <section class="card">
+      <h3>General Chapter Donation</h3>
+      <p class="small">A donation to support the organization — you decide how much to give.</p>
+      <p><a class="btn" href="https://www.paypal.com/donate/?hosted_button_id=P2MJTS44SXS4U" target="_blank" rel="noopener">Donate</a></p>
+      <p class="small">On PayPal, add note: “General donation.”</p>
+    </section>
+    <section class="card">
+      <h3>Give to the Chapter Scholarship</h3>
+      <form action="https://www.paypal.com/ncp/payment/W2QGQMAKX8TWN" method="post" target="_blank"
+            style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
+        <input class="pp-W2QGQMAKX8TWN" type="submit" value="Buy Now" />
+        <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="cards" />
+      </form>
+    </section>
+    <section class="card">
+      <h3>Contact us about Sponsorship</h3>
+      <p class="small">Discuss support, volunteering, or sponsoring an upcoming event.</p>
+      <p><a class="btn" href="/contact.html">Email the Chapter</a></p>
+    </section>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <p class="small">
+      Membership fees support the organization’s goals and mission; we are a <strong>501(c)(3)</strong> all-volunteer organization and no compensation is received by any board member. 
+      Dues support the cost to run our organization with the primary focus to continue to provide annual scholarships through our 
+      <strong>WVU Alumni Central Virginia Chapter Scholarship</strong> (endowed).
+    </p>
+  </div>
+</div></main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
+
+<script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+<script>
+  // Mobile: open/close main nav
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+  // Mobile: tap to open About dropdown
+  const aboutMenu = document.querySelector('.menu.dropdown');
+  const aboutBtn  = document.querySelector('.menu.dropdown .dropbtn');
+  if (aboutBtn && aboutMenu) {
+    aboutBtn.addEventListener('click', (e) => {
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        e.preventDefault();
+        aboutMenu.classList.toggle('open');
+        aboutBtn.setAttribute('aria-expanded', aboutMenu.classList.contains('open') ? 'true' : 'false');
+      }
+    });
+  }
+</script>
+
+</body></html>

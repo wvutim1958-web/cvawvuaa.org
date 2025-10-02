@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Data Debug Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .member-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .member-name {
+            font-weight: bold;
+            color: #2c5aa0;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .field-row {
+            display: flex;
+            margin: 5px 0;
+        }
+        .field-name {
+            font-weight: bold;
+            width: 150px;
+            color: #666;
+        }
+        .field-value {
+            color: #333;
+            flex: 1;
+        }
+        .empty-value {
+            color: #999;
+            font-style: italic;
+        }
+        .search-box {
+            width: 300px;
+            padding: 10px;
+            margin: 20px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .btn {
+            background: #2c5aa0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background: #1e3d6f;
+        }
+        .summary {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #2c5aa0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Member Data Debug Tool</h1>
+        
+        <div class="summary">
+            <h3>Data Summary</h3>
+            <div id="summaryStats"></div>
+        </div>
+        
+        <input type="text" class="search-box" id="searchBox" placeholder="Search members by name...">
+        <button class="btn" onclick="showAddressIssues()">Show Address Issues Only</button>
+        <button class="btn" onclick="showAll()">Show All Members</button>
+        <button class="btn" onclick="exportRawData()">Export Raw Data</button>
+        
+        <div id="membersList"></div>
+    </div>
+
+    <script>
+        let allMembers = [];
+        
+        function loadMemberData() {
+            // Try to load from localStorage (advanced manager)
+            let memberData = localStorage.getItem('members');
+            if (memberData) {
+                try {
+                    allMembers = JSON.parse(memberData);
+                    console.log('📊 Loaded member data:', allMembers);
+                } catch (e) {
+                    console.error('Error parsing member data:', e);
+                    allMembers = [];
+                }
+            } else {
+                console.log('❌ No member data found in localStorage');
+                allMembers = [];
+            }
+            
+            updateSummary();
+            displayMembers(allMembers);
+        }
+        
+        function updateSummary() {
+            const total = allMembers.length;
+            const withAddress = allMembers.filter(m => m.streetAddress && m.streetAddress.trim() !== '').length;
+            const withCity = allMembers.filter(m => m.city && m.city.trim() !== '').length;
+            const withState = allMembers.filter(m => m.state && m.state.trim() !== '').length;
+            const withZip = allMembers.filter(m => m.zip && m.zip.trim() !== '').length;
+            const withFullAddress = allMembers.filter(m => m.fullAddress && m.fullAddress.trim() !== '').length;
+            
+            document.getElementById('summaryStats').innerHTML = `
+                <strong>Total Members:</strong> ${total}<br>
+                <strong>With Street Address:</strong> ${withAddress} (${Math.round(withAddress/total*100)}%)<br>
+                <strong>With City:</strong> ${withCity} (${Math.round(withCity/total*100)}%)<br>
+                <strong>With State:</strong> ${withState} (${Math.round(withState/total*100)}%)<br>
+                <strong>With ZIP:</strong> ${withZip} (${Math.round(withZip/total*100)}%)<br>
+                <strong>With Full Address:</strong> ${withFullAddress} (${Math.round(withFullAddress/total*100)}%)
+            `;
+        }
+        
+        function displayMembers(members) {
+            const membersList = document.getElementById('membersList');
+            if (members.length === 0) {
+                membersList.innerHTML = '<p>No member data found. Please import CSV data first in the Advanced Member Manager.</p>';
+                return;
+            }
+            
+            let html = '';
+            members.forEach((member, index) => {
+                html += `
+                    <div class="member-card">
+                        <div class="member-name">${member.name || 'Unnamed Member'} (ID: ${member.id || index})</div>
+                        
+                        <div class="field-row">
+                            <span class="field-name">Street Address:</span>
+                            <span class="field-value ${!member.streetAddress ? 'empty-value' : ''}">${member.streetAddress || '(empty)'}</span>
+                        </div>
+                        
+                        <div class="field-row">
+                            <span class="field-name">City:</span>
+                            <span class="field-value ${!member.city ? 'empty-value' : ''}">${member.city || '(empty)'}</span>
+                        </div>
+                        
+                        <div class="field-row">
+                            <span class="field-name">State:</span>
+                            <span class="field-value ${!member.state ? 'empty-value' : ''}">${member.state || '(empty)'}</span>
+                        </div>
+                        
+                        <div class="field-row">
+                            <span class="field-name">ZIP:</span>
+                            <span class="field-value ${!member.zip ? 'empty-value' : ''}">${member.zip || '(empty)'}</span>
+                        </div>
+                        
+                        <div class="field-row">
+                            <span class="field-name">Full Address:</span>
+                            <span class="field-value ${!member.fullAddress ? 'empty-value' : ''}">${member.fullAddress || '(empty)'}</span>
+                        </div>
+                        
+                        <div class="field-row">
+                            <span class="field-name">Email:</span>
+                            <span class="field-value ${!member.email ? 'empty-value' : ''}">${member.email || '(empty)'}</span>
+                        </div>
+                        
+                        <div class="field-row">
+                            <span class="field-name">Phone:</span>
+                            <span class="field-value ${!member.phone ? 'empty-value' : ''}">${member.phone || '(empty)'}</span>
+                        </div>
+                        
+                        <div class="field-row">
+                            <span class="field-name">Type:</span>
+                            <span class="field-value">${member.type || 'individual'}</span>
+                        </div>
+                        
+                        <div class="field-row">
+                            <span class="field-name">Dues Status:</span>
+                            <span class="field-value">${member.duesStatus || 'unknown'}</span>
+                        </div>
+                        
+                        <details style="margin-top: 10px;">
+                            <summary>Raw Data Object</summary>
+                            <pre style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 3px; font-size: 12px; overflow: auto;">${JSON.stringify(member, null, 2)}</pre>
+                        </details>
+                    </div>
+                `;
+            });
+            
+            membersList.innerHTML = html;
+        }
+        
+        function showAddressIssues() {
+            const membersWithIssues = allMembers.filter(member => 
+                !member.streetAddress || !member.city || !member.state || !member.zip
+            );
+            displayMembers(membersWithIssues);
+        }
+        
+        function showAll() {
+            displayMembers(allMembers);
+        }
+        
+        function exportRawData() {
+            const dataStr = JSON.stringify(allMembers, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'member-debug-data.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+        
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = allMembers.filter(member => 
+                member.name && member.name.toLowerCase().includes(searchTerm)
+            );
+            displayMembers(filtered);
+        });
+        
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadMemberData);
+    </script>
+</body>
+</html>

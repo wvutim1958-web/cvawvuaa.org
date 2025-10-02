@@ -581,18 +581,31 @@ function loadRealMembers() {
   }
   
   // Convert advanced manager data to directory format - DO NOT override address fields with defaults
-  members = memberData.map(member => ({
-    ...member,
-    classYear: member.year || member.classYear || "Unknown",
-    major: member.major || "Alumni",
-    // IMPORTANT: Preserve actual address data from CSV - don't override with defaults
-    streetAddress: member.streetAddress || "",
-    city: member.city || "",
-    state: member.state || "",
-    zip: member.zip || "",
-    // Only use location if no individual city field exists
-    displayLocation: member.city ? `${member.city}${member.state ? ', ' + member.state : ''}` : (member.location || ""),
-    status: member.duesStatus || member.status || "unknown",
+  members = memberData.map((member, index) => {
+    // Debug logging for the first few members to see what data we have
+    if (index < 3) {
+      console.log(`🔍 Loading member ${index + 1} (${member.name}):`, member);
+      console.log(`   Address fields:`, {
+        streetAddress: member.streetAddress,
+        city: member.city,
+        state: member.state,
+        zip: member.zip,
+        fullAddress: member.fullAddress
+      });
+    }
+    
+    return {
+      ...member,
+      classYear: member.year || member.classYear || "Unknown",
+      major: member.major || "Alumni",
+      // IMPORTANT: Preserve actual address data from CSV - don't override with defaults
+      streetAddress: member.streetAddress || "",
+      city: member.city || "",
+      state: member.state || "",
+      zip: member.zip || "",
+      // Only use location if no individual city field exists
+      displayLocation: member.city ? `${member.city}${member.state ? ', ' + member.state : ''}` : (member.location || ""),
+      status: member.duesStatus || member.status || "unknown",
     // Preserve financial data
     totalAmountPaid: member.totalAmountPaid || 0,
     scholarshipAmount: member.scholarshipAmount || 0,
@@ -902,6 +915,16 @@ function editMember(id) {
 }
 
 function showEditModal(member) {
+  // Debug: Log what's actually in the member object
+  console.log('📋 Edit Modal - Member Data:', member);
+  console.log('📋 Address Fields:', {
+    streetAddress: member.streetAddress,
+    city: member.city,
+    state: member.state,
+    zip: member.zip,
+    fullAddress: member.fullAddress
+  });
+  
   // Create edit modal
   const modal = document.createElement('div');
   modal.className = 'edit-modal';
@@ -940,7 +963,7 @@ function showEditModal(member) {
         
         <div>
           <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Street Address:</label>
-          <input type="text" id="editStreetAddress" value="${member.streetAddress || ''}" placeholder="123 Main St" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          <input type="text" id="editStreetAddress" value="${member.streetAddress || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
         
         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem;">
@@ -951,12 +974,12 @@ function showEditModal(member) {
           
           <div>
             <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">State:</label>
-            <input type="text" id="editState" value="${member.state || 'VA'}" maxlength="2" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" id="editState" value="${member.state || ''}" maxlength="2" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
           </div>
           
           <div>
             <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">ZIP:</label>
-            <input type="text" id="editZip" value="${member.zip || ''}" placeholder="12345" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" id="editZip" value="${member.zip || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
           </div>
         </div>
         

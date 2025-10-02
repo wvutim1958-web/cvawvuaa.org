@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mailchimp - No Server Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .alert-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        input, button, textarea {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Mailchimp Test - CORS Workaround</h1>
+    
+    <div class="alert alert-warning">
+        <strong>⚠️ CORS Error Detected!</strong><br>
+        The "Failed to fetch" error means your browser is blocking API calls from file:// URLs.
+        This is normal browser security behavior.
+    </div>
+
+    <div class="section">
+        <h2>🚀 Quick Fix: Start a Web Server</h2>
+        
+        <div class="alert alert-info">
+            <strong>💡 Easy Solution:</strong> Double-click <code>start-server.bat</code> in your folder, 
+            then visit <strong>http://localhost:8080/mailchimp-debug.html</strong>
+        </div>
+
+        <h3>📋 Manual Server Options:</h3>
+        
+        <p><strong>Option 1 - Python:</strong></p>
+        <div class="code-block">1. Open PowerShell in your website folder
+2. Run: python -m http.server 8080
+3. Open: http://localhost:8080/mailchimp-debug.html</div>
+
+        <p><strong>Option 2 - VS Code:</strong></p>
+        <div class="code-block">1. Install VS Code + "Live Server" extension
+2. Right-click any HTML file
+3. Select "Open with Live Server"</div>
+
+        <p><strong>Option 3 - Node.js:</strong></p>
+        <div class="code-block">1. npm install -g http-server
+2. Run: http-server -p 8080
+3. Open: http://localhost:8080</div>
+    </div>
+
+    <div class="section">
+        <h2>🧪 Test Your API Key (Browser Console Method)</h2>
+        <p>As a workaround, you can test your API key directly in the browser console:</p>
+        
+        <div>
+            <input type="text" id="test-api-key" placeholder="Paste your API key here" style="width: 400px;">
+            <br>
+            <input type="text" id="test-server" placeholder="Server (e.g., us12)" style="width: 150px;">
+            <br>
+            <button onclick="generateConsoleTest()">🧪 Generate Console Test Code</button>
+        </div>
+        
+        <div id="console-test-output" style="display: none;">
+            <h3>📋 Copy this code to your browser console:</h3>
+            <p><strong>Steps:</strong> Press F12 → Go to Console tab → Paste the code below → Press Enter</p>
+            <textarea id="console-code" readonly style="width: 100%; height: 200px;"></textarea>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>✅ Why This Happens & How to Fix</h2>
+        
+        <div class="alert alert-info">
+            <strong>🔒 CORS (Cross-Origin Resource Sharing) Protection</strong><br>
+            Browsers prevent file:// pages from making requests to external APIs for security.
+            This is why you get "Failed to fetch" errors.
+        </div>
+
+        <h3>🎯 Solutions by Use Case:</h3>
+        
+        <p><strong>For Testing Locally:</strong></p>
+        <ul>
+            <li>Use <code>start-server.bat</code> (easiest)</li>
+            <li>Use VS Code Live Server extension</li>
+            <li>Use any local web server</li>
+        </ul>
+
+        <p><strong>For Production:</strong></p>
+        <ul>
+            <li>Upload to your web hosting (no CORS issues online)</li>
+            <li>Configure Mailchimp on the live site</li>
+            <li>All functionality works perfectly when hosted</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🎉 Next Steps</h2>
+        <ol>
+            <li><strong>Start web server</strong> using one of the methods above</li>
+            <li><strong>Open</strong> http://localhost:8080/mailchimp-debug.html</li>
+            <li><strong>Test your Mailchimp integration</strong> (should work perfectly)</li>
+            <li><strong>Configure admin dashboard</strong> at http://localhost:8080/admin/index.html</li>
+            <li><strong>Upload to web hosting</strong> when ready for production</li>
+        </ol>
+    </div>
+
+    <script>
+        function generateConsoleTest() {
+            const apiKey = document.getElementById('test-api-key').value.trim();
+            const server = document.getElementById('test-server').value.trim();
+            
+            if (!apiKey || !server) {
+                alert('Please enter both API key and server');
+                return;
+            }
+            
+            const consoleCode = `// Mailchimp API Test
+// This bypasses CORS by running directly in browser context
+
+const apiKey = '${apiKey}';
+const server = '${server}';
+const baseUrl = \`https://\${server}.api.mailchimp.com/3.0\`;
+
+console.log('Testing Mailchimp API...');
+console.log('Base URL:', baseUrl);
+
+// Test 1: Ping
+fetch(\`\${baseUrl}/ping\`, {
+    method: 'GET',
+    headers: {
+        'Authorization': \`Basic \${btoa('user:' + apiKey)}\`,
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => {
+    console.log('Ping response status:', response.status);
+    if (response.ok) {
+        return response.json();
+    } else {
+        throw new Error(\`HTTP \${response.status}\`);
+    }
+})
+.then(result => {
+    console.log('✅ Ping successful:', result);
+    console.log('Your API key and server are working!');
+})
+.catch(error => {
+    console.log('❌ Ping failed:', error);
+    console.log('Check your API key and server settings');
+});
+
+// Note: If ping works, your Mailchimp integration will work fine 
+// when running through a web server (http://localhost:8080)`;
+
+            document.getElementById('console-code').value = consoleCode;
+            document.getElementById('console-test-output').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
