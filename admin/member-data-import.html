@@ -1010,7 +1010,8 @@ student@mix.wvu.edu`;
 }
 
 function generateRenewalLetters() {
-  alert('📮 Generating Renewal Letters\n\nThis would:\n• Create personalized renewal letters\n• Include membership history\n• Add payment instructions\n• Generate mailing labels\n• Track renewal status\n\nLetters would be created for members with expiring memberships.');
+  // Redirect to the same email system as renewal reminders
+  exportRenewalReminders();
 }
 
 function scholarshipContributors() {
@@ -1096,7 +1097,13 @@ function viewMemberDetails(memberId) {
 }
 
 function sendRenewal(email) {
-  alert(`⏰ Sending renewal reminder to ${email}\n\nPersonalized renewal email includes:\n• Current membership status\n• Renewal deadline\n• Payment options (online, check, Venmo)\n• Membership benefits reminder\n• Contact information for questions\n\nRenewal tracking updated automatically.`);
+  // Find the member and show email preview for this specific member
+  const member = realMembers.find(m => m.email === email);
+  if (member && member.duesStatus === 'overdue') {
+    showRenewalEmailPreview([member]);
+  } else {
+    alert(`Member ${email} is not currently overdue for renewal.`);
+  }
 }
 
 function welcomeStudent(email) {
