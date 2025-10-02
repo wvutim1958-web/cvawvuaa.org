@@ -331,6 +331,7 @@
             Member Name
           </th>
           <th>Email & Phone</th>
+          <th>Address</th>
           <th>Membership Type</th>
           <th>Dues Status 2025</th>
           <th>Last Payment</th>
@@ -837,11 +838,21 @@ function parseCSVToMembers(csvText) {
         // Use exact field names from your CSV
         const streetAddress = record['Home Address'] || '';
         const city = record['City'] || '';
-        const state = record['State'] || 'VA';
+        const state = record['State'] || '';
         const zip = record['Zip Code'] || '';
-        // Log for debugging
-        if (streetAddress || city || zip) {
-          console.log(`Address found for ${name}:`, {streetAddress, city, state, zip});
+        
+        // Debug logging for address data
+        console.log(`Processing member ${name}:`);
+        console.log(`  Raw CSV record keys:`, Object.keys(record));
+        console.log(`  Home Address: "${record['Home Address']}" -> "${streetAddress}"`);
+        console.log(`  City: "${record['City']}" -> "${city}"`);
+        console.log(`  State: "${record['State']}" -> "${state}"`);
+        console.log(`  Zip Code: "${record['Zip Code']}" -> "${zip}"`);
+        
+        if (streetAddress || city || state || zip) {
+          console.log(`✅ Address data found for ${name}:`, {streetAddress, city, state, zip});
+        } else {
+          console.log(`❌ No address data found for ${name}`);
         }
         
         const fullAddress = [streetAddress, city, state, zip].filter(part => part).join(', ');
@@ -958,6 +969,15 @@ function updateMemberTable() {
       <td>
         <div>${member.email}</div>
         <div style="color: #64748b; font-size: 0.9rem;">${member.phone}</div>
+      </td>
+      <td>
+        <div style="font-size: 0.85rem;">
+          ${member.streetAddress ? `<div><strong>${member.streetAddress}</strong></div>` : ''}
+          ${member.city || member.state || member.zip ? 
+            `<div>${[member.city, member.state, member.zip].filter(x => x).join(', ')}</div>` : 
+            '<div style="color: #999;">No address</div>'
+          }
+        </div>
       </td>
       <td>${typeDisplay}</td>
       <td>

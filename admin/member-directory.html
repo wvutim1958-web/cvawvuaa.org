@@ -580,12 +580,18 @@ function loadRealMembers() {
     }
   }
   
-  // Convert advanced manager data to directory format
+  // Convert advanced manager data to directory format - DO NOT override address fields with defaults
   members = memberData.map(member => ({
     ...member,
     classYear: member.year || member.classYear || "Unknown",
     major: member.major || "Alumni",
-    city: member.city || member.location || "Virginia",
+    // IMPORTANT: Preserve actual address data from CSV - don't override with defaults
+    streetAddress: member.streetAddress || "",
+    city: member.city || "",
+    state: member.state || "",
+    zip: member.zip || "",
+    // Only use location if no individual city field exists
+    displayLocation: member.city ? `${member.city}${member.state ? ', ' + member.state : ''}` : (member.location || ""),
     status: member.duesStatus || member.status || "unknown",
     // Preserve financial data
     totalAmountPaid: member.totalAmountPaid || 0,
@@ -692,9 +698,13 @@ function renderMemberCards() {
           <div class="member-info-item">
             <span>🏠</span> ${member.fullAddress}
           </div>
+          ` : member.streetAddress || member.city || member.state ? `
+          <div class="member-info-item">
+            <span>📍</span> ${[member.streetAddress, member.city, member.state, member.zip].filter(x => x).join(', ') || 'Address not available'}
+          </div>
           ` : `
           <div class="member-info-item">
-            <span>📍</span> ${member.city}, VA
+            <span>📍</span> ${member.displayLocation || 'Address not available'}
           </div>
           `}
           <div class="member-info-item">
