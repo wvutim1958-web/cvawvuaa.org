@@ -331,23 +331,8 @@
 
   <!-- Member Cards -->
   <div class="member-grid" id="memberGrid">
-    <!-- Sample Member Cards -->
-    <div class="member-card" data-status="active" data-type="family" data-year="1995">
-      <div class="member-header">
-        <div class="member-name">John & Sarah Smith</div>
-        <span class="member-status status-active">Active</span>
-      </div>
-      <div class="member-details">
-        <div class="member-info">
-          <div class="member-info-item">
-            <span>📧</span> john.smith@email.com
-          </div>
-          <div class="member-info-item">
-            <span>📞</span> (555) 123-4567
-          </div>
-          <div class="member-info-item">
-            <span>🎓</span> Class of 1995 (Engineering)
-          </div>
+    <!-- Member cards will be populated by JavaScript -->
+  </div>
           <div class="member-info-item">
             <span>💳</span> Family Membership
           </div>
@@ -554,6 +539,162 @@
 </div>
 
 <script>
+// Sample member data - matches the advanced member manager
+let members = [
+  {
+    id: 1,
+    name: "Tim & Karen Castelli",
+    email: "president@cvawvuaa.org",
+    phone: "(804) 555-0123",
+    type: "family",
+    duesStatus: "current",
+    lastPayment: "2025-01-15",
+    year: 1998,
+    classYear: "1998",
+    major: "Engineering",
+    city: "Richmond"
+  },
+  {
+    id: 2,
+    name: "Sarah Montgomery",
+    email: "sarah.montgomery@email.com", 
+    phone: "(757) 555-0456",
+    type: "individual",
+    duesStatus: "overdue",
+    lastPayment: "2024-08-20",
+    year: 2010,
+    classYear: "2010",
+    major: "Business",
+    city: "Virginia Beach"
+  },
+  {
+    id: 3,
+    name: "Jessica Williams",
+    email: "jwilliams@mix.wvu.edu",
+    phone: "(540) 555-0789",
+    type: "student",
+    duesStatus: "current",
+    lastPayment: "2025-01-10",
+    year: 2024,
+    classYear: "2024",
+    major: "Communications",
+    city: "Charlottesville"
+  },
+  {
+    id: 4,
+    name: "David & Linda Thompson",
+    email: "dthompson@email.com",
+    phone: "(703) 555-0321",
+    type: "family",
+    duesStatus: "overdue",
+    lastPayment: "2024-09-15",
+    year: 1985,
+    classYear: "1985",
+    major: "Medicine",
+    city: "Alexandria"
+  },
+  {
+    id: 5,
+    name: "Mark Roberts",
+    email: "mroberts@email.com",
+    phone: "(804) 555-0987",
+    type: "individual",
+    duesStatus: "current",
+    lastPayment: "2025-02-01",
+    year: 2005,
+    classYear: "2005",
+    major: "Computer Science",
+    city: "Richmond"
+  },
+  {
+    id: 6,
+    name: "Amanda & Chris Johnson",
+    email: "ajohnson@email.com",
+    phone: "(757) 555-0654",
+    type: "family",
+    duesStatus: "pending",
+    lastPayment: null,
+    year: 1992,
+    classYear: "1992",
+    major: "Education",
+    city: "Norfolk"
+  }
+];
+
+// Initialize the member directory
+function initializeDirectory() {
+  updateMemberStats();
+  renderMemberCards();
+}
+
+// Update statistics
+function updateMemberStats() {
+  const totalMembers = members.length;
+  const activeMembers = members.filter(m => m.duesStatus === 'current').length;
+  const pendingMembers = members.filter(m => m.duesStatus === 'pending').length;
+  const expiredMembers = members.filter(m => m.duesStatus === 'overdue').length;
+  
+  document.querySelector('.stat-card:nth-child(1) .stat-number').textContent = totalMembers;
+  document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = activeMembers;
+  document.querySelector('.stat-card:nth-child(3) .stat-number').textContent = pendingMembers;
+  document.querySelector('.stat-card:nth-child(4) .stat-number').textContent = expiredMembers;
+}
+
+// Render member cards
+function renderMemberCards() {
+  const grid = document.getElementById('memberGrid');
+  grid.innerHTML = '';
+  
+  members.forEach(member => {
+    const status = member.duesStatus === 'current' ? 'active' : 
+                   member.duesStatus === 'pending' ? 'pending' : 'expired';
+    
+    const card = document.createElement('div');
+    card.className = 'member-card';
+    card.dataset.status = status;
+    card.dataset.type = member.type;
+    card.dataset.year = member.year;
+    
+    card.innerHTML = `
+      <div class="member-header">
+        <div class="member-name">${member.name}</div>
+        <span class="member-status status-${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+      </div>
+      <div class="member-details">
+        <div class="member-info">
+          <div class="member-info-item">
+            <span>📧</span> ${member.email}
+          </div>
+          <div class="member-info-item">
+            <span>📞</span> ${member.phone}
+          </div>
+          <div class="member-info-item">
+            <span>🎓</span> Class of ${member.classYear} (${member.major})
+          </div>
+          <div class="member-info-item">
+            <span>📍</span> ${member.city}, VA
+          </div>
+          <div class="member-info-item">
+            <span>💳</span> ${member.type.charAt(0).toUpperCase() + member.type.slice(1)} Member
+          </div>
+          ${member.lastPayment ? `
+          <div class="member-info-item">
+            <span>💰</span> Last Payment: ${new Date(member.lastPayment).toLocaleDateString()}
+          </div>
+          ` : ''}
+        </div>
+        <div class="member-actions">
+          <button class="action-btn small" onclick="editMember(${member.id})">✏️ Edit</button>
+          <button class="action-btn small" onclick="emailMember('${member.email}')">📧 Email</button>
+          <button class="action-btn small warning" onclick="deleteMember(${member.id})">🗑️ Delete</button>
+        </div>
+      </div>
+    `;
+    
+    grid.appendChild(card);
+  });
+}
+
 // Filter members
 function filterMembers() {
   const search = document.getElementById('memberSearch').value.toLowerCase();
@@ -675,11 +816,16 @@ function syncMailchimp() {
 
 // Export functions
 function exportCSV() {
-  const csvData = `Name,Email,Phone,Class Year,Membership Type,Status,City
-John & Sarah Smith,john.smith@email.com,(555) 123-4567,1995,Family,Active,Richmond
-Michael Johnson,m.johnson@email.com,(555) 987-6543,2010,Individual,Expired,Charlottesville
-Robert & Linda Wilson,rwilson@email.com,(555) 456-7890,1987,Lifetime,Active,Virginia Beach
-Emily Davis,edavis@mix.wvu.edu,(555) 321-0987,2024,Student,Pending,Norfolk`;
+  const headers = 'Name,Email,Phone,Class Year,Membership Type,Status,City,Last Payment';
+  const csvRows = members.map(member => {
+    const status = member.duesStatus === 'current' ? 'Active' : 
+                   member.duesStatus === 'pending' ? 'Pending' : 'Expired';
+    const lastPayment = member.lastPayment ? new Date(member.lastPayment).toLocaleDateString() : 'Never';
+    
+    return `"${member.name}","${member.email}","${member.phone}","${member.classYear}","${member.type}","${status}","${member.city}","${lastPayment}"`;
+  });
+  
+  const csvData = [headers, ...csvRows].join('\n');
   
   const blob = new Blob([csvData], { type: 'text/csv' });
   const url = URL.createObjectURL(blob);
@@ -713,6 +859,37 @@ function exportByClass() {
 function exportRenewalList() {
   alert('⏰ Generating renewal report...\n\nTracking:\n• Upcoming renewals\n• Overdue accounts\n• Payment reminder schedule\n• Revenue projections');
 }
+
+// Member action functions
+function editMember(id) {
+  const member = members.find(m => m.id === id);
+  if (member) {
+    alert(`✏️ Edit Member: ${member.name}\n\nThis would open an edit form with:\n• Personal information\n• Contact details\n• Membership type\n• Payment history`);
+  }
+}
+
+function emailMember(email) {
+  window.open(`mailto:${email}?subject=CVCWVUAA Message&body=Hello,\n\nGreetings from the Central Virginia Chapter WVU Alumni Association!\n\nLet's Go Mountaineers!`);
+}
+
+function deleteMember(id) {
+  const member = members.find(m => m.id === id);
+  if (member && confirm(`Delete member "${member.name}"?\n\nThis action cannot be undone.`)) {
+    members = members.filter(m => m.id !== id);
+    renderMemberCards();
+    updateMemberStats();
+    alert(`🗑️ Deleted member: ${member.name}`);
+  }
+}
+
+function openAddMemberModal() {
+  alert('➕ Add New Member\n\nThis would open a form to add:\n• Member information\n• Contact details\n• Membership type\n• Initial dues status');
+}
+
+// Initialize directory when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  initializeDirectory();
+});
 </script>
 
 </body>
