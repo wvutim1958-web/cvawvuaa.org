@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CVCWVUAA Advanced Member Management</title>
 <link rel="stylesheet" href="/css/styles.css">
+<script src="/admin/js/export-to-csv.js" defer></script>
 <style>
   .member-manager-container {
     max-width: 1400px;
@@ -313,6 +314,7 @@
         <button class="action-btn success" onclick="markAllCurrentDues()">✅ Mark All Current</button>
         <button class="action-btn warning" onclick="sendDuesReminders()">📧 Send Dues Reminders</button>
         <button class="action-btn" onclick="exportDuesReport()">📊 Export Dues Report</button>
+        <button class="action-btn" onclick="exportMembersToCSV()" style="background: #3b82f6;">💾 Export to CSV</button>
         <button class="action-btn secondary" onclick="bulkDeleteOverdue()">🗑️ Remove Overdue (90+ days)</button>
       </div>
     </div>
@@ -331,6 +333,7 @@
           <th>Membership Type</th>
           <th>Dues Status 2025</th>
           <th>Last Payment</th>
+          <th>Financial</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -383,6 +386,28 @@
     <div class="form-group">
       <label>Last Payment Date:</label>
       <input type="date" id="lastPayment">
+    </div>
+
+    <div class="form-group">
+      <label>Financial Information:</label>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+        <div>
+          <label>Total Amount Paid ($):</label>
+          <input type="number" id="totalAmountPaid" step="0.01" min="0" value="0">
+        </div>
+        <div>
+          <label>Dues Amount ($):</label>
+          <input type="number" id="duesAmount" step="0.01" min="0" value="0">
+        </div>
+        <div>
+          <label>Scholarship Contribution ($):</label>
+          <input type="number" id="scholarshipAmount" step="0.01" min="0" value="0">
+        </div>
+        <div>
+          <label>General Fund ($):</label>
+          <input type="number" id="generalFundAmount" step="0.01" min="0" value="0">
+        </div>
+      </div>
     </div>
     
     <div style="text-align: right; margin-top: 2rem;">
@@ -593,6 +618,13 @@ function parseCSVToMembers(csvText) {
           duesStatus = 'pending';
         }
         
+        // Get financial data fields
+        // membershipType already defined above, using it directly
+        const totalAmountPaid = record['Total Amount Paid'] || '0';
+        const scholarshipAmount = record['Scholarship'] || '0';
+        const duesAmount = record['Dues'] || '0';
+        const generalFundAmount = record['General Fund'] || '0';
+        
         // Use exact field names from your CSV
         const streetAddress = record['Home Address'] || '';
         const city = record['City'] || '';
@@ -618,7 +650,12 @@ function parseCSVToMembers(csvText) {
           city: city,
           state: state,
           zip: zip,
-          fullAddress: fullAddress
+          fullAddress: fullAddress,
+          // New financial fields
+          totalAmountPaid: parseFloat(totalAmountPaid) || 0,
+          scholarshipAmount: parseFloat(scholarshipAmount) || 0,
+          duesAmount: parseFloat(duesAmount) || 0,
+          generalFundAmount: parseFloat(generalFundAmount) || 0
         });
       }
     }
@@ -722,6 +759,14 @@ function updateMemberTable() {
         </div>
       </td>
       <td>${formatDate(member.lastPayment)}</td>
+      <td>
+        <div style="font-size: 0.85rem;">
+          <div><strong>Total:</strong> $${(member.totalAmountPaid || 0).toFixed(2)}</div>
+          <div><strong>Dues:</strong> $${(member.duesAmount || 0).toFixed(2)}</div>
+          <div><strong>Scholarship:</strong> $${(member.scholarshipAmount || 0).toFixed(2)}</div>
+          <div><strong>Fund:</strong> $${(member.generalFundAmount || 0).toFixed(2)}</div>
+        </div>
+      </td>
       <td>
         <div class="action-buttons">
           <button class="btn-contact" onclick="contactMember('${member.email}')">📧</button>
@@ -853,6 +898,12 @@ function editMember(id) {
     document.querySelector(`input[name="duesStatus"][value="${member.duesStatus}"]`).checked = true;
     document.getElementById('lastPayment').value = member.lastPayment || '';
     
+    // Set financial fields if they exist in the member object
+    document.getElementById('totalAmountPaid').value = member.totalAmountPaid || '0';
+    document.getElementById('duesAmount').value = member.duesAmount || '0';
+    document.getElementById('scholarshipAmount').value = member.scholarshipAmount || '0';
+    document.getElementById('generalFundAmount').value = member.generalFundAmount || '0';
+    
     document.getElementById('memberModal').style.display = 'block';
   }
 }
@@ -881,6 +932,12 @@ function saveMember() {
   const duesStatus = document.querySelector('input[name="duesStatus"]:checked').value;
   const lastPayment = document.getElementById('lastPayment').value;
   
+  // Get financial data
+  const totalAmountPaid = parseFloat(document.getElementById('totalAmountPaid').value) || 0;
+  const duesAmount = parseFloat(document.getElementById('duesAmount').value) || 0;
+  const scholarshipAmount = parseFloat(document.getElementById('scholarshipAmount').value) || 0;
+  const generalFundAmount = parseFloat(document.getElementById('generalFundAmount').value) || 0;
+  
   if (!name || !email) {
     alert('Name and email are required');
     return;
@@ -893,7 +950,12 @@ function saveMember() {
     type,
     duesStatus,
     lastPayment: lastPayment || null,
-    year: 2025
+    year: 2025,
+    // Financial fields
+    totalAmountPaid,
+    duesAmount,
+    scholarshipAmount,
+    generalFundAmount
   };
   
   if (currentEditingId) {
@@ -923,6 +985,12 @@ function clearMemberForm() {
   document.getElementById('memberType').value = 'individual';
   document.querySelector('input[name="duesStatus"][value="overdue"]').checked = true;
   document.getElementById('lastPayment').value = '';
+  
+  // Clear financial fields
+  document.getElementById('totalAmountPaid').value = '0';
+  document.getElementById('duesAmount').value = '0';
+  document.getElementById('scholarshipAmount').value = '0';
+  document.getElementById('generalFundAmount').value = '0';
 }
 
 // Modal functions
