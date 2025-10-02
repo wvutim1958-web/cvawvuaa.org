@@ -876,18 +876,122 @@ function toggleSelectAll() {
 }
 
 function sendDuesReminders() {
-  const overdueMembers = members.filter(m => m.duesStatus === 'overdue');
+  const overdueMembers = members.filter(m => m.duesStatus === 'overdue' && m.email);
+  
   if (overdueMembers.length === 0) {
     alert('No overdue members found');
     return;
   }
   
-  const emails = overdueMembers.map(m => m.email).join(';');
+  // Show email preview modal instead of trying to open email client directly
+  showEmailPreview(overdueMembers);
+}
+
+function showEmailPreview(overdueMembers) {
+  const emails = overdueMembers.map(m => m.email).join('; ');
   const subject = 'CVCWVUAA - Membership Dues Reminder';
-  const body = `Dear Fellow Mountaineer,\n\nThis is a friendly reminder that your Central Virginia Chapter membership dues are overdue.\n\nPlease renew at your earliest convenience.\n\nLet's Go Mountaineers!`;
+  const body = `Dear Fellow Mountaineer,
+
+This is a friendly reminder that your Central Virginia Chapter of West Virginia University Alumni Association membership dues are overdue for 2025.
+
+Annual Dues: $25 (Individual) / $35 (Family)
+
+You can pay your dues by:
+• Venmo: @CVCWVUAA
+• PayPal: treasurer@cvawvuaa.org
+• Check: Mail to CVCWVUAA, P.O. Box 12345, Richmond, VA 23230
+
+Please renew at your earliest convenience to maintain your membership benefits and support our chapter activities.
+
+Thank you for your continued support!
+
+Let's Go Mountaineers! 🔥🏔️
+
+Central Virginia Chapter WVU Alumni Association`;
+
+  // Create modal for email preview
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width: 800px;">
+      <h2>📧 Dues Reminder Email Preview</h2>
+      <p><strong>Recipients (${overdueMembers.length} members):</strong></p>
+      <div style="background: #f5f5f5; padding: 10px; border-radius: 5px; margin-bottom: 15px; max-height: 100px; overflow-y: auto;">
+        ${emails}
+      </div>
+      
+      <p><strong>Subject:</strong></p>
+      <input type="text" id="emailSubject" value="${subject}" style="width: 100%; margin-bottom: 15px;">
+      
+      <p><strong>Message:</strong></p>
+      <textarea id="emailBody" style="width: 100%; height: 300px; margin-bottom: 15px;">${body}</textarea>
+      
+      <div style="text-align: right;">
+        <button onclick="closeEmailModal()" class="btn-secondary" style="margin-right: 10px;">Cancel</button>
+        <button onclick="openEmailClient()" class="btn-primary">📧 Open Email Client</button>
+        <button onclick="copyEmailInfo()" class="btn-success" style="margin-left: 10px;">📋 Copy Email Info</button>
+      </div>
+    </div>
+  `;
   
-  window.open(`mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
-  alert(`📧 Opening email to ${overdueMembers.length} overdue members`);
+  document.body.appendChild(modal);
+  modal.style.display = 'flex';
+}
+
+function openEmailClient() {
+  const subject = document.getElementById('emailSubject').value;
+  const body = document.getElementById('emailBody').value;
+  const overdueMembers = members.filter(m => m.duesStatus === 'overdue' && m.email);
+  const emails = overdueMembers.map(m => m.email).join(';');
+  
+  const mailtoLink = `mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+  // Try multiple methods to open email
+  try {
+    // Method 1: Direct window.open
+    const emailWindow = window.open(mailtoLink);
+    
+    // Method 2: If popup blocked, try location.href
+    setTimeout(() => {
+      if (!emailWindow || emailWindow.closed) {
+        window.location.href = mailtoLink;
+      }
+    }, 100);
+    
+    closeEmailModal();
+    alert(`✅ Email client should open with ${overdueMembers.length} recipients.\n\nIf it doesn't open automatically, try the "Copy Email Info" button instead.`);
+  } catch (error) {
+    alert('❌ Could not open email client automatically. Please use the "Copy Email Info" button to copy the details and paste them manually into your email program.');
+  }
+}
+
+function copyEmailInfo() {
+  const subject = document.getElementById('emailSubject').value;
+  const body = document.getElementById('emailBody').value;
+  const overdueMembers = members.filter(m => m.duesStatus === 'overdue' && m.email);
+  const emails = overdueMembers.map(m => m.email).join('; ');
+  
+  const emailInfo = `TO: ${emails}\n\nSUBJECT: ${subject}\n\nMESSAGE:\n${body}`;
+  
+  navigator.clipboard.writeText(emailInfo).then(() => {
+    closeEmailModal();
+    alert(`📋 Email information copied to clipboard!\n\nRecipients: ${overdueMembers.length} members\n\nYou can now paste this into your email program.`);
+  }).catch(() => {
+    // Fallback for browsers that don't support clipboard API
+    const textArea = document.createElement('textarea');
+    textArea.value = emailInfo;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    closeEmailModal();
+    alert(`📋 Email information copied to clipboard!\n\nRecipients: ${overdueMembers.length} members`);
+  });
+}
+
+function closeEmailModal() {
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => modal.remove());
 }
 
 function exportDuesReport() {
