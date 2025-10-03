@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Data Recovery - CVCWVUAA</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        h1 { color: #003366; }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 4px; 
+            border-left: 4px solid #007acc; 
+            background: #e6f3ff; 
+            font-family: monospace;
+            white-space: pre-line;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .error { border-left-color: #cc0000; background: #ffe6e6; }
+        .success { border-left-color: #00cc00; background: #e6ffe6; }
+        .warning { border-left-color: #ffaa00; background: #fff8e6; }
+        button {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover { background: #004488; }
+        button.danger { background: #cc0000; }
+        button.danger:hover { background: #ee0000; }
+        button.warning { background: #cc6600; }
+        button.warning:hover { background: #ee7700; }
+        .member-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+        .member-table th, .member-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .member-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .member-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .csv-upload {
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 Member Data Recovery Tool</h1>
+        <p>This tool helps recover lost address data and restore member information.</p>
+        
+        <div class="status" id="output">Ready to analyze member data...</div>
+        
+        <div>
+            <h3>Data Analysis</h3>
+            <button onclick="analyzeAllData()">🔍 Analyze Current Data</button>
+            <button onclick="showAllStorageKeys()">🗂️ Show All Storage Keys</button>
+            <button onclick="exportCurrentData()">📄 Export Current Data</button>
+        </div>
+        
+        <div>
+            <h3>Recovery Options</h3>
+            <button onclick="restoreFromBackup()" class="warning">🔄 Try Restore from Backup</button>
+            <button onclick="createSampleData()" class="warning">👤 Create Sample Data</button>
+        </div>
+        
+        <div class="csv-upload">
+            <h3>Import Address Data</h3>
+            <p>Upload a CSV file with member address data to restore information</p>
+            <input type="file" id="csvFile" accept=".csv" onchange="handleCSVUpload(this)">
+            <br><small>Expected columns: name, address, city, state, zip, email, phone</small>
+        </div>
+        
+        <div>
+            <h3>Emergency Actions</h3>
+            <button onclick="clearAllMemberData()" class="danger">🗑️ Clear All Member Data</button>
+        </div>
+        
+        <div id="memberTable" style="display: none;">
+            <h3>Current Member Data</h3>
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table class="member-table" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>ZIP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const className = type === 'error' ? 'status error' : 
+                             type === 'success' ? 'status success' : 
+                             type === 'warning' ? 'status warning' : 'status';
+            output.className = className;
+            output.textContent += message + '\n';
+        }
+
+        function clearOutput() {
+            document.getElementById('output').textContent = '';
+            document.getElementById('output').className = 'status';
+        }
+
+        function findAllMemberData() {
+            const possibleKeys = [
+                'cvcwvuaa-members', 
+                'cvcwvuaa_members', 
+                'members', 
+                'memberData',
+                'cvcwvuaa-directory-members',
+                'memberPortalMembers',
+                'advanced-member-data',
+                'original-member-data'
+            ];
+            
+            const found = [];
+            
+            for (const key of possibleKeys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed)) {
+                            found.push({
+                                key: key,
+                                data: parsed,
+                                count: parsed.length,
+                                size: data.length
+                            });
+                        }
+                    } catch (e) {
+                        found.push({
+                            key: key,
+                            data: null,
+                            error: e.message,
+                            size: data.length
+                        });
+                    }
+                }
+            }
+            
+            return found;
+        }
+
+        function analyzeAllData() {
+            clearOutput();
+            log('🔍 Analyzing all member data sources...');
+            
+            const allData = findAllMemberData();
+            
+            if (allData.length === 0) {
+                log('❌ No member data found in localStorage at all!', 'error');
+                return;
+            }
+            
+            log(`📊 Found ${allData.length} data sources:`);
+            
+            allData.forEach((source, index) => {
+                if (source.error) {
+                    log(`${index + 1}. ${source.key}: ERROR - ${source.error} (${source.size} bytes)`, 'error');
+                } else {
+                    log(`${index + 1}. ${source.key}: ${source.count} members (${source.size} bytes)`);
+                    
+                    // Analyze sample member
+                    if (source.data.length > 0) {
+                        const sample = source.data[0];
+                        const hasAddress = sample.address && sample.address.trim() !== '';
+                        const hasCity = sample.city && sample.city.trim() !== '';
+                        const hasState = sample.state && sample.state.trim() !== '';
+                        const hasZip = sample.zip && sample.zip.trim() !== '';
+                        
+                        log(`   Sample: ${sample.name || sample.firstName + ' ' + sample.lastName || 'No name'}`);
+                        log(`   Address fields: ${hasAddress ? '✓' : '✗'} Address, ${hasCity ? '✓' : '✗'} City, ${hasState ? '✓' : '✗'} State, ${hasZip ? '✓' : '✗'} ZIP`);
+                    }
+                }
+            });
+            
+            // Show the largest/most complete dataset
+            const best = allData
+                .filter(d => !d.error && d.data)
+                .sort((a, b) => b.count - a.count)[0];
+                
+            if (best) {
+                log(`\n📋 Displaying data from: ${best.key}`);
+                displayMemberTable(best.data);
+            }
+        }
+
+        function displayMemberTable(members) {
+            const tableDiv = document.getElementById('memberTable');
+            const tableBody = document.getElementById('memberTableBody');
+            
+            tableBody.innerHTML = '';
+            
+            members.slice(0, 50).forEach((member, index) => {
+                const row = document.createElement('tr');
+                const name = member.name || `${member.firstName || ''} ${member.lastName || ''}`.trim() || 'No name';
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${name}</td>
+                    <td>${member.email || '[empty]'}</td>
+                    <td>${member.phone || '[empty]'}</td>
+                    <td>${member.address || '[empty]'}</td>
+                    <td>${member.city || '[empty]'}</td>
+                    <td>${member.state || '[empty]'}</td>
+                    <td>${member.zip || '[empty]'}</td>
+                `;
+                
+                // Highlight missing data
+                if (!member.address || member.address.trim() === '') {
+                    row.cells[4].style.backgroundColor = '#ffebee';
+                }
+                if (!member.city || member.city.trim() === '') {
+                    row.cells[5].style.backgroundColor = '#ffebee';
+                }
+                
+                tableBody.appendChild(row);
+            });
+            
+            if (members.length > 50) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="8" style="text-align: center; font-style: italic;">... and ${members.length - 50} more members</td>`;
+                tableBody.appendChild(row);
+            }
+            
+            tableDiv.style.display = 'block';
+        }
+
+        function showAllStorageKeys() {
+            clearOutput();
+            log('🗂️ All localStorage keys:');
+            
+            const keys = Object.keys(localStorage);
+            if (keys.length === 0) {
+                log('No keys found in localStorage', 'warning');
+                return;
+            }
+            
+            keys.forEach((key, index) => {
+                const data = localStorage.getItem(key);
+                const size = data ? data.length : 0;
+                log(`${index + 1}. ${key} (${size} bytes)`);
+                
+                if (key.toLowerCase().includes('member')) {
+                    log(`   ^ Member-related key`);
+                }
+            });
+        }
+
+        function exportCurrentData() {
+            const allData = findAllMemberData();
+            
+            if (allData.length === 0) {
+                log('❌ No data to export', 'error');
+                return;
+            }
+            
+            const best = allData
+                .filter(d => !d.error && d.data)
+                .sort((a, b) => b.count - a.count)[0];
+                
+            if (!best) {
+                log('❌ No valid data to export', 'error');
+                return;
+            }
+            
+            const csvContent = memberArrayToCSV(best.data);
+            downloadCSV(csvContent, 'member-data-export.csv');
+            log(`✅ Exported ${best.data.length} members from ${best.key}`, 'success');
+        }
+
+        function memberArrayToCSV(members) {
+            const headers = ['name', 'email', 'phone', 'address', 'city', 'state', 'zip'];
+            let csv = headers.join(',') + '\n';
+            
+            members.forEach(member => {
+                const name = member.name || `${member.firstName || ''} ${member.lastName || ''}`.trim();
+                const row = [
+                    `"${name}"`,
+                    `"${member.email || ''}"`,
+                    `"${member.phone || ''}"`,
+                    `"${member.address || ''}"`,
+                    `"${member.city || ''}"`,
+                    `"${member.state || ''}"`,
+                    `"${member.zip || ''}"`
+                ];
+                csv += row.join(',') + '\n';
+            });
+            
+            return csv;
+        }
+
+        function downloadCSV(csvContent, filename) {
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function handleCSVUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csv = e.target.result;
+                    const members = parseCSVToMembers(csv);
+                    
+                    if (members.length > 0) {
+                        log(`📄 Loaded ${members.length} members from CSV`, 'success');
+                        log('Sample member: ' + JSON.stringify(members[0]));
+                        
+                        if (confirm(`Import ${members.length} members? This will replace current data.`)) {
+                            localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+                            log(`✅ Imported ${members.length} members to localStorage`, 'success');
+                            analyzeAllData();
+                        }
+                    } else {
+                        log('❌ No valid member data found in CSV', 'error');
+                    }
+                } catch (error) {
+                    log(`❌ Error processing CSV: ${error.message}`, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function parseCSVToMembers(csvText) {
+            const lines = csvText.split('\n').filter(line => line.trim());
+            if (lines.length < 2) return [];
+            
+            const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim().toLowerCase());
+            const members = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.replace(/"/g, '').trim());
+                const member = {
+                    id: i,
+                    name: '',
+                    email: '',
+                    phone: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    zip: ''
+                };
+                
+                headers.forEach((header, index) => {
+                    if (values[index]) {
+                        switch (header) {
+                            case 'name':
+                            case 'full name':
+                            case 'member name':
+                                member.name = values[index];
+                                break;
+                            case 'email':
+                            case 'email address':
+                                member.email = values[index];
+                                break;
+                            case 'phone':
+                            case 'telephone':
+                            case 'phone number':
+                                member.phone = values[index];
+                                break;
+                            case 'address':
+                            case 'street address':
+                            case 'street':
+                                member.address = values[index];
+                                break;
+                            case 'city':
+                                member.city = values[index];
+                                break;
+                            case 'state':
+                                member.state = values[index];
+                                break;
+                            case 'zip':
+                            case 'zipcode':
+                            case 'postal code':
+                                member.zip = values[index];
+                                break;
+                        }
+                    }
+                });
+                
+                if (member.name || member.email) {
+                    members.push(member);
+                }
+            }
+            
+            return members;
+        }
+
+        function createSampleData() {
+            if (!confirm('Create sample data? This will replace current member data.')) {
+                return;
+            }
+            
+            const sampleMembers = [
+                {
+                    id: 1,
+                    name: 'John Smith',
+                    email: 'john.smith@email.com',
+                    phone: '(555) 123-4567',
+                    address: '123 Main Street',
+                    city: 'Richmond',
+                    state: 'Virginia',
+                    zip: '23219'
+                },
+                {
+                    id: 2,
+                    name: 'Mary Johnson',
+                    email: 'mary.johnson@email.com',
+                    phone: '(555) 987-6543',
+                    address: '456 Oak Avenue',
+                    city: 'Virginia Beach',
+                    state: 'Virginia',
+                    zip: '23451'
+                },
+                {
+                    id: 3,
+                    name: 'Robert Davis',
+                    email: 'robert.davis@email.com',
+                    phone: '(555) 555-0123',
+                    address: '789 Pine Road',
+                    city: 'Norfolk',
+                    state: 'Virginia',
+                    zip: '23502'
+                }
+            ];
+            
+            localStorage.setItem('cvcwvuaa-members', JSON.stringify(sampleMembers));
+            log(`✅ Created ${sampleMembers.length} sample members`, 'success');
+            analyzeAllData();
+        }
+
+        function clearAllMemberData() {
+            if (!confirm('DELETE ALL member data? This cannot be undone!')) {
+                return;
+            }
+            
+            const keys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members', 'memberData'];
+            keys.forEach(key => {
+                localStorage.removeItem(key);
+            });
+            
+            log('🗑️ Cleared all member data', 'warning');
+            analyzeAllData();
+        }
+
+        // Auto-run analysis on load
+        window.addEventListener('load', () => {
+            analyzeAllData();
+        });
+    </script>
+</body>
+</html>
