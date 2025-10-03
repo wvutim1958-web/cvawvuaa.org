@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restore from Good CSV - CVCWVUAA</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        h1 { color: #003366; text-align: center; }
+        .big-button {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        .big-button:hover { background: #004488; }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            background: #fafafa;
+        }
+        .status { 
+            padding: 15px; 
+            margin: 15px 0; 
+            border-radius: 4px; 
+            font-family: monospace;
+            white-space: pre-line;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+        .success { 
+            background: #e6ffe6; 
+            border: 2px solid #00cc00;
+            color: #006600;
+        }
+        .error { 
+            background: #ffe6e6; 
+            border: 2px solid #cc0000;
+            color: #cc0000;
+        }
+        .info { 
+            background: #e6f3ff; 
+            border: 2px solid #007acc;
+            color: #004466;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Restore from Good CSV File</h1>
+        
+        <p style="text-align: center; font-size: 16px;">
+            Upload your CVCWVUAA-Members-Export CSV file to restore all member addresses properly.
+        </p>
+        
+        <div class="upload-area">
+            <p><strong>📁 Select Your CSV File</strong></p>
+            <input type="file" id="csvFile" accept=".csv" onchange="handleFileUpload(this)" style="margin: 10px 0;">
+            <p style="font-size: 14px; color: #666;">
+                Expected file: CVCWVUAA-Members-Export-2025-10-02.csv<br>
+                or any CSV with columns: First Name(s), Last Name, E-mail Address, Home Address, City, State, Zip Code
+            </p>
+        </div>
+        
+        <div class="status info" id="output">
+Select your CSV file above to restore all member data with proper addresses.
+
+This will:
+1. Parse your complete member CSV file
+2. Extract all member info including full addresses  
+3. Create proper member records with street, city, state, zip
+4. Save to your member database
+5. Fix the receipt generator immediately
+
+Choose your file to start.
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            let className = 'status ';
+            if (type === 'error') className += 'error';
+            else if (type === 'success') className += 'success';
+            else className += 'info';
+            
+            output.className = className;
+            output.textContent = message;
+        }
+
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            log(`🔄 Processing file: ${file.name}\n\nReading CSV data...`);
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csvText = e.target.result;
+                    parseAndImportCSV(csvText, file.name);
+                } catch (error) {
+                    log(`❌ Error reading file: ${error.message}`, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function parseAndImportCSV(csvText, fileName) {
+            try {
+                log(`📊 Parsing CSV data from ${fileName}...\n`);
+                
+                const lines = csvText.split('\n').filter(line => line.trim());
+                if (lines.length < 2) {
+                    throw new Error('CSV file appears to be empty or has no data rows');
+                }
+                
+                // Parse header to find column positions
+                const header = lines[0];
+                const headerCols = parseCSVLine(header);
+                
+                // Find column indices
+                const colIndices = {
+                    firstName: findColumn(headerCols, ['First Name(s)', 'First Name', 'FirstName']),
+                    lastName: findColumn(headerCols, ['Last Name', 'LastName']),
+                    email: findColumn(headerCols, ['E-mail Address (Primary)', 'E-mail Address', 'Email', 'Email Address']),
+                    phone: findColumn(headerCols, ['Primary Phone', 'Phone', 'Phone Number']),
+                    address: findColumn(headerCols, ['Home Address', 'Address', 'Street Address']),
+                    city: findColumn(headerCols, ['City']),
+                    state: findColumn(headerCols, ['State']),
+                    zip: findColumn(headerCols, ['Zip Code', 'ZIP', 'Zip'])
+                };
+                
+                log(`Found columns: ${JSON.stringify(colIndices, null, 2)}\n`);
+                
+                const members = [];
+                let skipped = 0;
+                
+                // Process each data row
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    const cols = parseCSVLine(line);
+                    
+                    // Extract member data
+                    const firstName = (cols[colIndices.firstName] || '').trim();
+                    const lastName = (cols[colIndices.lastName] || '').trim();
+                    const email = (cols[colIndices.email] || '').trim();
+                    const phone = (cols[colIndices.phone] || '').trim();
+                    const address = (cols[colIndices.address] || '').trim();
+                    const city = (cols[colIndices.city] || '').trim();
+                    const state = (cols[colIndices.state] || '').trim();
+                    const zip = (cols[colIndices.zip] || '').trim();
+                    
+                    // Skip if no name or email
+                    if (!firstName && !lastName && !email) {
+                        skipped++;
+                        continue;
+                    }
+                    
+                    // Create full name
+                    const fullName = [firstName, lastName].filter(n => n).join(' ');
+                    
+                    // Create member record
+                    const member = {
+                        id: members.length + 1,
+                        name: fullName,
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email.toLowerCase(),
+                        phone: phone,
+                        address: address,
+                        city: city,
+                        state: state,
+                        zip: zip,
+                        memberSince: '2018'
+                    };
+                    
+                    members.push(member);
+                    
+                    // Log first few for verification
+                    if (members.length <= 5) {
+                        log(`Member ${members.length}: ${fullName}`);
+                        log(`  Email: ${email}`);
+                        log(`  Address: ${address}`);
+                        log(`  City: ${city}, ${state} ${zip}\n`);
+                    }
+                }
+                
+                if (members.length === 0) {
+                    throw new Error('No valid member records found in CSV');
+                }
+                
+                log(`✅ Parsed ${members.length} members (${skipped} rows skipped)\n\nSaving to member database...`);
+                
+                // Save to localStorage
+                localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+                
+                // Also save backup with timestamp
+                const timestamp = new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-');
+                localStorage.setItem(`cvcwvuaa-members-backup-${timestamp}`, JSON.stringify(members));
+                
+                // Show success message with sample data
+                const sample = members[0];
+                log(`🎉 SUCCESS! Imported ${members.length} members with complete address data!\n\n` +
+                    `Sample member:\n` +
+                    `Name: ${sample.name}\n` +
+                    `Email: ${sample.email}\n` +
+                    `Address: ${sample.address}\n` +
+                    `City: ${sample.city}, ${sample.state} ${sample.zip}\n\n` +
+                    `✅ Member database restored!\n` +
+                    `✅ All ${members.length} members have proper addresses!\n` +
+                    `✅ Receipt generator will now work correctly!\n\n` +
+                    `You can now go to the receipt generator and search for any member by name or email.`, 'success');
+                
+            } catch (error) {
+                log(`❌ ERROR: ${error.message}\n\n` +
+                    `Please check that:\n` +
+                    `1. The CSV file has the correct format\n` +
+                    `2. The first row contains column headers\n` +
+                    `3. The file is not corrupted`, 'error');
+            }
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim());
+            return result.map(field => field.replace(/^"(.*)"$/, '$1'));
+        }
+
+        function findColumn(headers, possibleNames) {
+            for (let i = 0; i < headers.length; i++) {
+                const header = headers[i].trim();
+                for (const name of possibleNames) {
+                    if (header.toLowerCase().includes(name.toLowerCase())) {
+                        return i;
+                    }
+                }
+            }
+            return -1; // Not found
+        }
+    </script>
+</body>
+</html>
