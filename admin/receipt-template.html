@@ -282,7 +282,8 @@
     
     <div class="action-buttons no-print">
         <button class="btn" onclick="printReceipt()">🖨️ Print Receipt</button>
-        <button class="btn btn-secondary" onclick="emailReceipt()">📧 Prepare for Email</button>
+        <button class="btn btn-secondary" onclick="emailReceipt()">📧 Email Receipt</button>
+        <button class="btn btn-secondary" onclick="showHTMLEmailDialog(document.getElementById('memberEmail').textContent, 'CVCWVUAA Payment Receipt ' + document.getElementById('receiptNumber').textContent)">📧 HTML Email</button>
         <button class="btn btn-secondary" onclick="saveReceipt()">💾 Save as PDF</button>
         <button class="btn" onclick="newReceipt()">📝 New Receipt</button>
     </div>
@@ -352,23 +353,74 @@
             const receiptNumber = document.getElementById('receiptNumber').textContent;
             const totalAmount = document.getElementById('totalAmount').textContent;
             const paymentDate = document.getElementById('paymentDate').textContent;
+            const paymentMethod = document.getElementById('paymentMethod').textContent;
+            const transactionId = document.getElementById('transactionId').textContent;
+            
+            // Get payment breakdown
+            const membershipAmount = document.getElementById('membershipAmount').textContent;
+            const eventAmount = document.getElementById('eventAmount').textContent;
+            const donationAmount = document.getElementById('donationAmount').textContent;
             
             console.log('Member email:', memberEmail);
             console.log('Member name:', memberName);
             
             const emailSubject = `CVCWVUAA Payment Receipt ${receiptNumber}`;
             
-            // Create full HTML email with the complete receipt
-            const htmlEmailContent = createHTMLEmailReceipt();
+            // Create a detailed plain text email that will work in all email clients
+            const emailBody = `Dear ${memberName},
+
+Thank you for your payment to the Central Virginia Chapter of the West Virginia University Alumni Association.
+
+RECEIPT DETAILS:
+Receipt Number: ${receiptNumber}
+Payment Date: ${paymentDate}
+Payment Method: ${paymentMethod}
+Transaction ID: ${transactionId}
+Total Amount: ${totalAmount}
+
+PAYMENT BREAKDOWN:
+- Annual Membership: ${membershipAmount}
+- Event Registration: ${eventAmount}
+- Donation: ${donationAmount}
+
+TAX INFORMATION:
+The Central Virginia Chapter of the WVU Alumni Association is a registered non-profit organization. 
+Portions of this payment may be tax-deductible. Please consult with your tax advisor for specific guidance.
+Tax ID (EIN): 54-1991299
+
+We appreciate your continued support of CVCWVUAA!
+
+Best regards,
+CVCWVUAA Admin Team
+
+Contact Information:
+Email: president@cvawvuaa.org
+Phone: (804) 566-8058
+Website: www.cvawvuaa.org
+
+This receipt was generated on ${new Date().toLocaleString()}`;
             
             if (memberEmail && memberEmail !== 'Not provided' && memberEmail.trim() !== '') {
-                console.log('Opening email client with HTML receipt');
-                // Show a dialog with instructions and the HTML content
-                showEmailDialog(memberEmail, emailSubject, htmlEmailContent);
+                console.log('Opening email client directly');
+                // Open email client directly with populated fields
+                const mailtoLink = `mailto:${memberEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+                window.open(mailtoLink);
+                
+                // Also offer HTML version
+                setTimeout(() => {
+                    if (confirm('Email client opened with plain text receipt. Would you like to also get the HTML version for a more professional look?')) {
+                        showHTMLEmailDialog(memberEmail, emailSubject);
+                    }
+                }, 1000);
             } else {
-                console.log('No valid email, showing copy dialog');
-                showEmailDialog('[Enter Member Email]', emailSubject, htmlEmailContent);
+                console.log('No valid email address');
+                alert('No email address available for this member. Please add an email address in the member information first.');
             }
+        }
+        
+        function showHTMLEmailDialog(emailAddress, subject) {
+            const htmlContent = createHTMLEmailReceipt();
+            showEmailDialog(emailAddress, subject, htmlContent);
         }
         
         function createHTMLEmailReceipt() {
