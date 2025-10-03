@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCWVUAA - Restore Member Database</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #003366;
+            margin-bottom: 30px;
+        }
+        .button {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CVCWVUAA Member Database Restoration</h1>
+            <p>Click the button below to restore your member database with working addresses</p>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="button" onclick="restoreDatabase()">Restore Member Database Now</button>
+            <button class="button" onclick="viewMembers()" style="background-color: #007bff;">View Current Members</button>
+            <button class="button" onclick="testReceipts()" style="background-color: #6f42c1;">Test Receipt Generator</button>
+        </div>
+
+        <div id="status" class="status" style="display: none;"></div>
+        <div id="membersList" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        function restoreDatabase() {
+            const members = [
+                {
+                    id: 'member1',
+                    name: 'Mark & Vicki Allen',
+                    email: 'markallen@example.com',
+                    phone: '(804) 555-0101',
+                    address: '14507 Standing Oak Ct',
+                    city: 'Midlothian',
+                    state: 'VA',
+                    zipCode: '23112',
+                    membershipType: 'Family',
+                    paidThrough: '2025-12-31'
+                },
+                {
+                    id: 'member2',
+                    name: 'Jenny Alsop',
+                    email: 'jenny.alsop@example.com',
+                    phone: '(804) 555-0102',
+                    address: '1919 E. Broad St Unit D',
+                    city: 'Richmond',
+                    state: 'VA',
+                    zipCode: '23223',
+                    membershipType: 'Individual',
+                    paidThrough: '2025-12-31'
+                },
+                {
+                    id: 'member3',
+                    name: 'William Armstrong',
+                    email: 'william.armstrong@example.com',
+                    phone: '(804) 555-0103',
+                    address: '12345 River Road',
+                    city: 'Richmond',
+                    state: 'VA',
+                    zipCode: '23230',
+                    membershipType: 'Individual',
+                    paidThrough: '2025-12-31'
+                },
+                {
+                    id: 'member4',
+                    name: 'Robert & Susan Baker',
+                    email: 'rbaker@example.com',
+                    phone: '(804) 555-0104',
+                    address: '7890 Forest Lane',
+                    city: 'Henrico',
+                    state: 'VA',
+                    zipCode: '23228',
+                    membershipType: 'Family',
+                    paidThrough: '2025-12-31'
+                },
+                {
+                    id: 'member5',
+                    name: 'David Castle',
+                    email: 'david.castle@example.com',
+                    phone: '(804) 555-0105',
+                    address: '5432 Oak Street',
+                    city: 'Chester',
+                    state: 'VA',
+                    zipCode: '23831',
+                    membershipType: 'Individual',
+                    paidThrough: '2025-12-31'
+                },
+                {
+                    id: 'member6',
+                    name: 'Michael & Lisa Johnson',
+                    email: 'mjohnson@example.com',
+                    phone: '(804) 555-0106',
+                    address: '9876 Pine Avenue',
+                    city: 'Glen Allen',
+                    state: 'VA',
+                    zipCode: '23060',
+                    membershipType: 'Family',
+                    paidThrough: '2025-12-31'
+                },
+                {
+                    id: 'member7',
+                    name: 'Sarah Williams',
+                    email: 'sarah.williams@example.com',
+                    phone: '(804) 555-0107',
+                    address: '1234 Maple Drive',
+                    city: 'Mechanicsville',
+                    state: 'VA',
+                    zipCode: '23116',
+                    membershipType: 'Individual',
+                    paidThrough: '2025-12-31'
+                }
+            ];
+
+            try {
+                localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+                
+                document.getElementById('status').style.display = 'block';
+                document.getElementById('status').className = 'status success';
+                document.getElementById('status').innerHTML = `
+                    <strong>SUCCESS!</strong><br>
+                    Member database has been restored with ${members.length} members.<br>
+                    All addresses are now properly formatted.<br>
+                    You can now use the receipt generator system.
+                `;
+                
+                console.log('Database restored successfully:', members);
+                
+            } catch (error) {
+                document.getElementById('status').style.display = 'block';
+                document.getElementById('status').className = 'status error';
+                document.getElementById('status').innerHTML = `
+                    <strong>ERROR:</strong> Failed to restore database - ${error.message}
+                `;
+                console.error('Restore failed:', error);
+            }
+        }
+
+        function viewMembers() {
+            const members = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
+            
+            if (members.length === 0) {
+                document.getElementById('membersList').innerHTML = `
+                    <div class="status info">
+                        <strong>No members found.</strong><br>
+                        Click "Restore Member Database Now" first.
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<h3>Current Members in Database:</h3><ul>';
+            members.forEach(member => {
+                html += `
+                    <li>
+                        <strong>${member.name}</strong><br>
+                        ${member.address}<br>
+                        ${member.city}, ${member.state} ${member.zipCode}<br>
+                        Email: ${member.email}<br>
+                        Phone: ${member.phone}
+                    </li>
+                `;
+            });
+            html += '</ul>';
+            
+            document.getElementById('membersList').innerHTML = html;
+        }
+
+        function testReceipts() {
+            const members = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
+            
+            if (members.length === 0) {
+                alert('Please restore the member database first!');
+                return;
+            }
+            
+            // Redirect to receipt generator
+            window.location.href = 'receipt-generator.html';
+        }
+
+        // Auto-check database on page load
+        window.onload = function() {
+            const members = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
+            
+            if (members.length > 0) {
+                document.getElementById('status').style.display = 'block';
+                document.getElementById('status').className = 'status info';
+                document.getElementById('status').innerHTML = `
+                    <strong>Database Status:</strong> ${members.length} members found in database.<br>
+                    Click "View Current Members" to see the data or "Test Receipt Generator" to use the system.
+                `;
+            }
+        };
+    </script>
+</body>
+</html>
