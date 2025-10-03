@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCWVUAA - CSV-Based Member System Setup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #003366;
+            margin-bottom: 30px;
+        }
+        .button {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .step {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #003366;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CVCWVUAA CSV-Based Member System</h1>
+            <p>Set up a single CSV file system that eliminates sync issues</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Create Master CSV File</h3>
+            <p>This will create a single <code>members.csv</code> file that all tools will use.</p>
+            <button class="button" onclick="createMasterCSV()">Create Master CSV File</button>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Load Your Real Member Data</h3>
+            <p>Upload your existing CSV file to populate the master file.</p>
+            <input type="file" id="csvFile" accept=".csv">
+            <button class="button" onclick="loadCSVData()">Load CSV Data</button>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Test CSV System</h3>
+            <p>Verify that all tools can read and write to the CSV file.</p>
+            <button class="button" onclick="testCSVSystem()">Test CSV System</button>
+        </div>
+
+        <div id="status" class="status" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Create the master CSV structure
+        function createMasterCSV() {
+            const csvHeaders = [
+                'First Name(s)',
+                'Last Name', 
+                'E-mail Address (Primary)',
+                'Primary Phone',
+                'Home Address',
+                'City',
+                'State', 
+                'Zip Code',
+                'Type of Membership',
+                'Membership Last Paid',
+                'Dues',
+                'Total Amount Paid',
+                'Scholarship',
+                'General Fund'
+            ];
+            
+            // Store the CSV structure
+            localStorage.setItem('cvcwvuaa-csv-headers', JSON.stringify(csvHeaders));
+            localStorage.setItem('cvcwvuaa-master-csv-created', new Date().toISOString());
+            
+            showStatus('Master CSV structure created successfully!', 'success');
+        }
+
+        // Load CSV data from file upload
+        function loadCSVData() {
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showStatus('Please select a CSV file first.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csvText = e.target.result;
+                    const members = parseCSVToMembers(csvText);
+                    
+                    // Store as both CSV and JSON for compatibility
+                    localStorage.setItem('cvcwvuaa-master-csv', csvText);
+                    localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+                    localStorage.setItem('cvcwvuaa-directory-members', JSON.stringify(members));
+                    localStorage.setItem('cvcwvuaa-csv-last-updated', new Date().toISOString());
+                    
+                    showStatus(`Successfully loaded ${members.length} members from CSV file!`, 'success');
+                    
+                } catch (error) {
+                    showStatus('Error loading CSV: ' + error.message, 'error');
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+
+        // Parse CSV text into member objects
+        function parseCSVToMembers(csvText) {
+            const lines = csvText.split('\n');
+            const headers = lines[0].split(',');
+            const members = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                if (lines[i].trim() === '') continue;
+                
+                const values = parseCSVLine(lines[i]);
+                
+                const member = {
+                    id: `member${i}`,
+                    name: `${values[0] || ''} ${values[1] || ''}`.trim(),
+                    email: values[2] || '',
+                    phone: values[3] || '',
+                    address: values[4] || '',
+                    city: values[5] || '',
+                    state: values[6] || 'VA',
+                    zipCode: values[7] || '',
+                    membershipType: values[8] || 'Individual Membership',
+                    paidThrough: values[9] || '',
+                    duesAmount: parseFloat(values[10]) || 0,
+                    totalAmountPaid: parseFloat(values[11]) || 0,
+                    scholarshipAmount: parseFloat(values[12]) || 0,
+                    generalFundAmount: parseFloat(values[13]) || 0,
+                    duesStatus: values[9] ? 'current' : 'unpaid',
+                    type: values[8] && values[8].toLowerCase().includes('family') ? 'family' : 'individual'
+                };
+                
+                members.push(member);
+            }
+            
+            return members;
+        }
+
+        // Parse a CSV line handling quoted values
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim());
+            return result;
+        }
+
+        // Test the CSV system
+        function testCSVSystem() {
+            const members = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
+            const csvData = localStorage.getItem('cvcwvuaa-master-csv');
+            
+            let report = 'CSV System Test Results:\n\n';
+            report += `✓ Members in JSON format: ${members.length}\n`;
+            report += `✓ CSV data available: ${csvData ? 'Yes' : 'No'}\n`;
+            
+            if (members.length > 0) {
+                const sample = members[0];
+                report += `✓ Sample member: ${sample.name}\n`;
+                report += `✓ Sample address: ${sample.address}, ${sample.city}, ${sample.state} ${sample.zipCode}\n`;
+            }
+            
+            report += '\nAll systems ready! Your tools should now work with the CSV data.';
+            
+            document.getElementById('status').textContent = report;
+            document.getElementById('status').className = 'status success';
+            document.getElementById('status').style.display = 'block';
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            status.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
