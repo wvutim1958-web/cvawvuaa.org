@@ -241,6 +241,10 @@
                     <input type="number" id="eventAmount" step="0.01" min="0" value="0.00" oninput="calculateTotal()">
                 </div>
                 <div class="form-group">
+                    <label for="scholarshipAmount">Scholarship Fund ($)</label>
+                    <input type="number" id="scholarshipAmount" step="0.01" min="0" value="0.00" oninput="calculateTotal()">
+                </div>
+                <div class="form-group">
                     <label for="donationAmount">Additional Donation ($)</label>
                     <input type="number" id="donationAmount" step="0.01" min="0" value="0.00" oninput="calculateTotal()">
                 </div>
@@ -248,6 +252,11 @@
                     <label for="otherAmount">Other Fees ($)</label>
                     <input type="number" id="otherAmount" step="0.01" min="0" value="0.00" oninput="calculateTotal()">
                 </div>
+            </div>
+            
+            <div class="form-group" style="margin-top: 20px;">
+                <label for="paymentMemo">Payment Memo/Notes</label>
+                <textarea id="paymentMemo" rows="3" placeholder="Optional notes about this payment (e.g., 'In memory of...', 'For specific scholarship', etc.)"></textarea>
             </div>
             
             <div class="total-display" id="totalDisplay">
@@ -412,10 +421,11 @@
         function calculateTotal() {
             const membership = parseFloat(document.getElementById('membershipAmount').value) || 0;
             const event = parseFloat(document.getElementById('eventAmount').value) || 0;
+            const scholarship = parseFloat(document.getElementById('scholarshipAmount').value) || 0;
             const donation = parseFloat(document.getElementById('donationAmount').value) || 0;
             const other = parseFloat(document.getElementById('otherAmount').value) || 0;
             
-            const total = membership + event + donation + other;
+            const total = membership + event + scholarship + donation + other;
             document.getElementById('totalDisplay').textContent = `Total: $${total.toFixed(2)}`;
         }
         
@@ -468,8 +478,10 @@
                 processedBy: document.getElementById('processedBy').value,
                 membershipAmount: document.getElementById('membershipAmount').value,
                 eventAmount: document.getElementById('eventAmount').value,
+                scholarshipAmount: document.getElementById('scholarshipAmount').value,
                 donationAmount: document.getElementById('donationAmount').value,
-                otherAmount: document.getElementById('otherAmount').value
+                otherAmount: document.getElementById('otherAmount').value,
+                memo: document.getElementById('paymentMemo').value
             };
             
             // Store receipt data in localStorage for the receipt template to pick up

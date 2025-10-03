@@ -258,10 +258,23 @@
                     <div id="eventAmount">$75.00</div>
                 </div>
                 <div class="breakdown-item">
+                    <div style="font-weight: bold; margin-bottom: 5px;">Scholarship Fund</div>
+                    <div id="scholarshipAmount">$0.00</div>
+                </div>
+                <div class="breakdown-item">
                     <div style="font-weight: bold; margin-bottom: 5px;">Additional Donation</div>
                     <div id="donationAmount">$0.00</div>
                 </div>
+                <div class="breakdown-item">
+                    <div style="font-weight: bold; margin-bottom: 5px;">Other Fees</div>
+                    <div id="otherAmount">$0.00</div>
+                </div>
             </div>
+        </div>
+        
+        <div class="memo-section" id="memoSection" style="background: #f8f9fa; border-left: 4px solid #FFD700; padding: 15px; margin: 20px 0; border-radius: 5px; display: none;">
+            <strong style="color: #003366;">Payment Notes:</strong>
+            <div id="paymentMemo" style="margin-top: 8px; font-style: italic; color: #555;"></div>
         </div>
         
         <div class="tax-info">
@@ -318,13 +331,25 @@
             // Payment Breakdown
             const membershipAmount = parseFloat(paymentData.membershipAmount || 0);
             const eventAmount = parseFloat(paymentData.eventAmount || 0);
+            const scholarshipAmount = parseFloat(paymentData.scholarshipAmount || 0);
             const donationAmount = parseFloat(paymentData.donationAmount || 0);
-            const totalAmount = membershipAmount + eventAmount + donationAmount;
+            const otherAmount = parseFloat(paymentData.otherAmount || 0);
+            const totalAmount = membershipAmount + eventAmount + scholarshipAmount + donationAmount + otherAmount;
             
             document.getElementById('membershipAmount').textContent = `$${membershipAmount.toFixed(2)}`;
             document.getElementById('eventAmount').textContent = `$${eventAmount.toFixed(2)}`;
+            document.getElementById('scholarshipAmount').textContent = `$${scholarshipAmount.toFixed(2)}`;
             document.getElementById('donationAmount').textContent = `$${donationAmount.toFixed(2)}`;
+            document.getElementById('otherAmount').textContent = `$${otherAmount.toFixed(2)}`;
             document.getElementById('totalAmount').textContent = `$${totalAmount.toFixed(2)}`;
+            
+            // Show memo if provided
+            if (paymentData.memo && paymentData.memo.trim()) {
+                document.getElementById('paymentMemo').textContent = paymentData.memo;
+                document.getElementById('memoSection').style.display = 'block';
+            } else {
+                document.getElementById('memoSection').style.display = 'none';
+            }
             
             // Hide zero amounts
             hideZeroAmounts();
@@ -359,7 +384,10 @@
             // Get payment breakdown
             const membershipAmount = document.getElementById('membershipAmount').textContent;
             const eventAmount = document.getElementById('eventAmount').textContent;
+            const scholarshipAmount = document.getElementById('scholarshipAmount').textContent;
             const donationAmount = document.getElementById('donationAmount').textContent;
+            const otherAmount = document.getElementById('otherAmount').textContent;
+            const paymentMemo = document.getElementById('paymentMemo').textContent;
             
             console.log('Member email:', memberEmail);
             console.log('Member name:', memberName);
@@ -381,7 +409,9 @@ Total Amount: ${totalAmount}
 PAYMENT BREAKDOWN:
 - Annual Membership: ${membershipAmount}
 - Event Registration: ${eventAmount}
+- Scholarship Fund: ${scholarshipAmount}
 - Donation: ${donationAmount}
+- Other Fees: ${otherAmount}${paymentMemo ? '\n\nPAYMENT NOTES:\n' + paymentMemo : ''}
 
 TAX INFORMATION:
 The Central Virginia Chapter of the WVU Alumni Association is a registered non-profit organization. 
@@ -508,9 +538,17 @@ This receipt was generated on ${new Date().toLocaleString()}`;
                     <div>${eventAmount}</div>
                 </div>
                 <div class="breakdown-item">
+                    <div style="font-weight: bold;">Scholarship Fund</div>
+                    <div>${scholarshipAmount}</div>
+                </div>
+                <div class="breakdown-item">
                     <div style="font-weight: bold;">Donation</div>
                     <div>${donationAmount}</div>
                 </div>
+                <div class="breakdown-item">
+                    <div style="font-weight: bold;">Other Fees</div>
+                    <div>${otherAmount}</div>
+                </div>${paymentMemo ? '<div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-left: 4px solid #FFD700; border-radius: 5px;"><strong style="color: #003366;">Payment Notes:</strong><div style="margin-top: 8px; font-style: italic; color: #555;">' + paymentMemo + '</div></div>' : ''}
             </div>
         </div>
         
