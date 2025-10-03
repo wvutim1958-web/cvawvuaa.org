@@ -1061,6 +1061,10 @@ function saveMemberEdits(memberId) {
   // Save to localStorage so it syncs with advanced member manager
   localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
   
+  // Also update the directory-members storage for full sync
+  localStorage.setItem('cvcwvuaa-directory-members', JSON.stringify(members));
+  localStorage.setItem('cvcwvuaa-directory-last-update', new Date().toISOString());
+  
   // Refresh the display
   renderMemberCards();
   updateMemberStats();

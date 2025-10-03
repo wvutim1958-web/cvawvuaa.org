@@ -1039,7 +1039,7 @@ function updateMemberTable() {
         <div class="action-buttons">
           <button class="btn-contact" onclick="contactMember('${member.email}')">📧</button>
           <button class="btn-receipt" onclick="createMemberReceipt(${member.id})" title="Generate Receipt">🧾</button>
-          <button class="btn-edit" onclick="editMember(${member.id})">✏️</button>
+          <button class="btn-edit" onclick="editMember('${member.id}')">✏️</button>
           <button class="btn-delete" onclick="deleteMember(${member.id})">🗑️</button>
         </div>
       </td>
@@ -1193,7 +1193,7 @@ function openAddMemberModal() {
 }
 
 function editMember(id) {
-  const member = members.find(m => m.id === id);
+  const member = members.find(m => m.id == id || m.id === id);
   if (member) {
     currentEditingId = id;
     document.getElementById('modalTitle').textContent = 'Edit Member';
