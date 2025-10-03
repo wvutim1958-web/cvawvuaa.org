@@ -8,93 +8,42 @@
     <p id="status">Loading members...</p>
 
     <script>
-        // Just put the member data in the database. That's it.
-        const members = [
-            {
-                id: 'member1',
-                name: 'Mark & Vicki Allen',
-                email: 'markallen@example.com',
-                phone: '(804) 555-0101',
-                address: '14507 Standing Oak Ct',
-                city: 'Midlothian',
+        // Generate 100+ members automatically
+        const members = [];
+        
+        // Base member data
+        const firstNames = ['James', 'Robert', 'John', 'Michael', 'David', 'William', 'Richard', 'Joseph', 'Thomas', 'Christopher', 'Charles', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Donald', 'Steven', 'Paul', 'Andrew', 'Joshua', 'Kenneth', 'Kevin', 'Brian', 'George', 'Timothy', 'Ronald', 'Jason', 'Edward', 'Jeffrey', 'Ryan', 'Jacob', 'Gary', 'Nicholas', 'Eric', 'Jonathan', 'Stephen', 'Larry', 'Justin', 'Scott', 'Brandon', 'Benjamin', 'Samuel', 'Gregory', 'Alexander', 'Patrick', 'Frank', 'Raymond', 'Jack', 'Dennis', 'Jerry', 'Tyler', 'Aaron', 'Henry', 'Douglas', 'Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen', 'Nancy', 'Lisa', 'Betty', 'Helen', 'Sandra', 'Donna', 'Carol', 'Ruth', 'Sharon', 'Michelle', 'Laura', 'Emily', 'Kimberly', 'Deborah', 'Dorothy', 'Amy', 'Angela', 'Ashley', 'Brenda', 'Emma', 'Olivia', 'Cynthia', 'Marie', 'Janet', 'Catherine', 'Frances', 'Christine', 'Samantha', 'Debra', 'Rachel', 'Carolyn', 'Virginia', 'Maria', 'Heather', 'Diane', 'Julie', 'Joyce', 'Victoria', 'Kelly', 'Christina'];
+        
+        const lastNames = ['Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin', 'Lee', 'Perez', 'Thompson', 'White', 'Harris', 'Sanchez', 'Clark', 'Ramirez', 'Lewis', 'Robinson', 'Walker', 'Young', 'Allen', 'King', 'Wright', 'Scott', 'Torres', 'Nguyen', 'Hill', 'Flores', 'Green', 'Adams', 'Nelson', 'Baker', 'Hall', 'Rivera', 'Campbell', 'Mitchell', 'Carter', 'Roberts', 'Gomez', 'Phillips', 'Evans', 'Turner', 'Diaz', 'Parker', 'Cruz', 'Edwards', 'Collins', 'Reyes', 'Stewart', 'Morris', 'Morales', 'Murphy', 'Cook', 'Rogers', 'Gutierrez', 'Ortiz', 'Morgan', 'Cooper', 'Peterson', 'Bailey', 'Reed', 'Kelly', 'Howard', 'Ramos', 'Kim', 'Cox', 'Ward', 'Richardson', 'Watson', 'Brooks', 'Chavez', 'Wood', 'James', 'Bennett', 'Gray', 'Mendoza', 'Ruiz', 'Hughes', 'Price', 'Alvarez', 'Castillo', 'Sanders', 'Patel', 'Myers', 'Long', 'Ross', 'Foster', 'Jimenez'];
+        
+        const streets = ['Main St', 'Oak Ave', 'Pine Rd', 'Forest Hill Ave', 'Three Chopt Rd', 'Patterson Ave', 'Staples Mill Rd', 'Broad Rock Blvd', 'Midlothian Turnpike', 'Hull Street Rd', 'West Broad St', 'Monument Ave', 'Chamberlayne Ave', 'Mechanicsville Tpke', 'Jeff Davis Hwy', 'Nine Mile Rd', 'Laburnum Ave', 'Jahnke Rd', 'Parham Rd', 'Horsepen Rd', 'Gaskins Rd', 'W Leigh St', 'Courthouse Rd', 'Hickory Park Dr', 'Lauderdale Dr', 'River Rd', 'Grove Ave', 'Cary St', 'Franklin St', 'Broad St'];
+        
+        const cities = ['Richmond', 'Henrico', 'Glen Allen', 'Mechanicsville', 'Chester', 'Midlothian', 'Chesterfield', 'Bon Air', 'Short Pump', 'Innsbrook'];
+        
+        const zipCodes = ['23112', '23223', '23230', '23228', '23831', '23060', '23225', '23229', '23226', '23224', '23235', '23234', '23294', '23220', '23222', '23111', '23237', '23227', '23233', '23238', '23832', '23059', '23236'];
+        
+        // Generate 120 members
+        for (let i = 1; i <= 120; i++) {
+            const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+            const street = streets[Math.floor(Math.random() * streets.length)];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            const zipCode = zipCodes[Math.floor(Math.random() * zipCodes.length)];
+            const streetNumber = Math.floor(Math.random() * 9999) + 1000;
+            
+            members.push({
+                id: `member${i}`,
+                name: firstName + ' ' + lastName,
+                email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`,
+                phone: `(804) 555-${String(Math.floor(Math.random() * 9000) + 1000)}`,
+                address: `${streetNumber} ${street}`,
+                city: city,
                 state: 'VA',
-                zipCode: '23112',
-                membershipType: 'Family',
+                zipCode: zipCode,
+                membershipType: i % 3 === 0 ? 'Family' : 'Individual',
                 paidThrough: '2025-12-31'
-            },
-            {
-                id: 'member2', 
-                name: 'Jenny Alsop',
-                email: 'jenny.alsop@example.com',
-                phone: '(804) 555-0102',
-                address: '1919 E. Broad St Unit D',
-                city: 'Richmond',
-                state: 'VA',
-                zipCode: '23223',
-                membershipType: 'Individual',
-                paidThrough: '2025-12-31'
-            },
-            {
-                id: 'member3',
-                name: 'William Armstrong', 
-                email: 'william.armstrong@example.com',
-                phone: '(804) 555-0103',
-                address: '12345 River Road',
-                city: 'Richmond',
-                state: 'VA', 
-                zipCode: '23230',
-                membershipType: 'Individual',
-                paidThrough: '2025-12-31'
-            },
-            {
-                id: 'member4',
-                name: 'Robert & Susan Baker',
-                email: 'rbaker@example.com', 
-                phone: '(804) 555-0104',
-                address: '7890 Forest Lane',
-                city: 'Henrico',
-                state: 'VA',
-                zipCode: '23228', 
-                membershipType: 'Family',
-                paidThrough: '2025-12-31'
-            },
-            {
-                id: 'member5',
-                name: 'David Castle',
-                email: 'david.castle@example.com',
-                phone: '(804) 555-0105', 
-                address: '5432 Oak Street',
-                city: 'Chester',
-                state: 'VA',
-                zipCode: '23831',
-                membershipType: 'Individual',
-                paidThrough: '2025-12-31'
-            },
-            {
-                id: 'member6',
-                name: 'Michael & Lisa Johnson',
-                email: 'mjohnson@example.com',
-                phone: '(804) 555-0106',
-                address: '9876 Pine Avenue', 
-                city: 'Glen Allen',
-                state: 'VA',
-                zipCode: '23060',
-                membershipType: 'Family',
-                paidThrough: '2025-12-31'
-            },
-            {
-                id: 'member7',
-                name: 'Sarah Williams',
-                email: 'sarah.williams@example.com',
-                phone: '(804) 555-0107',
-                address: '1234 Maple Drive',
-                city: 'Mechanicsville',
-                state: 'VA',
-                zipCode: '23116', 
-                membershipType: 'Individual',
-                paidThrough: '2025-12-31'
-            }
-        ];
+            });
+        }
 
         // Put members in database
         localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
