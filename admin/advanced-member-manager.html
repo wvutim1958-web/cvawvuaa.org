@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CVCWVUAA Advanced Member Management</title>
+<title>CVCWVUAA Complete Management Hub</title>
 <link rel="stylesheet" href="/css/styles.css">
 <script src="/admin/js/export-to-csv.js" defer></script>
 <style>
@@ -20,6 +20,16 @@
     border-radius: 12px;
     margin-bottom: 2rem;
     text-align: center;
+  }
+
+  .main-hub-notice {
+    background: #28a745;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: bold;
   }
 
   .controls-panel {
@@ -277,8 +287,12 @@
   
   <!-- Header -->
   <div class="manager-header">
-    <h1>👥 Advanced Member Management</h1>
-    <p>Comprehensive member database with dues tracking and deletion tools</p>
+    <h1>🏢 CVCWVUAA Complete Management Hub</h1>
+    <p>Your One-Stop Solution: Member Management • Receipt Generation • Financial Tracking</p>
+  </div>
+
+  <div class="main-hub-notice">
+    ✅ This is your MAIN TOOL - Everything you need in one place! No more switching between different tools.
   </div>
 
   <!-- Statistics Bar -->
@@ -333,6 +347,7 @@
         <button class="action-btn" onclick="openReceiptGenerator()" style="background: #7c3aed;">🧾 Generate Receipts</button>
         <button class="action-btn" onclick="exportMembersToCSV()" style="background: #3b82f6;">💾 Export to CSV</button>
         <button class="action-btn" onclick="downloadMasterCSV()" style="background: #10b981;">📥 Master CSV</button>
+        <button class="action-btn" onclick="quickAddMember()" style="background: #28a745;">➕ Add New Member</button>
         <button class="action-btn secondary" onclick="bulkDeleteOverdue()">🗑️ Remove Overdue (90+ days)</button>
       </div>
     </div>
@@ -1162,6 +1177,46 @@ function toggleDuesStatus(memberId) {
     saveMembers();
     updateDisplay();
   }
+}
+
+// Quick Add Member Function
+function quickAddMember() {
+  const name = prompt('Enter member name:');
+  if (!name) return;
+  
+  const email = prompt('Enter email address:');
+  if (!email) return;
+  
+  const phone = prompt('Enter phone number (optional):') || '';
+  const address = prompt('Enter street address (optional):') || '';
+  const city = prompt('Enter city (optional):') || '';
+  const state = prompt('Enter state (default: VA):') || 'VA';
+  const zipCode = prompt('Enter ZIP code (optional):') || '';
+  
+  const newMember = {
+    id: Date.now(), // Simple unique ID
+    name: name,
+    email: email,
+    phone: phone,
+    address: address,
+    streetAddress: address,
+    city: city,
+    state: state,
+    zipCode: zipCode,
+    fullAddress: [address, city, state, zipCode].filter(x => x).join(', '),
+    membershipType: 'Individual Membership',
+    duesStatus: 'unpaid',
+    paidThrough: '',
+    duesAmount: 0,
+    totalAmountPaid: 0,
+    scholarshipAmount: 0,
+    generalFundAmount: 0
+  };
+  
+  members.push(newMember);
+  saveMembersData();
+  renderMemberTable();
+  alert('✅ Member added successfully!');
 }
 
 function markAllCurrentDues() {
