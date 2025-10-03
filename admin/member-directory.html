@@ -1021,7 +1021,7 @@ function showEditModal(member) {
       
       <div style="text-align: right; margin-top: 1.5rem;">
         <button onclick="closeEditModal()" style="background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 6px; margin-right: 10px; cursor: pointer;">Cancel</button>
-        <button onclick="saveMemberEdits(${member.id})" style="background: var(--wvu-blue, #002855); color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Save Changes</button>
+        <button onclick="saveMemberEdits('${member.id}')" style="background: var(--wvu-blue, #002855); color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Save Changes</button>
       </div>
     </div>
   `;
@@ -1030,8 +1030,12 @@ function showEditModal(member) {
 }
 
 function saveMemberEdits(memberId) {
-  const member = members.find(m => m.id === memberId);
-  if (!member) return;
+  const member = members.find(m => m.id == memberId || m.id === memberId);
+  if (!member) {
+    console.error('Member not found for save with ID:', memberId);
+    alert('Member not found. Please refresh the page and try again.');
+    return;
+  }
   
   // Get updated values from form
   member.name = document.getElementById('editName').value;
