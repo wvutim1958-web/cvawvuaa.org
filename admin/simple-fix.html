@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fix Database Now</title>
+</head>
+<body>
+    <h1>Fixing Database...</h1>
+    <p id="status">Loading members...</p>
+
+    <script>
+        // Just put the member data in the database. That's it.
+        const members = [
+            {
+                id: 'member1',
+                name: 'Mark & Vicki Allen',
+                email: 'markallen@example.com',
+                phone: '(804) 555-0101',
+                address: '14507 Standing Oak Ct',
+                city: 'Midlothian',
+                state: 'VA',
+                zipCode: '23112',
+                membershipType: 'Family',
+                paidThrough: '2025-12-31'
+            },
+            {
+                id: 'member2', 
+                name: 'Jenny Alsop',
+                email: 'jenny.alsop@example.com',
+                phone: '(804) 555-0102',
+                address: '1919 E. Broad St Unit D',
+                city: 'Richmond',
+                state: 'VA',
+                zipCode: '23223',
+                membershipType: 'Individual',
+                paidThrough: '2025-12-31'
+            },
+            {
+                id: 'member3',
+                name: 'William Armstrong', 
+                email: 'william.armstrong@example.com',
+                phone: '(804) 555-0103',
+                address: '12345 River Road',
+                city: 'Richmond',
+                state: 'VA', 
+                zipCode: '23230',
+                membershipType: 'Individual',
+                paidThrough: '2025-12-31'
+            },
+            {
+                id: 'member4',
+                name: 'Robert & Susan Baker',
+                email: 'rbaker@example.com', 
+                phone: '(804) 555-0104',
+                address: '7890 Forest Lane',
+                city: 'Henrico',
+                state: 'VA',
+                zipCode: '23228', 
+                membershipType: 'Family',
+                paidThrough: '2025-12-31'
+            },
+            {
+                id: 'member5',
+                name: 'David Castle',
+                email: 'david.castle@example.com',
+                phone: '(804) 555-0105', 
+                address: '5432 Oak Street',
+                city: 'Chester',
+                state: 'VA',
+                zipCode: '23831',
+                membershipType: 'Individual',
+                paidThrough: '2025-12-31'
+            },
+            {
+                id: 'member6',
+                name: 'Michael & Lisa Johnson',
+                email: 'mjohnson@example.com',
+                phone: '(804) 555-0106',
+                address: '9876 Pine Avenue', 
+                city: 'Glen Allen',
+                state: 'VA',
+                zipCode: '23060',
+                membershipType: 'Family',
+                paidThrough: '2025-12-31'
+            },
+            {
+                id: 'member7',
+                name: 'Sarah Williams',
+                email: 'sarah.williams@example.com',
+                phone: '(804) 555-0107',
+                address: '1234 Maple Drive',
+                city: 'Mechanicsville',
+                state: 'VA',
+                zipCode: '23116', 
+                membershipType: 'Individual',
+                paidThrough: '2025-12-31'
+            }
+        ];
+
+        // Put members in database
+        localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+        
+        // Show status
+        document.getElementById('status').innerHTML = `Fixed! Database now has ${members.length} members.<br><br>
+        <a href="member-directory.html">Go to Member Directory</a><br>
+        <a href="advanced-member-manager.html">Go to Member Manager</a><br>
+        <a href="receipt-generator.html">Go to Receipt Generator</a>`;
+    </script>
+</body>
+</html>
