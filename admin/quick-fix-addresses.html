@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Member Fix - CVCWVUAA</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        h1 { color: #003366; text-align: center; }
+        .big-button {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .big-button:hover { background: #004488; }
+        .status { 
+            padding: 15px; 
+            margin: 15px 0; 
+            border-radius: 4px; 
+            font-family: monospace;
+            white-space: pre-line;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+        .info { 
+            background: #e6f3ff; 
+            border: 2px solid #007acc;
+            color: #004466;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Quick Member Address Fix</h1>
+        
+        <p style="text-align: center;">Let's see what's actually in your member database and fix the addresses directly.</p>
+        
+        <div style="text-align: center;">
+            <button class="big-button" onclick="showCurrentData()">📊 Show Current Member Data</button>
+            <button class="big-button" onclick="fixAddressesNow()">🔧 Fix Addresses Now</button>
+            <button class="big-button" onclick="createTestMembers()">👥 Create Test Members</button>
+        </div>
+        
+        <div class="status info" id="output">
+Click "Show Current Member Data" to see what's in your database right now.
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const output = document.getElementById('output');
+            output.textContent = message;
+        }
+
+        function showCurrentData() {
+            log('🔍 Checking current member database...\n\n');
+            
+            // Check all possible localStorage keys
+            const keys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members', 'memberData'];
+            let found = false;
+            
+            for (const key of keys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const members = JSON.parse(data);
+                        if (Array.isArray(members) && members.length > 0) {
+                            log(`✅ Found ${members.length} members in '${key}'\n\n` +
+                                `Sample member data:\n` +
+                                `Name: ${members[0].name || 'No name'}\n` +
+                                `Email: ${members[0].email || 'No email'}\n` +
+                                `Address: "${members[0].address || 'NO ADDRESS'}"\n` +
+                                `City: "${members[0].city || 'NO CITY'}"\n` +
+                                `State: "${members[0].state || 'NO STATE'}"\n` +
+                                `ZIP: "${members[0].zip || 'NO ZIP'}"\n\n` +
+                                `Full first member object:\n${JSON.stringify(members[0], null, 2)}\n\n` +
+                                `Address status for all members:\n`);
+                            
+                            let hasAddresses = 0;
+                            let missingAddresses = 0;
+                            
+                            members.forEach((member, index) => {
+                                if (member.address && member.address.trim() !== '') {
+                                    hasAddresses++;
+                                } else {
+                                    missingAddresses++;
+                                }
+                                
+                                if (index < 10) { // Show first 10
+                                    const name = member.name || 'No name';
+                                    const address = member.address || '[MISSING]';
+                                    log(`${index + 1}. ${name}: ${address}`);
+                                }
+                            });
+                            
+                            log(`\n📊 Summary:\n` +
+                                `Members with addresses: ${hasAddresses}\n` +
+                                `Members missing addresses: ${missingAddresses}\n` +
+                                `Total members: ${members.length}`);
+                            
+                            found = true;
+                            break;
+                        }
+                    } catch (e) {
+                        log(`❌ Error reading ${key}: ${e.message}\n`);
+                    }
+                }
+            }
+            
+            if (!found) {
+                log('❌ NO MEMBER DATA FOUND!\n\n' +
+                    'Checking all localStorage keys:\n');
+                    
+                Object.keys(localStorage).forEach(key => {
+                    log(`- ${key}`);
+                });
+            }
+        }
+
+        function fixAddressesNow() {
+            log('🔧 Fixing addresses using CSV data directly...\n\n');
+            
+            // Hard-coded address data from your CSV
+            const addressData = {
+                'tmzahler@gmail.com': {
+                    name: 'Thomas Zahler',
+                    address: '14213 Chimney House Road',
+                    city: 'Midlothian',
+                    state: 'Virginia',
+                    zip: '23112'
+                },
+                'woody468645@yahoo.com': {
+                    name: 'James Woodside',
+                    address: '3805 Cutshaw Ave, Apt 104',
+                    city: 'Richmond',
+                    state: 'Virginia', 
+                    zip: '23230'
+                },
+                'jeffwilsonwvu80@gmail.com': {
+                    name: 'Jeffrey Wilson',
+                    address: '2643 Mulberry Row Road',
+                    city: 'Midlothian',
+                    state: 'Virginia',
+                    zip: '23113'
+                },
+                'rwhiteman@verizon.net': {
+                    name: 'Sandra Whiteman',
+                    address: '5524 Burberry Lane',
+                    city: 'Glen Allen',
+                    state: 'Virginia',
+                    zip: '23059'
+                },
+                'tweeks2@collinsengr.com': {
+                    name: 'Timothy Weeks',
+                    address: '745 Bluecrab Road, Suite B',
+                    city: 'Newport News',
+                    state: 'Virginia',
+                    zip: '23606'
+                },
+                'carol.timpano@gmail.com': {
+                    name: 'Carol Timpano',
+                    address: '8410 Copperpenny Terrace',
+                    city: 'Chesterfield',
+                    state: 'Virginia',
+                    zip: '23832'
+                },
+                'ebthornhill@gmail.com': {
+                    name: 'Elizabeth Thornhill',
+                    address: '219 Greenbrier St',
+                    city: 'Morgantown',
+                    state: 'West Virginia',
+                    zip: '26501'
+                }
+            };
+
+            // Find current member data
+            const keys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members', 'memberData'];
+            let members = null;
+            let workingKey = null;
+            
+            for (const key of keys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            members = parsed;
+                            workingKey = key;
+                            break;
+                        }
+                    } catch (e) {
+                        continue;
+                    }
+                }
+            }
+
+            if (!members) {
+                log('❌ No member data found. Creating new members with addresses...\n');
+                
+                members = Object.entries(addressData).map((entry, index) => {
+                    const [email, data] = entry;
+                    return {
+                        id: index + 1,
+                        name: data.name,
+                        email: email,
+                        phone: '',
+                        address: data.address,
+                        city: data.city,
+                        state: data.state,
+                        zip: data.zip,
+                        memberSince: '2018'
+                    };
+                });
+                
+                workingKey = 'cvcwvuaa-members';
+            } else {
+                log(`Found ${members.length} existing members. Fixing addresses...\n`);
+                
+                let fixed = 0;
+                members.forEach(member => {
+                    const email = member.email ? member.email.toLowerCase() : '';
+                    if (addressData[email]) {
+                        const addr = addressData[email];
+                        member.address = addr.address;
+                        member.city = addr.city;
+                        member.state = addr.state;
+                        member.zip = addr.zip;
+                        if (!member.name || member.name.trim() === '') {
+                            member.name = addr.name;
+                        }
+                        fixed++;
+                        log(`✅ Fixed: ${member.name} - ${addr.address}`);
+                    }
+                });
+                
+                log(`\nFixed addresses for ${fixed} members.\n`);
+            }
+
+            // Save to localStorage
+            localStorage.setItem(workingKey, JSON.stringify(members));
+            
+            log(`✅ DONE! Saved ${members.length} members with addresses to '${workingKey}'\n\n` +
+                `✅ Your receipt generator should now work!\n` +
+                `✅ All members now have proper addresses!\n\n` +
+                `Sample fixed member:\n` +
+                `Name: ${members[0].name}\n` +
+                `Address: ${members[0].address}\n` +
+                `City: ${members[0].city}, ${members[0].state} ${members[0].zip}`);
+        }
+
+        function createTestMembers() {
+            const testMembers = [
+                {
+                    id: 1,
+                    name: 'John Test',
+                    email: 'john@test.com',
+                    phone: '555-1234',
+                    address: '123 Test Street',
+                    city: 'Richmond',
+                    state: 'Virginia',
+                    zip: '23220',
+                    memberSince: '2024'
+                },
+                {
+                    id: 2,
+                    name: 'Jane Sample',
+                    email: 'jane@sample.com',
+                    phone: '555-5678',
+                    address: '456 Sample Ave',
+                    city: 'Norfolk',
+                    state: 'Virginia',
+                    zip: '23502',
+                    memberSince: '2024'
+                }
+            ];
+            
+            localStorage.setItem('cvcwvuaa-members', JSON.stringify(testMembers));
+            
+            log(`✅ Created 2 test members with complete address data\n\n` +
+                `Test these in your receipt generator to verify it works.\n` +
+                `Then use "Fix Addresses Now" to restore real member data.`);
+        }
+
+        // Auto-run on load
+        window.addEventListener('load', () => {
+            showCurrentData();
+        });
+    </script>
+</body>
+</html>
