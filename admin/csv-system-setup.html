@@ -82,7 +82,13 @@
         </div>
 
         <div class="step">
-            <h3>Step 3: Test CSV System</h3>
+            <h3>Step 3: Check Current Status</h3>
+            <p>See what's currently stored in the system.</p>
+            <button class="button" onclick="checkCurrentStatus()" style="background-color: #007bff;">Check Status</button>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Test CSV System</h3>
             <p>Verify that all tools can read and write to the CSV file.</p>
             <button class="button" onclick="testCSVSystem()">Test CSV System</button>
         </div>
@@ -110,11 +116,17 @@
                 'General Fund'
             ];
             
-            // Store the CSV structure
+            // Create the CSV header line
+            const csvHeaderLine = csvHeaders.join(',');
+            
+            // Store the CSV structure and empty CSV file
             localStorage.setItem('cvcwvuaa-csv-headers', JSON.stringify(csvHeaders));
+            localStorage.setItem('cvcwvuaa-master-csv', csvHeaderLine + '\n');
             localStorage.setItem('cvcwvuaa-master-csv-created', new Date().toISOString());
             
-            showStatus('Master CSV structure created successfully!', 'success');
+            const message = `✅ Master CSV structure created successfully!\n\nCreated:\n• CSV headers (${csvHeaders.length} columns)\n• Empty CSV file ready for data\n• Storage keys initialized\n\nNow upload your CSV file in Step 2.`;
+            
+            showStatus(message, 'success');
         }
 
         // Load CSV data from file upload
@@ -208,6 +220,36 @@
             return result;
         }
 
+        // Check what's currently stored
+        function checkCurrentStatus() {
+            const csvHeaders = localStorage.getItem('cvcwvuaa-csv-headers');
+            const masterCSV = localStorage.getItem('cvcwvuaa-master-csv');
+            const members = localStorage.getItem('cvcwvuaa-members');
+            const created = localStorage.getItem('cvcwvuaa-master-csv-created');
+            
+            let status = 'Current System Status:\n\n';
+            
+            status += `✓ CSV Headers: ${csvHeaders ? 'Created' : 'Not created'}\n`;
+            status += `✓ Master CSV: ${masterCSV ? `${masterCSV.length} characters` : 'Not created'}\n`;
+            status += `✓ Member Data: ${members ? `${JSON.parse(members).length} members` : 'No members loaded'}\n`;
+            status += `✓ Created Date: ${created ? new Date(created).toLocaleString() : 'Not set'}\n\n`;
+            
+            if (csvHeaders) {
+                const headers = JSON.parse(csvHeaders);
+                status += `CSV Columns (${headers.length}):\n`;
+                headers.forEach((header, index) => {
+                    status += `${index + 1}. ${header}\n`;
+                });
+            }
+            
+            if (masterCSV && masterCSV.includes('\n')) {
+                const lines = masterCSV.split('\n').filter(line => line.trim());
+                status += `\nCSV Data: ${lines.length} lines (including header)\n`;
+            }
+            
+            showStatus(status, 'info');
+        }
+
         // Test the CSV system
         function testCSVSystem() {
             const members = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
@@ -233,8 +275,11 @@
         function showStatus(message, type) {
             const status = document.getElementById('status');
             status.className = `status ${type}`;
-            status.textContent = message;
+            status.innerHTML = message.replace(/\n/g, '<br>'); // Allow line breaks
             status.style.display = 'block';
+            
+            // Scroll to status message
+            status.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
