@@ -158,6 +158,22 @@
     font-size: 0.85rem;
   }
 
+  .btn-receipt {
+    background: #7c3aed;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+
+  .btn-receipt:hover {
+    background: #6d28d9;
+    transform: translateY(-1px);
+  }
+
   .bulk-actions {
     background: #f8fafc;
     padding: 1rem;
@@ -314,6 +330,7 @@
         <button class="action-btn success" onclick="markAllCurrentDues()">✅ Mark All Current</button>
         <button class="action-btn warning" onclick="sendDuesReminders()">📧 Send Dues Reminders</button>
         <button class="action-btn" onclick="exportDuesReport()">📊 Export Dues Report</button>
+        <button class="action-btn" onclick="openReceiptGenerator()" style="background: #7c3aed;">🧾 Generate Receipts</button>
         <button class="action-btn" onclick="exportMembersToCSV()" style="background: #3b82f6;">💾 Export to CSV</button>
         <button class="action-btn" onclick="downloadMasterCSV()" style="background: #10b981;">📥 Master CSV</button>
         <button class="action-btn secondary" onclick="bulkDeleteOverdue()">🗑️ Remove Overdue (90+ days)</button>
@@ -998,11 +1015,7 @@ function updateMemberTable() {
       </td>
       <td>
         <div style="font-size: 0.85rem;">
-          ${member.streetAddress ? `<div><strong>${member.streetAddress}</strong></div>` : ''}
-          ${member.city || member.state || member.zip ? 
-            `<div>${[member.city, member.state, member.zip].filter(x => x).join(', ')}</div>` : 
-            '<div style="color: #999;">No address</div>'
-          }
+          ${getCleanAddress(member)}
         </div>
       </td>
       <td>${typeDisplay}</td>
@@ -1025,6 +1038,7 @@ function updateMemberTable() {
       <td>
         <div class="action-buttons">
           <button class="btn-contact" onclick="contactMember('${member.email}')">📧</button>
+          <button class="btn-receipt" onclick="createMemberReceipt(${member.id})" title="Generate Receipt">🧾</button>
           <button class="btn-edit" onclick="editMember(${member.id})">✏️</button>
           <button class="btn-delete" onclick="deleteMember(${member.id})">🗑️</button>
         </div>
@@ -1052,6 +1066,45 @@ function getTypeDisplay(type) {
     lifetime: 'Lifetime'
   };
   return types[type] || type;
+}
+
+function getCleanAddress(member) {
+  // Validate address components and filter out potential names
+  const isValidAddressComponent = (component) => {
+    if (!component || !component.trim()) return false;
+    const trimmed = component.trim();
+    
+    // Skip if it looks like a single last name (common issue)
+    if (/^[A-Z][a-z]+$/.test(trimmed) && trimmed.length < 15 && 
+        !['Richmond', 'Norfolk', 'Virginia', 'Hampton', 'Newport', 'Glen Allen'].includes(trimmed)) {
+      return false;
+    }
+    
+    return true;
+  };
+  
+  const cleanStreet = isValidAddressComponent(member.streetAddress) ? member.streetAddress : '';
+  const cleanCity = isValidAddressComponent(member.city) ? member.city : '';
+  const cleanState = isValidAddressComponent(member.state) ? member.state : '';
+  const cleanZip = member.zip && /^\d{5}(-\d{4})?$/.test(member.zip.trim()) ? member.zip : '';
+  
+  let addressHTML = '';
+  
+  if (cleanStreet) {
+    addressHTML += `<div><strong>${cleanStreet}</strong></div>`;
+  }
+  
+  const cityStateZip = [cleanCity, cleanState, cleanZip].filter(x => x).join(', ');
+  if (cityStateZip) {
+    addressHTML += `<div>${cityStateZip}</div>`;
+  }
+  
+  // If we have a full address field that looks valid, use that instead
+  if (!addressHTML && member.fullAddress && member.fullAddress.includes(',')) {
+    addressHTML = `<div>${member.fullAddress}</div>`;
+  }
+  
+  return addressHTML || '<div style="color: #999;">No address</div>';
 }
 
 function formatDate(dateString) {
@@ -1585,6 +1638,145 @@ function bulkDeleteOverdue() {
 
 function contactMember(email) {
   window.open(`mailto:${email}?subject=From CVCWVUAA President`);
+}
+
+// Receipt Generation Functions
+function openReceiptGenerator() {
+  window.open('receipt-generator.html', '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+}
+
+function createMemberReceipt(memberId) {
+  const member = members.find(m => m.id === memberId);
+  if (!member) {
+    alert('Member not found');
+    return;
+  }
+
+  // Open receipt generator with pre-filled member data
+  const receiptWindow = window.open('receipt-generator.html', '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+  
+  // Wait for the receipt generator to load, then populate with member data
+  receiptWindow.onload = function() {
+    setTimeout(() => {
+      // Pre-populate the receipt generator form
+      if (receiptWindow.document.getElementById('memberName')) {
+        receiptWindow.document.getElementById('memberName').value = member.name || '';
+        receiptWindow.document.getElementById('memberEmail').value = member.email || '';
+        receiptWindow.document.getElementById('memberPhone').value = member.phone || '';
+        
+        // Format address
+        const addressParts = [member.streetAddress, member.city, member.state, member.zip].filter(x => x);
+        receiptWindow.document.getElementById('memberAddress').value = addressParts.join(', ');
+        
+        receiptWindow.document.getElementById('memberSince').value = member.memberSince || member.joinDate || 'Not available';
+        
+        // Pre-populate payment amounts if available
+        if (member.duesAmount && member.duesAmount > 0) {
+          receiptWindow.document.getElementById('membershipAmount').value = member.duesAmount.toFixed(2);
+        }
+        if (member.scholarshipAmount && member.scholarshipAmount > 0) {
+          receiptWindow.document.getElementById('donationAmount').value = member.scholarshipAmount.toFixed(2);
+        }
+        if (member.generalFundAmount && member.generalFundAmount > 0) {
+          receiptWindow.document.getElementById('otherAmount').value = member.generalFundAmount.toFixed(2);
+        }
+        
+        // Set last payment date if available
+        if (member.lastPayment) {
+          const paymentDate = new Date(member.lastPayment);
+          if (!isNaN(paymentDate.getTime())) {
+            receiptWindow.document.getElementById('paymentDate').value = paymentDate.toISOString().split('T')[0];
+          }
+        }
+        
+        // Trigger total calculation
+        if (receiptWindow.calculateTotal) {
+          receiptWindow.calculateTotal();
+        }
+      }
+    }, 500); // Give the window time to fully load
+  };
+}
+
+function generateReceiptForPayment(memberId, paymentData) {
+  const member = members.find(m => m.id === memberId);
+  if (!member) {
+    alert('Member not found');
+    return;
+  }
+
+  // Prepare receipt data
+  const memberData = {
+    name: member.name,
+    email: member.email,
+    phone: member.phone,
+    address: [member.streetAddress, member.city, member.state, member.zip].filter(x => x).join(', '),
+    memberSince: member.memberSince || member.joinDate
+  };
+
+  // Generate receipt number
+  const now = new Date();
+  const year = now.getFullYear();
+  const timestamp = Date.now().toString().slice(-6);
+  const receiptNumber = `CVCWV-${year}-${timestamp}`;
+
+  const receiptData = {
+    receiptNumber: receiptNumber,
+    date: paymentData.date || new Date().toLocaleDateString(),
+    method: paymentData.method || 'Not specified',
+    transactionId: paymentData.transactionId || 'N/A',
+    processedBy: 'CVCWVUAA Admin',
+    membershipAmount: paymentData.membershipAmount || '0.00',
+    eventAmount: paymentData.eventAmount || '0.00',
+    donationAmount: paymentData.donationAmount || '0.00',
+    otherAmount: paymentData.otherAmount || '0.00'
+  };
+
+  // Open receipt template with populated data
+  const receiptWindow = window.open('receipt-template.html', '_blank');
+  receiptWindow.onload = function() {
+    receiptWindow.receiptData = {
+      member: memberData,
+      payment: receiptData
+    };
+    receiptWindow.populateReceipt(memberData, receiptData);
+  };
+
+  // Save payment record to member
+  if (!member.payments) {
+    member.payments = [];
+  }
+  
+  const totalAmount = parseFloat(paymentData.membershipAmount || 0) + 
+                     parseFloat(paymentData.eventAmount || 0) + 
+                     parseFloat(paymentData.donationAmount || 0) + 
+                     parseFloat(paymentData.otherAmount || 0);
+
+  member.payments.push({
+    date: paymentData.date,
+    amount: totalAmount,
+    method: paymentData.method,
+    receiptNumber: receiptNumber,
+    breakdown: {
+      membership: parseFloat(paymentData.membershipAmount || 0),
+      event: parseFloat(paymentData.eventAmount || 0),
+      donation: parseFloat(paymentData.donationAmount || 0),
+      other: parseFloat(paymentData.otherAmount || 0)
+    }
+  });
+
+  // Update member totals
+  member.totalAmountPaid = (member.totalAmountPaid || 0) + totalAmount;
+  member.lastPaymentDate = paymentData.date;
+  member.lastPaymentAmount = totalAmount;
+  
+  // Mark as admin modified to preserve data
+  member.hasAdminPaymentChanges = true;
+
+  // Save to localStorage
+  localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+  
+  return receiptNumber;
 }
 
 // Initialize on page load
