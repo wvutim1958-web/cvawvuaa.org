@@ -603,8 +603,8 @@ function loadRealMembers() {
       city: member.city || "",
       state: member.state || "",
       zip: member.zip || "",
-      // Only use location if no individual city field exists
-      displayLocation: member.city ? `${member.city}${member.state ? ', ' + member.state : ''}` : (member.location || ""),
+      // Only show city/state if they exist, don't use location field (might contain email)
+      displayLocation: member.city ? `${member.city}${member.state ? ', ' + member.state : ''}` : "",
       status: member.duesStatus || member.status || "unknown",
       // Preserve financial data
       totalAmountPaid: member.totalAmountPaid || 0,
@@ -731,7 +731,7 @@ function renderMemberCards() {
           ` : ''}
         </div>
         <div class="member-actions">
-          <button class="action-btn small" onclick="editMember(${member.id})">✏️ Edit</button>
+          <button class="action-btn small" onclick="editMember('${member.id}')">✏️ Edit</button>
           <button class="action-btn small" onclick="emailMember('${member.email}')">📧 Email</button>
           <button class="action-btn small warning" onclick="deleteMember(${member.id})">🗑️ Delete</button>
         </div>
@@ -909,9 +909,12 @@ function exportRenewalList() {
 
 // Member action functions
 function editMember(id) {
-  const member = members.find(m => m.id === id);
+  const member = members.find(m => m.id == id || m.id === id);
   if (member) {
     showEditModal(member);
+  } else {
+    console.error('Member not found with ID:', id);
+    alert('Member not found. Please refresh the page and try again.');
   }
 }
 
