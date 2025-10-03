@@ -1,0 +1,881 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cast N Lines â€“ Ultimate Fishing Line Hub | Bass, Saltwater, Trolling, Crabbing & More!</title>
+  <meta name="description" content="Your complete fishing line destination! Bass lines, saltwater leaders, trolling wire, crab pot rope, line counters, spooling tools. Every type of fishing line for fresh & saltwater fishing." />
+  <link rel="icon" href="assets/favicon.png" />
+  <meta property="og:title" content="Cast N Lines â€“ Ultimate Fishing Line Hub" />
+  <meta property="og:description" content="Complete fishing line destination: Bass, saltwater, trolling, crabbing, tools & accessories. Every type for every angler!" />
+  <meta property="og:image" content="assets/logo.png" />
+  <meta property="og:type" content="website" />
+  
+  <style>
+    :root {
+      --primary: #0369a1;
+      --secondary: #059669; 
+      --accent: #3b82f6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #dc2626;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --ocean: #1e40af;
+      --freshwater: #059669;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6; 
+      color: var(--dark); 
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    }
+    
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+    
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--ocean) 0%, var(--primary) 50%, var(--secondary) 100%);
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .brand { 
+      display: flex; 
+      align-items: center; 
+      gap: 15px; 
+      font-size: 32px; 
+      font-weight: 800;
+    }
+    
+    .brand img { height: 60px; width: auto; }
+    
+    .logo-text {
+      background: linear-gradient(45deg, #ffffff, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    nav { 
+      display: flex; 
+      gap: 15px; 
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+    
+    nav a { 
+      color: white; 
+      text-decoration: none; 
+      font-weight: 600; 
+      opacity: 0.9; 
+      transition: all 0.3s; 
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    
+    nav a:hover { 
+      opacity: 1; 
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.3);
+      transform: translateY(-1px);
+    }
+    
+    /* Hero Section */
+    .hero { 
+      background: linear-gradient(135deg, var(--ocean) 0%, var(--primary) 50%, var(--secondary) 100%); 
+      color: white; 
+      padding: 5rem 0; 
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0,50 Q25,30 50,50 T100,50 L100,100 L0,100 Z" fill="rgba(255,255,255,0.05)"/></svg>') no-repeat center bottom;
+      background-size: 100% 50%;
+    }
+    
+    .hero-content { 
+      display: grid; 
+      grid-template-columns: 2fr 1fr; 
+      gap: 4rem; 
+      align-items: center; 
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero h1 { 
+      font-size: 4rem; 
+      margin-bottom: 1.5rem; 
+      line-height: 1.1; 
+      font-weight: 900;
+    }
+    
+    .hero .subtitle {
+      font-size: 1.4rem; 
+      margin-bottom: 2rem; 
+      opacity: 0.95; 
+      line-height: 1.4;
+    }
+    
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    
+    .cta-button {
+      display: inline-block; 
+      background: var(--success); 
+      color: white; 
+      padding: 18px 35px;
+      border-radius: 10px; 
+      text-decoration: none; 
+      font-weight: 700; 
+      font-size: 1.1rem; 
+      transition: all 0.3s;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      border: 2px solid transparent;
+    }
+    
+    .cta-button:hover { 
+      background: #059669; 
+      transform: translateY(-3px); 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+    
+    .cta-secondary {
+      background: transparent;
+      border-color: white;
+      color: white;
+    }
+    
+    .cta-secondary:hover {
+      background: white;
+      color: var(--primary);
+    }
+    
+    .hero-stats {
+      background: rgba(255,255,255,0.1); 
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 15px; 
+      padding: 2.5rem; 
+      backdrop-filter: blur(10px);
+    }
+    
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #93c5fd;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    /* Product Grid */
+    .products-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); 
+      gap: 2.5rem; 
+    }
+    
+    .product-card {
+      background: white; 
+      border-radius: 16px; 
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08); 
+      transition: all 0.4s; 
+      border: 1px solid #e2e8f0;
+      position: relative;
+    }
+    
+    .product-card:hover { 
+      transform: translateY(-8px); 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
+    }
+    
+    .product-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--warning);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      z-index: 2;
+    }
+    
+    .product-image {
+      height: 200px;
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .product-content { padding: 2.5rem; }
+    
+    .product-category { 
+      color: var(--accent); 
+      font-weight: 700; 
+      font-size: 0.85rem; 
+      text-transform: uppercase; 
+      margin-bottom: 0.8rem; 
+      letter-spacing: 0.5px;
+    }
+    
+    .product-title { 
+      font-size: 1.5rem; 
+      font-weight: 700; 
+      margin-bottom: 0.8rem; 
+      color: var(--dark); 
+      line-height: 1.3;
+    }
+    
+    .product-price { 
+      font-size: 1.4rem; 
+      font-weight: 800; 
+      color: var(--success); 
+      margin-bottom: 1.5rem; 
+    }
+    
+    .product-features { 
+      list-style: none; 
+      margin-bottom: 2rem; 
+    }
+    
+    .product-features li { 
+      padding: 8px 0; 
+      font-size: 1rem; 
+      color: #475569; 
+      display: flex;
+      align-items: center;
+    }
+    
+    .product-features li::before { 
+      content: "âœ“"; 
+      color: var(--success); 
+      font-weight: 900; 
+      margin-right: 12px; 
+      font-size: 1.1rem;
+    }
+    
+    .product-actions { 
+      display: flex; 
+      flex-wrap: wrap;
+      gap: 12px; 
+    }
+    
+    .btn { 
+      flex: 1; 
+      min-width: 130px;
+      padding: 14px 20px; 
+      border-radius: 8px; 
+      text-decoration: none; 
+      text-align: center; 
+      font-weight: 700; 
+      font-size: 0.95rem; 
+      transition: all 0.3s; 
+      display: inline-block;
+      border: 2px solid transparent;
+    }
+    
+    .btn-amazon { 
+      background: #ff9900; 
+      color: white; 
+    }
+    
+    .btn-amazon:hover { 
+      background: #e68900; 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 153, 0, 0.3);
+    }
+    
+    .btn-basspro { 
+      background: #2563eb; 
+      color: white; 
+    }
+    
+    .btn-basspro:hover { 
+      background: #1d4ed8; 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+    }
+    
+    .section {
+      margin-bottom: 6rem;
+      padding: 4rem 0;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    
+    .section-title { 
+      font-size: 3rem; 
+      margin-bottom: 1rem; 
+      color: var(--primary); 
+      font-weight: 800;
+    }
+    
+    .section-subtitle {
+      font-size: 1.3rem;
+      color: #64748b;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* Footer */
+    footer { 
+      background: linear-gradient(135deg, var(--dark), #0f172a); 
+      color: white; 
+      padding: 4rem 0 2rem; 
+      margin-top: 6rem; 
+    }
+    
+    .footer-content { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+      gap: 3rem; 
+      margin-bottom: 3rem; 
+    }
+    
+    .footer-section h4 { 
+      margin-bottom: 1.5rem; 
+      color: #93c5fd;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    
+    .footer-section p, .footer-section li { 
+      opacity: 0.8; 
+      line-height: 1.8;
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-section ul {
+      list-style: none;
+    }
+    
+    .footer-section a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-section a:hover {
+      color: #93c5fd;
+    }
+    
+    .footer-bottom { 
+      text-align: center; 
+      padding-top: 2rem; 
+      border-top: 1px solid #374151; 
+      opacity: 0.7; 
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-content { 
+        grid-template-columns: 1fr; 
+        text-align: center; 
+        gap: 2rem;
+      }
+      
+      .hero h1 { 
+        font-size: 3rem; 
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header-content { 
+        flex-direction: column; 
+        gap: 1rem; 
+        text-align: center;
+      }
+      
+      .brand {
+        font-size: 24px;
+      }
+      
+      nav { 
+        justify-content: center; 
+        gap: 10px;
+      }
+      
+      nav a {
+        font-size: 12px;
+        padding: 6px 8px;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero .subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .products-grid { 
+        grid-template-columns: 1fr; 
+      }
+      
+      .btn { 
+        min-width: 100px;
+        font-size: 0.85rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="brand">
+          <span class="logo-text">ðŸŽ£ Cast N Lines</span>
+        </div>
+        <nav>
+          <a href="#freshwater">Freshwater</a>
+          <a href="#saltwater">Saltwater</a>
+          <a href="#trolling">Trolling</a>
+          <a href="#crabbing">Crabbing</a>
+          <a href="#tools">Tools</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div>
+          <h1>Every Line for Every Fish</h1>
+          <p class="subtitle">From bass fishing to deep sea trolling, crab lines to fly fishing leaders - we're your complete fishing line headquarters. Expert reviews, unbeatable deals, and everything you need to land your next trophy!</p>
+          <div class="cta-group">
+            <a href="#freshwater" class="cta-button">Shop Freshwater Lines</a>
+            <a href="#saltwater" class="cta-button cta-secondary">Saltwater Gear</a>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <h3>ðŸŽ£ Why Anglers Choose Us</h3>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <span class="stat-number">500+</span>
+              <span class="stat-label">Products Tested</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">15</span>
+              <span class="stat-label">Fishing Types</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">50K+</span>
+              <span class="stat-label">Happy Anglers</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">24/7</span>
+              <span class="stat-label">Expert Advice</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="container">
+      
+      <!-- Freshwater Section -->
+      <section id="freshwater" class="section">
+        <div class="section-header">
+          <h2 class="section-title">ðŸŽ£ Freshwater Fishing Lines</h2>
+          <p class="section-subtitle">Bass, trout, walleye, and panfish lines. From ultra-light finesse to heavy cover punching.</p>
+        </div>
+        
+        <div class="products-grid">
+          <article class="product-card">
+            <div class="product-badge">Best Seller</div>
+            <div class="product-image">Berkley Trilene XL</div>
+            <div class="product-content">
+              <div class="product-category">Monofilament</div>
+              <h3 class="product-title">Berkley Trilene XL - Bass Mono</h3>
+              <div class="product-price">$8 - $15</div>
+              <ul class="product-features">
+                <li>Extra limp for perfect casting</li>
+                <li>Crystal clear invisibility</li>
+                <li>Superior knot strength</li>
+                <li>4-25lb test available</li>
+                <li>Perfect for bass, walleye, crappie</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=berkley+trilene+xl+monofilament+fishing+line&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=berkley+trilene+xl+monofilament" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-badge">Pro Choice</div>
+            <div class="product-image">Seaguar InvizX</div>
+            <div class="product-content">
+              <div class="product-category">Fluorocarbon</div>
+              <h3 class="product-title">Seaguar InvizX Fluoro</h3>
+              <div class="product-price">$18 - $32</div>
+              <ul class="product-features">
+                <li>100% pure fluorocarbon</li>
+                <li>Completely invisible underwater</li>
+                <li>Soft & manageable</li>
+                <li>Excellent sensitivity</li>
+                <li>Perfect for clear water bass</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=seaguar+invizx+fluorocarbon+fishing+line&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=seaguar+invizx+fluorocarbon" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-badge">Tournament</div>
+            <div class="product-image">PowerPro Spectra</div>
+            <div class="product-content">
+              <div class="product-category">Braided</div>
+              <h3 class="product-title">PowerPro Super Slick V2</h3>
+              <div class="product-price">$22 - $45</div>
+              <ul class="product-features">
+                <li>8-carrier Spectra fiber</li>
+                <li>Zero stretch sensitivity</li>
+                <li>Ultra-thin diameter</li>
+                <li>Moss green stealth</li>
+                <li>Flippin', froggin', heavy cover</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=powerpro+super+slick+v2+braided+line&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=powerpro+super+slick+v2" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Saltwater Section -->
+      <section id="saltwater" class="section">
+        <div class="section-header">
+          <h2 class="section-title">ðŸŒŠ Saltwater & Ocean Lines</h2>
+          <p class="section-subtitle">Built for the salt. Surf fishing, offshore, inshore - corrosion resistant lines that handle big fish.</p>
+        </div>
+        
+        <div class="products-grid">
+          <article class="product-card">
+            <div class="product-badge">Salt Tough</div>
+            <div class="product-image">Ande Monster</div>
+            <div class="product-content">
+              <div class="product-category">Monofilament</div>
+              <h3 class="product-title">Ande Monster Monofilament</h3>
+              <div class="product-price">$15 - $35</div>
+              <ul class="product-features">
+                <li>Ultra-high molecular weight</li>
+                <li>Maximum abrasion resistance</li>
+                <li>Superior knot strength</li>
+                <li>20-130lb test range</li>
+                <li>Big game saltwater proven</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=ande+monster+monofilament+saltwater&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=ande+monster+monofilament" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-badge">Offshore</div>
+            <div class="product-image">Seaguar Blue Label</div>
+            <div class="product-content">
+              <div class="product-category">Fluorocarbon Leader</div>
+              <h3 class="product-title">Seaguar Blue Label Leader</h3>
+              <div class="product-price">$25 - $55</div>
+              <ul class="product-features">
+                <li>100% fluorocarbon leader</li>
+                <li>Invisible to fish</li>
+                <li>Superior shock strength</li>
+                <li>25-200lb test available</li>
+                <li>Tuna, marlin, shark leader</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=seaguar+blue+label+fluorocarbon+leader&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=seaguar+blue+label+leader" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-badge">Inshore</div>
+            <div class="product-image">Sufix 832 Coastal</div>
+            <div class="product-content">
+              <div class="product-category">Braided</div>
+              <h3 class="product-title">Sufix 832 Coastal Camo</h3>
+              <div class="product-price">$28 - $65</div>
+              <ul class="product-features">
+                <li>8 fibers + GORE performance</li>
+                <li>Coastal camo coloring</li>
+                <li>Superior casting distance</li>
+                <li>Incredible abrasion resistance</li>
+                <li>Redfish, snook, tarpon ready</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=sufix+832+coastal+camo+braided&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=sufix+832+coastal+camo" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Trolling Section -->
+      <section id="trolling" class="section">
+        <div class="section-header">
+          <h2 class="section-title">âš“ Trolling & Deep Sea Lines</h2>
+          <p class="section-subtitle">Wire lines, lead core, copper, and heavy monofilament for deep water trolling success.</p>
+        </div>
+        
+        <div class="products-grid">
+          <article class="product-card">
+            <div class="product-badge">Deep Sea</div>
+            <div class="product-image">Mason Tackle Wire</div>
+            <div class="product-content">
+              <div class="product-category">Stainless Wire</div>
+              <h3 class="product-title">Mason Stainless Steel Wire</h3>
+              <div class="product-price">$35 - $85</div>
+              <ul class="product-features">
+                <li>316 stainless steel construction</li>
+                <li>Kink-resistant design</li>
+                <li>30-60lb test range</li>
+                <li>500-1000ft spools</li>
+                <li>Deep trolling for tuna, wahoo</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=mason+stainless+steel+trolling+wire&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=mason+stainless+steel+wire" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-badge">Great Lakes</div>
+            <div class="product-image">Sufix Lead Core</div>
+            <div class="product-content">
+              <div class="product-category">Lead Core</div>
+              <h3 class="product-title">Sufix Lead Core Trolling Line</h3>
+              <div class="product-price">$45 - $95</div>
+              <ul class="product-features">
+                <li>Metered color-coded segments</li>
+                <li>18-27lb test options</li>
+                <li>Consistent sink rate</li>
+                <li>100-200yd spools</li>
+                <li>Perfect for salmon, trout trolling</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=sufix+lead+core+trolling+line&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=sufix+lead+core+line" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-badge">Precision</div>
+            <div class="product-image">Copper Trolling Line</div>
+            <div class="product-content">
+              <div class="product-category">Copper Wire</div>
+              <h3 class="product-title">32lb Copper Trolling Wire</h3>
+              <div class="product-price">$65 - $125</div>
+              <ul class="product-features">
+                <li>Pure copper construction</li>
+                <li>Controlled descent rate</li>
+                <li>32lb breaking strength</li>
+                <li>300-500ft lengths</li>
+                <li>Salmon & steelhead standard</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=32lb+copper+trolling+wire+line&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=copper+trolling+line" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Crabbing Section -->
+      <section id="crabbing" class="section">
+        <div class="section-header">
+          <h2 class="section-title">ðŸ¦€ Crab & Lobster Lines</h2>
+          <p class="section-subtitle">Heavy-duty ropes, trap lines, and crab pot setups. Built tough for commercial and recreational crabbing.</p>
+        </div>
+        
+        <div class="products-grid">
+          <article class="product-card">
+            <div class="product-badge">Commercial</div>
+            <div class="product-image">Poly Crab Rope</div>
+            <div class="product-content">
+              <div class="product-category">Polypropylene Rope</div>
+              <h3 class="product-title">5/16" Poly Crab Pot Rope</h3>
+              <div class="product-price">$45 - $85</div>
+              <ul class="product-features">
+                <li>UV resistant polypropylene</li>
+                <li>Floats on water surface</li>
+                <li>600lb working load</li>
+                <li>300-600ft lengths</li>
+                <li>Bright visibility colors</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=crab+pot+rope+polypropylene+5%2F16&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=crab+pot+rope" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-badge">Tools</div>
+            <div class="product-image">Line Counter</div>
+            <div class="product-content">
+              <div class="product-category">Line Counter</div>
+              <h3 class="product-title">Digital Line Counter</h3>
+              <div class="product-price">$85 - $145</div>
+              <ul class="product-features">
+                <li>Digital LCD display</li>
+                <li>Accurate to 1 foot</li>
+                <li>Memory for multiple depths</li>
+                <li>Trolling speed calculator</li>
+                <li>Essential for precise trolling</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=digital+fishing+line+counter+trolling&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=digital+line+counter" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-badge">Essential</div>
+            <div class="product-image">Line Spooler</div>
+            <div class="product-content">
+              <div class="product-category">Spooling System</div>
+              <h3 class="product-title">Berkley Portable Line Spooler</h3>
+              <div class="product-price">$35 - $65</div>
+              <ul class="product-features">
+                <li>Holds multiple spool sizes</li>
+                <li>Adjustable tension control</li>
+                <li>Portable & lightweight</li>
+                <li>Prevents line twist</li>
+                <li>Perfect line spooling every time</li>
+              </ul>
+              <div class="product-actions">
+                <a href="https://www.amazon.com/s?k=berkley+portable+line+spooler+station&tag=castnfish02-20" target="_blank" class="btn btn-amazon">ðŸ›’ Amazon</a>
+                <a href="https://www.basspro.com/shop/en/search?Ntt=berkley+line+spooler" target="_blank" class="btn btn-basspro">ðŸŽ£ Bass Pro</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>ðŸŽ£ About Cast N Lines</h4>
+          <p>We're the ultimate destination for every type of fishing line imaginable. From weekend bass fishing to commercial crabbing operations, our expert team tests and reviews every product to help you make the right choice.</p>
+          <p>Real anglers, real testing, honest recommendations.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>ðŸ’° Legal Information</h4>
+          <p><strong>Affiliate Disclosure:</strong> Cast N Lines participates in affiliate programs including Amazon Associates (ID: castnfish02-20), Bass Pro Shops, and Cabela's. We earn from qualifying purchases made through our links at no extra cost to you.</p>
+          <p>This helps us provide free, comprehensive reviews and maintain our independence.</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 Cast N Lines - The Ultimate Fishing Line Headquarters | Every Line for Every Fish | Expert Reviews & Unbeatable Deals</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Cast N Lines",
+    "alternateName": "Ultimate Fishing Line Hub",
+    "url": "https://castnlines.com",
+    "description": "Complete fishing line destination for bass, saltwater, trolling, crabbing, tools and specialty fishing applications",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Cast N Lines",
+      "description": "Expert fishing line reviews and recommendations"
+    }
+  }
+  </script>
+
+</body>
+</html>

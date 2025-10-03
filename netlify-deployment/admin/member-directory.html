@@ -543,77 +543,81 @@
 // Real member data loaded from CSV - starts empty until imported
 let members = [];
 
-// Load real member data using unified system
+// Load real member data from localStorage (shared with advanced member manager)
 function loadRealMembers() {
-  console.log('🔄 Loading members using unified system...');
+  // Try to load from the main members storage first
+  const savedMembers = localStorage.getItem('cvcwvuaa-members');
   
-  // Use unified system - single source of truth
-  let memberData = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
+  // Also check for directory-specific storage (for bidirectional sync)
+  const directorySavedMembers = localStorage.getItem('cvcwvuaa-directory-members');
   
-  // Fallback check for directory-specific data
-  if (memberData.length === 0) {
-    memberData = JSON.parse(localStorage.getItem('cvcwvuaa-directory-members') || '[]');
-    if (memberData.length > 0) {
-      // If we found directory data, sync it back to main storage
-      localStorage.setItem('cvcwvuaa-members', JSON.stringify(memberData));
-      console.log('📋 Synced directory data back to main storage');
+  // Get sync timestamp to determine which data is newer
+  const lastSync = localStorage.getItem('cvcwvuaa-last-sync');
+  const lastDirectoryUpdate = localStorage.getItem('cvcwvuaa-directory-last-update');
+  
+  let memberData = [];
+  
+  // Use the most recent data source
+  if (savedMembers) {
+    try {
+      memberData = JSON.parse(savedMembers);
+      console.log(`Loaded ${memberData.length} members from main storage`);
+    } catch (e) {
+      console.error('Error loading saved members:', e);
     }
   }
   
-  if (memberData.length === 0) {
-    console.log('❌ No member data found');
-    members = [];
-    return;
+  // If we have directory-specific data and it's newer, use that
+  if (directorySavedMembers && (!lastSync || (lastDirectoryUpdate && lastDirectoryUpdate > lastSync))) {
+    try {
+      const directoryData = JSON.parse(directorySavedMembers);
+      if (directoryData.length > 0) {
+        memberData = directoryData;
+        console.log(`Using directory-specific data: ${memberData.length} members`);
+      }
+    } catch (e) {
+      console.error('Error loading directory members:', e);
+    }
   }
   
-  // Convert to directory format preserving ALL address data
+  // Convert advanced manager data to directory format - DO NOT override address fields with defaults
   members = memberData.map((member, index) => {
-    // Debug first few members
+    // Debug logging for the first few members to see what data we have
     if (index < 3) {
-      console.log(`� Member ${index + 1}: ${member.name}`, {
+      console.log(`🔍 Loading member ${index + 1} (${member.name}):`, member);
+      console.log(`   Address fields:`, {
         streetAddress: member.streetAddress,
         city: member.city,
         state: member.state,
-        zip: member.zipCode || member.zip,
-        email: member.email
+        zip: member.zip,
+        fullAddress: member.fullAddress
       });
     }
     
     return {
       ...member,
-      // Basic info
-      classYear: member.year || member.classYear || "Alumni",
+      classYear: member.year || member.classYear || "Unknown",
       major: member.major || "Alumni",
-      
-      // Address fields - preserve existing data, no overrides
-      streetAddress: member.streetAddress || member.address || "",
+      // IMPORTANT: Preserve actual address data from CSV - don't override with defaults
+      streetAddress: member.streetAddress || "",
       city: member.city || "",
       state: member.state || "",
-      zip: member.zipCode || member.zip || "",
-      
-      // Display location using actual address components
-      displayLocation: member.city ? `${member.city}${member.state ? ', ' + member.state : ''}` : "",
-      
-      // Status
+      zip: member.zip || "",
+      // Only use location if no individual city field exists
+      displayLocation: member.city ? `${member.city}${member.state ? ', ' + member.state : ''}` : (member.location || ""),
       status: member.duesStatus || member.status || "unknown",
-      
-      // Financial data
+      // Preserve financial data
       totalAmountPaid: member.totalAmountPaid || 0,
       scholarshipAmount: member.scholarshipAmount || 0,
       duesAmount: member.duesAmount || 0,
       generalFundAmount: member.generalFundAmount || 0,
-      
-      // Admin flags
+      // Preserve admin change flags
       hasAdminFinancialChanges: member.hasAdminFinancialChanges || false,
       hasAdminPaymentChanges: member.hasAdminPaymentChanges || false
     };
   });
   
-  console.log(`✅ Unified system loaded: ${members.length} members total`);
-  
-  // Keep both storages in sync
-  localStorage.setItem('cvcwvuaa-directory-members', JSON.stringify(memberData));
-  localStorage.setItem('cvcwvuaa-directory-last-update', new Date().toISOString());
+  console.log(`Directory loaded: ${members.length} members total`);
 }
 
 // Save directory changes back to main storage
@@ -727,7 +731,7 @@ function renderMemberCards() {
           ` : ''}
         </div>
         <div class="member-actions">
-          <button class="action-btn small" onclick="editMember('${member.id}')">✏️ Edit</button>
+          <button class="action-btn small" onclick="editMember(${member.id})">✏️ Edit</button>
           <button class="action-btn small" onclick="emailMember('${member.email}')">📧 Email</button>
           <button class="action-btn small warning" onclick="deleteMember(${member.id})">🗑️ Delete</button>
         </div>
@@ -905,12 +909,9 @@ function exportRenewalList() {
 
 // Member action functions
 function editMember(id) {
-  const member = members.find(m => m.id == id || m.id === id);
+  const member = members.find(m => m.id === id);
   if (member) {
     showEditModal(member);
-  } else {
-    console.error('Member not found with ID:', id);
-    alert('Member not found. Please refresh the page and try again.');
   }
 }
 
@@ -1017,7 +1018,7 @@ function showEditModal(member) {
       
       <div style="text-align: right; margin-top: 1.5rem;">
         <button onclick="closeEditModal()" style="background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 6px; margin-right: 10px; cursor: pointer;">Cancel</button>
-        <button onclick="saveMemberEdits('${member.id}')" style="background: var(--wvu-blue, #002855); color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Save Changes</button>
+        <button onclick="saveMemberEdits(${member.id})" style="background: var(--wvu-blue, #002855); color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Save Changes</button>
       </div>
     </div>
   `;
@@ -1026,12 +1027,8 @@ function showEditModal(member) {
 }
 
 function saveMemberEdits(memberId) {
-  const member = members.find(m => m.id == memberId || m.id === memberId);
-  if (!member) {
-    console.error('Member not found for save with ID:', memberId);
-    alert('Member not found. Please refresh the page and try again.');
-    return;
-  }
+  const member = members.find(m => m.id === memberId);
+  if (!member) return;
   
   // Get updated values from form
   member.name = document.getElementById('editName').value;
@@ -1056,10 +1053,6 @@ function saveMemberEdits(memberId) {
   
   // Save to localStorage so it syncs with advanced member manager
   localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
-  
-  // Also update the directory-members storage for full sync
-  localStorage.setItem('cvcwvuaa-directory-members', JSON.stringify(members));
-  localStorage.setItem('cvcwvuaa-directory-last-update', new Date().toISOString());
   
   // Refresh the display
   renderMemberCards();

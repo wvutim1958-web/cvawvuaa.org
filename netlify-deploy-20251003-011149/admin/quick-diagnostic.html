@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCWVUAA Quick Diagnostic</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 1000px;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CVCWVUAA Quick Diagnostic</h1>
+        
+        <button onclick="checkLocalStorage()">Check localStorage</button>
+        <button onclick="testMemberAccess()">Test Member Access</button>
+        <button onclick="showSampleMembers()">Show Sample Members</button>
+        <button onclick="fixAddressIssues()">Fix Address Issues</button>
+        
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function output(message, type = 'result') {
+            const div = document.getElementById('output');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${type}`;
+            resultDiv.textContent = message;
+            div.appendChild(resultDiv);
+        }
+        
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '';
+        }
+        
+        function checkLocalStorage() {
+            clearOutput();
+            output('=== LOCALSTORAGE CHECK ===');
+            
+            // Get all localStorage keys
+            const allKeys = Object.keys(localStorage);
+            output(`Total localStorage keys: ${allKeys.length}`);
+            output(`All keys: ${allKeys.join(', ')}`);
+            
+            // Check specific member keys
+            const memberKeys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members', 'memberData'];
+            
+            memberKeys.forEach(key => {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed)) {
+                            output(`✅ ${key}: ${parsed.length} members found`, 'success');
+                        } else {
+                            output(`⚠️ ${key}: Data exists but not an array`, 'error');
+                        }
+                    } catch (e) {
+                        output(`❌ ${key}: Parse error - ${e.message}`, 'error');
+                    }
+                } else {
+                    output(`❌ ${key}: No data found`);
+                }
+            });
+        }
+        
+        function testMemberAccess() {
+            clearOutput();
+            output('=== MEMBER ACCESS TEST ===');
+            
+            // Try the same logic as receipt generator
+            const memberKeys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members', 'memberData'];
+            let members = [];
+            let foundKey = null;
+            
+            for (const key of memberKeys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            members = parsed;
+                            foundKey = key;
+                            break;
+                        }
+                    } catch (e) {
+                        output(`Error with key ${key}: ${e.message}`, 'error');
+                    }
+                }
+            }
+            
+            if (members.length > 0) {
+                output(`✅ SUCCESS: Found ${members.length} members using key: ${foundKey}`, 'success');
+                output(`First member name: ${members[0].name || 'No name field'}`);
+                output(`First member email: ${members[0].email || 'No email field'}`);
+            } else {
+                output(`❌ FAILED: No members found`, 'error');
+            }
+        }
+        
+        function showSampleMembers() {
+            clearOutput();
+            output('=== SAMPLE MEMBER DATA ===');
+            
+            // Get members using same logic
+            const memberKeys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members', 'memberData'];
+            let members = [];
+            
+            for (const key of memberKeys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            members = parsed;
+                            break;
+                        }
+                    } catch (e) {
+                        continue;
+                    }
+                }
+            }
+            
+            if (members.length > 0) {
+                // Show first 3 members
+                members.slice(0, 3).forEach((member, i) => {
+                    output(`--- Member ${i + 1} ---`);
+                    output(`Name: ${member.name || 'MISSING'}`);
+                    output(`Email: ${member.email || 'MISSING'}`);
+                    output(`Phone: ${member.phone || 'MISSING'}`);
+                    output(`streetAddress: ${member.streetAddress || 'MISSING'}`);
+                    output(`city: ${member.city || 'MISSING'}`);
+                    output(`state: ${member.state || 'MISSING'}`);
+                    output(`zip: ${member.zip || 'MISSING'}`);
+                    output(`address: ${member.address || 'MISSING'}`);
+                    output(`fullAddress: ${member.fullAddress || 'MISSING'}`);
+                    output(''); // blank line
+                });
+                
+                // Look for Buckley specifically
+                const buckley = members.find(m => 
+                    (m.name && m.name.toLowerCase().includes('buckley')) ||
+                    (m.email && m.email.toLowerCase().includes('buckley'))
+                );
+                
+                if (buckley) {
+                    output('--- BUCKLEY MEMBER FOUND ---');
+                    output(JSON.stringify(buckley, null, 2));
+                }
+            } else {
+                output('No members to show', 'error');
+            }
+        }
+        
+        function fixAddressIssues() {
+            clearOutput();
+            output('=== FIXING ADDRESS ISSUES ===');
+            
+            // Get members
+            const memberKeys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members', 'memberData'];
+            let members = [];
+            let foundKey = null;
+            
+            for (const key of memberKeys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            members = parsed;
+                            foundKey = key;
+                            break;
+                        }
+                    } catch (e) {
+                        continue;
+                    }
+                }
+            }
+            
+            if (members.length === 0) {
+                output('No members found to fix', 'error');
+                return;
+            }
+            
+            let fixedCount = 0;
+            
+            members.forEach((member, index) => {
+                let memberFixed = false;
+                
+                // Check if city field contains what looks like a last name
+                if (member.city && /^[A-Z][a-z]+$/.test(member.city.trim()) && member.city.length < 15) {
+                    output(`Fixing member ${index + 1}: Moving "${member.city}" from city to name`);
+                    
+                    if (member.name && !member.name.includes(member.city)) {
+                        member.name += ' ' + member.city;
+                    } else if (!member.name) {
+                        member.name = member.city;
+                    }
+                    
+                    delete member.city;
+                    memberFixed = true;
+                }
+                
+                // Check streetAddress field
+                if (member.streetAddress && /^[A-Z][a-z]+$/.test(member.streetAddress.trim()) && member.streetAddress.length < 15) {
+                    output(`Fixing member ${index + 1}: Moving "${member.streetAddress}" from streetAddress to name`);
+                    
+                    if (member.name && !member.name.includes(member.streetAddress)) {
+                        member.name += ' ' + member.streetAddress;
+                    } else if (!member.name) {
+                        member.name = member.streetAddress;
+                    }
+                    
+                    delete member.streetAddress;
+                    memberFixed = true;
+                }
+                
+                if (memberFixed) {
+                    fixedCount++;
+                }
+            });
+            
+            if (fixedCount > 0) {
+                // Save back to localStorage
+                localStorage.setItem(foundKey, JSON.stringify(members));
+                output(`✅ Fixed ${fixedCount} members. Changes saved to ${foundKey}`, 'success');
+            } else {
+                output('No address issues found to fix');
+            }
+        }
+        
+        // Auto-run basic check on load
+        window.addEventListener('load', () => {
+            checkLocalStorage();
+            testMemberAccess();
+        });
+    </script>
+</body>
+</html>

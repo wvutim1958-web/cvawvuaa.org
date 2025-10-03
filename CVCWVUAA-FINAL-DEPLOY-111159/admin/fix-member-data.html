@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix Member Data - CVCWVUAA</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        h1 { color: #003366; }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 4px; 
+            border-left: 4px solid #007acc; 
+            background: #e6f3ff; 
+        }
+        .error { border-left-color: #cc0000; background: #ffe6e6; }
+        .success { border-left-color: #00cc00; background: #e6ffe6; }
+        button {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover { background: #004488; }
+        .data-display {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Member Data Fix Tool</h1>
+        
+        <div class="status" id="status">
+            Click "Check Data" to examine localStorage and identify issues.
+        </div>
+
+        <button onclick="checkAllData()">🔍 Check Data</button>
+        <button onclick="fixAllIssues()">🔨 Fix All Issues</button>
+        <button onclick="testReceiptGenerator()">🧾 Test Receipt Generator</button>
+        <button onclick="clearAndReload()">🔄 Clear & Reload</button>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const status = document.getElementById('status');
+            if (type === 'error') {
+                status.className = 'status error';
+            } else if (type === 'success') {
+                status.className = 'status success';
+            } else {
+                status.className = 'status';
+            }
+            status.innerHTML = message;
+            console.log(message);
+        }
+
+        function checkAllData() {
+            log('Checking localStorage data...');
+            const results = document.getElementById('results');
+            let output = '<h3>localStorage Analysis:</h3>';
+            
+            // Check all localStorage keys
+            output += '<div class="data-display">';
+            output += '<strong>All localStorage keys:</strong><br>';
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                output += `Key: ${key} | Size: ${value ? value.length : 0} chars<br>`;
+            }
+            output += '</div>';
+
+            // Try different member keys
+            const possibleKeys = [
+                'cvcwvuaa-members',
+                'cvcwvuaa_members', 
+                'members',
+                'memberData',
+                'CVCWVUAA_members'
+            ];
+
+            let membersFound = null;
+            let workingKey = null;
+
+            for (const key of possibleKeys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            membersFound = parsed;
+                            workingKey = key;
+                            output += `<div class="data-display success">
+                                <strong>FOUND MEMBERS in key: ${key}</strong><br>
+                                Count: ${parsed.length}<br>
+                                First member: ${JSON.stringify(parsed[0], null, 2)}
+                            </div>`;
+                            break;
+                        }
+                    } catch (e) {
+                        output += `<div class="data-display error">Key ${key}: Invalid JSON</div>`;
+                    }
+                }
+            }
+
+            if (!membersFound) {
+                output += '<div class="data-display error"><strong>NO MEMBER DATA FOUND!</strong></div>';
+                log('❌ No member data found in localStorage', 'error');
+            } else {
+                // Analyze member structure
+                const sample = membersFound[0];
+                output += '<div class="data-display">';
+                output += '<strong>Member Structure Analysis:</strong><br>';
+                output += `Sample member keys: ${Object.keys(sample).join(', ')}<br>`;
+                
+                // Check for address issues
+                if (sample.address && sample.lastName) {
+                    if (sample.address === sample.lastName) {
+                        output += '⚠️ ADDRESS CORRUPTION DETECTED: address field contains lastName<br>';
+                    }
+                }
+                output += '</div>';
+
+                log(`✅ Found ${membersFound.length} members in key: ${workingKey}`, 'success');
+            }
+
+            results.innerHTML = output;
+        }
+
+        function fixAllIssues() {
+            log('Attempting to fix all data issues...');
+            
+            // Find members data
+            const possibleKeys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members'];
+            let members = null;
+            let workingKey = null;
+
+            for (const key of possibleKeys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            members = parsed;
+                            workingKey = key;
+                            break;
+                        }
+                    } catch (e) {
+                        console.error(`Error parsing ${key}:`, e);
+                    }
+                }
+            }
+
+            if (!members) {
+                log('❌ No member data found to fix', 'error');
+                return;
+            }
+
+            // Fix issues
+            let fixedCount = 0;
+            members.forEach((member, index) => {
+                // Fix address corruption (address = lastName)
+                if (member.address === member.lastName) {
+                    member.address = ''; // Clear corrupted address
+                    fixedCount++;
+                }
+                
+                // Ensure all required fields exist
+                if (!member.id) member.id = index + 1;
+                if (!member.firstName) member.firstName = '';
+                if (!member.lastName) member.lastName = '';
+                if (!member.email) member.email = '';
+                if (!member.phone) member.phone = '';
+                if (!member.address) member.address = '';
+                if (!member.city) member.city = '';
+                if (!member.state) member.state = '';
+                if (!member.zip) member.zip = '';
+            });
+
+            // Save to standard key
+            localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+            
+            // Remove old keys if different
+            if (workingKey !== 'cvcwvuaa-members') {
+                localStorage.removeItem(workingKey);
+            }
+
+            log(`✅ Fixed ${fixedCount} address corruption issues. Data saved to 'cvcwvuaa-members'`, 'success');
+        }
+
+        function testReceiptGenerator() {
+            log('Testing receipt generator connection...');
+            
+            // Test member access like receipt generator does
+            const members = localStorage.getItem('cvcwvuaa-members');
+            if (!members) {
+                log('❌ Receipt generator test failed: No data in cvcwvuaa-members', 'error');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(members);
+                if (!Array.isArray(parsed) || parsed.length === 0) {
+                    log('❌ Receipt generator test failed: Invalid or empty member array', 'error');
+                    return;
+                }
+
+                log(`✅ Receipt generator test passed: ${parsed.length} members accessible`, 'success');
+                
+                // Open receipt generator
+                window.open('receipt-generator.html', '_blank');
+            } catch (e) {
+                log(`❌ Receipt generator test failed: JSON parse error - ${e.message}`, 'error');
+            }
+        }
+
+        function clearAndReload() {
+            if (confirm('This will clear all localStorage data. Continue?')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // Auto-run check on load
+        window.onload = function() {
+            setTimeout(checkAllData, 500);
+        };
+    </script>
+</body>
+</html>

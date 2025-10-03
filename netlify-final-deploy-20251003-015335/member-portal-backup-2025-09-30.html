@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Member Portal • CVCWVUAA - $25/year All Benefits</title>
+  <meta name="description" content="Member portal for the Central Virginia Chapter of WVU Alumni Association. Just $25/year gets you all member benefits - events, directory, resources, and more!">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/social-media.css">
+  <style>
+    .member-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .benefit-card {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border: 1px solid #dee2e6;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .benefit-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .benefit-card.premium {
+      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+      border-color: #ffc107;
+    }
+    .benefit-card.exclusive {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      border-color: #2196f3;
+    }
+    .login-section {
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .member-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #003366;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #5b6777;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+
+      <!-- About Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news.html">Latest News</a>
+          <a role="menuitem" href="/newsletters/">📧 Newsletter Archive</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">🔍</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrapper">
+
+    <h2>🔐 Member Portal</h2>
+    <p class="lead">All member benefits included - just $25/year for complete access!</p>
+    <div style="background: #e8f5e8; border: 1px solid #4caf50; border-radius: 6px; padding: 12px; margin: 16px 0; text-align: center;">
+      <p style="margin: 0; color: #2e7d32; font-weight: 600;">✅ Simplified Membership: One low price, all benefits included - no premium tiers!</p>
+    </div>
+
+    <!-- Login Section (shown when not logged in) -->
+    <div id="login-section" class="login-section">
+      <div class="card">
+        <h3>Member Login Required</h3>
+        <p>Access your member benefits, exclusive content, and connect with fellow Mountaineers.</p>
+        <div style="margin: 20px 0;">
+          <button class="btn" onclick="console.log('🔐 Main login clicked'); if(typeof showLogin === 'function') { console.log('✅ Calling showLogin()'); showLogin(); } else { console.error('❌ showLogin not available'); alert('❌ Login system not loaded. Functions available: ' + Object.keys(window).filter(k => k.includes('show')).join(', ')); }" style="margin-right: 8px;">🔐 Login</button>
+          <button class="btn outline" onclick="console.log('📝 Registration clicked'); if(typeof showRegistration === 'function') { console.log('✅ Calling showRegistration()'); showRegistration(); } else { console.error('❌ showRegistration not available'); alert('❌ Registration system not loaded.'); }">📝 Register</button>
+        </div>
+        <div style="margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: 6px; font-size: 14px;">
+          <strong>✨ Simplified Membership - Demo Accounts:</strong><br>
+          All members get the same benefits! Try these accounts:<br>
+          Member Account: <code>member@cvawvuaa.org</code> / <code>member123</code><br>
+          Another Member: <code>john.doe@email.com</code> / <code>password123</code><br><br>
+          <button onclick="console.log('✅ Button clicked!'); alert('✅ JS Basic Test: If you see this alert, JavaScript onclick is working!');" style="padding: 4px 8px; font-size: 12px; margin-right: 5px; background: #28a745; color: white; border: none; border-radius: 3px;">✅ JS Test</button>
+          <button onclick="console.log('🔧 Debug button clicked'); if(typeof testMemberPortal === 'function') { testMemberPortal(); } else { alert('❌ testMemberPortal function not found. Check console.'); }" style="padding: 4px 8px; font-size: 12px; margin-right: 5px;">� Debug Info</button>
+          <button onclick="console.log('🔐 Login button clicked'); if(typeof showLogin === 'function') { showLogin(); } else { alert('❌ showLogin function not found. Check console.'); }" style="padding: 4px 8px; font-size: 12px; margin-right: 5px;">🔐 Test Login</button>
+          <a href="simple-test.html" style="display: inline-block; padding: 4px 8px; font-size: 12px; text-decoration: none; background: #007bff; color: white; border-radius: 3px;">🚀 Simple Test</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Member Dashboard (shown when logged in) -->
+    <div id="member-section" style="display: none;">
+      
+      <!-- Member Profile -->
+      <div id="member-dashboard-content">
+        <!-- Content populated by JavaScript -->
+      </div>
+
+      <!-- Member Benefits Dashboard -->
+      <div class="member-dashboard">
+        
+        <!-- Event Access -->
+        <div class="benefit-card">
+          <h3>🎫 Event Access</h3>
+          <p>Priority RSVP access to all chapter events and activities.</p>
+          <div style="margin: 16px 0;">
+            <a href="events.html" class="btn">View Events</a>
+          </div>
+          <div class="member-only">
+            <p><small>✅ You have access to all events</small></p>
+          </div>
+        </div>
+
+        <!-- Newsletter Archive -->
+        <div class="benefit-card">
+          <h3>📧 Newsletter Access</h3>
+          <p>Full access to newsletter archives and exclusive member communications.</p>
+          <div style="margin: 16px 0;">
+            <a href="newsletters/index.html" class="btn">Newsletter Archive</a>
+          </div>
+          <div class="member-only">
+            <p><small>✅ Access to all newsletters</small></p>
+          </div>
+        </div>
+
+        <!-- Member Directory -->
+        <div class="benefit-card">
+          <h3>👥 Member Directory</h3>
+          <p>Connect with fellow alumni through our searchable member directory.</p>
+          <div style="margin: 16px 0;">
+            <a href="members/directory.html" class="btn">Browse Directory</a>
+          </div>
+          <div class="member-only">
+            <p><small>✅ Member Benefit</small></p>
+          </div>
+        </div>
+
+        <!-- Exclusive Content -->
+        <div class="benefit-card">
+          <h3>💎 Member Resources</h3>
+          <p>Access member content, insider updates, and exclusive alumni resources.</p>
+          <div style="margin: 16px 0;">
+            <a href="members/premium.html" class="btn">View Resources</a>
+          </div>
+          <div class="member-only">
+            <p><small>✅ Member Benefit</small></p>
+          </div>
+        </div>
+
+        <!-- Board Management -->
+        <div class="benefit-card board-only" style="display: none;">
+          <h3>🔧 Member Management</h3>
+          <p>Admin tools for managing member accounts and chapter operations.</p>
+          <div style="margin: 16px 0;">
+            <button class="btn" onclick="showMemberAdmin()">Manage Members</button>
+          </div>
+          <div class="board-only">
+            <p><small>🏛️ Board Member Access</small></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Member-Only Content Sections -->
+      <div class="member-only">
+        
+        <!-- Recent Activity -->
+        <div class="card" style="margin-top: 24px;">
+          <h3>📈 Recent Chapter Activity</h3>
+          <div id="member-activity">
+            <p style="color: #5b6777; font-style: italic;">Loading recent activity...</p>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card" style="margin-top: 24px;">
+          <h3>⚡ Quick Actions</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 16px;">
+            <button class="btn outline" onclick="window.location.href='/events.html'">🎫 RSVP to Events</button>
+            <button class="btn outline" onclick="window.location.href='/contact.html'">📞 Contact Board</button>
+            <button class="btn outline" onclick="window.location.href='/pay.html'">💳 Update Membership</button>
+            <button class="btn outline" onclick="doLogout()">🚪 Logout</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Premium-Only Content -->
+      <div class="premium-only" style="display: none;">
+        <div class="card" style="margin-top: 24px; background: linear-gradient(135deg, #fff3cd, #ffeaa7); border-color: #ffc107;">
+          <h3>💎 Premium Member Benefits</h3>
+          <p>Thank you for your premium membership! You have access to exclusive benefits:</p>
+          <ul>
+            <li>👥 Member Directory with networking opportunities</li>
+            <li>💎 Exclusive content and insider updates</li>
+            <li>⭐ Priority event access and seating</li>
+            <li>🎁 Exclusive member-only events</li>
+            <li>📧 Premium newsletter content</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Board-Only Admin Section -->
+      <div class="board-only" style="display: none;">
+        <div class="card" style="margin-top: 24px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-color: #2196f3;">
+          <h3>🏛️ Board Member Dashboard</h3>
+          <p>Administrative tools and chapter management resources.</p>
+          
+          <!-- Member Statistics -->
+          <div class="member-stats" id="member-stats">
+            <div class="stat-item">
+              <div class="stat-number" id="total-members">-</div>
+              <div class="stat-label">Total Members</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" id="active-members">-</div>
+              <div class="stat-label">Active</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number" id="pending-members">-</div>
+              <div class="stat-label">Pending</div>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px;">
+            <button class="btn" onclick="showMemberAdmin()">👥 Manage Members</button>
+            <a href="/admin/index.html" class="btn outline">📊 Admin Dashboard</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Membership Information -->
+    <div class="card" style="margin-top: 32px;">
+      <h3>💳 Membership Information</h3>
+      <p>Join the Central Virginia Chapter to unlock exclusive benefits and connect with fellow Mountaineers in your area.</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin: 20px 0;">
+        <div style="padding: 16px; background: #f8f9fa; border-radius: 8px;">
+          <h4 style="margin: 0 0 8px 0;">Regular Membership</h4>
+          <ul style="margin: 8px 0; padding-left: 20px; font-size: 14px;">
+            <li>Event access and RSVP</li>
+            <li>Newsletter subscriptions</li>
+            <li>Chapter communications</li>
+            <li>Community networking</li>
+          </ul>
+          <p style="margin: 12px 0 0 0;"><a href="/pay.html">Learn More →</a></p>
+        </div>
+        
+        <div style="padding: 16px; background: linear-gradient(135deg, #fff3cd, #ffeaa7); border-radius: 8px;">
+          <h4 style="margin: 0 0 8px 0;">💎 Premium Membership</h4>
+          <ul style="margin: 8px 0; padding-left: 20px; font-size: 14px;">
+            <li>All regular benefits</li>
+            <li>Member directory access</li>
+            <li>Exclusive content and events</li>
+            <li>Priority event access</li>
+          </ul>
+          <p style="margin: 12px 0 0 0;"><a href="/pay.html">Upgrade →</a></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+      <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
+
+<script>
+  // Year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+
+  // Mobile navigation
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+
+  // Dropdown functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropdowns = document.querySelectorAll('.menu.dropdown');
+    
+    dropdowns.forEach((menu) => {
+      const btn = menu.querySelector('.dropbtn');
+      if (!btn) return;
+      
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Close other dropdowns
+        dropdowns.forEach(otherMenu => {
+          if (otherMenu !== menu) {
+            otherMenu.classList.remove('open');
+            const otherBtn = otherMenu.querySelector('.dropbtn');
+            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+        
+        // Toggle this dropdown
+        const isOpen = menu.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.menu.dropdown')) {
+        dropdowns.forEach(menu => {
+          menu.classList.remove('open');
+          const btn = menu.querySelector('.dropbtn');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+  });
+
+  // Theme toggle functionality
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    });
+  }
+
+  // Helper functions for member portal (explicitly global)
+  console.log('=== Defining global functions ===');
+  
+  function showLogin() {
+    console.log('=== Login button clicked ===');
+    console.log('memberPortal type:', typeof memberPortal);
+    console.log('window.memberPortal type:', typeof window.memberPortal);
+    console.log('SimpleMemberPortal available:', typeof window.SimpleMemberPortal);
+    
+    // Try to get the portal object
+    let portal = window.memberPortal || window.SimpleMemberPortal;
+    
+    if (portal && typeof portal.showLoginModal === 'function') {
+      console.log('✅ Found working portal, showing login modal...');
+      try {
+        portal.showLoginModal();
+        console.log('✅ Login modal shown successfully');
+      } catch (error) {
+        console.error('❌ Error showing login modal:', error);
+        alert('Error opening login form: ' + error.message);
+      }
+    } else {
+      console.error('❌ No working member portal found');
+      console.log('Available portals:', {
+        'window.memberPortal': typeof window.memberPortal,
+        'window.SimpleMemberPortal': typeof window.SimpleMemberPortal,
+        'memberPortal': typeof memberPortal
+      });
+      
+      // Use backup portal
+      loadBackupMemberPortal();
+      if (window.memberPortal && window.memberPortal.showLoginModal) {
+        window.memberPortal.showLoginModal();
+      } else {
+        alert('Member Portal system unavailable. Please refresh the page and try again.');
+      }
+    }
+  }
+
+  function showRegistration() {
+    const portal = window.memberPortal || window.SimpleMemberPortal;
+    if (portal && portal.showRegistrationModal) {
+      portal.showRegistrationModal();
+    } else {
+      console.error('Member Portal not available');
+      alert('Registration: Coming soon! Please use demo accounts for now:\n\nmember@cvawvuaa.org / member123\njohn.doe@email.com / password123');
+    }
+  }
+
+  function doLogout() {
+    if (typeof memberPortal !== 'undefined' && memberPortal.logout) {
+      memberPortal.logout();
+      refreshUserStatus();
+    } else {
+      console.error('Member Portal not initialized yet');
+      alert('Please wait a moment and try again. The member portal is still loading.');
+    }
+  }
+
+  function testMemberPortal() {
+    console.log('=== Member Portal Debug Info ===');
+    console.log('typeof memberPortal:', typeof memberPortal);
+    console.log('memberPortal object:', memberPortal);
+    
+    if (typeof memberPortal !== 'undefined') {
+      console.log('memberPortal.initialized:', memberPortal.initialized);
+      console.log('memberPortal.showLoginModal:', typeof memberPortal.showLoginModal);
+      console.log('memberPortal.members:', Object.keys(memberPortal.members || {}));
+      console.log('memberPortal constructor:', memberPortal.constructor.name);
+      
+      // Test the function directly
+      if (typeof memberPortal.showLoginModal === 'function') {
+        console.log('showLoginModal function is available - testing...');
+        try {
+          memberPortal.showLoginModal();
+          console.log('showLoginModal executed successfully');
+        } catch (error) {
+          console.error('Error calling showLoginModal:', error);
+        }
+      }
+    }
+    
+    const debugInfo = `Debug Info (see console for details):
+Type: ${typeof memberPortal}
+Available: ${typeof memberPortal !== 'undefined'}
+Initialized: ${typeof memberPortal !== 'undefined' ? memberPortal.initialized : 'N/A'}
+Has showLoginModal: ${typeof memberPortal !== 'undefined' && typeof memberPortal.showLoginModal === 'function'}
+Members count: ${typeof memberPortal !== 'undefined' && memberPortal.members ? Object.keys(memberPortal.members).length : 'N/A'}
+Constructor: ${typeof memberPortal !== 'undefined' ? memberPortal.constructor.name : 'N/A'}`;
+    
+    alert(debugInfo);
+  }
+
+  // Make functions explicitly available on window object
+  window.showLogin = showLogin;
+  window.showRegistration = showRegistration;  
+  window.testMemberPortal = testMemberPortal;
+  
+  console.log('✅ Functions assigned to window object');
+  console.log('window.showLogin:', typeof window.showLogin);
+  console.log('window.showRegistration:', typeof window.showRegistration);
+  console.log('window.testMemberPortal:', typeof window.testMemberPortal);
+
+  // Member portal specific functions
+  function showExclusiveContent() {
+    const modal = memberPortal.createModal('💎 Exclusive Member Content', `
+      <div style="text-align: center; padding: 20px;">
+        <h4>Premium Content Coming Soon!</h4>
+        <p>We're preparing exclusive content for our premium members including:</p>
+        <ul style="text-align: left; display: inline-block;">
+          <li>📚 Career networking resources</li>
+          <li>🎥 Exclusive alumni interviews</li>
+          <li>📊 Chapter financial reports</li>
+          <li>🎁 Member-only event recordings</li>
+          <li>💼 Job opportunity alerts</li>
+        </ul>
+        <p style="margin-top: 20px;">Stay tuned for exciting updates!</p>
+      </div>
+    `);
+    document.body.appendChild(modal);
+  }
+
+  function showMemberAdmin() {
+    if (!memberPortal.currentUser || memberPortal.currentUser.memberType !== 'board') {
+      memberPortal.showNotification('Access denied: Board members only', 'error');
+      return;
+    }
+
+    const stats = memberPortal.getMemberStats();
+    const members = Object.values(memberPortal.members);
+    
+    const membersList = members.map(member => `
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 4px;">
+        <div>
+          <strong>${member.name}</strong> (${member.email})
+          <br><small>Type: ${member.memberType} | Status: ${member.status || 'active'}</small>
+        </div>
+        <div>
+          <button onclick="toggleMemberStatus('${member.email}')" style="padding: 4px 8px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;">
+            ${member.status === 'pending' ? 'Approve' : 'Edit'}
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    const modal = memberPortal.createModal('👥 Member Administration', `
+      <div style="margin-bottom: 16px;">
+        <h4>Member Statistics</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center;">
+          <div style="padding: 8px; background: #f8f9fa; border-radius: 4px;">
+            <div style="font-weight: bold; color: #28a745;">${stats.total}</div>
+            <div style="font-size: 12px;">Total</div>
+          </div>
+          <div style="padding: 8px; background: #f8f9fa; border-radius: 4px;">
+            <div style="font-weight: bold; color: #007bff;">${stats.active}</div>
+            <div style="font-size: 12px;">Active</div>
+          </div>
+          <div style="padding: 8px; background: #f8f9fa; border-radius: 4px;">
+            <div style="font-weight: bold; color: #ffc107;">${stats.pending}</div>
+            <div style="font-size: 12px;">Pending</div>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h4>All Members</h4>
+        <div style="max-height: 300px; overflow-y: auto;">
+          ${membersList}
+        </div>
+      </div>
+    `);
+
+    document.body.appendChild(modal);
+  }
+
+  function toggleMemberStatus(email) {
+    const member = memberPortal.members[email];
+    if (!member) return;
+
+    if (member.status === 'pending') {
+      member.status = 'active';
+      memberPortal.saveMembers();
+      memberPortal.showNotification(`${member.name} approved!`, 'success');
+    }
+    
+    // Refresh the modal
+    document.querySelector('[style*="fixed"]').remove();
+    showMemberAdmin();
+  }
+
+  // Load member activity
+  function loadMemberActivity() {
+    const activityContainer = document.getElementById('member-activity');
+    if (!activityContainer) return;
+
+    // Simulate recent activity
+    const activities = [
+      '🎫 New event posted: Alumni Social Night',
+      '📧 Monthly newsletter generated',
+      '👥 3 new member registrations pending',
+      '🏆 Scholarship fund reached $5,000 goal',
+      '📸 New photos added to gallery'
+    ];
+
+    const activityHtml = activities.map(activity => 
+      `<p style="margin: 8px 0; padding: 8px 12px; background: #f8f9fa; border-left: 3px solid #007bff; border-radius: 4px;">${activity}</p>`
+    ).join('');
+
+    activityContainer.innerHTML = activityHtml;
+  }
+
+  // Update member statistics for board members
+  function updateMemberStats() {
+    if (!memberPortal.currentUser || memberPortal.currentUser.memberType !== 'board') return;
+
+    const stats = memberPortal.getMemberStats();
+    if (stats) {
+      document.getElementById('total-members').textContent = stats.total;
+      document.getElementById('active-members').textContent = stats.active;
+      document.getElementById('pending-members').textContent = stats.pending;
+    }
+  }
+</script>
+
+<!-- Member Portal System -->
+<script>
+/**
+ * Inline Member Portal - Guaranteed to work since it's embedded directly
+ */
+console.log('🚀 Loading inline member portal...');
+
+// Create the member portal object directly in the HTML
+window.memberPortal = {
+  initialized: true,
+  currentUser: null,
+  
+  // Demo members data
+  demoMembers: {
+    'member@cvawvuaa.org': {
+      email: 'member@cvawvuaa.org',
+      name: 'Demo Member',
+      password: 'member123',
+      memberType: 'member'
+    },
+    'john.doe@email.com': {
+      email: 'john.doe@email.com', 
+      name: 'John Doe',
+      password: 'password123',
+      memberType: 'member'
+    }
+  },
+  
+  // Show login modal
+  showLoginModal: function() {
+    console.log('📋 Opening login modal...');
+    
+    // Remove any existing modal
+    const existing = document.querySelector('.member-login-modal');
+    if (existing) existing.remove();
+    
+    // Create modal HTML
+    const modalHTML = `
+      <div class="member-login-modal" style="
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5); z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+        font-family: Arial, sans-serif;
+      ">
+        <div style="
+          background: white; padding: 30px; border-radius: 10px; 
+          max-width: 400px; width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        ">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; color: #333;">🔐 Member Login</h3>
+            <button onclick="document.querySelector('.member-login-modal').remove()" style="
+              background: none; border: none; font-size: 24px; cursor: pointer;
+              color: #999; width: 30px; height: 30px; border-radius: 50%;
+            " onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='none'">×</button>
+          </div>
+          
+          <form onsubmit="window.memberPortal.handleLogin(event); return false;">
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: bold;">Email:</label>
+              <input type="email" id="login-email" required style="
+                width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;
+                box-sizing: border-box; font-size: 16px;
+              " placeholder="member@cvawvuaa.org">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: bold;">Password:</label>
+              <input type="password" id="login-password" required style="
+                width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;
+                box-sizing: border-box; font-size: 16px;
+              " placeholder="member123">
+            </div>
+            
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 20px;">
+              <button type="button" onclick="document.querySelector('.member-login-modal').remove()" style="
+                padding: 10px 20px; background: #6c757d; color: white; border: none; 
+                border-radius: 4px; cursor: pointer; font-size: 16px;
+              ">Cancel</button>
+              <button type="submit" style="
+                padding: 10px 20px; background: #007bff; color: white; border: none; 
+                border-radius: 4px; cursor: pointer; font-size: 16px;
+              ">Login</button>
+            </div>
+          </form>
+          
+          <div style="border-top: 1px solid #eee; padding-top: 15px; font-size: 14px; color: #666;">
+            <p style="margin: 0 0 10px 0;"><strong>Demo Accounts:</strong></p>
+            <div style="background: #f8f9fa; padding: 10px; border-radius: 4px;">
+              <p style="margin: 5px 0;">📧 <strong>member@cvawvuaa.org</strong> / member123</p>
+              <p style="margin: 5px 0;">📧 <strong>john.doe@email.com</strong> / password123</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // Add to page
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Close on outside click
+    const modal = document.querySelector('.member-login-modal');
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.remove();
+      }
+    });
+    
+    // Focus email field
+    setTimeout(() => {
+      document.getElementById('login-email').focus();
+    }, 100);
+  },
+  
+  // Handle login form submission
+  handleLogin: function(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    
+    console.log('🔍 Attempting login for:', email);
+    
+    // Check credentials
+    const member = this.demoMembers[email];
+    if (member && member.password === password) {
+      this.currentUser = member;
+      console.log('✅ Login successful for:', member.name);
+      
+      // Close modal
+      document.querySelector('.member-login-modal').remove();
+      
+      // Show success
+      this.showNotification('✅ Login successful! Welcome ' + member.name, 'success');
+      
+      // Update page to show logged-in state
+      this.updateLoginStatus();
+    } else {
+      console.log('❌ Login failed for:', email);
+      this.showNotification('❌ Invalid email or password. Try the demo accounts!', 'error');
+    }
+  },
+  
+  // Show registration modal (simplified)
+  showRegistrationModal: function() {
+    this.showNotification('📝 Registration coming soon! Please use demo accounts for now.', 'info');
+  },
+  
+  // Show notification
+  showNotification: function(message, type = 'info') {
+    // Remove existing notifications
+    const existing = document.querySelectorAll('.member-notification');
+    existing.forEach(n => n.remove());
+    
+    const colors = {
+      success: '#28a745',
+      error: '#dc3545', 
+      info: '#007bff'
+    };
+    
+    const notification = document.createElement('div');
+    notification.className = 'member-notification';
+    notification.style.cssText = `
+      position: fixed; top: 20px; right: 20px; z-index: 10000;
+      padding: 15px 20px; border-radius: 5px; color: white; font-weight: bold;
+      background: ${colors[type] || colors.info}; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      font-family: Arial, sans-serif; max-width: 300px;
+      animation: slideInRight 0.3s ease;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      }
+    }, 4000);
+  },
+  
+  // Update login status on page
+  updateLoginStatus: function() {
+    console.log('🔄 Updating login status...');
+    
+    const loginSection = document.getElementById('login-section');
+    const memberSection = document.getElementById('member-section');
+    
+    if (this.currentUser) {
+      console.log('👤 User logged in, showing member content');
+      if (loginSection) loginSection.style.display = 'none';
+      if (memberSection) memberSection.style.display = 'block';
+      
+      // Update member dashboard content
+      const dashboardContent = document.getElementById('member-dashboard-content');
+      if (dashboardContent) {
+        dashboardContent.innerHTML = `
+          <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h4 style="margin: 0 0 10px 0;">👤 Welcome, ${this.currentUser.name}!</h4>
+            <p style="margin: 0; color: #1976d2;">You are logged in as: ${this.currentUser.email}</p>
+            <button onclick="window.memberPortal.logout()" style="
+              margin-top: 10px; padding: 8px 16px; background: #dc3545; color: white; 
+              border: none; border-radius: 4px; cursor: pointer;
+            ">🚪 Logout</button>
+          </div>
+        `;
+      }
+    } else {
+      console.log('👤 User not logged in, showing login form');
+      if (loginSection) loginSection.style.display = 'block';
+      if (memberSection) memberSection.style.display = 'none';
+    }
+  },
+  
+  // Logout function
+  logout: function() {
+    this.currentUser = null;
+    this.showNotification('👋 Logged out successfully!', 'info');
+    this.updateLoginStatus();
+  },
+  
+  // Check if user is logged in
+  isLoggedIn: function() {
+    return this.currentUser !== null;
+  }
+};
+
+// Add CSS for animations
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
+
+// Make sure it's available globally
+window.SimpleMemberPortal = window.memberPortal;
+
+console.log('✅ Inline member portal loaded successfully!');
+console.log('- memberPortal available:', typeof window.memberPortal);
+console.log('- SimpleMemberPortal available:', typeof window.SimpleMemberPortal);
+console.log('- Portal initialized:', window.memberPortal.initialized);
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎯 DOM loaded, updating login status...');
+  window.memberPortal.updateLoginStatus();
+});
+</script>
+
+<!-- Fallback external script (if user wants to use external file) -->
+<script src="js/simple-member-portal.js" onload="console.log('📦 External script also loaded')" onerror="console.log('📦 External script failed (using inline version)')"></script>
+<script>
+  // Enhanced member portal availability check
+  function checkMemberPortalAvailability() {
+    console.log('=== MEMBER PORTAL AVAILABILITY CHECK ===');
+    console.log('memberPortal available:', typeof window.memberPortal);
+    console.log('memberPortal initialized:', window.memberPortal ? window.memberPortal.initialized : 'N/A');
+    
+    if (typeof window.memberPortal !== 'undefined' && window.memberPortal.initialized) {
+      console.log('✅ Inline member portal is available and ready!');
+      
+      // Ensure global access
+      try {
+        if (typeof memberPortal === 'undefined') {
+          memberPortal = window.memberPortal;
+        }
+      } catch (e) {
+        console.log('Global memberPortal assignment limited (strict mode)');
+      }
+    } else {
+      console.error('❌ Member portal not properly initialized');
+    }
+    
+    // Final status
+    console.log('Final status:');
+    console.log('- window.memberPortal:', typeof window.memberPortal);
+    console.log('- memberPortal.showLoginModal:', typeof (window.memberPortal && window.memberPortal.showLoginModal));
+    console.log('- Portal ready:', !!(window.memberPortal && window.memberPortal.initialized));
+    console.log('==========================================');
+  }
+  
+  // Backup member portal if main script fails
+  function loadBackupMemberPortal() {
+    console.log('🛠️ Loading backup member portal...');
+    
+    window.memberPortal = {
+      initialized: true,
+      showLoginModal: function() {
+        alert('Demo Login:\n\nEmail: member@cvawvuaa.org\nPassword: member123\n\n(This is a basic fallback - full portal should load normally)');
+      },
+      showRegistrationModal: function() {
+        alert('Registration: Coming soon! Use demo accounts for now.');
+      },
+      logout: function() {
+        alert('Logged out successfully!');
+      }
+    };
+    
+    console.log('✅ Backup member portal loaded');
+  }
+  
+  console.log('=== Script loading check ===');
+  console.log('MemberPortal class available:', typeof MemberPortal);
+  console.log('memberPortal object available:', typeof memberPortal);
+  console.log('window.memberPortal available:', typeof window.memberPortal);
+  
+  // Test if functions are accessible
+  console.log('=== Testing function accessibility ===');
+  console.log('showLogin available:', typeof showLogin);
+  console.log('window.showLogin available:', typeof window.showLogin);
+  console.log('testMemberPortal available:', typeof testMemberPortal);
+  console.log('window.testMemberPortal available:', typeof window.testMemberPortal);
+  console.log('showRegistration available:', typeof showRegistration);
+  console.log('window.showRegistration available:', typeof window.showRegistration);
+  console.log('All window properties containing "show":', Object.keys(window).filter(k => k.includes('show')));
+  console.log('All window properties containing "test":', Object.keys(window).filter(k => k.includes('test')));
+  console.log('==========================================');
+
+  // Initialize member portal features when page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, checking member portal...');
+    
+    // Test function accessibility after DOM load
+    console.log('After DOM load - showLogin available:', typeof showLogin);
+    console.log('After DOM load - window.showLogin available:', typeof window.showLogin);
+    
+    // Check if memberPortal is available
+    if (typeof memberPortal !== 'undefined') {
+      console.log('Member portal found immediately');
+      initializeMemberPortalFeatures();
+    } else {
+      console.log('Member portal not ready, waiting...');
+      // Wait for member portal to initialize
+      let attempts = 0;
+      const checkInterval = setInterval(() => {
+        attempts++;
+        if (typeof memberPortal !== 'undefined') {
+          console.log('Member portal ready after', attempts * 100, 'ms');
+          clearInterval(checkInterval);
+          initializeMemberPortalFeatures();
+        } else if (attempts > 50) {
+          console.error('Member portal failed to initialize after 5 seconds');
+          clearInterval(checkInterval);
+        }
+      }, 100);
+    }
+  });
+  
+  function initializeMemberPortalFeatures() {
+    console.log('Initializing member portal features...');
+    console.log('memberPortal available:', typeof memberPortal !== 'undefined');
+    console.log('memberPortal initialized:', typeof memberPortal !== 'undefined' ? memberPortal.initialized : 'N/A');
+    
+    try {
+      if (typeof loadMemberActivity === 'function') loadMemberActivity();
+      if (typeof updateMemberStats === 'function') updateMemberStats();
+      
+      // Show all benefit cards to any logged-in member
+      if (typeof memberPortal !== 'undefined' && memberPortal.isLoggedIn && memberPortal.isLoggedIn()) {
+        console.log('User is logged in, showing all member content');
+        const loginSection = document.getElementById('login-section');
+        const memberSection = document.getElementById('member-section');
+        
+        if (loginSection) loginSection.style.display = 'none';
+        if (memberSection) memberSection.style.display = 'block';
+        
+        // Show all benefit cards to any member
+        const allBenefitCards = document.querySelectorAll('.benefit-card');
+        allBenefitCards.forEach(card => {
+          card.style.display = 'block';
+        });
+      } else {
+        console.log('User not logged in, showing login section');
+        const loginSection = document.getElementById('login-section');
+        const memberSection = document.getElementById('member-section');
+        
+        if (loginSection) loginSection.style.display = 'block';
+        if (memberSection) memberSection.style.display = 'none';
+      }
+      
+      console.log('Member portal features initialized successfully');
+    } catch (error) {
+      console.error('Error initializing member portal features:', error);
+    }
+  }
+</script>
+
+</body>
+</html>

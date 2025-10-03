@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
+  <meta charset="utf-8">
+  <title>Minimal MemberPortal Test</title>
+</head>
+<body>
+  <h2>Minimal MemberPortal Script Test</h2>
+  <div id="status">Loading...</div>
+  
+  <script>
+    console.log('=== BEFORE SCRIPT LOAD ===');
+    console.log('MemberPortal:', typeof MemberPortal);
+    
+    // Add error handling for script loading
+    window.addEventListener('error', (event) => {
+      console.error('Global error:', event.error);
+      document.getElementById('status').innerHTML = `
+        <div style="color: red;">
+          <strong>Error:</strong> ${event.error ? event.error.message : 'Unknown error'}<br>
+          <strong>File:</strong> ${event.filename}<br>
+          <strong>Line:</strong> ${event.lineno}
+        </div>
+      `;
+    });
+    
+    // Test basic JavaScript
+    try {
+      console.log('Basic JS test: 1 + 1 =', 1 + 1);
+      console.log('Date test:', new Date().toISOString());
+    } catch (e) {
+      console.error('Basic JS failed:', e);
+    }
+  </script>
+  
+  <!-- Load the script -->
+  <script src="js/member-portal.js" 
+          onload="console.log('Script onload triggered'); scriptLoadSuccess();" 
+          onerror="console.error('Script onerror triggered'); scriptLoadFailed();"></script>
+  
+  <script>
+    function scriptLoadSuccess() {
+      console.log('=== AFTER SCRIPT LOAD SUCCESS ===');
+      console.log('MemberPortal class:', typeof MemberPortal);
+      console.log('memberPortal instance:', typeof memberPortal);
+      console.log('window.memberPortal:', typeof window.memberPortal);
+      
+      document.getElementById('status').innerHTML = `
+        <div style="color: green;">
+          âœ… Script loaded successfully!<br>
+          MemberPortal class: ${typeof MemberPortal}<br>
+          memberPortal instance: ${typeof memberPortal}<br>
+          window.memberPortal: ${typeof window.memberPortal}
+        </div>
+      `;
+      
+      // Try to create an instance if class is available
+      if (typeof MemberPortal !== 'undefined' && typeof memberPortal === 'undefined') {
+        try {
+          const testPortal = new MemberPortal();
+          console.log('Test instance created:', testPortal);
+          document.getElementById('status').innerHTML += '<br>âœ… Instance creation successful!';
+        } catch (error) {
+          console.error('Instance creation failed:', error);
+          document.getElementById('status').innerHTML += '<br>âŒ Instance creation failed: ' + error.message;
+        }
+      }
+    }
+    
+    function scriptLoadFailed() {
+      console.error('=== SCRIPT LOAD FAILED ===');
+      document.getElementById('status').innerHTML = `
+        <div style="color: red;">
+          âŒ Script failed to load!<br>
+          Check browser console for details.
+        </div>
+      `;
+    }
+    
+    // Fallback check after delay
+    setTimeout(() => {
+      if (typeof MemberPortal === 'undefined') {
+        console.error('MemberPortal still not available after timeout');
+        if (document.getElementById('status').textContent === 'Loading...') {
+          document.getElementById('status').innerHTML = `
+            <div style="color: red;">
+              âŒ Script loading timeout - MemberPortal class not available
+            </div>
+          `;
+        }
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Data Fix - CVCWVUAA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f0f8ff;
+        }
+        .fix-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #d32f2f;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .upload-area {
+            border: 3px dashed #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            background: #f8fff8;
+        }
+        .big-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .big-button:hover {
+            background: #218838;
+        }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+        .links {
+            margin-top: 30px;
+        }
+        .links a {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="fix-box">
+        <h1>🔧 QUICK DATA FIX</h1>
+        <p>Upload your CSV to fix all sync issues between tools</p>
+        
+        <div class="upload-area">
+            <h3>📂 Select Your CSV File</h3>
+            <input type="file" id="csvFile" accept=".csv">
+        </div>
+        
+        <button class="big-button" onclick="quickFix()">🚀 FIX EVERYTHING NOW</button>
+        
+        <div id="result" style="display: none;"></div>
+        
+        <div class="links">
+            <a href="member-directory.html">📋 Directory</a>
+            <a href="advanced-member-manager.html">⚙️ Manager</a>
+            <a href="receipt-generator.html">🧾 Receipts</a>
+        </div>
+    </div>
+
+    <script>
+        function quickFix() {
+            const file = document.getElementById('csvFile').files[0];
+            if (!file) {
+                showResult('Please select your CSV file first!', false);
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csv = e.target.result;
+                    const members = quickParseCSV(csv);
+                    
+                    if (members.length === 0) {
+                        showResult('No member data found in CSV!', false);
+                        return;
+                    }
+                    
+                    // Clear everything and set unified data
+                    localStorage.clear();
+                    
+                    // Set in all the places tools look for data
+                    localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+                    localStorage.setItem('cvcwvuaa-directory-members', JSON.stringify(members));
+                    
+                    showResult(`✅ SUCCESS! Fixed ${members.length} members.<br><br>All tools now have the same complete data!<br><br>Test: ${members[0].name}<br>Address: ${members[0].streetAddress}<br>City: ${members[0].city}`, true);
+                    
+                } catch (error) {
+                    showResult('Error: ' + error.message, false);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function quickParseCSV(csv) {
+            const lines = csv.split('\n');
+            const members = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const cols = line.split(',').map(col => col.replace(/"/g, '').trim());
+                if (cols.length < 8) continue;
+                
+                members.push({
+                    id: `member${i}`,
+                    name: `${cols[0]} ${cols[1]}`.trim(),
+                    firstName: cols[0],
+                    lastName: cols[1], 
+                    email: cols[2],
+                    phone: cols[3],
+                    address: cols[4],
+                    streetAddress: cols[4],
+                    city: cols[5],
+                    state: cols[6] || 'VA',
+                    zipCode: cols[7],
+                    zip: cols[7],
+                    fullAddress: [cols[4], cols[5], cols[6], cols[7]].filter(x => x).join(', '),
+                    displayLocation: cols[5] ? `${cols[5]}, ${cols[6] || 'VA'}` : '',
+                    membershipType: cols[8] || 'Individual',
+                    paidThrough: cols[9] || '',
+                    duesAmount: parseFloat(cols[10]) || 0,
+                    totalAmountPaid: parseFloat(cols[11]) || 0,
+                    scholarshipAmount: parseFloat(cols[12]) || 0,
+                    generalFundAmount: parseFloat(cols[13]) || 0,
+                    duesStatus: cols[9] ? 'current' : 'unpaid',
+                    status: cols[9] ? 'current' : 'unpaid',
+                    classYear: 'Alumni',
+                    major: 'Alumni'
+                });
+            }
+            
+            return members;
+        }
+
+        function showResult(message, isSuccess) {
+            const result = document.getElementById('result');
+            result.className = `status ${isSuccess ? 'success' : 'error'}`;
+            result.innerHTML = message;
+            result.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

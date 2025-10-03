@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVCWVUAA Meeting Minutes Template</title>
+<link rel="stylesheet" href="/css/styles.css">
+<style>
+  .minutes-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .header-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #002855;
+  }
+  
+  .meeting-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .section {
+    margin-bottom: 2rem;
+  }
+  
+  .section-title {
+    background: #002855;
+    color: white;
+    padding: 0.75rem 1rem;
+    margin: 0 0 1rem 0;
+    font-weight: 700;
+    border-radius: 6px;
+  }
+  
+  .attendees-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .action-item {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .action-item strong {
+    color: #856404;
+  }
+  
+  .print-btn, .save-btn {
+    background: #002855;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    margin-right: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .print-btn:hover, .save-btn:hover {
+    background: #1e3a8a;
+  }
+  
+  @media print {
+    .no-print { display: none; }
+    .minutes-container { box-shadow: none; margin: 0; }
+  }
+  
+  input[type="text"], input[type="date"], input[type="time"], textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+  }
+  
+  textarea {
+    min-height: 60px;
+    resize: vertical;
+  }
+  
+  .fill-blank {
+    display: inline-block;
+    min-width: 150px;
+    border-bottom: 1px solid #666;
+    margin: 0 5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="minutes-container">
+    
+    <!-- Header -->
+    <div class="header-section">
+      <h1>CENTRAL VIRGINIA CHAPTER</h1>
+      <h2>West Virginia University Alumni Association</h2>
+      <h3>Board Meeting Minutes</h3>
+    </div>
+
+    <!-- Meeting Details -->
+    <div class="meeting-details">
+      <div>
+        <strong>Date:</strong> <input type="date" id="meetingDate">
+      </div>
+      <div>
+        <strong>Time:</strong> <input type="time" id="startTime"> - <input type="time" id="endTime">
+      </div>
+      <div>
+        <strong>Location:</strong> 
+        <input type="text" placeholder="Zoom / In-Person Location" id="location">
+      </div>
+      <div>
+        <strong>Meeting Type:</strong> 
+        <select style="width: 100%; padding: 0.5rem;">
+          <option>Regular Board Meeting</option>
+          <option>Special Board Meeting</option>
+          <option>Annual Planning Meeting</option>
+          <option>Emergency Meeting</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Attendance -->
+    <div class="section">
+      <h3 class="section-title">📋 Attendance</h3>
+      <div class="attendees-grid">
+        <div>
+          <h4>Board Members Present:</h4>
+          <div class="checkbox-item">
+            <input type="checkbox" id="president"> <label for="president">President</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="vicepresident"> <label for="vicepresident">Vice President</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="secretary"> <label for="secretary">Secretary</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="treasurer"> <label for="treasurer">Treasurer</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="member1"> <label for="member1">Board Member</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="member2"> <label for="member2">Board Member</label>
+          </div>
+        </div>
+        <div>
+          <h4>Guests/Others Present:</h4>
+          <textarea placeholder="List any guests, committee chairs, or other attendees..."></textarea>
+        </div>
+      </div>
+      
+      <div style="margin-top: 1rem;">
+        <strong>Quorum:</strong> 
+        <label><input type="radio" name="quorum" value="yes"> Yes</label>
+        <label><input type="radio" name="quorum" value="no"> No</label>
+        <span style="margin-left: 1rem; font-style: italic;">
+          (Minimum <span class="fill-blank">4</span> board members required)
+        </span>
+      </div>
+    </div>
+
+    <!-- Call to Order -->
+    <div class="section">
+      <h3 class="section-title">🔨 Call to Order</h3>
+      <p>Meeting called to order at <input type="time" style="width: auto;"> by <input type="text" placeholder="Name" style="width: 200px;">, President.</p>
+    </div>
+
+    <!-- Approval of Previous Minutes -->
+    <div class="section">
+      <h3 class="section-title">✅ Approval of Previous Meeting Minutes</h3>
+      <p>Minutes from <input type="date" style="width: auto;"> meeting were:</p>
+      <label><input type="radio" name="minutes" value="approved"> Approved as presented</label><br>
+      <label><input type="radio" name="minutes" value="amended"> Approved with amendments</label><br>
+      <label><input type="radio" name="minutes" value="deferred"> Deferred to next meeting</label>
+      
+      <div style="margin-top: 1rem;">
+        <strong>Amendments/Notes:</strong>
+        <textarea placeholder="Any changes or corrections to previous minutes..."></textarea>
+      </div>
+    </div>
+
+    <!-- Officer Reports -->
+    <div class="section">
+      <h3 class="section-title">📊 Officer Reports</h3>
+      
+      <h4>President's Report:</h4>
+      <textarea placeholder="Key items from President's report..."></textarea>
+      
+      <h4>Treasurer's Report:</h4>
+      <div style="margin: 1rem 0;">
+        <strong>Account Balances as of <input type="date" style="width: auto;">:</strong><br>
+        Checking: $<input type="text" placeholder="0.00" style="width: 100px;"><br>
+        Savings: $<input type="text" placeholder="0.00" style="width: 100px;"><br>
+        Scholarship Fund: $<input type="text" placeholder="0.00" style="width: 100px;">
+      </div>
+      <textarea placeholder="Other financial items, expenses, revenue..."></textarea>
+      
+      <h4>Secretary's Report:</h4>
+      <textarea placeholder="Correspondence, membership updates, communications..."></textarea>
+    </div>
+
+    <!-- Committee Reports -->
+    <div class="section">
+      <h3 class="section-title">🏢 Committee Reports</h3>
+      
+      <h4>Events Committee:</h4>
+      <textarea placeholder="Upcoming events, watch parties, social activities..."></textarea>
+      
+      <h4>Scholarship Committee:</h4>
+      <textarea placeholder="Scholarship applications, fund status, awards..."></textarea>
+      
+      <h4>Communications/Website:</h4>
+      <textarea placeholder="Website updates, social media, newsletters..."></textarea>
+      
+      <h4>Membership Committee:</h4>
+      <textarea placeholder="New members, retention efforts, outreach..."></textarea>
+    </div>
+
+    <!-- Old Business -->
+    <div class="section">
+      <h3 class="section-title">🔄 Old Business</h3>
+      <textarea placeholder="Follow-up on previous action items, ongoing projects..."></textarea>
+    </div>
+
+    <!-- New Business -->
+    <div class="section">
+      <h3 class="section-title">🆕 New Business</h3>
+      <textarea placeholder="New proposals, decisions needed, upcoming initiatives..."></textarea>
+    </div>
+
+    <!-- Action Items -->
+    <div class="section">
+      <h3 class="section-title">⚡ Action Items & Assignments</h3>
+      <div id="actionItems">
+        <div class="action-item">
+          <strong>Action:</strong> <input type="text" placeholder="What needs to be done?" style="width: 60%;"><br>
+          <strong>Assigned to:</strong> <input type="text" placeholder="Who is responsible?" style="width: 40%;">
+          <strong>Due Date:</strong> <input type="date" style="width: 30%;">
+        </div>
+      </div>
+      <button onclick="addActionItem()" style="background: #28a745; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">+ Add Action Item</button>
+    </div>
+
+    <!-- Next Meeting -->
+    <div class="section">
+      <h3 class="section-title">📅 Next Meeting</h3>
+      <p>
+        <strong>Date:</strong> <input type="date"><br>
+        <strong>Time:</strong> <input type="time"><br>
+        <strong>Location:</strong> <input type="text" placeholder="Zoom / Location">
+      </p>
+    </div>
+
+    <!-- Adjournment -->
+    <div class="section">
+      <h3 class="section-title">🔚 Adjournment</h3>
+      <p>Meeting adjourned at <input type="time" style="width: auto;"> on motion by <input type="text" placeholder="Name" style="width: 200px;">, seconded by <input type="text" placeholder="Name" style="width: 200px;">.</p>
+    </div>
+
+    <!-- Signature -->
+    <div class="section">
+      <div style="margin-top: 3rem; border-top: 1px solid #ddd; padding-top: 2rem;">
+        <p>Respectfully submitted,</p><br><br>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+          <div>
+            <div style="border-bottom: 1px solid #666; margin-bottom: 5px; height: 20px;"></div>
+            <p style="text-align: center; margin: 0;"><strong>Secretary Signature</strong></p>
+          </div>
+          <div>
+            <div style="border-bottom: 1px solid #666; margin-bottom: 5px; height: 20px;"></div>
+            <p style="text-align: center; margin: 0;"><strong>Date</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="no-print" style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #ddd;">
+      <button class="save-btn" onclick="saveMinutes()">💾 Save as PDF</button>
+      <button class="print-btn" onclick="window.print()">🖨️ Print Minutes</button>
+      <button class="save-btn" onclick="exportText()">📄 Export Text</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Auto-populate today's date
+document.getElementById('meetingDate').value = new Date().toISOString().split('T')[0];
+
+// Add action items dynamically
+function addActionItem() {
+  const container = document.getElementById('actionItems');
+  const newItem = document.createElement('div');
+  newItem.className = 'action-item';
+  newItem.innerHTML = `
+    <strong>Action:</strong> <input type="text" placeholder="What needs to be done?" style="width: 60%;"><br>
+    <strong>Assigned to:</strong> <input type="text" placeholder="Who is responsible?" style="width: 40%;">
+    <strong>Due Date:</strong> <input type="date" style="width: 30%;">
+    <button onclick="this.parentElement.remove()" style="float: right; background: #dc3545; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer;">Remove</button>
+  `;
+  container.appendChild(newItem);
+}
+
+// Save as PDF function
+function saveMinutes() {
+  window.print(); // This will allow saving as PDF in most browsers
+}
+
+// Export as text
+function exportText() {
+  const container = document.querySelector('.minutes-container');
+  const text = container.innerText;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `CVCWVUAA-Minutes-${document.getElementById('meetingDate').value}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// Auto-save to localStorage every 30 seconds
+setInterval(() => {
+  const formData = {};
+  const inputs = document.querySelectorAll('input, textarea, select');
+  inputs.forEach(input => {
+    if (input.id || input.name) {
+      formData[input.id || input.name] = input.value;
+    }
+  });
+  localStorage.setItem('cvcwvuaa-minutes-draft', JSON.stringify(formData));
+}, 30000);
+
+// Load saved draft on page load
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('cvcwvuaa-minutes-draft');
+  if (saved && confirm('Load previous draft?')) {
+    const data = JSON.parse(saved);
+    Object.keys(data).forEach(key => {
+      const element = document.getElementById(key) || document.querySelector(`[name="${key}"]`);
+      if (element) {
+        element.value = data[key];
+      }
+    });
+  }
+});
+</script>
+
+</body>
+</html>

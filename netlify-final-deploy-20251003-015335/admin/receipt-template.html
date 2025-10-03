@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCWVUAA Payment Receipt</title>
+    <style>
+        @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+            .receipt { box-shadow: none; border: none; }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .receipt {
+            background: white;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #003366;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .org-name {
+            color: #003366;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .org-subtitle {
+            color: #666;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        
+        .receipt-title {
+            color: #003366;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+        
+        .receipt-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .member-info, .receipt-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #FFD700;
+        }
+        
+        .section-title {
+            color: #003366;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 5px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .info-value {
+            color: #555;
+        }
+        
+        .payment-details {
+            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .payment-amount {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .payment-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .breakdown-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #FFD700;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .tax-info {
+            background: #fffbf0;
+            border: 1px solid #FFD700;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .btn {
+            background: #003366;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background: #004080;
+        }
+        
+        .btn-secondary {
+            background: #FFD700;
+            color: #003366;
+        }
+        
+        .btn-secondary:hover {
+            background: #FFC107;
+        }
+        
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .receipt-number {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #003366;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt" id="receiptContent">
+        <div class="header">
+            <h1 class="org-name">CVCWVUAA</h1>
+            <p class="org-subtitle">Central Virginia Chapter<br>West Virginia University Alumni Association</p>
+            <h2 class="receipt-title">Payment Receipt</h2>
+        </div>
+        
+        <div class="receipt-info">
+            <div class="member-info">
+                <div class="section-title">Member Information</div>
+                <div class="info-row">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value" id="memberName">John Doe</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value" id="memberEmail">member@example.com</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Phone:</span>
+                    <span class="info-value" id="memberPhone">555-123-4567</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Address:</span>
+                    <span class="info-value" id="memberAddress">123 Main St, City, State 12345</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Member Since:</span>
+                    <span class="info-value" id="memberSince">January 2024</span>
+                </div>
+            </div>
+            
+            <div class="receipt-details">
+                <div class="section-title">Receipt Details</div>
+                <div class="info-row">
+                    <span class="info-label">Receipt #:</span>
+                    <span class="info-value receipt-number" id="receiptNumber">CVCWV-2025-001234</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Date:</span>
+                    <span class="info-value" id="paymentDate">October 3, 2025</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Payment Method:</span>
+                    <span class="info-value" id="paymentMethod">Credit Card</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Transaction ID:</span>
+                    <span class="info-value" id="transactionId">TXN-ABC123XYZ</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Processed By:</span>
+                    <span class="info-value" id="processedBy">CVCWVUAA Admin</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="payment-details">
+            <div class="section-title" style="color: white; border-bottom-color: #FFD700;">Payment Summary</div>
+            <div class="payment-amount" id="totalAmount">$125.00</div>
+            <div class="payment-breakdown">
+                <div class="breakdown-item">
+                    <div style="font-weight: bold; margin-bottom: 5px;">Annual Membership</div>
+                    <div id="membershipAmount">$50.00</div>
+                </div>
+                <div class="breakdown-item">
+                    <div style="font-weight: bold; margin-bottom: 5px;">Event Registration</div>
+                    <div id="eventAmount">$75.00</div>
+                </div>
+                <div class="breakdown-item">
+                    <div style="font-weight: bold; margin-bottom: 5px;">Additional Donation</div>
+                    <div id="donationAmount">$0.00</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tax-info">
+            <strong>Tax Information:</strong> The Central Virginia Chapter of the West Virginia University Alumni Association is a registered non-profit organization. 
+            Portions of this payment may be tax-deductible. Please consult with your tax advisor for specific guidance. 
+            Tax ID: <strong>54-1991299</strong>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Thank you for your continued support of CVCWVUAA!</strong></p>
+            <p>Questions about this receipt? Contact us at: <strong>president@cvawvuaa.org</strong> | Phone: <strong>(804) 566-8058</strong></p>
+            <p>Website: <strong>www.cvawvuaa.org</strong></p>
+            <p style="margin-top: 15px; font-size: 12px; color: #999;">
+                This receipt was generated on <span id="generatedDate"></span>
+            </p>
+        </div>
+    </div>
+    
+    <div class="action-buttons no-print">
+        <button class="btn" onclick="printReceipt()">🖨️ Print Receipt</button>
+        <button class="btn btn-secondary" onclick="emailReceipt()">📧 Prepare for Email</button>
+        <button class="btn btn-secondary" onclick="saveReceipt()">💾 Save as PDF</button>
+        <button class="btn" onclick="newReceipt()">📝 New Receipt</button>
+    </div>
+
+    <script>
+        // Set generated date
+        document.getElementById('generatedDate').textContent = new Date().toLocaleString();
+        
+        // Receipt generation functions
+        function generateReceiptNumber() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const timestamp = Date.now().toString().slice(-6);
+            return `CVCWV-${year}-${timestamp}`;
+        }
+        
+        function populateReceipt(memberData, paymentData) {
+            // Member Information
+            document.getElementById('memberName').textContent = memberData.name || 'Member Name';
+            document.getElementById('memberEmail').textContent = memberData.email || 'Not provided';
+            document.getElementById('memberPhone').textContent = memberData.phone || 'Not provided';
+            document.getElementById('memberAddress').textContent = memberData.address || 'Not provided';
+            document.getElementById('memberSince').textContent = memberData.memberSince || 'Not available';
+            
+            // Receipt Details
+            document.getElementById('receiptNumber').textContent = paymentData.receiptNumber || generateReceiptNumber();
+            document.getElementById('paymentDate').textContent = paymentData.date || new Date().toLocaleDateString();
+            document.getElementById('paymentMethod').textContent = paymentData.method || 'Not specified';
+            document.getElementById('transactionId').textContent = paymentData.transactionId || 'N/A';
+            document.getElementById('processedBy').textContent = paymentData.processedBy || 'CVCWVUAA Admin';
+            
+            // Payment Breakdown
+            const membershipAmount = parseFloat(paymentData.membershipAmount || 0);
+            const eventAmount = parseFloat(paymentData.eventAmount || 0);
+            const donationAmount = parseFloat(paymentData.donationAmount || 0);
+            const totalAmount = membershipAmount + eventAmount + donationAmount;
+            
+            document.getElementById('membershipAmount').textContent = `$${membershipAmount.toFixed(2)}`;
+            document.getElementById('eventAmount').textContent = `$${eventAmount.toFixed(2)}`;
+            document.getElementById('donationAmount').textContent = `$${donationAmount.toFixed(2)}`;
+            document.getElementById('totalAmount').textContent = `$${totalAmount.toFixed(2)}`;
+            
+            // Hide zero amounts
+            hideZeroAmounts();
+        }
+        
+        function hideZeroAmounts() {
+            const breakdownItems = document.querySelectorAll('.breakdown-item');
+            breakdownItems.forEach(item => {
+                const amountText = item.querySelector('div:last-child').textContent;
+                const amount = parseFloat(amountText.replace('$', ''));
+                if (amount === 0) {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        function printReceipt() {
+            window.print();
+        }
+        
+        function emailReceipt() {
+            console.log('Email receipt function called');
+            
+            const memberEmail = document.getElementById('memberEmail').textContent;
+            const memberName = document.getElementById('memberName').textContent;
+            const receiptNumber = document.getElementById('receiptNumber').textContent;
+            const totalAmount = document.getElementById('totalAmount').textContent;
+            const paymentDate = document.getElementById('paymentDate').textContent;
+            
+            console.log('Member email:', memberEmail);
+            console.log('Member name:', memberName);
+            
+            const emailSubject = `CVCWVUAA Payment Receipt ${receiptNumber}`;
+            
+            // Create full HTML email with the complete receipt
+            const htmlEmailContent = createHTMLEmailReceipt();
+            
+            if (memberEmail && memberEmail !== 'Not provided' && memberEmail.trim() !== '') {
+                console.log('Opening email client with HTML receipt');
+                // Show a dialog with instructions and the HTML content
+                showEmailDialog(memberEmail, emailSubject, htmlEmailContent);
+            } else {
+                console.log('No valid email, showing copy dialog');
+                showEmailDialog('[Enter Member Email]', emailSubject, htmlEmailContent);
+            }
+        }
+        
+        function createHTMLEmailReceipt() {
+            // Get all the receipt data
+            const memberName = document.getElementById('memberName').textContent;
+            const memberEmail = document.getElementById('memberEmail').textContent;
+            const memberPhone = document.getElementById('memberPhone').textContent;
+            const memberAddress = document.getElementById('memberAddress').textContent;
+            const memberSince = document.getElementById('memberSince').textContent;
+            
+            const receiptNumber = document.getElementById('receiptNumber').textContent;
+            const paymentDate = document.getElementById('paymentDate').textContent;
+            const paymentMethod = document.getElementById('paymentMethod').textContent;
+            const transactionId = document.getElementById('transactionId').textContent;
+            const processedBy = document.getElementById('processedBy').textContent;
+            
+            const membershipAmount = document.getElementById('membershipAmount').textContent;
+            const eventAmount = document.getElementById('eventAmount').textContent;
+            const donationAmount = document.getElementById('donationAmount').textContent;
+            const totalAmount = document.getElementById('totalAmount').textContent;
+            
+            // Create the HTML email version
+            return `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+        .receipt { background: white; max-width: 700px; margin: 0 auto; padding: 30px; border-radius: 8px; border: 2px solid #003366; }
+        .header { text-align: center; border-bottom: 3px solid #FFD700; padding-bottom: 15px; margin-bottom: 25px; }
+        .org-name { color: #003366; font-size: 24px; font-weight: bold; margin: 0; }
+        .org-subtitle { color: #666; font-size: 14px; margin: 5px 0; }
+        .receipt-title { color: #003366; font-size: 20px; font-weight: bold; margin: 15px 0; }
+        .receipt-info { display: table; width: 100%; margin-bottom: 25px; }
+        .info-section { display: table-cell; width: 48%; padding: 15px; background: #f8f9fa; border-left: 4px solid #FFD700; margin-right: 4%; vertical-align: top; }
+        .info-title { color: #003366; font-weight: bold; font-size: 16px; margin-bottom: 10px; border-bottom: 2px solid #FFD700; padding-bottom: 5px; }
+        .info-item { margin: 8px 0; }
+        .info-label { font-weight: bold; display: inline-block; min-width: 90px; }
+        .payment-summary { background: #003366; color: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .total-amount { font-size: 28px; font-weight: bold; text-align: center; margin: 15px 0; }
+        .breakdown { display: table; width: 100%; margin-top: 15px; }
+        .breakdown-item { display: table-cell; width: 33%; text-align: center; padding: 10px; background: rgba(255,255,255,0.1); margin: 0 2px; border-radius: 3px; }
+        .tax-info { background: #fff8e1; border: 1px solid #FFD700; padding: 15px; border-radius: 5px; margin: 20px 0; font-size: 12px; }
+        .footer { text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        <div class="header">
+            <h1 class="org-name">CVCWVUAA</h1>
+            <p class="org-subtitle">Central Virginia Chapter<br>West Virginia University Alumni Association</p>
+            <h2 class="receipt-title">Payment Receipt</h2>
+        </div>
+        
+        <div class="receipt-info">
+            <div class="info-section">
+                <div class="info-title">Member Information</div>
+                <div class="info-item"><span class="info-label">Name:</span> ${memberName}</div>
+                <div class="info-item"><span class="info-label">Email:</span> ${memberEmail}</div>
+                <div class="info-item"><span class="info-label">Phone:</span> ${memberPhone}</div>
+                <div class="info-item"><span class="info-label">Address:</span> ${memberAddress}</div>
+                <div class="info-item"><span class="info-label">Member Since:</span> ${memberSince}</div>
+            </div>
+            <div style="width: 4%;"></div>
+            <div class="info-section">
+                <div class="info-title">Receipt Details</div>
+                <div class="info-item"><span class="info-label">Receipt #:</span> ${receiptNumber}</div>
+                <div class="info-item"><span class="info-label">Date:</span> ${paymentDate}</div>
+                <div class="info-item"><span class="info-label">Payment Method:</span> ${paymentMethod}</div>
+                <div class="info-item"><span class="info-label">Transaction ID:</span> ${transactionId}</div>
+                <div class="info-item"><span class="info-label">Processed By:</span> ${processedBy}</div>
+            </div>
+        </div>
+        
+        <div class="payment-summary">
+            <div style="color: #FFD700; font-weight: bold; font-size: 18px; margin-bottom: 10px;">Payment Summary</div>
+            <div class="total-amount">${totalAmount}</div>
+            <div class="breakdown">
+                <div class="breakdown-item">
+                    <div style="font-weight: bold;">Annual Membership</div>
+                    <div>${membershipAmount}</div>
+                </div>
+                <div class="breakdown-item">
+                    <div style="font-weight: bold;">Event Registration</div>
+                    <div>${eventAmount}</div>
+                </div>
+                <div class="breakdown-item">
+                    <div style="font-weight: bold;">Donation</div>
+                    <div>${donationAmount}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tax-info">
+            <strong>Tax Information:</strong> The Central Virginia Chapter of the West Virginia University Alumni Association is a registered non-profit organization. 
+            Portions of this payment may be tax-deductible. Please consult with your tax advisor for specific guidance. 
+            Tax ID: <strong>54-1991299</strong>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Thank you for your continued support of CVCWVUAA!</strong></p>
+            <p>Questions about this receipt? Contact us at: <strong>president@cvawvuaa.org</strong> | Phone: <strong>(804) 566-8058</strong></p>
+            <p>Website: <strong>www.cvawvuaa.org</strong></p>
+            <p style="margin-top: 15px; font-size: 10px;">This receipt was generated on ${new Date().toLocaleString()}</p>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+        
+        function showEmailDialog(emailAddress, subject, htmlContent) {
+            const dialog = `
+                <div id="emailDialog" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; justify-content: center; align-items: center;">
+                    <div style="background: white; padding: 25px; border-radius: 10px; max-width: 800px; max-height: 90%; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <h3 style="color: #003366; margin-top: 0;">📧 HTML Email Receipt</h3>
+                        <p><strong>To:</strong> ${emailAddress}</p>
+                        <p><strong>Subject:</strong> ${subject}</p>
+                        
+                        <div style="margin: 15px 0;">
+                            <h4>Instructions:</h4>
+                            <ol style="font-size: 14px;">
+                                <li>Copy the HTML content below</li>
+                                <li>Open your email client and create a new email</li>
+                                <li>Switch to HTML mode (usually in format options)</li>
+                                <li>Paste the HTML content</li>
+                                <li>The recipient will see a professional formatted receipt with EIN and all details</li>
+                            </ol>
+                        </div>
+                        
+                        <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">HTML Email Content:</label>
+                        <textarea id="htmlContent" style="width: 100%; height: 200px; margin: 10px 0; font-family: monospace; font-size: 11px;" readonly>${htmlContent}</textarea>
+                        
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button onclick="copyHTMLContent()" style="background: #003366; color: white; padding: 12px 24px; border: none; border-radius: 5px; margin-right: 10px; cursor: pointer;">📋 Copy HTML Content</button>
+                            <button onclick="previewEmail()" style="background: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 5px; margin-right: 10px; cursor: pointer;">👁 Preview Receipt</button>
+                            <button onclick="closeEmailDialog()" style="background: #666; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer;">✖ Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', dialog);
+        }
+        
+        function copyHTMLContent() {
+            const textarea = document.getElementById('htmlContent');
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Show feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '✅ HTML Copied!';
+            button.style.background = '#28a745';
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '#003366';
+            }, 2000);
+        }
+        
+        function previewEmail() {
+            const htmlContent = document.getElementById('htmlContent').value;
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(htmlContent);
+            previewWindow.document.close();
+        }
+        
+        function copyEmailContent(button) {
+            const textarea = button.parentElement.parentElement.querySelector('textarea');
+            textarea.select();
+            document.execCommand('copy');
+            button.textContent = '✅ Copied!';
+            setTimeout(() => {
+                button.textContent = '📋 Copy Content';
+            }, 2000);
+        }
+        
+        function closeEmailDialog() {
+            const dialog = document.querySelector('div[style*="position: fixed"]');
+            if (dialog) {
+                dialog.remove();
+            }
+        }
+        
+        function createEmailFriendlyReceipt() {
+            const memberName = document.getElementById('memberName').textContent;
+            const receiptNumber = document.getElementById('receiptNumber').textContent;
+            const paymentDate = document.getElementById('paymentDate').textContent;
+            const paymentMethod = document.getElementById('paymentMethod').textContent;
+            const transactionId = document.getElementById('transactionId').textContent;
+            const totalAmount = document.getElementById('totalAmount').textContent;
+            
+            const membershipAmount = document.getElementById('membershipAmount').textContent;
+            const eventAmount = document.getElementById('eventAmount').textContent;
+            const donationAmount = document.getElementById('donationAmount').textContent;
+            
+            return `
+========================================
+CVCWVUAA PAYMENT RECEIPT
+========================================
+
+Member: ${memberName}
+Receipt #: ${receiptNumber}
+Date: ${paymentDate}
+Payment Method: ${paymentMethod}
+Transaction ID: ${transactionId}
+
+PAYMENT BREAKDOWN:
+- Annual Membership: ${membershipAmount}
+- Event Registration: ${eventAmount}
+- Additional Donation: ${donationAmount}
+
+TOTAL AMOUNT: ${totalAmount}
+
+========================================
+Central Virginia Chapter
+West Virginia University Alumni Association
+Email: president@cvawvuaa.org
+Phone: (804) 566-8058
+Website: www.cvawvuaa.org
+========================================`;
+        }
+        
+        function saveReceipt() {
+            // This would typically integrate with a PDF generation service
+            // For now, we'll suggest using browser's print to PDF feature
+            alert('To save as PDF:\n\n1. Click "Print Receipt"\n2. Choose "Save as PDF" in the print dialog\n3. Select your desired location');
+            printReceipt();
+        }
+        
+        function newReceipt() {
+            if (confirm('Create a new receipt? This will clear current data.')) {
+                // Reset to default values or redirect to member selection
+                location.reload();
+            }
+        }
+        
+        // Check for receipt data from multiple sources
+        window.onload = function() {
+            console.log('Receipt template loading...');
+            
+            // First try to get data from localStorage (new method)
+            const storedData = localStorage.getItem('currentReceiptData');
+            if (storedData) {
+                try {
+                    const receiptData = JSON.parse(storedData);
+                    console.log('Using stored receipt data:', receiptData);
+                    populateReceipt(receiptData.member, receiptData.payment);
+                    
+                    // Clear the stored data after using it
+                    localStorage.removeItem('currentReceiptData');
+                    return;
+                } catch (e) {
+                    console.error('Error parsing stored receipt data:', e);
+                }
+            }
+            
+            // Check if data was passed via window object (backup method)
+            if (window.receiptData && window.receiptData.member) {
+                console.log('Using window receipt data:', window.receiptData);
+                populateReceipt(window.receiptData.member, window.receiptData.payment);
+                return;
+            }
+            
+            // Fall back to sample data if no real data available
+            console.log('No receipt data found, using sample data');
+            window.receiptData = {
+                member: {
+                    name: 'Sample Member',
+                    email: 'member@example.com',
+                    phone: '555-123-4567',
+                    address: '123 Main Street, Richmond, VA 23220',
+                    memberSince: 'January 2024'
+                },
+                payment: {
+                    receiptNumber: generateReceiptNumber(),
+                    date: new Date().toLocaleDateString(),
+                    method: 'Credit Card',
+                    transactionId: 'TXN-SAMPLE123',
+                    processedBy: 'CVCWVUAA Admin',
+                    membershipAmount: '50.00',
+                    eventAmount: '25.00',
+                    donationAmount: '0.00'
+                }
+            };
+            
+            populateReceipt(window.receiptData.member, window.receiptData.payment);
+        };
+    </script>
+</body>
+</html>

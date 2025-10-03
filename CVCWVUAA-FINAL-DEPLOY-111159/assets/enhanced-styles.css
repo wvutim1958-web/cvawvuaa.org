@@ -1,0 +1,196 @@
+/* Enhanced Visual Polish for CVCWVUAA */
+
+/* Improved card styling with better shadows and hover effects */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Better button styling with hover animations */
+.btn, .admin-button {
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover, .admin-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced navigation dropdown animations */
+.dropdown-panel {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.dropdown.open .dropdown-panel {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Improved form styling */
+input[type="text"], 
+input[type="email"], 
+textarea, 
+select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus, 
+input[type="email"]:focus, 
+textarea:focus, 
+select:focus {
+  border-color: #ffd100;
+  box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.1);
+}
+
+/* Better mobile navigation */
+@media (max-width: 900px) {
+  .nav {
+    background: #fff;
+    border-radius: 12px;
+    margin-top: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Enhanced typography */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.3;
+}
+
+/* Better spacing for content sections */
+.wrapper > * + * {
+  margin-top: 1.5rem;
+}
+
+/* Improved photo gallery grid */
+.gallery-grid {
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.gallery-grid figure {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.gallery-grid figure:hover {
+  transform: scale(1.02);
+}
+
+/* Enhanced search button styling */
+.search-btn {
+  background: rgba(255, 209, 0, 0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: background-color 0.2s ease;
+}
+
+.search-btn:hover {
+  background: rgba(255, 209, 0, 0.2);
+}
+
+/* Better theme toggle button */
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Enhanced footer styling */
+.site-footer {
+  background: linear-gradient(135deg, #002855 0%, #1a4480 100%);
+}
+
+/* Better loading states */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Improved accessibility focus styles */
+*:focus-visible {
+  outline: 2px solid #ffd100;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Enhanced admin dashboard styling */
+.admin-grid {
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Better stats display */
+.stat-box {
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.stat-box:hover {
+  background: #e9ecef;
+  transform: translateY(-2px);
+}
+
+/* Enhanced related pages sections */
+.card[style*="background:#f8f9fa"] {
+  border: 1px solid #e9ecef;
+}
+
+.card[style*="background:#f8f9fa"] a {
+  text-decoration: none;
+  color: #002855;
+  transition: color 0.2s ease;
+}
+
+.card[style*="background:#f8f9fa"] a:hover {
+  color: #ffd100;
+  text-decoration: underline;
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .nav-toggle,
+  .theme-toggle,
+  .search-btn,
+  .admin-button {
+    display: none !important;
+  }
+}

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCWVUAA - Unified Member System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #003366;
+            margin-bottom: 30px;
+        }
+        .button {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ffeaa7;
+            margin-bottom: 20px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .step {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #003366;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CVCWVUAA Unified Member System</h1>
+            <p>Sync all tools to use the same member data</p>
+        </div>
+
+        <div class="warning">
+            <strong>Important:</strong> This will update all your member tools (directory, advanced manager, receipt generator) to use the same unified data source. This should eliminate all sync issues.
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Load Your CSV Data</h3>
+            <p>Upload your member CSV file to create the unified database.</p>
+            <input type="file" id="csvFile" accept=".csv">
+            <button class="button" onclick="loadUnifiedData()">Load CSV and Create Unified System</button>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Update All Tools</h3>
+            <p>Sync all existing tools to use the unified member database.</p>
+            <button class="button" onclick="updateAllTools()">Update All Tools to Unified System</button>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Test Everything</h3>
+            <p>Verify that all tools now show the same complete member data.</p>
+            <button class="button" onclick="testAllTools()" style="background-color: #007bff;">Test All Tools</button>
+        </div>
+
+        <div id="status" class="status" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Load CSV and create unified member system
+        function loadUnifiedData() {
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showStatus('Please select a CSV file first.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csvText = e.target.result;
+                    const members = parseCSVToUnifiedMembers(csvText);
+                    
+                    // Store in ALL the places the different tools look
+                    localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+                    localStorage.setItem('cvcwvuaa-directory-members', JSON.stringify(members));
+                    localStorage.setItem('cvcwvuaa-master-csv', csvText);
+                    localStorage.setItem('cvcwvuaa-csv-last-updated', new Date().toISOString());
+                    localStorage.setItem('cvcwvuaa-last-sync', new Date().toISOString());
+                    localStorage.setItem('cvcwvuaa-directory-last-update', new Date().toISOString());
+                    
+                    showStatus(`✅ Successfully loaded ${members.length} members into unified system!<br><br>All tools now have access to complete member data including:<br>• Full names and addresses<br>• Phone and email<br>• Membership types<br>• Payment information`, 'success');
+                    
+                } catch (error) {
+                    showStatus('❌ Error loading CSV: ' + error.message, 'error');
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+
+        // Parse CSV into unified member format that works with all tools
+        function parseCSVToUnifiedMembers(csvText) {
+            const lines = csvText.split('\n');
+            const members = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                if (lines[i].trim() === '') continue;
+                
+                const values = parseCSVLine(lines[i]);
+                
+                if (values.length < 8) continue; // Skip incomplete rows
+                
+                const streetAddress = values[4] || '';
+                const city = values[5] || '';
+                const state = values[6] || 'VA';
+                const zipCode = values[7] || '';
+                
+                const member = {
+                    // Core identification
+                    id: `member${i}`,
+                    name: `${values[0] || ''} ${values[1] || ''}`.trim(),
+                    email: values[2] || '',
+                    phone: values[3] || '',
+                    
+                    // Address fields - mapped to all variations tools might expect
+                    address: streetAddress,
+                    streetAddress: streetAddress,
+                    city: city,
+                    state: state,
+                    zipCode: zipCode,
+                    zip: zipCode,
+                    
+                    // Full formatted addresses for display
+                    fullAddress: [streetAddress, city, state, zipCode].filter(part => part && part.trim()).join(', '),
+                    displayLocation: city ? `${city}${state ? ', ' + state : ''}` : '',
+                    
+                    // Membership information
+                    membershipType: values[8] || 'Individual Membership',
+                    type: values[8] && values[8].toLowerCase().includes('family') ? 'family' : 'individual',
+                    
+                    // Payment information
+                    paidThrough: values[9] || '',
+                    lastPayment: values[9] || '',
+                    duesAmount: parseFloat(values[10]) || 0,
+                    totalAmountPaid: parseFloat(values[11]) || 0,
+                    scholarshipAmount: parseFloat(values[12]) || 0,
+                    generalFundAmount: parseFloat(values[13]) || 0,
+                    
+                    // Status fields
+                    duesStatus: values[9] ? 'current' : 'unpaid',
+                    status: values[9] ? 'current' : 'unpaid',
+                    
+                    // Additional fields for compatibility
+                    classYear: 'Alumni',
+                    major: 'Alumni',
+                    year: new Date().getFullYear()
+                };
+                
+                members.push(member);
+            }
+            
+            return members;
+        }
+
+        // Parse CSV line handling quotes and commas
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim());
+            return result;
+        }
+
+        // Update all tools to use unified system
+        function updateAllTools() {
+            const members = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
+            
+            if (members.length === 0) {
+                showStatus('❌ No member data found. Please load CSV data first.', 'error');
+                return;
+            }
+            
+            // Force all tools to use the same data
+            localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+            localStorage.setItem('cvcwvuaa-directory-members', JSON.stringify(members));
+            localStorage.setItem('cvcwvuaa-last-sync', new Date().toISOString());
+            localStorage.setItem('cvcwvuaa-directory-last-update', new Date().toISOString());
+            
+            // Clear any conflicting data
+            localStorage.removeItem('cvcwvuaa-deleted-members');
+            
+            showStatus(`✅ Updated all tools to use unified member database!<br><br>Synchronized:<br>• Member Directory<br>• Advanced Member Manager<br>• Receipt Generator<br>• All other member tools<br><br>All ${members.length} members now have consistent data across all tools.`, 'success');
+        }
+
+        // Test all tools
+        function testAllTools() {
+            const members = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
+            const directoryMembers = JSON.parse(localStorage.getItem('cvcwvuaa-directory-members') || '[]');
+            
+            let report = 'Unified System Test Results:<br><br>';
+            
+            report += `✅ Main Member Database: ${members.length} members<br>`;
+            report += `✅ Directory Database: ${directoryMembers.length} members<br>`;
+            report += `✅ Data Sync: ${members.length === directoryMembers.length ? 'Perfect' : 'Needs sync'}<br><br>`;
+            
+            if (members.length > 0) {
+                const sample = members[0];
+                report += `Sample Member Data:<br>`;
+                report += `• Name: ${sample.name}<br>`;
+                report += `• Street Address: ${sample.streetAddress || 'Not set'}<br>`;
+                report += `• Full Address: ${sample.fullAddress || 'Not available'}<br>`;
+                report += `• Email: ${sample.email}<br>`;
+                report += `• Phone: ${sample.phone}<br>`;
+                report += `• Membership: ${sample.membershipType}<br><br>`;
+            }
+            
+            report += 'Test your tools:<br>';
+            report += '• <a href="member-directory.html" target="_blank">Member Directory</a><br>';
+            report += '• <a href="advanced-member-manager.html" target="_blank">Advanced Member Manager</a><br>';
+            report += '• <a href="receipt-generator.html" target="_blank">Receipt Generator</a><br><br>';
+            report += 'All should now show the same complete member data!';
+            
+            showStatus(report, 'success');
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.innerHTML = message;
+            status.style.display = 'block';
+            status.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+﻿<!doctype html><html lang="en"><head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVCWVUAA â€¢ Bylaws & Proclamation</title>
+<meta name="description" content="View the official bylaws and proclamation documents for the Central Virginia Chapter of the WVU Alumni Association. Download PDF versions available.">
+<link rel="stylesheet" href="/css/styles.css">
+</head><body>
+
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">â˜°</button>
+
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws Â· Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">ðŸ”</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">ðŸŒ™</button>
+    </nav>
+  </div>
+</header>
+
+<main><div class="wrapper">
+  <h2>Bylaws &amp; Proclamation</h2>
+  <div class="card">
+    <p class="small">This viewer loads <code>/assets/docs/bylaws.pdf</code>. If it doesnâ€™t display, use the download link below.</p>
+    <object data="/assets/docs/bylaws.pdf" type="application/pdf" width="100%" height="900" style="border:1px solid #e6e9ef;border-radius:12px">
+      <p>Unable to display PDF. <a class="btn" href="/assets/docs/bylaws.pdf">Download PDF</a></p>
+    </object>
+    <p style="margin-top:10px"><a class="btn" href="/assets/docs/bylaws.pdf">Download PDF</a></p>
+  </div>
+</div></main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA â€” Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">Â© <span id="year"></span> CVCWVUAA â€” Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
+
+<script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+<script>
+  // Mobile: open/close main nav
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+  // Mobile: tap to open About dropdown
+  const aboutMenu = document.querySelector('.menu.dropdown');
+  const aboutBtn  = document.querySelector('.menu.dropdown .dropbtn');
+  if (aboutBtn && aboutMenu) {
+    aboutBtn.addEventListener('click', (e) => {
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        e.preventDefault();
+        aboutMenu.classList.toggle('open');
+        aboutBtn.setAttribute('aria-expanded', aboutMenu.classList.contains('open') ? 'true' : 'false');
+      }
+    });
+  }
+</script>
+
+</body></html>
+

@@ -1,0 +1,141 @@
+﻿<!doctype html><html lang="en"><head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVCWVUAA â€¢ News</title>
+<link rel="stylesheet" href="/css/styles.css">
+</head><body>
+
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">â˜°</button>
+
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws Â· Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">ðŸ”</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">ðŸŒ™</button>
+    
+    </nav>
+  </div>
+</header>
+
+<main><div class="wrapper">
+  <div class="search-compact" style="margin-bottom: 20px;">
+    <div id="search-container"></div>
+  </div>
+  
+  <h2>Campus Life â€” WVU Events</h2>
+  <div class="card">
+    <div id="localist-widget-74813321" class="localist-widget"></div>
+    <script defer type="text/javascript"
+      src="https://cal.wvu.edu/widget/combo?schools=wvu&types=38634929567204%2C38634929553886%2C38634929562082%2C38634929555935%2C38801326270388%2C38801329324608%2C50416918812932%2C38634929560033%2C38634929564131%2C38634934878778%2C38634934883900%2C38634934872631%2C50416928594502%2C44588934017410%2C44588935805469%2C44588935087787&groups=mountaineer_maniacs%2Cmountaineer_racing%2Cstudent_organizations%2C4h%2Cwest-virginia-community-educational-outreach-service%2Cwest-virginia-extension-master-gardener-association%2Cwvu-extension-energy-express&departments=academic_advising_council%2Cacademic_engagement_success_center%2Caccounting%2Cadmissions%2Cadvance_center%2Cadventure_wv%2Calumni%2Carts_and_entertainment%2Cathletics%2Ccampus_recreation%2Ccodewv%2Ccommunity_design_team%2Cpresidents_office%2Cwvu_online%2Cwvu-jacksons-mill%2Cwvu_hub%2Cwvu_veterans&days=31&num=50&all_instances=1&match=any&experience=hybrid&exclude_experience=hybrid&container=localist-widget-74813321&template=modern"></script>
+    <div id="lclst_widget_footer"><a style="margin-left:auto;margin-right:auto;display:block;width:81px;margin-top:10px;" title="Widget powered by Concept3D" href="https://www.localist.com?utm_source=widget&utm_campaign=widget_footer&utm_medium=branded%20link"><img src="//d3e1o4bcbhmj8g.cloudfront.net/assets/platforms/default/about/widget_footer.png" alt="Localist" width="81" height="23"></a></div>
+  </div>
+</div></main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA â€” Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">Â© <span id="year"></span> CVCWVUAA â€” Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
+
+<script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+<script src="/js/theme-toggle.js"></script>
+<script src="/js/search.js"></script>
+<script>
+  // Mobile: open/close main nav
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+  // Mobile: tap to open dropdowns
+  document.querySelectorAll('.menu.dropdown').forEach(menu => {
+    const btn = menu.querySelector('.dropbtn');
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 900px)').matches) {
+          e.preventDefault();
+          menu.classList.toggle('open');
+          btn.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
+        }
+      });
+    }
+  });
+
+  // Theme toggle functionality
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.textContent = savedTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggle.textContent = newTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
+    });
+  }
+</script>
+
+</body></html>
+

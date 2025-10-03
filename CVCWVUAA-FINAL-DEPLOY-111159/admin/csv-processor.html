@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSV Member Data Processor</title>
+<link rel="stylesheet" href="/css/styles.css">
+<style>
+  .processor-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+
+  .upload-zone {
+    border: 3px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 3rem;
+    text-align: center;
+    background: #f9fafb;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+  }
+
+  .upload-zone.dragover {
+    border-color: var(--wvu-blue);
+    background: #f0f9ff;
+  }
+
+  .upload-zone input[type="file"] {
+    display: none;
+  }
+
+  .upload-btn {
+    background: var(--wvu-blue);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+
+  .processing-results {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-top: 2rem;
+    display: none;
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .result-card {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid var(--wvu-blue);
+  }
+
+  .result-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--wvu-blue);
+    margin-bottom: 0.5rem;
+  }
+
+  .member-preview {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .member-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr 1fr;
+    gap: 1rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+  }
+
+  .member-row:last-child {
+    border-bottom: none;
+  }
+
+  .member-row.header {
+    font-weight: 600;
+    background: white;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .export-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .export-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="processor-container">
+  
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <h1>📊 CSV Member Data Processor</h1>
+    <p>Upload and process your membership CSV file for enhanced member management</p>
+  </div>
+
+  <!-- Upload Zone -->
+  <div class="upload-zone" id="uploadZone">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+    <h3>Drop your CSV file here or click to browse</h3>
+    <p style="color: #64748b; margin: 1rem 0;">Supports .csv files up to 10MB</p>
+    <input type="file" id="csvFile" accept=".csv" onchange="processCSV(event)">
+    <button class="upload-btn" onclick="document.getElementById('csvFile').click()">
+      📂 Select CSV File
+    </button>
+  </div>
+
+  <!-- Processing Results -->
+  <div class="processing-results" id="results">
+    <h3>📈 Processing Results</h3>
+    
+    <div class="result-grid">
+      <div class="result-card">
+        <div class="result-number" id="totalRecords">0</div>
+        <div>Total Records</div>
+      </div>
+      <div class="result-card">
+        <div class="result-number" id="validEmails">0</div>
+        <div>Valid Emails</div>
+      </div>
+      <div class="result-card">
+        <div class="result-number" id="phoneNumbers">0</div>
+        <div>Phone Numbers</div>
+      </div>
+      <div class="result-card">
+        <div class="result-number" id="completeRecords">0</div>
+        <div>Complete Records</div>
+      </div>
+    </div>
+
+    <!-- Data Preview -->
+    <div>
+      <h4>📋 Data Preview (First 10 Records)</h4>
+      <div class="member-preview" id="dataPreview">
+        <!-- Will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Export Options -->
+    <div class="export-section">
+      <h4>📤 Export Options</h4>
+      <div class="export-grid">
+        <button class="action-btn" onclick="exportEmailList()">
+          📧 Export Email List
+        </button>
+        <button class="action-btn success" onclick="exportMailingLabels()">
+          🏷️ Export Mailing Labels
+        </button>
+        <button class="action-btn" onclick="exportPhoneList()">
+          📞 Export Phone Directory
+        </button>
+        <button class="action-btn warning" onclick="exportRenewalList()">
+          ⏰ Export Renewal Reminders
+        </button>
+        <button class="action-btn" onclick="exportScholarshipDonors()">
+          🎓 Export Scholarship Donors
+        </button>
+        <button class="action-btn secondary" onclick="exportCleanCSV()">
+          🧹 Export Clean CSV
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+    <h3>📝 Instructions</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+      <div>
+        <h4>✅ What this tool does:</h4>
+        <ul>
+          <li>Validates email addresses</li>
+          <li>Standardizes phone numbers</li>
+          <li>Identifies scholarship contributors</li>
+          <li>Generates targeted export lists</li>
+          <li>Creates mailing labels</li>
+          <li>Produces renewal reminders</li>
+        </ul>
+      </div>
+      <div>
+        <h4>📋 Expected CSV columns:</h4>
+        <ul>
+          <li>Last Name, First Name(s)</li>
+          <li>E-mail Address (Primary)</li>
+          <li>Home Address, City, State, Zip</li>
+          <li>Primary Phone</li>
+          <li>Type of Membership</li>
+          <li>Scholarship contributions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let csvData = [];
+let processedData = {};
+
+// File upload handling
+document.getElementById('uploadZone').addEventListener('dragover', function(e) {
+  e.preventDefault();
+  this.classList.add('dragover');
+});
+
+document.getElementById('uploadZone').addEventListener('dragleave', function(e) {
+  e.preventDefault();
+  this.classList.remove('dragover');
+});
+
+document.getElementById('uploadZone').addEventListener('drop', function(e) {
+  e.preventDefault();
+  this.classList.remove('dragover');
+  
+  const files = e.dataTransfer.files;
+  if (files.length > 0 && files[0].type === 'text/csv') {
+    processFile(files[0]);
+  }
+});
+
+function processCSV(event) {
+  const file = event.target.files[0];
+  if (file) {
+    processFile(file);
+  }
+}
+
+function processFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const csv = e.target.result;
+    parseCSV(csv);
+  };
+  reader.readAsText(file);
+}
+
+function parseCSV(csv) {
+  const lines = csv.split('\n');
+  const headers = lines[0].split(',');
+  csvData = [];
+  
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim()) {
+      const values = parseCSVLine(lines[i]);
+      const record = {};
+      headers.forEach((header, index) => {
+        record[header.trim()] = values[index] ? values[index].trim() : '';
+      });
+      csvData.push(record);
+    }
+  }
+  
+  analyzeData();
+  displayResults();
+}
+
+function parseCSVLine(line) {
+  const values = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      values.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  values.push(current);
+  return values;
+}
+
+function analyzeData() {
+  processedData = {
+    totalRecords: csvData.length,
+    validEmails: 0,
+    phoneNumbers: 0,
+    completeRecords: 0,
+    scholarshipContributors: 0,
+    membershipTypes: {},
+    states: {},
+    emails: [],
+    phones: [],
+    addresses: []
+  };
+  
+  csvData.forEach(record => {
+    // Count valid emails
+    const email = record['E-mail Address (Primary)'] || record['Email'] || '';
+    if (email && email.includes('@') && email.includes('.')) {
+      processedData.validEmails++;
+      processedData.emails.push({
+        name: `${record['First Name(s)']} ${record['Last Name']}`,
+        email: email
+      });
+    }
+    
+    // Count phone numbers
+    const phone = record['Primary Phone'] || record['Phone'] || '';
+    if (phone && phone.replace(/\D/g, '').length >= 10) {
+      processedData.phoneNumbers++;
+      processedData.phones.push({
+        name: `${record['First Name(s)']} ${record['Last Name']}`,
+        phone: phone
+      });
+    }
+    
+    // Check for complete records
+    if (email && phone && record['Home Address'] && record['City']) {
+      processedData.completeRecords++;
+    }
+    
+    // Count scholarship contributors
+    const scholarship = record['Scholarship'] || '';
+    if (scholarship && scholarship !== '0' && scholarship !== '') {
+      processedData.scholarshipContributors++;
+    }
+    
+    // Track membership types
+    const memberType = record['Type of Membership'] || 'Unknown';
+    processedData.membershipTypes[memberType] = (processedData.membershipTypes[memberType] || 0) + 1;
+    
+    // Track states
+    const state = record['State'] || 'Unknown';
+    processedData.states[state] = (processedData.states[state] || 0) + 1;
+    
+    // Collect address data
+    if (record['Home Address'] && record['City'] && record['State']) {
+      processedData.addresses.push({
+        name: `${record['First Name(s)']} ${record['Last Name']}`,
+        address: `${record['Home Address']}, ${record['City']}, ${record['State']} ${record['Zip Code']}`
+      });
+    }
+  });
+}
+
+function displayResults() {
+  document.getElementById('results').style.display = 'block';
+  
+  // Update statistics
+  document.getElementById('totalRecords').textContent = processedData.totalRecords;
+  document.getElementById('validEmails').textContent = processedData.validEmails;
+  document.getElementById('phoneNumbers').textContent = processedData.phoneNumbers;
+  document.getElementById('completeRecords').textContent = processedData.completeRecords;
+  
+  // Display data preview
+  const preview = document.getElementById('dataPreview');
+  preview.innerHTML = '';
+  
+  // Header row
+  const headerRow = document.createElement('div');
+  headerRow.className = 'member-row header';
+  headerRow.innerHTML = '<div>Name</div><div>Type</div><div>Email</div><div>Phone</div>';
+  preview.appendChild(headerRow);
+  
+  // Data rows (first 10)
+  csvData.slice(0, 10).forEach(record => {
+    const row = document.createElement('div');
+    row.className = 'member-row';
+    
+    const name = `${record['First Name(s)']} ${record['Last Name']}`;
+    const type = record['Type of Membership'] || 'Unknown';
+    const email = record['E-mail Address (Primary)'] || 'No email';
+    const phone = record['Primary Phone'] || 'No phone';
+    
+    row.innerHTML = `
+      <div>${name}</div>
+      <div>${type}</div>
+      <div>${email}</div>
+      <div>${phone}</div>
+    `;
+    preview.appendChild(row);
+  });
+  
+  console.log('Processed data:', processedData);
+}
+
+// Export functions
+function exportEmailList() {
+  const emailList = processedData.emails
+    .map(item => `${item.name} <${item.email}>`)
+    .join('\n');
+  
+  downloadFile(emailList, 'CVCWVUAA-Email-List.txt', 'text/plain');
+  alert(`📧 Email list exported!\n\n${processedData.validEmails} email addresses ready for your email client.`);
+}
+
+function exportMailingLabels() {
+  const labels = processedData.addresses
+    .map(item => `${item.name}\n${item.address}`)
+    .join('\n\n');
+  
+  downloadFile(labels, 'CVCWVUAA-Mailing-Labels.txt', 'text/plain');
+  alert(`🏷️ Mailing labels exported!\n\n${processedData.addresses.length} addresses formatted for label printing.`);
+}
+
+function exportPhoneList() {
+  const phoneList = processedData.phones
+    .map(item => `${item.name}: ${item.phone}`)
+    .join('\n');
+  
+  downloadFile(phoneList, 'CVCWVUAA-Phone-Directory.txt', 'text/plain');
+  alert(`📞 Phone directory exported!\n\n${processedData.phoneNumbers} phone numbers ready for contact list.`);
+}
+
+function exportRenewalList() {
+  // Filter for members who might need renewals (this would be based on dates in real implementation)
+  const renewalList = csvData
+    .filter(record => record['Type of Membership'] && record['Type of Membership'] !== 'Lifetime')
+    .map(record => {
+      const name = `${record['First Name(s)']} ${record['Last Name']}`;
+      const email = record['E-mail Address (Primary)'] || 'No email';
+      const type = record['Type of Membership'];
+      return `${name}, ${email}, ${type}`;
+    })
+    .join('\n');
+  
+  downloadFile(`Name, Email, Membership Type\n${renewalList}`, 'CVCWVUAA-Renewal-List.csv', 'text/csv');
+  alert('⏰ Renewal list exported!\n\nList includes all non-lifetime members for renewal tracking.');
+}
+
+function exportScholarshipDonors() {
+  const donors = csvData
+    .filter(record => record['Scholarship'] && record['Scholarship'] !== '0' && record['Scholarship'] !== '')
+    .map(record => {
+      const name = `${record['First Name(s)']} ${record['Last Name']}`;
+      const email = record['E-mail Address (Primary)'] || 'No email';
+      const amount = record['Scholarship'];
+      return `${name}, ${email}, $${amount}`;
+    })
+    .join('\n');
+  
+  downloadFile(`Name, Email, Scholarship Contribution\n${donors}`, 'CVCWVUAA-Scholarship-Donors.csv', 'text/csv');
+  alert(`🎓 Scholarship donors exported!\n\n${processedData.scholarshipContributors} donors identified for recognition.`);
+}
+
+function exportCleanCSV() {
+  // Create cleaned CSV with standardized data
+  const headers = ['Last Name', 'First Name', 'Email', 'Phone', 'Address', 'City', 'State', 'Zip', 'Membership Type', 'Scholarship'];
+  const cleanData = csvData.map(record => {
+    return [
+      record['Last Name'] || '',
+      record['First Name(s)'] || '',
+      record['E-mail Address (Primary)'] || '',
+      record['Primary Phone'] || '',
+      record['Home Address'] || '',
+      record['City'] || '',
+      record['State'] || '',
+      record['Zip Code'] || '',
+      record['Type of Membership'] || '',
+      record['Scholarship'] || ''
+    ].map(field => `"${field}"`).join(',');
+  });
+  
+  const csvContent = headers.join(',') + '\n' + cleanData.join('\n');
+  downloadFile(csvContent, 'CVCWVUAA-Clean-Data.csv', 'text/csv');
+  alert('🧹 Clean CSV exported!\n\nStandardized data ready for import into other systems.');
+}
+
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], { type: type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>

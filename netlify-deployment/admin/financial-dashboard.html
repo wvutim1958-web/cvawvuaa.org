@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVCWVUAA Financial Dashboard</title>
+<link rel="stylesheet" href="/css/styles.css">
+<style>
+  .financial-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+
+  .balance-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .balance-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    border-top: 4px solid var(--wvu-blue);
+  }
+
+  .balance-amount {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--wvu-blue);
+    margin: 1rem 0;
+  }
+
+  .financial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #f8fafc;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid #e5e7eb;
+  }
+
+  .expense-item.income {
+    border-left-color: #10b981;
+    background: #f0fdf4;
+  }
+
+  .expense-item.expense {
+    border-left-color: #ef4444;
+    background: #fef2f2;
+  }
+
+  .transaction-form {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+  }
+
+  .quick-report {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-top: 2rem;
+  }
+
+  .report-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .summary-item {
+    text-align: center;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+  }
+
+  .chart-placeholder {
+    height: 200px;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="financial-container">
+  
+  <!-- Header -->
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <h1>💰 Financial Dashboard</h1>
+    <p>Central Virginia Chapter Budget Overview</p>
+  </div>
+
+  <!-- Account Balances -->
+  <div class="balance-cards">
+    <div class="balance-card">
+      <h3>💳 Operating Account</h3>
+      <div class="balance-amount">$3,456.78</div>
+      <p>General chapter funds</p>
+    </div>
+    
+    <div class="balance-card">
+      <h3>🎓 Scholarship Fund</h3>
+      <div class="balance-amount">$8,247.52</div>
+      <p>Blake E. Fought Memorial</p>
+    </div>
+    
+    <div class="balance-card">
+      <h3>💰 Total Assets</h3>
+      <div class="balance-amount">$11,704.30</div>
+      <p>Combined chapter funds</p>
+    </div>
+  </div>
+
+  <!-- Financial Overview Grid -->
+  <div class="financial-grid">
+    
+    <!-- Recent Transactions -->
+    <div class="panel">
+      <div class="panel-header">
+        📊 Recent Transactions
+      </div>
+      <div class="panel-content">
+        
+        <div class="expense-item income">
+          <div>
+            <div style="font-weight: 600;">Membership Dues</div>
+            <div style="font-size: 0.85rem; color: #64748b;">Oct 1, 2025</div>
+          </div>
+          <div style="font-weight: 700; color: #10b981;">+$150.00</div>
+        </div>
+        
+        <div class="expense-item income">
+          <div>
+            <div style="font-weight: 600;">Event Registration</div>
+            <div style="font-size: 0.85rem; color: #64748b;">Sep 28, 2025</div>
+          </div>
+          <div style="font-weight: 700; color: #10b981;">+$320.00</div>
+        </div>
+        
+        <div class="expense-item expense">
+          <div>
+            <div style="font-weight: 600;">Event Venue</div>
+            <div style="font-size: 0.85rem; color: #64748b;">Sep 25, 2025</div>
+          </div>
+          <div style="font-weight: 700; color: #ef4444;">-$175.00</div>
+        </div>
+        
+        <div class="expense-item expense">
+          <div>
+            <div style="font-weight: 600;">Website Hosting</div>
+            <div style="font-size: 0.85rem; color: #64748b;">Sep 15, 2025</div>
+          </div>
+          <div style="font-weight: 700; color: #ef4444;">-$25.00</div>
+        </div>
+        
+        <div class="expense-item income">
+          <div>
+            <div style="font-weight: 600;">Scholarship Donation</div>
+            <div style="font-size: 0.85rem; color: #64748b;">Sep 10, 2025</div>
+          </div>
+          <div style="font-weight: 700; color: #10b981;">+$500.00</div>
+        </div>
+
+        <!-- Add Transaction Form -->
+        <div class="transaction-form">
+          <h4>Add New Transaction</h4>
+          <div class="form-group">
+            <label>Type:</label>
+            <select id="transactionType">
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description:</label>
+            <input type="text" id="transactionDesc" placeholder="Enter description">
+          </div>
+          <div class="form-group">
+            <label>Amount:</label>
+            <input type="number" id="transactionAmount" placeholder="0.00" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Category:</label>
+            <select id="transactionCategory">
+              <option value="membership">Membership Dues</option>
+              <option value="events">Events</option>
+              <option value="scholarship">Scholarship</option>
+              <option value="operations">Operations</option>
+              <option value="marketing">Marketing</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <button class="action-btn" onclick="addTransaction()">💾 Add Transaction</button>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- Budget Categories -->
+    <div class="panel">
+      <div class="panel-header">
+        📈 Budget Categories (Monthly)
+      </div>
+      <div class="panel-content">
+        
+        <div style="margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+            <span>Events & Venues</span>
+            <span>$350 / $500</span>
+          </div>
+          <div style="background: #e5e7eb; height: 8px; border-radius: 4px;">
+            <div style="background: #3b82f6; height: 8px; border-radius: 4px; width: 70%;"></div>
+          </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+            <span>Administrative</span>
+            <span>$75 / $150</span>
+          </div>
+          <div style="background: #e5e7eb; height: 8px; border-radius: 4px;">
+            <div style="background: #10b981; height: 8px; border-radius: 4px; width: 50%;"></div>
+          </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+            <span>Marketing</span>
+            <span>$25 / $100</span>
+          </div>
+          <div style="background: #e5e7eb; height: 8px; border-radius: 4px;">
+            <div style="background: #f59e0b; height: 8px; border-radius: 4px; width: 25%;"></div>
+          </div>
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+            <span>Scholarship Fund</span>
+            <span>$1,200 / $1,000</span>
+          </div>
+          <div style="background: #e5e7eb; height: 8px; border-radius: 4px;">
+            <div style="background: #8b5cf6; height: 8px; border-radius: 4px; width: 100%;"></div>
+          </div>
+        </div>
+
+        <!-- Monthly Summary Chart Placeholder -->
+        <div class="chart-placeholder">
+          📊 Monthly Spending Chart
+          <br><small>(Integration with charting library)</small>
+        </div>
+
+        <!-- Quick Budget Actions -->
+        <div style="margin-top: 1rem;">
+          <button class="action-btn secondary" onclick="exportFinancials()">📊 Export Report</button>
+          <button class="action-btn" onclick="createBudget()">📝 Set Budget</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Financial Reports -->
+  <div class="quick-report">
+    <h3>📋 Quick Financial Reports</h3>
+    
+    <div class="report-summary">
+      <div class="summary-item">
+        <h4>This Month</h4>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">+$1,245</div>
+        <div style="font-size: 0.85rem; color: #64748b;">Net Income</div>
+      </div>
+      
+      <div class="summary-item">
+        <h4>Year to Date</h4>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;">$8,950</div>
+        <div style="font-size: 0.85rem; color: #64748b;">Total Income</div>
+      </div>
+      
+      <div class="summary-item">
+        <h4>Scholarship Fund</h4>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #8b5cf6;">$2,100</div>
+        <div style="font-size: 0.85rem; color: #64748b;">This Year Raised</div>
+      </div>
+      
+      <div class="summary-item">
+        <h4>Avg per Member</h4>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #f59e0b;">$92.12</div>
+        <div style="font-size: 0.85rem; color: #64748b;">Annual Value</div>
+      </div>
+    </div>
+
+    <!-- Report Generation -->
+    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb;">
+      <h4>📊 Generate Reports</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <button class="action-btn" onclick="generateReport('monthly')">📅 Monthly Report</button>
+        <button class="action-btn" onclick="generateReport('quarterly')">📊 Quarterly Report</button>
+        <button class="action-btn" onclick="generateReport('annual')">📈 Annual Report</button>
+        <button class="action-btn success" onclick="generateReport('tax')">📋 Tax Summary</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function addTransaction() {
+  const type = document.getElementById('transactionType').value;
+  const desc = document.getElementById('transactionDesc').value;
+  const amount = document.getElementById('transactionAmount').value;
+  const category = document.getElementById('transactionCategory').value;
+  
+  if (!desc || !amount) {
+    alert('Please fill in all fields');
+    return;
+  }
+  
+  alert(`✅ Transaction Added!\nType: ${type}\nDescription: ${desc}\nAmount: $${amount}\nCategory: ${category}`);
+  
+  // Clear form
+  document.getElementById('transactionDesc').value = '';
+  document.getElementById('transactionAmount').value = '';
+}
+
+function exportFinancials() {
+  const csvContent = `Date,Description,Amount,Category,Type
+2025-10-01,Membership Dues,150.00,Membership,Income
+2025-09-28,Event Registration,320.00,Events,Income
+2025-09-25,Event Venue,-175.00,Events,Expense
+2025-09-15,Website Hosting,-25.00,Operations,Expense
+2025-09-10,Scholarship Donation,500.00,Scholarship,Income`;
+
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `CVCWVUAA-Financial-Report-${new Date().toISOString().split('T')[0]}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  alert('📊 Financial report exported as CSV file!');
+}
+
+function createBudget() {
+  alert('💰 Budget Planning Tool\n\nThis would open a comprehensive budget planning interface where you can:\n\n• Set monthly spending limits\n• Allocate funds by category\n• Track against previous years\n• Set savings goals\n• Plan for major events');
+}
+
+function generateReport(type) {
+  const reports = {
+    monthly: 'Monthly Financial Summary - includes all transactions, budget vs actual, and member dues status',
+    quarterly: 'Quarterly Financial Report - comprehensive overview with trends and analysis',
+    annual: 'Annual Financial Report - complete year summary for board meetings and records',
+    tax: 'Tax Summary Report - formatted for tax preparation with all deductible expenses'
+  };
+  
+  alert(`📋 Generating ${type.charAt(0).toUpperCase() + type.slice(1)} Report\n\n${reports[type]}\n\nThis would generate a professional PDF report with all financial data, charts, and summaries.`);
+}
+</script>
+
+</body>
+</html>

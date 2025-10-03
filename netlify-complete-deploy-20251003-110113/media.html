@@ -1,0 +1,262 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G14Q10H6Y2');
+</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CVCWVUAA â€¢ Media Uploads</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .gallery-grid { display:grid; gap:16px; grid-template-columns:1fr; }
+    @media (min-width:780px) { .gallery-grid { grid-template-columns:1fr 1fr 1fr; } }
+    .small { font-size:14px }
+    figure.card { background:#fff; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.15); overflow:hidden; }
+    figure.card img, figure.card video { display:block; width:100%; height:220px; object-fit:cover; }
+    figure.card figcaption { padding:8px; }
+  </style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">â˜°</button>
+
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws Â· Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">ðŸ”</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">ðŸŒ™</button>
+    </nav>
+  </div>
+</header>
+
+<main><div class="wrapper">
+
+  <h2>Share Your Photos</h2>
+  <p class="small">
+    Please compress your photos into a single <strong>.zip</strong> file and upload it here.<br>
+    Example filename: <code>watch-party-2025-10-12-j-smith.zip</code>
+  </p>
+  <p class="small">Please compress your photos into a single <strong>.zip</strong> and upload it here. Example: <code>watch-party-2025-10-12-j-smith.zip</code></p>
+  <p class="small">Uploads are reviewed by our volunteers and may be featured. Thank you!</p>
+
+  <form class="stack" action="https://formsubmit.co/president@cvawvuaa.org" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_subject" value="CVCWVUAA Photo Upload (ZIP)">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="https://cvawvuaa.org/thanks.html">
+    <!-- Honeypot: bots will fill this, humans won't (hidden) -->
+    <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">
+      <label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <div class="row">
+      <label>Your Name
+        <input type="text" name="Name" required>
+      </label>
+      <label>Email
+        <input type="email" name="Email" required>
+      </label>
+      <label>Your Name <input type="text" name="Name" required></label>
+      <label>Email <input type="email" name="Email" required></label>
+    </div>
+
+    <label>Event / Caption
+      <input type="text" name="Caption" placeholder="Event name, date, brief caption">
+    </label>
+
+    <label>Event / Caption <input type="text" name="Caption" placeholder="Event name, date, brief caption"></label>
+    <fieldset class="card" style="border:none">
+      <legend><strong>Upload your ZIP file</strong></legend>
+      <p class="small" style="margin-top:0">Select one .zip file. If your photos are large, create multiple ZIPs and submit separately.</p>
+      <p class="small" style="margin-top:0">Select one .zip file. If large, split into multiple ZIPs and submit each.</p>
+      <input type="file" name="attachment" accept=".zip" required>
+    </fieldset>
+
+    <label>Message (optional)
+      <textarea name="Message" rows="3" placeholder="Anything we should know?"></textarea>
+    </label>
+
+    <label>Message (optional) <textarea name="Message" rows="3" placeholder="Anything we should know?"></textarea></label>
+    <button class="btn" type="submit">Send ZIP</button>
+  </form>
+
+  <h2 style="margin-top:28px">Chapter Gallery</h2>
+  <div id="gallery-grid" class="gallery-grid"></div>
+
+</div></main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA â€” Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">Â© <span id="year"></span> CVCWVUAA â€” Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
+
+<script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+
+<script>
+// Gallery loader
+(async function () {
+  const grid = document.getElementById('gallery-grid');
+
+  function note(html, color="#8a5300"){
+    const msg = document.createElement('div');
+    msg.className = 'card';
+    msg.style.padding = '12px';
+    msg.innerHTML = `<div class="small" style="color:${color}">${html}</div>`;
+    grid && grid.prepend(msg);
+  }
+
+  async function loadJSON() {
+    const urls = ['content/gallery.json', '/content/gallery.json'];
+    for (const u of urls) {
+      try {
+        const r = await fetch(u, { cache: 'no-store' });
+        if (r.ok) return await r.json();
+      } catch {}
+    }
+    throw new Error('Unable to load gallery.json');
+  }
+
+  function norm(src) { return src && src.startsWith('/') ? src : src; }
+
+  function cardFor(item){
+    const fig = document.createElement('figure');
+    fig.className = 'card';
+    if(item.type === 'video'){
+      const v = document.createElement('video');
+      v.controls = true; v.playsInline = true; v.preload = "metadata";
+      v.style.cssText = 'width:100%;height:220px;object-fit:cover';
+      if(item.poster) v.poster = norm(item.poster);
+      const source = document.createElement('source');
+      source.src = norm(item.src);
+      source.type = 'video/mp4';
+      v.appendChild(source);
+      fig.appendChild(v);
+    } else {
+      const img = document.createElement('img');
+      img.src = norm(item.src);
+      img.alt = item.alt || '';
+      fig.appendChild(img);
+    }
+    const cap = document.createElement('figcaption');
+    const meta = [item.credit || '', item.date || ''].filter(Boolean).join(' â€¢ ');
+    cap.innerHTML = `<div><strong>${item.caption || ''}</strong></div>
+                     <div class="small" style="color:#5b6777">${meta}</div>`;
+    fig.appendChild(cap);
+    return fig;
+  }
+
+  try{
+    const items = await loadJSON();
+    if(!Array.isArray(items) || !items.length){
+      note('No media yet. Add entries in <code>content/gallery.json</code>.');
+      return;
+    }
+    grid.innerHTML = '';
+    items.forEach(it => grid.appendChild(cardFor(it)));
+  }catch(e){
+    console.error(e);
+    note('Gallery load error. Make sure <code>content/gallery.json</code> exists and images are uploaded.');
+  }
+})();
+</script>
+<script>
+  // Mobile: open/close main nav
+  (function(){
+    const navBtn = document.querySelector('.nav-toggle');
+    const nav = document.getElementById('site-nav');
+    if (navBtn && nav) {
+      navBtn.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+    // Mobile: tap to open dropdowns
+    document.querySelectorAll('.menu.dropdown').forEach(menu => {
+      const btn = menu.querySelector('.dropbtn');
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          if (window.matchMedia('(max-width: 900px)').matches) {
+            e.preventDefault();
+            menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
+          }
+        });
+      }
+    });
+
+    // Theme toggle functionality
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (themeToggle) {
+      // Load saved theme or default to light
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      themeToggle.textContent = savedTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
+      
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        themeToggle.textContent = newTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
+
