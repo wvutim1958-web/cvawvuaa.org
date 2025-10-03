@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix Virginia Address Issue - CVCWVUAA</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        h1 { color: #003366; }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 4px; 
+            border-left: 4px solid #007acc; 
+            background: #e6f3ff; 
+            font-family: monospace;
+            white-space: pre-line;
+        }
+        .error { border-left-color: #cc0000; background: #ffe6e6; }
+        .success { border-left-color: #00cc00; background: #e6ffe6; }
+        .warning { border-left-color: #ffaa00; background: #fff8e6; }
+        button {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover { background: #004488; }
+        button.warning { background: #cc6600; }
+        button.warning:hover { background: #ee7700; }
+        .member-list {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Fix Virginia Address Issue</h1>
+        <p>This tool specifically addresses the issue where member addresses are showing as just "virginia" instead of proper addresses.</p>
+        
+        <div class="status" id="output">Ready to check member data...</div>
+        
+        <button onclick="checkVirginiaIssue()">🔍 Check for Virginia Address Issues</button>
+        <button onclick="fixVirginiaIssue()" class="warning">🔧 Fix Virginia Address Issues</button>
+        <button onclick="showAllMembers()">👥 Show All Members</button>
+        <button onclick="clearOutput()">🗑️ Clear Output</button>
+        
+        <div class="member-list" id="memberList" style="display: none;">
+            Member data will appear here...
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const className = type === 'error' ? 'status error' : 
+                             type === 'success' ? 'status success' : 
+                             type === 'warning' ? 'status warning' : 'status';
+            output.className = className;
+            output.textContent += message + '\n';
+        }
+
+        function clearOutput() {
+            document.getElementById('output').textContent = '';
+            document.getElementById('output').className = 'status';
+            document.getElementById('memberList').style.display = 'none';
+        }
+
+        function findMembers() {
+            const possibleKeys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members', 'memberData'];
+            
+            for (const key of possibleKeys) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            log(`Found ${parsed.length} members in localStorage key: ${key}`);
+                            return { members: parsed, key: key };
+                        }
+                    } catch (e) {
+                        log(`Error parsing ${key}: ${e.message}`, 'error');
+                    }
+                }
+            }
+            return null;
+        }
+
+        function checkVirginiaIssue() {
+            clearOutput();
+            log('🔍 Checking for Virginia address issues...');
+            
+            const result = findMembers();
+            if (!result) {
+                log('❌ No member data found in localStorage', 'error');
+                return;
+            }
+            
+            const { members, key } = result;
+            let virginiaCount = 0;
+            let emptyAddressCount = 0;
+            let totalMembers = members.length;
+            
+            const virginiaMembers = [];
+            
+            members.forEach((member, index) => {
+                const address = member.address || '';
+                const name = member.name || `${member.firstName || ''} ${member.lastName || ''}`.trim();
+                
+                if (address.toLowerCase().trim() === 'virginia') {
+                    virginiaCount++;
+                    virginiaMembers.push(`${index + 1}. ${name} - Address: "${address}"`);
+                } else if (address.trim() === '') {
+                    emptyAddressCount++;
+                }
+            });
+            
+            log(`📊 Analysis Results:`);
+            log(`Total Members: ${totalMembers}`);
+            log(`Members with "virginia" address: ${virginiaCount}`);
+            log(`Members with empty addresses: ${emptyAddressCount}`);
+            log(`Members with proper addresses: ${totalMembers - virginiaCount - emptyAddressCount}`);
+            
+            if (virginiaCount > 0) {
+                log('\n🚨 Members with "virginia" address issue:', 'warning');
+                virginiaMembers.forEach(member => log(member));
+            } else {
+                log('\n✅ No "virginia" address issues found!', 'success');
+            }
+        }
+
+        function fixVirginiaIssue() {
+            clearOutput();
+            log('🔧 Fixing Virginia address issues...');
+            
+            const result = findMembers();
+            if (!result) {
+                log('❌ No member data found in localStorage', 'error');
+                return;
+            }
+            
+            const { members, key } = result;
+            let fixedCount = 0;
+            const fixedMembers = [];
+            
+            members.forEach((member, index) => {
+                const name = member.name || `${member.firstName || ''} ${member.lastName || ''}`.trim();
+                
+                // Check if address is just "virginia" (case insensitive)
+                if (member.address && member.address.toLowerCase().trim() === 'virginia') {
+                    // Clear the corrupted address and set state to Virginia if it's empty
+                    member.address = '';
+                    if (!member.state || member.state.trim() === '') {
+                        member.state = 'Virginia';
+                    }
+                    fixedCount++;
+                    fixedMembers.push(`${index + 1}. ${name} - Cleared corrupted address, set state to Virginia`);
+                }
+                
+                // Also check other fields that might have been corrupted
+                if (member.city && member.city.toLowerCase().trim() === 'virginia') {
+                    member.city = '';
+                    if (!member.state || member.state.trim() === '') {
+                        member.state = 'Virginia';
+                    }
+                    fixedCount++;
+                    fixedMembers.push(`${index + 1}. ${name} - Fixed corrupted city field`);
+                }
+            });
+            
+            if (fixedCount > 0) {
+                // Save the fixed data back to localStorage
+                localStorage.setItem(key, JSON.stringify(members));
+                
+                log(`✅ Fixed ${fixedCount} corrupted address entries:`, 'success');
+                fixedMembers.forEach(member => log(member));
+                log('\n💾 Changes saved to localStorage');
+                log('\nℹ️ Note: Addresses have been cleared. You may need to manually re-enter correct addresses.');
+            } else {
+                log('✅ No Virginia address corruption found to fix', 'success');
+            }
+        }
+
+        function showAllMembers() {
+            const memberList = document.getElementById('memberList');
+            const result = findMembers();
+            
+            if (!result) {
+                memberList.textContent = 'No member data found';
+                memberList.style.display = 'block';
+                return;
+            }
+            
+            const { members } = result;
+            let output = '';
+            
+            members.forEach((member, index) => {
+                const name = member.name || `${member.firstName || ''} ${member.lastName || ''}`.trim();
+                const address = member.address || '[empty]';
+                const city = member.city || '[empty]';
+                const state = member.state || '[empty]';
+                const zip = member.zip || '[empty]';
+                
+                output += `${index + 1}. ${name}\n`;
+                output += `   Address: ${address}\n`;
+                output += `   City: ${city}, State: ${state}, ZIP: ${zip}\n`;
+                output += `   Email: ${member.email || '[empty]'}\n\n`;
+            });
+            
+            memberList.textContent = output;
+            memberList.style.display = 'block';
+        }
+
+        // Auto-run check on load
+        window.addEventListener('load', () => {
+            checkVirginiaIssue();
+        });
+    </script>
+</body>
+</html>
