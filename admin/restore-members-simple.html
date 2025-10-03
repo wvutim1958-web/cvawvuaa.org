@@ -110,7 +110,7 @@ Click the button above to start.
                 log('✅ CSV file loaded successfully\n\nStep 2: Parsing member data...');
                 
                 // Parse CSV
-                const lines = csvText.split('\\n').filter(line => line.trim());
+                const lines = csvText.split('\n').filter(line => line.trim());
                 if (lines.length < 2) {
                     throw new Error('CSV file appears to be empty or invalid');
                 }
@@ -237,7 +237,7 @@ Click the button above to start.
             } else if (workingParts.length === 2) {
                 // Format: street, city state zip
                 const lastPart = workingParts[1];
-                const match = lastPart.match(/^(.+?)\\s+([A-Z]{2})\\s*(\\d{5}(-\\d{4})?)$/);
+                const match = lastPart.match(/^(.+?)\s+([A-Z]{2})\s*(\d{5}(-\d{4})?)$/);
                 if (match) {
                     city = workingParts[0];
                     state = match[2];
@@ -249,7 +249,7 @@ Click the button above to start.
             } else if (workingParts.length === 1) {
                 // Try to parse "City, STATE ZIP" format
                 const part = workingParts[0];
-                const match = part.match(/^(.+?),\\s*([A-Z]{2})\\s*(\\d{5}(-\\d{4})?)$/);
+                const match = part.match(/^(.+?),\s*([A-Z]{2})\s*(\d{5}(-\d{4})?)$/);
                 if (match) {
                     city = match[1];
                     state = match[2]; 
