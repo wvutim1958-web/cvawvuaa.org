@@ -177,18 +177,25 @@
                     name: `${values[0] || ''} ${values[1] || ''}`.trim(),
                     email: values[2] || '',
                     phone: values[3] || '',
-                    address: values[4] || '',
+                    address: values[4] || '',           // Street address
+                    streetAddress: values[4] || '',     // Also map to streetAddress field
                     city: values[5] || '',
                     state: values[6] || 'VA',
                     zipCode: values[7] || '',
+                    zip: values[7] || '',               // Also map to zip field
                     membershipType: values[8] || 'Individual Membership',
                     paidThrough: values[9] || '',
+                    lastPayment: values[9] || '',       // Also map to lastPayment
                     duesAmount: parseFloat(values[10]) || 0,
                     totalAmountPaid: parseFloat(values[11]) || 0,
                     scholarshipAmount: parseFloat(values[12]) || 0,
                     generalFundAmount: parseFloat(values[13]) || 0,
                     duesStatus: values[9] ? 'current' : 'unpaid',
-                    type: values[8] && values[8].toLowerCase().includes('family') ? 'family' : 'individual'
+                    status: values[9] ? 'current' : 'unpaid',  // Also map to status
+                    type: values[8] && values[8].toLowerCase().includes('family') ? 'family' : 'individual',
+                    // Create full address for display
+                    fullAddress: [values[4], values[5], values[6], values[7]].filter(part => part && part.trim()).join(', '),
+                    displayLocation: values[5] ? `${values[5]}${values[6] ? ', ' + values[6] : ''}` : ''
                 };
                 
                 members.push(member);
@@ -262,7 +269,11 @@
             if (members.length > 0) {
                 const sample = members[0];
                 report += `✓ Sample member: ${sample.name}\n`;
-                report += `✓ Sample address: ${sample.address}, ${sample.city}, ${sample.state} ${sample.zipCode}\n`;
+                report += `✓ Street address: ${sample.streetAddress || sample.address || 'Not set'}\n`;
+                report += `✓ Full address: ${sample.fullAddress || 'Not available'}\n`;
+                report += `✓ City/State: ${sample.city}, ${sample.state} ${sample.zipCode}\n`;
+                report += `✓ Email: ${sample.email}\n`;
+                report += `✓ Phone: ${sample.phone}\n`;
             }
             
             report += '\nAll systems ready! Your tools should now work with the CSV data.';
