@@ -1193,8 +1193,12 @@ function openAddMemberModal() {
 }
 
 function editMember(id) {
+  console.log('Edit member called with ID:', id);
+  console.log('Available members:', members.map(m => ({id: m.id, name: m.name})));
+  
   const member = members.find(m => m.id == id || m.id === id);
   if (member) {
+    console.log('Found member:', member);
     currentEditingId = id;
     document.getElementById('modalTitle').textContent = 'Edit Member';
     document.getElementById('saveBtn').textContent = 'Update Member';
@@ -1213,6 +1217,10 @@ function editMember(id) {
     document.getElementById('generalFundAmount').value = member.generalFundAmount || '0';
     
     document.getElementById('memberModal').style.display = 'block';
+  } else {
+    console.error('Member not found with ID:', id);
+    console.error('Available IDs:', members.map(m => m.id));
+    alert('Member not found. Check console for details.');
   }
 }
 
