@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fix Members Now</title>
+</head>
+<body>
+    <h1>Fixing Member Database...</h1>
+    <div id="status">Processing...</div>
+
+    <script>
+        // Just put the real member data directly into localStorage
+        const members = [
+            {
+                id: 1,
+                name: "Mark & Vicki Allen",
+                email: "vla24fan@verizon.net",
+                phone: "804-240-6147",
+                address: "14507 Standing Oak Ct",
+                city: "Midlothian",
+                state: "VA",
+                zip: "23112"
+            },
+            {
+                id: 2,
+                name: "Jenny Alsop",
+                email: "eersandeyes@yahoo.com",
+                phone: "",
+                address: "1919 E. Broad St Unit D",
+                city: "Richmond",
+                state: "VA",
+                zip: "23223"
+            },
+            {
+                id: 3,
+                name: "Seth Ball",
+                email: "sethdball1@gmail.com",
+                phone: "(804) 307-6360",
+                address: "1100 Pantigo Lane #303",
+                city: "Chesapeake",
+                state: "VA",
+                zip: "23320"
+            },
+            {
+                id: 4,
+                name: "Bob Basham",
+                email: "wvubasham@gmail.com",
+                phone: "804-921-1883",
+                address: "1 Broad Run Rd",
+                city: "Manakin-Sabot",
+                state: "VA",
+                zip: "23103"
+            },
+            {
+                id: 5,
+                name: "Timothy Sr Casten",
+                email: "tcasten@gmail.com",
+                phone: "804-566-8058",
+                address: "4701 Stoney Creek Pkwy",
+                city: "Chester",
+                state: "VA",
+                zip: "23831"
+            },
+            {
+                id: 6,
+                name: "Jeff Wilson",
+                email: "jeffwilsonwvu80@gmail.com",
+                phone: "804-516-4607",
+                address: "2643 Mulberry Row Rd",
+                city: "Midlothian",
+                state: "VA",
+                zip: "23113"
+            },
+            {
+                id: 7,
+                name: "Thomas & Mar Zahler",
+                email: "tmzahler@gmail.com",
+                phone: "804-363-7683",
+                address: "14213 Chimney House Rd",
+                city: "Midlothian",
+                state: "VA",
+                zip: "23112"
+            }
+        ];
+
+        // Save to localStorage
+        localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+        
+        document.getElementById('status').innerHTML = 
+            '<h2>DONE!</h2>' +
+            '<p>Saved ' + members.length + ' members with addresses.</p>' +
+            '<p>Your receipt generator should work now.</p>' +
+            '<p><a href="receipt-generator.html">Go to Receipt Generator</a></p>';
+    </script>
+</body>
+</html>
