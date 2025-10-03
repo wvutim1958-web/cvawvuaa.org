@@ -692,9 +692,9 @@ Website: www.cvawvuaa.org
         }
         
         function newReceipt() {
-            if (confirm('Create a new receipt? This will clear current data.')) {
-                // Reset to default values or redirect to member selection
-                location.reload();
+            if (confirm('Create a new receipt? This will redirect to the receipt generator.')) {
+                // Redirect to receipt generator to create a new receipt
+                window.location.href = 'receipt-generator.html';
             }
         }
         
