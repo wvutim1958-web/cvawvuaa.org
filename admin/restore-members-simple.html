@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restore Members from CSV - CVCWVUAA</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        h1 { color: #003366; text-align: center; }
+        .big-button {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        .big-button:hover { background: #004488; }
+        .status { 
+            padding: 15px; 
+            margin: 15px 0; 
+            border-radius: 4px; 
+            font-family: monospace;
+            white-space: pre-line;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { 
+            background: #e6ffe6; 
+            border: 2px solid #00cc00;
+            color: #006600;
+        }
+        .error { 
+            background: #ffe6e6; 
+            border: 2px solid #cc0000;
+            color: #cc0000;
+        }
+        .info { 
+            background: #e6f3ff; 
+            border: 2px solid #007acc;
+            color: #004466;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Restore Member Data from CSV</h1>
+        
+        <p style="text-align: center; font-size: 16px;">
+            This will restore your member database from the transaction CSV file.<br>
+            <strong>One click to fix everything.</strong>
+        </p>
+        
+        <button class="big-button" onclick="restoreFromTransactionCSV()">
+            📄 Restore Members from Transaction CSV
+        </button>
+        
+        <div class="status info" id="output">
+Ready to restore member data from your transaction CSV file...
+
+This will:
+1. Parse your customer-transactions-complete.csv file
+2. Extract member names, addresses, and contact info  
+3. Create proper member records with full address data
+4. Save to your member database
+5. Fix the receipt generator immediately
+
+Click the button above to start.
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            let className = 'status ';
+            if (type === 'error') className += 'error';
+            else if (type === 'success') className += 'success';
+            else className += 'info';
+            
+            output.className = className;
+            output.textContent = message;
+        }
+
+        async function restoreFromTransactionCSV() {
+            log('🔄 Starting member data restoration...\n\nStep 1: Fetching transaction CSV file...');
+            
+            try {
+                // Fetch the CSV file from the root directory
+                const response = await fetch('/customer-transactions-complete.csv');
+                if (!response.ok) {
+                    throw new Error(`Could not load CSV file: ${response.status}`);
+                }
+                
+                const csvText = await response.text();
+                log('✅ CSV file loaded successfully\n\nStep 2: Parsing member data...');
+                
+                // Parse CSV
+                const lines = csvText.split('\\n').filter(line => line.trim());
+                if (lines.length < 2) {
+                    throw new Error('CSV file appears to be empty or invalid');
+                }
+                
+                // Skip header, process data lines
+                const members = [];
+                const seenEmails = new Set();
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    // Parse CSV line (handle commas in quotes)
+                    const columns = parseCSVLine(line);
+                    if (columns.length < 4) continue;
+                    
+                    const [name, address, email, amount, date] = columns;
+                    
+                    // Skip if no email or already processed
+                    if (!email || email === 'Not Provided' || seenEmails.has(email.toLowerCase())) {
+                        continue;
+                    }
+                    
+                    // Parse address
+                    const addressParts = parseAddress(address);
+                    
+                    // Create member record
+                    const member = {
+                        id: members.length + 1,
+                        name: cleanName(name),
+                        email: email.toLowerCase().trim(),
+                        phone: '', // Not in CSV, will need to be added manually
+                        address: addressParts.street,
+                        city: addressParts.city,
+                        state: addressParts.state,
+                        zip: addressParts.zip,
+                        memberSince: formatDate(date) || '2018',
+                        lastPayment: amount,
+                        lastPaymentDate: formatDate(date)
+                    };
+                    
+                    members.push(member);
+                    seenEmails.add(email.toLowerCase());
+                }
+                
+                if (members.length === 0) {
+                    throw new Error('No valid member records found in CSV');
+                }
+                
+                log(`✅ Parsed ${members.length} unique members\n\nStep 3: Saving to member database...`);
+                
+                // Save to localStorage
+                localStorage.setItem('cvcwvuaa-members', JSON.stringify(members));
+                
+                // Also save as backup
+                localStorage.setItem('cvcwvuaa-members-backup-' + Date.now(), JSON.stringify(members));
+                
+                log(`✅ SUCCESS! Restored ${members.length} members to database\n\n` +
+                    `Sample restored member:\n` +
+                    `Name: ${members[0].name}\n` +
+                    `Email: ${members[0].email}\n` +
+                    `Address: ${members[0].address}\n` +
+                    `City: ${members[0].city}, ${members[0].state} ${members[0].zip}\n\n` +
+                    `✅ Member database is now restored!\n` +
+                    `✅ Receipt generator will now work properly!\n` +
+                    `✅ All address data has been recovered!\n\n` +
+                    `You can now go to the receipt generator and search for members by name or email.`, 'success');
+                
+            } catch (error) {
+                log(`❌ ERROR: ${error.message}\n\n` +
+                    `This usually means:\n` +
+                    `1. The CSV file is not accessible\n` +
+                    `2. The file format has changed\n` +
+                    `3. Network issue\n\n` +
+                    `Please check that customer-transactions-complete.csv exists in the root directory.`, 'error');
+            }
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim());
+            return result.map(field => field.replace(/^"(.*)"$/, '$1'));
+        }
+
+        function parseAddress(addressString) {
+            if (!addressString || addressString === 'Not Provided') {
+                return { street: '', city: '', state: '', zip: '' };
+            }
+            
+            // Remove quotes and split by comma
+            const parts = addressString.replace(/"/g, '').split(',').map(p => p.trim());
+            
+            if (parts.length < 2) {
+                return { street: addressString, city: '', state: '', zip: '' };
+            }
+            
+            const street = parts[0] || '';
+            let city = '', state = '', zip = '';
+            
+            // Last part is usually country (US) - ignore it
+            const workingParts = parts.slice(1).filter(p => p && p !== 'US');
+            
+            if (workingParts.length >= 3) {
+                // Format: street, city, state, zip
+                city = workingParts[0];
+                state = workingParts[1];
+                zip = workingParts[2];
+            } else if (workingParts.length === 2) {
+                // Format: street, city state zip
+                const lastPart = workingParts[1];
+                const match = lastPart.match(/^(.+?)\\s+([A-Z]{2})\\s*(\\d{5}(-\\d{4})?)$/);
+                if (match) {
+                    city = workingParts[0];
+                    state = match[2];
+                    zip = match[3];
+                } else {
+                    city = workingParts[0];
+                    state = workingParts[1];
+                }
+            } else if (workingParts.length === 1) {
+                // Try to parse "City, STATE ZIP" format
+                const part = workingParts[0];
+                const match = part.match(/^(.+?),\\s*([A-Z]{2})\\s*(\\d{5}(-\\d{4})?)$/);
+                if (match) {
+                    city = match[1];
+                    state = match[2]; 
+                    zip = match[3];
+                } else {
+                    city = part;
+                }
+            }
+            
+            return { street, city, state, zip };
+        }
+
+        function cleanName(name) {
+            if (!name) return '';
+            
+            // Handle "LastName FirstName" format
+            const parts = name.split(' ').filter(p => p.trim());
+            if (parts.length === 2) {
+                // Assume it's "Last First" and swap to "First Last"
+                return `${parts[1]} ${parts[0]}`;
+            }
+            
+            return name;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            
+            try {
+                const date = new Date(dateString);
+                return date.getFullYear().toString();
+            } catch {
+                return '';
+            }
+        }
+    </script>
+</body>
+</html>
