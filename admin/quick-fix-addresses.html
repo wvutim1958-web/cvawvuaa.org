@@ -138,58 +138,48 @@ Click "Show Current Member Data" to see what's in your database right now.
         function fixAddressesNow() {
             log('🔧 Fixing addresses using CSV data directly...\n\n');
             
-            // Hard-coded address data from your CSV
-            const addressData = {
-                'tmzahler@gmail.com': {
-                    name: 'Thomas Zahler',
-                    address: '14213 Chimney House Road',
-                    city: 'Midlothian',
-                    state: 'Virginia',
-                    zip: '23112'
-                },
-                'woody468645@yahoo.com': {
-                    name: 'James Woodside',
-                    address: '3805 Cutshaw Ave, Apt 104',
-                    city: 'Richmond',
-                    state: 'Virginia', 
-                    zip: '23230'
-                },
-                'jeffwilsonwvu80@gmail.com': {
-                    name: 'Jeffrey Wilson',
-                    address: '2643 Mulberry Row Road',
-                    city: 'Midlothian',
-                    state: 'Virginia',
-                    zip: '23113'
-                },
-                'rwhiteman@verizon.net': {
-                    name: 'Sandra Whiteman',
-                    address: '5524 Burberry Lane',
-                    city: 'Glen Allen',
-                    state: 'Virginia',
-                    zip: '23059'
-                },
-                'tweeks2@collinsengr.com': {
-                    name: 'Timothy Weeks',
-                    address: '745 Bluecrab Road, Suite B',
-                    city: 'Newport News',
-                    state: 'Virginia',
-                    zip: '23606'
-                },
-                'carol.timpano@gmail.com': {
-                    name: 'Carol Timpano',
-                    address: '8410 Copperpenny Terrace',
-                    city: 'Chesterfield',
-                    state: 'Virginia',
-                    zip: '23832'
-                },
-                'ebthornhill@gmail.com': {
-                    name: 'Elizabeth Thornhill',
-                    address: '219 Greenbrier St',
-                    city: 'Morgantown',
-                    state: 'West Virginia',
-                    zip: '26501'
+            // Parse addresses from your actual CSV data
+            const csvAddressData = `Customer Name,Delivery Address,Email Address,Last Transaction Amount,Last Transaction Date
+Zahler Thomas,"14213 Chimney House Road, Midlothian, 23112, US",tmzahler@gmail.com,$40.00 USD,7/26/2021
+Woodside James,"3805 Cutshaw Ave, Apt 104, Richmond, VA, 23230, US",Woody468645@Yahoo.com,$80.00 USD,11/20/2019
+Wilson Jeffrey,"2643 Mulberry Row Road, Midlothian, VA, 23113, US",jeffwilsonwvu80@gmail.com,$45.00 USD,9/5/2025
+Whiteman Sandra,"5524 Burberry Lane, GLEN ALLEN, VA, 23059-5379, US",rwhiteman@verizon.net,$45.00 USD,7/5/2024
+Weeks Timothy,"745 Bluecrab Road, Suite B, Newport News, VA, 23606, US",tweeks2@collinsengr.com,$550.00 USD,2/5/2020
+Timpano Carol,"8410 Copperpenny terrace, Chesterfield, VA, 23832, US",carol.timpano@gmail.com,$25.00 USD,11/27/2018`;
+
+            // Parse the CSV data
+            const lines = csvAddressData.split('\n');
+            const addressData = {};
+            
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i];
+                if (!line.trim()) continue;
+                
+                // Parse CSV line with quoted addresses
+                const match = line.match(/^([^,]+),"([^"]+)",([^,]+),/);
+                if (match) {
+                    const [, name, fullAddress, email] = match;
+                    
+                    // Parse the address
+                    const addrParts = fullAddress.split(',').map(p => p.trim());
+                    const street = addrParts[0] || '';
+                    const city = addrParts[1] || '';
+                    const stateZip = addrParts[2] || '';
+                    const state = stateZip.includes(' ') ? stateZip.split(' ')[0] : 'VA';
+                    const zip = stateZip.match(/\d{5}/)?.[0] || '';
+                    
+                    // Store by email (case insensitive)
+                    addressData[email.toLowerCase().trim()] = {
+                        name: name.trim(),
+                        address: street,
+                        city: city,
+                        state: state === 'VA' ? 'Virginia' : state,
+                        zip: zip
+                    };
                 }
-            };
+            }
+            
+            log(`Parsed ${Object.keys(addressData).length} addresses from CSV data\n`);
 
             // Find current member data
             const keys = ['cvcwvuaa-members', 'cvcwvuaa_members', 'members', 'memberData'];
@@ -250,6 +240,30 @@ Click "Show Current Member Data" to see what's in your database right now.
                         log(`✅ Fixed: ${member.name} - ${addr.address}`);
                     }
                 });
+                
+                // Also try matching by name if email didn't work
+                if (fixed === 0) {
+                    log(`No email matches found. Trying name matching...\n`);
+                    members.forEach(member => {
+                        if (!member.address || member.address === 'undefined') {
+                            // Try to find by partial name match
+                            const memberName = (member.name || '').toLowerCase();
+                            for (const [email, data] of Object.entries(addressData)) {
+                                const csvName = data.name.toLowerCase();
+                                if (memberName.includes(csvName.split(' ')[0]) || 
+                                    csvName.includes(memberName.split(' ')[0])) {
+                                    member.address = data.address;
+                                    member.city = data.city;
+                                    member.state = data.state;
+                                    member.zip = data.zip;
+                                    fixed++;
+                                    log(`✅ Fixed by name: ${member.name} - ${data.address}`);
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                }
                 
                 log(`\nFixed addresses for ${fixed} members.\n`);
             }
