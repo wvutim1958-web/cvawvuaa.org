@@ -214,3 +214,113 @@ function exportForGoogleMaps() {
     alert(`✅ Successfully exported ${membersWithAddresses.length} Richmond area members for Google Maps!\n\nFile: CVCWVUAA-Richmond-Members-GoogleMaps-${new Date().toISOString().split('T')[0]}.csv\n\nNext steps:\n1. Go to mymaps.google.com\n2. Click "Create a New Map"\n3. Click "Import" and upload this CSV file\n4. Google will automatically map all the addresses!`);
   }
 }
+
+// Avery 5160 Labels Export (30 labels per sheet, 1" x 2⅝")
+function exportAvery5160Labels() {
+  // Get current members data from localStorage
+  const membersData = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
+  
+  if (membersData.length === 0) {
+    alert('⚠️ No member data found to export. Please import or add members first.');
+    return;
+  }
+
+  // Filter members with valid mailing addresses
+  const membersWithAddresses = membersData.filter(member => {
+    const hasName = member.name && member.name.trim();
+    const hasAddress = (member.streetAddress && member.city) || member.fullAddress;
+    return hasName && hasAddress;
+  });
+
+  if (membersWithAddresses.length === 0) {
+    alert('⚠️ No members found with complete mailing addresses.');
+    return;
+  }
+
+  // Sort members alphabetically by last name for easier mailing
+  membersWithAddresses.sort((a, b) => {
+    const lastNameA = a.name.split(' ').pop().toLowerCase();
+    const lastNameB = b.name.split(' ').pop().toLowerCase();
+    return lastNameA.localeCompare(lastNameB);
+  });
+
+  // Create Avery 5160 compatible CSV format
+  const headers = [
+    'Name',
+    'Address1', 
+    'Address2',
+    'City',
+    'State',
+    'Zip'
+  ];
+
+  let csvContent = headers.join(',') + '\n';
+
+  // Format each member for Avery 5160 labels
+  membersWithAddresses.forEach(member => {
+    // Clean and format name
+    const cleanName = (member.name || '').trim();
+    
+    // Handle address components
+    let address1 = '';
+    let address2 = '';
+    let city = '';
+    let state = '';
+    let zip = '';
+
+    if (member.streetAddress && member.city) {
+      // Use structured address data
+      address1 = member.streetAddress.trim();
+      city = member.city.trim();
+      state = (member.state || 'VA').trim();
+      zip = (member.zip || '').trim();
+    } else if (member.fullAddress) {
+      // Parse full address string
+      const addressParts = member.fullAddress.split(',').map(part => part.trim());
+      if (addressParts.length >= 2) {
+        address1 = addressParts[0];
+        const lastPart = addressParts[addressParts.length - 1];
+        
+        // Try to extract state and zip from last part
+        const stateZipMatch = lastPart.match(/([A-Z]{2})\s+(\d{5}(-\d{4})?)/);
+        if (stateZipMatch) {
+          state = stateZipMatch[1];
+          zip = stateZipMatch[2];
+          // City is everything before the last part
+          city = addressParts.slice(1, -1).join(', ');
+        } else {
+          city = addressParts.slice(1).join(', ');
+          state = 'VA';
+        }
+      }
+    }
+
+    // Create label row (Avery 5160 format)
+    const row = [
+      escapeCSVField(cleanName),
+      escapeCSVField(address1),
+      escapeCSVField(address2), // Usually empty for standard addresses
+      escapeCSVField(city),
+      escapeCSVField(state),
+      escapeCSVField(zip)
+    ];
+
+    csvContent += row.join(',') + '\n';
+  });
+
+  // Create and download the file
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `CVCWVUAA-Avery5160-Labels-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert(`✅ Successfully exported ${membersWithAddresses.length} member addresses for Avery 5160 labels!\n\nFile: CVCWVUAA-Avery5160-Labels-${new Date().toISOString().split('T')[0]}.csv\n\nNext steps:\n1. Open Microsoft Word\n2. Go to Mailings → Start Mail Merge → Labels\n3. Select "Avery US Letter 5160"\n4. Click "Select Recipients" → "Use an Existing List"\n5. Select your downloaded CSV file\n6. Insert merge fields: <<Name>>, <<Address1>>, etc.\n7. Complete the merge and print!\n\nMembers are sorted alphabetically by last name for easier organization.`);
+  }
+}
