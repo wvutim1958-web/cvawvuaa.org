@@ -114,3 +114,103 @@ function formatDateForCSV(dateString) {
     return dateString; // Return original if formatting fails
   }
 }
+
+// Google Maps-specific CSV export
+function exportForGoogleMaps() {
+  // Get current members data from localStorage
+  const membersData = JSON.parse(localStorage.getItem('cvcwvuaa-members') || '[]');
+  
+  if (membersData.length === 0) {
+    alert('⚠️ No member data found to export. Please import or add members first.');
+    return;
+  }
+
+  // Filter members with valid addresses (Richmond area focus)
+  const membersWithAddresses = membersData.filter(member => {
+    const hasAddress = (member.streetAddress && member.city) || member.fullAddress;
+    const isRichmondArea = !member.city || 
+      member.city.toLowerCase().includes('richmond') ||
+      member.city.toLowerCase().includes('glen allen') ||
+      member.city.toLowerCase().includes('henrico') ||
+      member.city.toLowerCase().includes('chesterfield') ||
+      member.city.toLowerCase().includes('mechanicsville') ||
+      member.city.toLowerCase().includes('midlothian') ||
+      member.city.toLowerCase().includes('virginia') ||
+      (member.state && member.state.toLowerCase() === 'va');
+    
+    return hasAddress && isRichmondArea;
+  });
+
+  if (membersWithAddresses.length === 0) {
+    alert('⚠️ No members found with valid addresses in the Richmond area.');
+    return;
+  }
+
+  // Create headers for Google Maps (simplified format)
+  const headers = [
+    'Name',
+    'Address', 
+    'City',
+    'State',
+    'Zip',
+    'Full Address',
+    'Description',
+    'Type',
+    'Status'
+  ];
+
+  let csvContent = headers.join(',') + '\n';
+
+  // Add each member as a row
+  membersWithAddresses.forEach(member => {
+    // Create full address for mapping
+    const addressParts = [
+      member.streetAddress, 
+      member.city, 
+      member.state || 'VA', 
+      member.zip
+    ].filter(part => part && part.trim());
+    
+    const fullAddress = addressParts.length > 0 ? 
+      addressParts.join(', ') : 
+      (member.fullAddress || '');
+
+    // Create description with membership info
+    const description = [
+      `Member Type: ${getFullMembershipType(member.type)}`,
+      `Status: ${member.duesStatus || 'unknown'}`,
+      member.email ? `Email: ${member.email}` : '',
+      member.phone ? `Phone: ${member.phone}` : ''
+    ].filter(item => item).join(' | ');
+
+    const row = [
+      escapeCSVField(member.name || ''),
+      escapeCSVField(member.streetAddress || ''),
+      escapeCSVField(member.city || ''),
+      escapeCSVField(member.state || 'VA'),
+      escapeCSVField(member.zip || ''),
+      escapeCSVField(fullAddress),
+      escapeCSVField(description),
+      escapeCSVField(getFullMembershipType(member.type)),
+      escapeCSVField(member.duesStatus || 'unknown')
+    ];
+
+    csvContent += row.join(',') + '\n';
+  });
+
+  // Create and download the file
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `CVCWVUAA-Richmond-Members-GoogleMaps-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert(`✅ Successfully exported ${membersWithAddresses.length} Richmond area members for Google Maps!\n\nFile: CVCWVUAA-Richmond-Members-GoogleMaps-${new Date().toISOString().split('T')[0]}.csv\n\nNext steps:\n1. Go to mymaps.google.com\n2. Click "Create a New Map"\n3. Click "Import" and upload this CSV file\n4. Google will automatically map all the addresses!`);
+  }
+}
