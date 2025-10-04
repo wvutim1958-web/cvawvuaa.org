@@ -360,3 +360,88 @@ function exportAvery5160Labels() {
     alert(`✅ Successfully exported ${membersWithAddresses.length} member addresses for Avery 5160 labels!\n\nFile: CVCWVUAA-Avery5160-Labels-${new Date().toISOString().split('T')[0]}.csv\n\nNext steps:\n1. Open Microsoft Word\n2. Go to Mailings → Start Mail Merge → Labels\n3. Select "Avery US Letter 5160"\n4. Click "Select Recipients" → "Use an Existing List"\n5. Select your downloaded CSV file\n6. Insert merge fields: <<Name>>, <<Address1>>, etc.\n7. Complete the merge and print!\n\nMembers are sorted alphabetically by last name for easier organization.`);
   }
 }
+
+// Return Address Labels Export (4 rows x 20 labels = 80 per sheet)
+function exportReturnAddressLabels() {
+  // CVCWVUAA return address information
+  const returnAddress = {
+    organization: 'CVCWVUAA',
+    address1: '4701 Stoney Creek Pkwy',
+    cityStateZip: 'Chester, VA 23831'
+  };
+
+  // Create CSV format for return address labels (one row repeated)
+  const headers = [
+    'Line1',
+    'Line2', 
+    'Line3'
+  ];
+
+  let csvContent = headers.join(',') + '\n';
+
+  // Add the return address as a single row
+  const row = [
+    escapeCSVField(returnAddress.organization),
+    escapeCSVField(returnAddress.address1),
+    escapeCSVField(returnAddress.cityStateZip)
+  ];
+
+  csvContent += row.join(',') + '\n';
+
+  // Create and download the file
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `CVCWVUAA-ReturnAddress-Labels-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert(`✅ Return address labels CSV created!\n\nFile: CVCWVUAA-ReturnAddress-Labels-${new Date().toISOString().split('T')[0]}.csv\n\nReturn Address:\nCVCWVUAA\n4701 Stoney Creek Pkwy\nChester, VA 23831\n\nWord Setup:\n1. Mailings → Start Mail Merge → Labels\n2. Select your label type (likely Avery 5167 for 4x20 layout)\n3. Click "Select Recipients" → "Use an Existing List"\n4. Select the downloaded CSV\n5. Insert fields: <<Line1>>, <<Line2>>, <<Line3>>\n6. Update Labels → Finish & Merge\n\nAll 80 labels will have the same return address!`);
+  }
+}
+
+// Simple Return Address Generator (No CSV needed)
+function generateReturnAddressDocument() {
+  // Create a simple text document with return address for copy/paste
+  const returnAddress = `CVCWVUAA
+4701 Stoney Creek Pkwy
+Chester, VA 23831`;
+
+  const instructions = `CVCWVUAA Return Address Labels
+
+Return Address:
+${returnAddress}
+
+Instructions for Word:
+1. Open Microsoft Word
+2. Go to Mailings → Start Mail Merge → Labels
+3. Select your label type:
+   - For 4 rows x 20 labels: Try Avery 5167 (Return Address)
+   - Or use "Details" to set custom dimensions
+4. In the first label, type the return address above
+5. Click "Update Labels" to copy to all labels
+6. Print on your label sheets
+
+Note: If 5167 doesn't match, look for labels with 80 labels per sheet (4x20 layout).`;
+
+  // Create and download as text file
+  const blob = new Blob([instructions], { type: 'text/plain;charset=utf-8;' });
+  const link = document.createElement('a');
+  
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `CVCWVUAA-ReturnAddress-Instructions-${new Date().toISOString().split('T')[0]}.txt`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert(`✅ Return address instructions downloaded!\n\nReturn Address:\nCVCWVUAA\n4701 Stoney Creek Pkwy\nChester, VA 23831\n\nThe text file contains complete setup instructions for Word.\n\nQuick method: Just type the return address in the first label and click "Update Labels"!`);
+  }
+}
