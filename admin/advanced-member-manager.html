@@ -1091,14 +1091,13 @@ function getTypeDisplay(type) {
 }
 
 function getCleanAddress(member) {
-  // Validate address components and filter out potential names
+  // Validate address components - be less restrictive to preserve actual addresses
   const isValidAddressComponent = (component) => {
     if (!component || !component.trim()) return false;
     const trimmed = component.trim();
     
-    // Skip if it looks like a single last name (common issue)
-    if (/^[A-Z][a-z]+$/.test(trimmed) && trimmed.length < 15 && 
-        !['Richmond', 'Norfolk', 'Virginia', 'Hampton', 'Newport', 'Glen Allen'].includes(trimmed)) {
+    // Only skip obviously invalid data (too short or just punctuation)
+    if (trimmed.length < 2 || /^[^a-zA-Z0-9]*$/.test(trimmed)) {
       return false;
     }
     
@@ -1759,9 +1758,18 @@ function createMemberReceipt(memberId) {
         receiptWindow.document.getElementById('memberEmail').value = member.email || '';
         receiptWindow.document.getElementById('memberPhone').value = member.phone || '';
         
-        // Format address
-        const addressParts = [member.streetAddress, member.city, member.state, member.zip].filter(x => x);
-        receiptWindow.document.getElementById('memberAddress').value = addressParts.join(', ');
+        // Format address - debug logging
+        console.log('Member address data:', {
+          streetAddress: member.streetAddress,
+          city: member.city,
+          state: member.state,
+          zip: member.zip,
+          fullAddress: member.fullAddress
+        });
+        
+        const addressParts = [member.streetAddress, member.city, member.state, member.zip].filter(x => x && x.trim());
+        const formattedAddress = addressParts.length > 0 ? addressParts.join(', ') : (member.fullAddress || '');
+        receiptWindow.document.getElementById('memberAddress').value = formattedAddress;
         
         receiptWindow.document.getElementById('memberSince').value = member.memberSince || member.joinDate || 'Not available';
         
