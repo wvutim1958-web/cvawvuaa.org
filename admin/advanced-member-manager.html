@@ -1037,7 +1037,7 @@ function updateMemberTable() {
       <td>
         <div class="dues-status">
           <input type="checkbox" class="dues-checkbox" ${member.duesStatus === 'current' ? 'checked' : ''} 
-                 onchange="toggleDuesStatus(${member.id})">
+                 onchange="toggleDuesStatus('${member.id}')">
           <span class="dues-badge badge-${member.duesStatus}">${statusBadge}</span>
         </div>
       </td>
@@ -1165,8 +1165,10 @@ function filterMembers() {
 
 // Dues management functions
 function toggleDuesStatus(memberId) {
-  const member = members.find(m => m.id === memberId);
+  console.log('Toggle dues status called with ID:', memberId, 'type:', typeof memberId);
+  const member = members.find(m => m.id == memberId || m.id === memberId);
   if (member) {
+    console.log('Found member for dues toggle:', member);
     if (member.duesStatus === 'current') {
       member.duesStatus = 'overdue';
       member.lastPayment = null;
@@ -1176,6 +1178,9 @@ function toggleDuesStatus(memberId) {
     }
     saveMembers();
     updateDisplay();
+  } else {
+    console.error('Member not found for dues toggle. ID:', memberId);
+    console.log('Available member IDs:', members.map(m => ({id: m.id, type: typeof m.id})));
   }
 }
 
