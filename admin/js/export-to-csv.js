@@ -257,7 +257,19 @@ function exportAvery5160Labels() {
   let csvContent = headers.join(',') + '\n';
 
   // Format each member for Avery 5160 labels
-  membersWithAddresses.forEach(member => {
+  membersWithAddresses.forEach((member, index) => {
+    // Debug logging for first few members
+    if (index < 3) {
+      console.log(`Debug member ${index + 1}:`, {
+        name: member.name,
+        streetAddress: member.streetAddress,
+        city: member.city,
+        state: member.state,
+        zip: member.zip,
+        fullAddress: member.fullAddress
+      });
+    }
+
     // Clean and format name
     const cleanName = (member.name || '').trim();
     
@@ -268,13 +280,13 @@ function exportAvery5160Labels() {
     let state = '';
     let zip = '';
 
-    if (member.streetAddress && member.city) {
+    if (member.streetAddress && member.streetAddress.trim() && member.city && member.city.trim()) {
       // Use structured address data
       address1 = member.streetAddress.trim();
       city = member.city.trim();
       state = (member.state || 'VA').trim();
       zip = (member.zip || '').trim();
-    } else if (member.fullAddress) {
+    } else if (member.fullAddress && member.fullAddress.trim()) {
       // Parse full address string
       const addressParts = member.fullAddress.split(',').map(part => part.trim());
       if (addressParts.length >= 2) {
@@ -293,6 +305,30 @@ function exportAvery5160Labels() {
           state = 'VA';
         }
       }
+    }
+
+    // Debug logging for address parsing
+    if (index < 3) {
+      console.log(`Parsed address ${index + 1}:`, {
+        address1: address1,
+        city: city,
+        state: state,
+        zip: zip
+      });
+    }
+
+    // Fallback: if still no street address, try to use any available address data
+    if (!address1 && member.streetAddress) {
+      address1 = member.streetAddress.trim();
+    }
+    if (!city && member.city) {
+      city = member.city.trim();
+    }
+    if (!state && member.state) {
+      state = member.state.trim();
+    }
+    if (!zip && member.zip) {
+      zip = member.zip.trim();
     }
 
     // Create label row (Avery 5160 format)
