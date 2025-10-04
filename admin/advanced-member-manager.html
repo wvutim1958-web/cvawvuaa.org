@@ -1053,9 +1053,9 @@ function updateMemberTable() {
       <td>
         <div class="action-buttons">
           <button class="btn-contact" onclick="contactMember('${member.email}')">📧</button>
-          <button class="btn-receipt" onclick="createMemberReceipt(${member.id})" title="Generate Receipt">🧾</button>
+          <button class="btn-receipt" onclick="createMemberReceipt('${member.id}')" title="Generate Receipt">🧾</button>
           <button class="btn-edit" onclick="editMember('${member.id}')">✏️</button>
-          <button class="btn-delete" onclick="deleteMember(${member.id})">🗑️</button>
+          <button class="btn-delete" onclick="deleteMember('${member.id}')">🗑️</button>
         </div>
       </td>
     `;
@@ -1280,18 +1280,23 @@ function editMember(id) {
 }
 
 function deleteMember(id) {
-  const member = members.find(m => m.id === id);
+  console.log('Delete member called with ID:', id, 'type:', typeof id);
+  const member = members.find(m => m.id == id || m.id === id);
   if (member) {
+    console.log('Found member to delete:', member);
     showConfirmation(
       `Delete member "${member.name}"?`,
       `This will permanently remove ${member.name} from your database. This action cannot be undone.`,
       () => {
-        members = members.filter(m => m.id !== id);
+        members = members.filter(m => m.id != id && m.id !== id);
         saveMembers();
         updateDisplay();
         alert(`🗑️ Deleted member: ${member.name}`);
       }
     );
+  } else {
+    console.error('Member not found for deletion. ID:', id);
+    console.log('Available member IDs:', members.map(m => ({id: m.id, type: typeof m.id})));
   }
 }
 
@@ -1709,8 +1714,11 @@ function openReceiptGenerator() {
 }
 
 function createMemberReceipt(memberId) {
-  const member = members.find(m => m.id === memberId);
+  console.log('Create receipt called with ID:', memberId, 'type:', typeof memberId);
+  const member = members.find(m => m.id == memberId || m.id === memberId);
   if (!member) {
+    console.error('Member not found for receipt. ID:', memberId);
+    console.log('Available member IDs:', members.map(m => ({id: m.id, type: typeof m.id})));
     alert('Member not found');
     return;
   }
