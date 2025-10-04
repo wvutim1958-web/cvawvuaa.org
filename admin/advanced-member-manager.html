@@ -132,6 +132,11 @@
     color: #92400e;
   }
 
+  .badge-unpaid {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
   .action-buttons {
     display: flex;
     gap: 0.5rem;
@@ -413,6 +418,7 @@
       <div style="display: flex; align-items: center; gap: 1rem;">
         <label><input type="radio" name="duesStatus" value="current"> ✅ Current</label>
         <label><input type="radio" name="duesStatus" value="pending"> ⏳ Pending</label>
+        <label><input type="radio" name="duesStatus" value="unpaid"> ⭕ Unpaid</label>
         <label><input type="radio" name="duesStatus" value="overdue" checked> ❌ Overdue</label>
       </div>
     </div>
@@ -1068,7 +1074,8 @@ function getStatusBadge(status) {
   const badges = {
     current: '✅ Current',
     overdue: '❌ Overdue', 
-    pending: '⏳ Pending'
+    pending: '⏳ Pending',
+    unpaid: '⭕ Unpaid'
   };
   return badges[status] || status;
 }
@@ -1267,7 +1274,19 @@ function editMember(id) {
     document.getElementById('memberEmail').value = member.email;
     document.getElementById('memberPhone').value = member.phone;
     document.getElementById('memberType').value = member.type;
-    document.querySelector(`input[name="duesStatus"][value="${member.duesStatus}"]`).checked = true;
+    
+    // Safely set dues status radio button
+    const duesRadio = document.querySelector(`input[name="duesStatus"][value="${member.duesStatus}"]`);
+    if (duesRadio) {
+      duesRadio.checked = true;
+    } else {
+      console.warn(`No radio button found for duesStatus: ${member.duesStatus}, defaulting to unpaid`);
+      const defaultRadio = document.querySelector(`input[name="duesStatus"][value="unpaid"]`);
+      if (defaultRadio) {
+        defaultRadio.checked = true;
+      }
+    }
+    
     document.getElementById('lastPayment').value = member.lastPayment || '';
     
     // Set financial fields if they exist in the member object
