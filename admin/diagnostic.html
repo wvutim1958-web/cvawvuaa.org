@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin System Status Check</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .status-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .status-good { color: #28a745; }
+        .status-bad { color: #dc3545; }
+        .status-warning { color: #ffc107; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .file-list { font-family: monospace; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="status-container">
+        <h1>🔍 CVCWVUAA Admin System Diagnostic</h1>
+        <p><strong>Time:</strong> <span id="timestamp"></span></p>
+        
+        <div class="test-section">
+            <h2>📁 Core Admin Files Status</h2>
+            <div id="file-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🖥️ Page Display Test</h2>
+            <div id="display-test">
+                <h3>Admin Index Page Elements:</h3>
+                <div>
+                    <span class="status-good">✅ Header:</span> CVCWVUAA Admin Hub<br>
+                    <span class="status-good">✅ Main Tool:</span> Complete Management Hub → advanced-member-manager.html<br>
+                    <span class="status-good">✅ Secondary Tools:</span> Quick Fix, Receipt Generator, System Setup<br>
+                    <span class="status-good">✅ Content Management Grid:</span> 6 sections with tools
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔗 Link Tests</h2>
+            <div id="link-tests">
+                <p>Testing critical admin links...</p>
+                <div id="link-results"></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🛠️ What Could Be "Screwed Up"</h2>
+            <div>
+                <h3>Common Issues:</h3>
+                <ul>
+                    <li><strong>CSS Not Loading:</strong> Page appears unstyled or broken layout</li>
+                    <li><strong>JavaScript Errors:</strong> Buttons don't work, forms broken</li>
+                    <li><strong>File Path Issues:</strong> Links lead to 404 errors</li>
+                    <li><strong>Browser Cache:</strong> Old cached version loading</li>
+                    <li><strong>Server Issues:</strong> Files not uploading correctly to live site</li>
+                </ul>
+                
+                <h3>Immediate Fixes to Try:</h3>
+                <ol>
+                    <li><strong>Hard Refresh:</strong> Ctrl+Shift+R (Chrome) or Ctrl+F5</li>
+                    <li><strong>Clear Browser Cache:</strong> Settings > Privacy > Clear browsing data</li>
+                    <li><strong>Check Live Site:</strong> Verify files uploaded to hosting</li>
+                    <li><strong>Try Different Browser:</strong> Test in Firefox, Edge, etc.</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📋 Manual Test Checklist</h2>
+            <div>
+                <h3>Please Check These Yourself:</h3>
+                <form>
+                    <label><input type="checkbox"> Can you see the blue gradient header "CVCWVUAA Admin Hub"?</label><br>
+                    <label><input type="checkbox"> Does the green "Complete Management Hub" button appear?</label><br>
+                    <label><input type="checkbox"> Are there 3 secondary tools below (Quick Fix, Receipt Generator, System Setup)?</label><br>
+                    <label><input type="checkbox"> Do you see 6 white boxes with content management tools?</label><br>
+                    <label><input type="checkbox"> When you click "Complete Management Hub", does it load the member manager?</label><br>
+                    <label><input type="checkbox"> Are the colors and styling appearing correctly?</label><br>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        
+        // Test file accessibility
+        const filesToTest = [
+            'index.html',
+            'advanced-member-manager.html', 
+            'quick-fix.html',
+            'receipt-generator.html',
+            'unified-member-system.html',
+            '../css/styles.css'
+        ];
+        
+        const fileStatusDiv = document.getElementById('file-status');
+        const linkResultsDiv = document.getElementById('link-results');
+        
+        filesToTest.forEach(file => {
+            fetch(file)
+                .then(response => {
+                    const status = response.ok ? 
+                        `<span class="status-good">✅ ${file}</span>` : 
+                        `<span class="status-bad">❌ ${file} (${response.status})</span>`;
+                    fileStatusDiv.innerHTML += status + '<br>';
+                })
+                .catch(error => {
+                    fileStatusDiv.innerHTML += `<span class="status-bad">❌ ${file} (Network Error: ${error.message})</span><br>`;
+                });
+        });
+        
+        // Test critical links
+        const linksToTest = [
+            { name: 'Advanced Member Manager', url: 'advanced-member-manager.html' },
+            { name: 'Quick Fix Tool', url: 'quick-fix.html' },
+            { name: 'Receipt Generator', url: 'receipt-generator.html' }
+        ];
+        
+        linksToTest.forEach(link => {
+            fetch(link.url)
+                .then(response => {
+                    const status = response.ok ? 
+                        `<span class="status-good">✅ ${link.name}</span> → ${link.url}` : 
+                        `<span class="status-bad">❌ ${link.name}</span> → ${link.url} (${response.status})`;
+                    linkResultsDiv.innerHTML += status + '<br>';
+                })
+                .catch(error => {
+                    linkResultsDiv.innerHTML += `<span class="status-bad">❌ ${link.name}</span> → ${link.url} (Error: ${error.message})<br>`;
+                });
+        });
+    </script>
+</body>
+</html>

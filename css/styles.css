@@ -33,7 +33,7 @@ body{margin:0;background:var(--bg-primary);color:var(--text-primary);font:16px/1
 a{color:#1b4d8a;text-decoration:none} a:hover{text-decoration:underline}
 .wrapper{max-width:1120px;margin:0 auto;padding:0 22px}
 header.site{background:var(--header-bg);color:#fff}
-.topbar{display:flex;align-items:center;gap:16px;justify-content:space-between;padding:14px 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
 
 /* Hero Header Banner */
 .hero-header{
@@ -49,8 +49,11 @@ header.site{background:var(--header-bg);color:#fff}
   .hero-header{height:120px;background-size:cover}
 }
 .brand{display:flex;align-items:center;gap:12px;padding:6px 12px;border-radius:12px;background:#ffffff;box-shadow:0 6px 22px rgba(0,0,0,.22)}
+.brand-wrap{display:flex;justify-content:center;align-items:center;width:100%;padding:12px 0}
+.brand img{width:72px;height:72px;border-radius:12px;object-fit:cover;display:block;box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .site-logo{display:block;height:64px;width:auto;object-fit:contain;filter:none!important;opacity:1!important}
-nav a{color:#ffd56e;margin:0 .5rem;font-weight:700;display:inline-block;padding:.35rem .4rem;border-radius:6px}
+nav{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding-bottom:10px}
+nav a{color:#ffd56e;margin:0 4px;font-weight:600}
 nav a.active{box-shadow:inset 0 -3px 0 var(--wvu-gold)}
 nav a.btn{background:var(--wvu-gold);color:var(--wvu-blue);border-radius:999px;padding:.45rem .8rem}
 main{padding:22px 0 28px}

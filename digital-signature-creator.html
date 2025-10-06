@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Signature Creator - Timothy Casten</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .signature-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #003366;
+            margin-bottom: 10px;
+        }
+        
+        .instructions {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        #signatureCanvas {
+            border: 3px solid #003366;
+            border-radius: 8px;
+            cursor: crosshair;
+            background: white;
+            touch-action: none;
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background: #004080;
+        }
+        
+        .clear-btn {
+            background: #cc0000;
+        }
+        
+        .clear-btn:hover {
+            background: #dd0000;
+        }
+        
+        .download-btn {
+            background: #006600;
+        }
+        
+        .download-btn:hover {
+            background: #007700;
+        }
+        
+        .signature-preview {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: white;
+            display: none;
+        }
+        
+        .tips {
+            background: #e6f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .tips h3 {
+            color: #003366;
+            margin-top: 0;
+        }
+        
+        .canvas-container {
+            position: relative;
+            display: inline-block;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="signature-container">
+        <h1>Digital Signature Creator</h1>
+        <p class="instructions">
+            Use your touchpad or mouse to sign your name below.<br>
+            <strong>Timothy Casten - CVCWVUAA President</strong>
+        </p>
+        
+        <div class="canvas-container">
+            <canvas id="signatureCanvas" width="600" height="200"></canvas>
+        </div>
+        
+        <div class="controls">
+            <button onclick="clearSignature()" class="clear-btn">Clear Signature</button>
+            <button onclick="downloadSignature()" class="download-btn">Download PNG</button>
+            <button onclick="downloadSignatureJPG()" class="download-btn">Download JPG</button>
+            <button onclick="previewSignature()">Preview</button>
+        </div>
+        
+        <div id="signaturePreview" class="signature-preview">
+            <h3>Signature Preview:</h3>
+            <img id="previewImage" style="max-width: 100%; height: auto;">
+        </div>
+        
+        <div class="tips">
+            <h3>🖊️ Signature Tips:</h3>
+            <ul>
+                <li><strong>Use smooth, confident strokes</strong> - Don't go too slow</li>
+                <li><strong>Sign naturally</strong> - Write as you normally would on paper</li>
+                <li><strong>Try a few times</strong> - Use "Clear" to start over until you're happy</li>
+                <li><strong>Make it readable</strong> - Remember this will appear in official documents</li>
+                <li><strong>Save both formats</strong> - PNG for documents, JPG for emails</li>
+            </ul>
+            
+            <h3>💼 How to Use Your Signature:</h3>
+            <ul>
+                <li><strong>Email signatures</strong> - Insert the image in your email signature</li>
+                <li><strong>PDF documents</strong> - Add to contracts, letters, official documents</li>
+                <li><strong>Newsletter</strong> - Include in your president's message</li>
+                <li><strong>Website</strong> - Add to your bio page or official communications</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        // Set up canvas styling
+        ctx.strokeStyle = '#000033';  // Dark blue ink color
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Mouse events
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch events for touchpad/touchscreen
+        canvas.addEventListener('touchstart', handleTouch);
+        canvas.addEventListener('touchmove', handleTouch);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(currentX, currentY);
+            ctx.stroke();
+
+            lastX = currentX;
+            lastY = currentY;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            if (!touch) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
+                                            e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+
+            if (e.type === 'touchstart') {
+                startDrawing(mouseEvent);
+            } else if (e.type === 'touchmove') {
+                draw(mouseEvent);
+            } else if (e.type === 'touchend') {
+                stopDrawing();
+            }
+        }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('signaturePreview').style.display = 'none';
+        }
+
+        function downloadSignature() {
+            const link = document.createElement('a');
+            link.download = 'Timothy-Casten-Signature.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function downloadSignatureJPG() {
+            // Create a white background for JPG
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            
+            // Fill with white background
+            tempCtx.fillStyle = 'white';
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            
+            // Draw the signature on top
+            tempCtx.drawImage(canvas, 0, 0);
+            
+            const link = document.createElement('a');
+            link.download = 'Timothy-Casten-Signature.jpg';
+            link.href = tempCanvas.toDataURL('image/jpeg', 0.9);
+            link.click();
+        }
+
+        function previewSignature() {
+            const previewDiv = document.getElementById('signaturePreview');
+            const previewImg = document.getElementById('previewImage');
+            
+            previewImg.src = canvas.toDataURL();
+            previewDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

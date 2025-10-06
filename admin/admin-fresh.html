@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCWVUAA Admin - Fresh Version</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .admin-button {
+            display: block;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+        }
+        .admin-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40,167,69,0.4);
+            color: white;
+            text-decoration: none;
+        }
+        .admin-button .icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .admin-button .description {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: normal;
+        }
+        .status-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .emergency-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="header">
+            <h1>🏢 CVCWVUAA Admin Center</h1>
+            <p>Central Virginia Chapter Management - Fresh Clean Version</p>
+        </div>
+        
+        <div class="content">
+            <div class="status-message">
+                ✅ <strong>Emergency Fresh Admin Panel</strong> - This bypasses any server cache or file conflicts
+            </div>
+            
+            <div class="button-grid">
+                <a href="advanced-member-manager.html" class="admin-button">
+                    <span class="icon">🏢</span>
+                    <div>Advanced Member Manager</div>
+                    <div class="description">Complete member management system</div>
+                </a>
+                
+                <a href="quick-fix.html" class="admin-button">
+                    <span class="icon">🔧</span>
+                    <div>Quick Data Fix</div>
+                    <div class="description">Upload and sync member data</div>
+                </a>
+                
+                <a href="receipt-generator.html" class="admin-button">
+                    <span class="icon">🧾</span>
+                    <div>Receipt Generator</div>
+                    <div class="description">Create member receipts</div>
+                </a>
+                
+                <a href="unified-member-system.html" class="admin-button">
+                    <span class="icon">⚙️</span>
+                    <div>System Setup</div>
+                    <div class="description">Configure member system</div>
+                </a>
+            </div>
+            
+            <div class="emergency-info">
+                <h3>🚨 If buttons still show CSS code:</h3>
+                <ol>
+                    <li><strong>Clear browser cache completely</strong> (Settings → Privacy → Clear browsing data)</li>
+                    <li><strong>Try incognito/private browsing mode</strong></li>
+                    <li><strong>Check if files uploaded correctly</strong> to your web hosting</li>
+                    <li><strong>Contact your hosting provider</strong> - this might be a server configuration issue</li>
+                </ol>
+                
+                <p><strong>Technical Note:</strong> If clicking buttons shows raw CSS instead of loading pages, this indicates either a server misconfiguration, wrong MIME types, or corrupted file uploads.</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; color: #666;">
+                <p>🕐 Generated: <span id="timestamp"></span></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        console.log('Fresh admin panel loaded successfully');
+    </script>
+</body>
+</html>

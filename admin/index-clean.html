@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCWVUAA Admin Hub - Clean Version</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .main-button {
+            display: block;
+            background: #28a745;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .main-button:hover {
+            background: #218838;
+            color: white;
+            text-decoration: none;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .tool-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .tool-link {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 3px;
+            font-size: 14px;
+        }
+        .tool-link:hover {
+            background: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+        .section-title {
+            color: #002855;
+            border-bottom: 2px solid #002855;
+            padding-bottom: 10px;
+            margin: 30px 0 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 CVCWVUAA Admin Hub</h1>
+            <p>Central Virginia Chapter Management Center</p>
+        </div>
+
+        <div style="background: #28a745; color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
+            ✅ Complete Solution: Advanced Member Manager has EVERYTHING in one place!
+        </div>
+
+        <a href="advanced-member-manager.html" class="main-button">
+            🏢 Complete Management Hub<br>
+            <small style="font-weight: normal;">Members • Payments • Receipts • Financial Tracking</small>
+        </a>
+
+        <div class="tools-grid">
+            <div class="tool-box">
+                <h3>🔧 Quick Tools</h3>
+                <a href="quick-fix.html" class="tool-link">Quick Data Fix</a>
+                <a href="receipt-generator.html" class="tool-link">Receipt Generator</a>
+                <a href="unified-member-system.html" class="tool-link">System Setup</a>
+            </div>
+        </div>
+
+        <h2 class="section-title">📝 Content Management Tools</h2>
+        
+        <div class="tools-grid">
+            <div class="tool-box">
+                <h3>📝 Content</h3>
+                <a href="news-manager.html" class="tool-link">News & Articles</a>
+                <a href="newsletter-manager.html" class="tool-link">Newsletters</a>
+                <a href="alumni-spotlight-manager.html" class="tool-link">Alumni Spotlight</a>
+            </div>
+
+            <div class="tool-box">
+                <h3>🏛️ Presidential</h3>
+                <a href="president-dashboard.html" class="tool-link">President's Command</a>
+                <a href="member-directory.html" class="tool-link">Member Directory</a>
+                <a href="financial-dashboard.html" class="tool-link">Financial Dashboard</a>
+            </div>
+
+            <div class="tool-box">
+                <h3>🎉 Events</h3>
+                <a href="event-manager.html" class="tool-link">Create Event</a>
+                <a href="rsvp-manager.html" class="tool-link">RSVP Manager</a>
+                <a href="meeting-minutes-template.html" class="tool-link">Meeting Minutes</a>
+            </div>
+
+            <div class="tool-box">
+                <h3>🖼️ Media</h3>
+                <a href="media-uploader.html" class="tool-link">Photo Gallery</a>
+                <a href="video-library.html" class="tool-link">Video Library</a>
+                <a href="file-manager.html" class="tool-link">File Manager</a>
+            </div>
+
+            <div class="tool-box">
+                <h3>📧 Email</h3>
+                <a href="email-campaign.html" class="tool-link">Send Campaign</a>
+                <a href="subscriber-lists.html" class="tool-link">Subscriber Lists</a>
+                <a href="mailchimp-config.html" class="tool-link">Mailchimp Config</a>
+            </div>
+
+            <div class="tool-box">
+                <h3>⚙️ Settings</h3>
+                <a href="site-settings.html" class="tool-link">Site Settings</a>
+                <a href="theme-manager.html" class="tool-link">Theme Manager</a>
+                <a href="navigation-config.html" class="tool-link">Navigation</a>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; color: #666;">
+            <p>✅ All your content management tools are restored! Start with the Complete Management Hub for member tools.</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('Clean admin page loaded successfully');
+        
+        // Test that all links are accessible
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href]');
+            console.log('Found ' + links.length + ' links on the page');
+            
+            // Add click logging for debugging
+            links.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    console.log('Clicked: ' + link.href);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
