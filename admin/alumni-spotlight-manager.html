@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Spotlight Manager - CVCWVUAA</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .manager-container { max-width: 1200px; margin: 2rem auto; padding: 2rem; }
+        .manager-header { background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .tool-card { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .tool-card h3 { color: #002855; margin-bottom: 1rem; }
+        .btn { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; margin: 5px; font-weight: 600; }
+        .btn:hover { background: #0056b3; text-decoration: none; color: white; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-warning:hover { background: #e0a800; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #495057; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        textarea.form-control { min-height: 100px; resize: vertical; }
+        .back-link { display: inline-block; margin-bottom: 2rem; color: #007bff; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .spotlight-item { background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #ffd100; }
+        .profile-preview { background: #e3f2fd; padding: 1rem; border-radius: 6px; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="manager-container">
+        <a href="index.html" class="back-link">← Back to Admin Hub</a>
+        
+        <div class="manager-header">
+            <h1>⭐ Alumni Spotlight Manager</h1>
+            <p>Feature outstanding alumni and their achievements</p>
+        </div>
+
+        <div class="tools-grid">
+            <!-- Create Alumni Profile -->
+            <div class="tool-card">
+                <h3>✏️ Create Alumni Spotlight</h3>
+                <form id="spotlightForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="alumni-name">Full Name</label>
+                            <input type="text" id="alumni-name" class="form-control" placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="grad-year">Graduation Year</label>
+                            <input type="number" id="grad-year" class="form-control" placeholder="2010" min="1960" max="2030">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="degree">Degree</label>
+                            <input type="text" id="degree" class="form-control" placeholder="Bachelor of Science in Engineering">
+                        </div>
+                        <div class="form-group">
+                            <label for="current-role">Current Position</label>
+                            <input type="text" id="current-role" class="form-control" placeholder="CEO, Company Name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bio">Biography</label>
+                        <textarea id="bio" class="form-control" placeholder="Tell us about their career journey and achievements..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="wvu-memories">WVU Memories</label>
+                        <textarea id="wvu-memories" class="form-control" placeholder="What are their favorite WVU memories or experiences?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="advice">Advice for Current Students</label>
+                        <textarea id="advice" class="form-control" placeholder="What advice would they give to current WVU students?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="photo-url">Photo URL (Optional)</label>
+                        <input type="url" id="photo-url" class="form-control" placeholder="https://example.com/photo.jpg">
+                    </div>
+                    
+                    <button type="button" class="btn btn-success" onclick="saveSpotlight()">💾 Save Profile</button>
+                    <button type="button" class="btn btn-warning" onclick="previewSpotlight()">👁️ Preview</button>
+                    <button type="button" class="btn" onclick="clearForm()">🔄 Clear Form</button>
+                </form>
+            </div>
+
+            <!-- Spotlight Templates -->
+            <div class="tool-card">
+                <h3>📄 Spotlight Templates</h3>
+                <p class="small" style="margin-bottom: 1rem;">Use these templates to quickly create spotlights for different alumni types:</p>
+                
+                <div style="display: grid; gap: 0.5rem;">
+                    <button class="btn" onclick="useTemplate('business')">💼 Business Leader</button>
+                    <button class="btn" onclick="useTemplate('educator')">📚 Educator</button>
+                    <button class="btn" onclick="useTemplate('military')">🎖️ Military Service</button>
+                    <button class="btn" onclick="useTemplate('healthcare')">🏥 Healthcare Professional</button>
+                    <button class="btn" onclick="useTemplate('entrepreneur')">🚀 Entrepreneur</button>
+                    <button class="btn" onclick="useTemplate('nonprofit')">❤️ Nonprofit Leader</button>
+                </div>
+                
+                <hr style="margin: 1.5rem 0;">
+                
+                <h4>Quick Actions</h4>
+                <div style="display: grid; gap: 0.5rem;">
+                    <a href="../alumni-spotlight.html" class="btn" target="_blank">📖 View Live Spotlights</a>
+                    <button class="btn btn-warning" onclick="uploadPhoto()">📸 Upload Photo</button>
+                    <button class="btn" onclick="importFromLinkedIn()">💼 Import from LinkedIn</button>
+                    <button class="btn" onclick="nominateAlumni()">⭐ Nomination Form</button>
+                </div>
+            </div>
+
+            <!-- Recent Spotlights -->
+            <div class="tool-card">
+                <h3>📋 Recent Alumni Spotlights</h3>
+                <div id="spotlightList">
+                    <div class="spotlight-item">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h5>Sarah Johnson '08</h5>
+                                <p class="small">Software Engineering Manager, Tech Corp</p>
+                                <span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Published</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-warning" onclick="editSpotlight('sarah-johnson')">Edit</button>
+                                <button class="btn" onclick="viewSpotlight('sarah-johnson')">View</button>
+                            </div>
+                        </div>
+                        <p class="small" style="margin-top: 0.5rem; color: #666;">Published: Oct 1, 2025 • Views: 245</p>
+                    </div>
+                    
+                    <div class="spotlight-item">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h5>Michael Davis '95</h5>
+                                <p class="small">Principal, Davis Elementary School</p>
+                                <span style="background: #ffc107; color: #212529; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Draft</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-warning" onclick="editSpotlight('michael-davis')">Edit</button>
+                                <button class="btn btn-success" onclick="publishSpotlight('michael-davis')">Publish</button>
+                            </div>
+                        </div>
+                        <p class="small" style="margin-top: 0.5rem; color: #666;">Created: Sep 28, 2025 • Not published</p>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="loadAllSpotlights()">📄 Load All Spotlights</button>
+            </div>
+
+            <!-- Analytics & Nominations -->
+            <div class="tool-card">
+                <h3>📊 Analytics & Nominations</h3>
+                
+                <div style="background: #e3f2fd; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                    <h5>📈 Spotlight Performance</h5>
+                    <p class="small">Last 30 days:</p>
+                    <p>👀 Total Views: 1,247<br>
+                    ⭐ New Spotlights: 3<br>
+                    📧 Nominations Received: 7</p>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                    <h5>📝 Pending Nominations</h5>
+                    <p class="small">Alumni nominated by members:</p>
+                    <ul style="margin: 0.5rem 0;">
+                        <li>Jennifer Smith '02 - Nominated by Tom Wilson</li>
+                        <li>Robert Brown '89 - Nominated by Lisa Davis</li>
+                        <li>Amanda White '15 - Self-nominated</li>
+                    </ul>
+                    <button class="btn" onclick="reviewNominations()">Review Nominations</button>
+                </div>
+                
+                <div style="display: grid; gap: 0.5rem;">
+                    <button class="btn" onclick="exportSpotlights()">📤 Export All Profiles</button>
+                    <button class="btn" onclick="generateReport()">📊 Generate Report</button>
+                    <button class="btn" onclick="shareOnSocial()">📱 Share on Social Media</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Modal -->
+        <div id="previewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;">
+            <div style="background: white; margin: 2rem; padding: 2rem; border-radius: 12px; max-height: 80vh; overflow-y: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2>Spotlight Preview</h2>
+                    <button onclick="closePreview()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                </div>
+                <div id="previewContent"></div>
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button class="btn btn-success" onclick="publishFromPreview()">⭐ Publish Spotlight</button>
+                    <button class="btn btn-warning" onclick="saveFromPreview()">💾 Save as Draft</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function saveSpotlight() {
+            const name = document.getElementById('alumni-name').value;
+            const gradYear = document.getElementById('grad-year').value;
+            const degree = document.getElementById('degree').value;
+            const currentRole = document.getElementById('current-role').value;
+            const bio = document.getElementById('bio').value;
+            const wvuMemories = document.getElementById('wvu-memories').value;
+            const advice = document.getElementById('advice').value;
+            const photoUrl = document.getElementById('photo-url').value;
+            
+            if (!name || !gradYear || !bio) {
+                alert('Please fill in name, graduation year, and biography');
+                return;
+            }
+            
+            const spotlight = {
+                id: Date.now(),
+                name: name,
+                gradYear: gradYear,
+                degree: degree,
+                currentRole: currentRole,
+                bio: bio,
+                wvuMemories: wvuMemories,
+                advice: advice,
+                photoUrl: photoUrl,
+                created: new Date().toISOString(),
+                status: 'draft'
+            };
+            
+            const spotlights = JSON.parse(localStorage.getItem('cvcwvuaa_spotlights') || '[]');
+            spotlights.unshift(spotlight);
+            localStorage.setItem('cvcwvuaa_spotlights', JSON.stringify(spotlights));
+            
+            alert('Alumni spotlight saved successfully!');
+            clearForm();
+            loadAllSpotlights();
+        }
+        
+        function previewSpotlight() {
+            const name = document.getElementById('alumni-name').value;
+            const gradYear = document.getElementById('grad-year').value;
+            const degree = document.getElementById('degree').value;
+            const currentRole = document.getElementById('current-role').value;
+            const bio = document.getElementById('bio').value;
+            const wvuMemories = document.getElementById('wvu-memories').value;
+            const advice = document.getElementById('advice').value;
+            const photoUrl = document.getElementById('photo-url').value;
+            
+            if (!name || !gradYear || !bio) {
+                alert('Please fill in name, graduation year, and biography to preview');
+                return;
+            }
+            
+            const previewHTML = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        ${photoUrl ? `<img src="${photoUrl}" alt="${name}" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem;">` : '<div style="width: 200px; height: 200px; border-radius: 50%; background: #f0f0f0; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: #666;">No Photo</div>'}
+                        <h1 style="color: #002855; margin: 0;">${name}</h1>
+                        <p style="color: #ffd100; font-weight: 600; font-size: 18px;">Class of ${gradYear}</p>
+                        ${degree ? `<p style="color: #666;">${degree}</p>` : ''}
+                        ${currentRole ? `<p style="color: #666; font-weight: 600;">${currentRole}</p>` : ''}
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h2 style="color: #002855;">Biography</h2>
+                        <p>${bio.replace(/\n/g, '<br>')}</p>
+                    </div>
+                    
+                    ${wvuMemories ? `
+                    <div style="margin-bottom: 2rem;">
+                        <h2 style="color: #002855;">WVU Memories</h2>
+                        <p>${wvuMemories.replace(/\n/g, '<br>')}</p>
+                    </div>` : ''}
+                    
+                    ${advice ? `
+                    <div style="margin-bottom: 2rem;">
+                        <h2 style="color: #002855;">Advice for Current Students</h2>
+                        <p>${advice.replace(/\n/g, '<br>')}</p>
+                    </div>` : ''}
+                </div>
+            `;
+            
+            document.getElementById('previewContent').innerHTML = previewHTML;
+            document.getElementById('previewModal').style.display = 'block';
+        }
+        
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+        
+        function clearForm() {
+            document.getElementById('spotlightForm').reset();
+        }
+        
+        function useTemplate(type) {
+            const templates = {
+                business: {
+                    bio: "A distinguished business leader with over [X] years of experience in [industry]. Started their career at [company] after graduating from WVU and quickly rose through the ranks due to their innovative approach and leadership skills. Currently serves as [position] at [company], where they have successfully [major achievement].",
+                    wvuMemories: "Fondly remembers [specific memory], participating in [organizations/activities], and the lifelong friendships formed during their time in Morgantown. The WVU community provided the foundation for both personal and professional growth.",
+                    advice: "Take advantage of every opportunity WVU offers - join organizations, build relationships with professors, and never stop learning. The Mountaineer network is incredibly strong and will support you throughout your career."
+                },
+                educator: {
+                    bio: "Dedicated educator who has spent [X] years shaping young minds and making a difference in the community. After graduating from WVU with a degree in [field], they began their teaching career at [school/district] and have since become a respected leader in education, specializing in [area of expertise].",
+                    wvuMemories: "Treasures memories of [education-related experiences at WVU], studying in the education department, and the professors who inspired their passion for teaching. The strong foundation in [subject] provided at WVU continues to influence their teaching philosophy today.",
+                    advice: "Education is a calling that requires passion, patience, and perseverance. Use your WVU education as a springboard to make a positive impact in whatever field you choose. Remember that learning never stops - stay curious and keep growing."
+                },
+                military: {
+                    bio: "Proud veteran who has served our country with distinction for [X] years. After graduating from WVU, they enlisted/commissioned in the [branch of service] where they achieved the rank of [rank] and specialized in [field]. Their military service has taken them around the world and provided invaluable leadership experience.",
+                    wvuMemories: "Recalls the strong sense of community and pride at WVU that prepared them for military service. Participated in [ROTC/activities] and developed the leadership skills and discipline that would serve them well in their military career.",
+                    advice: "WVU taught me the importance of service, leadership, and integrity. Whether you choose military service or civilian life, these values will guide you. Always be willing to serve something greater than yourself and never forget your Mountaineer roots."
+                },
+                healthcare: {
+                    bio: "Compassionate healthcare professional dedicated to improving patient outcomes and advancing medical knowledge. Graduated from WVU before pursuing [advanced degree/certification] and now practices as a [specialty] at [institution]. Has been recognized for [achievements] in the field.",
+                    wvuMemories: "Grateful for the strong science foundation received at WVU and the research opportunities that sparked their interest in healthcare. Participated in [pre-health activities] and formed lasting relationships with faculty mentors.",
+                    advice: "Healthcare is both challenging and rewarding. WVU provided me with the critical thinking skills and work ethic necessary to succeed. Stay committed to lifelong learning and always put patients first."
+                },
+                entrepreneur: {
+                    bio: "Innovative entrepreneur who turned their WVU education into a successful business venture. Founded [company name] in [year], which has grown to become [description of success]. Known for [unique approach/innovation] and commitment to [values/mission].",
+                    wvuMemories: "Credits WVU with fostering their entrepreneurial spirit through [specific experiences]. The diverse community and challenging coursework helped develop the problem-solving skills essential for business success.",
+                    advice: "Don't be afraid to take calculated risks and pursue your passions. WVU taught me to think big and work hard. The Mountaineer network has been invaluable in building my business - maintain those connections and always be willing to help fellow alumni."
+                },
+                nonprofit: {
+                    bio: "Passionate advocate for [cause] who has dedicated their career to making a positive impact in the community. Currently serves as [position] at [organization], where they have successfully [major accomplishments]. Their work has benefited [beneficiaries] and brought about meaningful change.",
+                    wvuMemories: "Inspired by WVU's commitment to service and community engagement. Participated in [service activities] and developed a deep understanding of social responsibility that continues to drive their work today.",
+                    advice: "Find your passion and use it to serve others. WVU instilled in me the importance of giving back to the community. Whatever career path you choose, look for ways to make a positive difference in the world."
+                }
+            };
+            
+            const template = templates[type];
+            if (template) {
+                document.getElementById('bio').value = template.bio;
+                document.getElementById('wvu-memories').value = template.wvuMemories;
+                document.getElementById('advice').value = template.advice;
+            }
+        }
+        
+        function loadAllSpotlights() {
+            // This would load from database in real implementation
+            console.log('Loading all spotlights...');
+        }
+        
+        function editSpotlight(id) {
+            alert('Edit spotlight functionality would be implemented here for: ' + id);
+        }
+        
+        function viewSpotlight(id) {
+            alert('View spotlight functionality would be implemented here for: ' + id);
+        }
+        
+        function publishSpotlight(id) {
+            alert('Publish spotlight functionality would be implemented here for: ' + id);
+        }
+        
+        function uploadPhoto() {
+            alert('Photo upload functionality would be implemented here');
+        }
+        
+        function importFromLinkedIn() {
+            alert('LinkedIn import functionality would be implemented here');
+        }
+        
+        function nominateAlumni() {
+            alert('Nomination form would be opened here');
+        }
+        
+        function reviewNominations() {
+            alert('Nomination review interface would be opened here');
+        }
+        
+        function exportSpotlights() {
+            const spotlights = JSON.parse(localStorage.getItem('cvcwvuaa_spotlights') || '[]');
+            const dataStr = JSON.stringify(spotlights, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'cvcwvuaa_spotlights.json';
+            link.click();
+        }
+        
+        function generateReport() {
+            alert('Analytics report generation would be implemented here');
+        }
+        
+        function shareOnSocial() {
+            alert('Social media sharing would be implemented here');
+        }
+        
+        function publishFromPreview() {
+            alert('Publish from preview would be implemented here');
+        }
+        
+        function saveFromPreview() {
+            closePreview();
+            saveSpotlight();
+        }
+    </script>
+</body>
+</html>

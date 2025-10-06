@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Articles Manager - CVCWVUAA</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .manager-container { max-width: 1200px; margin: 2rem auto; padding: 2rem; }
+        .manager-header { background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .tool-card { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .tool-card h3 { color: #002855; margin-bottom: 1rem; }
+        .btn { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; margin: 5px; font-weight: 600; }
+        .btn:hover { background: #0056b3; text-decoration: none; color: white; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-warning:hover { background: #e0a800; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #495057; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; }
+        textarea.form-control { min-height: 120px; resize: vertical; }
+        .back-link { display: inline-block; margin-bottom: 2rem; color: #007bff; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="manager-container">
+        <a href="index.html" class="back-link">← Back to Admin Hub</a>
+        
+        <div class="manager-header">
+            <h1>📰 News & Articles Manager</h1>
+            <p>Create, edit, and manage news articles and announcements</p>
+        </div>
+
+        <div class="tools-grid">
+            <!-- Create New Article -->
+            <div class="tool-card">
+                <h3>✏️ Create New Article</h3>
+                <form id="articleForm">
+                    <div class="form-group">
+                        <label for="title">Article Title</label>
+                        <input type="text" id="title" class="form-control" placeholder="Enter article title...">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" class="form-control">
+                            <option value="news">Chapter News</option>
+                            <option value="events">Events</option>
+                            <option value="announcements">Announcements</option>
+                            <option value="alumni">Alumni Updates</option>
+                            <option value="sports">Sports</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Article Content</label>
+                        <textarea id="content" class="form-control" placeholder="Write your article here..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" class="form-control" value="Timothy Casten" placeholder="Author name">
+                    </div>
+                    <button type="button" class="btn btn-success" onclick="saveArticle()">📝 Save Article</button>
+                    <button type="button" class="btn btn-warning" onclick="previewArticle()">👁️ Preview</button>
+                </form>
+            </div>
+
+            <!-- Article List -->
+            <div class="tool-card">
+                <h3>📋 Recent Articles</h3>
+                <div id="articleList">
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 1rem;">
+                        <h5>October 2025 Newsletter</h5>
+                        <p class="small">Published: October 6, 2025</p>
+                        <a href="../CVCWVUAA-October-Newsletter-FINAL.html" class="btn" target="_blank">View</a>
+                        <button class="btn btn-warning" onclick="editArticle('newsletter-oct-2025')">Edit</button>
+                    </div>
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 1rem;">
+                        <h5>Board Recruitment Drive</h5>
+                        <p class="small">Draft - Not Published</p>
+                        <button class="btn btn-warning" onclick="editArticle('board-recruitment')">Edit</button>
+                        <button class="btn btn-success" onclick="publishArticle('board-recruitment')">Publish</button>
+                    </div>
+                </div>
+                <button class="btn" onclick="loadAllArticles()">📄 Load All Articles</button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="tool-card">
+                <h3>⚡ Quick Actions</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <a href="../news.html" class="btn" target="_blank">📖 View Live News Page</a>
+                    <button class="btn btn-warning" onclick="uploadImage()">🖼️ Upload Images</button>
+                    <button class="btn" onclick="manageCategories()">🏷️ Manage Categories</button>
+                    <button class="btn" onclick="exportArticles()">📤 Export Articles</button>
+                    <a href="newsletter-manager.html" class="btn">📧 Newsletter Manager</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Modal -->
+        <div id="previewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;">
+            <div style="background: white; margin: 2rem; padding: 2rem; border-radius: 12px; max-height: 80vh; overflow-y: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2>Article Preview</h2>
+                    <button onclick="closePreview()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                </div>
+                <div id="previewContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function saveArticle() {
+            const title = document.getElementById('title').value;
+            const category = document.getElementById('category').value;
+            const content = document.getElementById('content').value;
+            const author = document.getElementById('author').value;
+            
+            if (!title || !content) {
+                alert('Please fill in title and content');
+                return;
+            }
+            
+            // In a real implementation, this would save to a database or CMS
+            const article = {
+                id: Date.now(),
+                title: title,
+                category: category,
+                content: content,
+                author: author,
+                date: new Date().toLocaleDateString(),
+                published: false
+            };
+            
+            // Store in localStorage for demo
+            const articles = JSON.parse(localStorage.getItem('cvcwvuaa_articles') || '[]');
+            articles.unshift(article);
+            localStorage.setItem('cvcwvuaa_articles', JSON.stringify(articles));
+            
+            alert('Article saved successfully!');
+            document.getElementById('articleForm').reset();
+            loadAllArticles();
+        }
+        
+        function previewArticle() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const author = document.getElementById('author').value;
+            
+            if (!title || !content) {
+                alert('Please fill in title and content to preview');
+                return;
+            }
+            
+            const previewHTML = `
+                <article>
+                    <h1>${title}</h1>
+                    <p class="meta">By ${author} • ${new Date().toLocaleDateString()}</p>
+                    <div>${content.replace(/\n/g, '<br>')}</div>
+                </article>
+            `;
+            
+            document.getElementById('previewContent').innerHTML = previewHTML;
+            document.getElementById('previewModal').style.display = 'block';
+        }
+        
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+        
+        function loadAllArticles() {
+            const articles = JSON.parse(localStorage.getItem('cvcwvuaa_articles') || '[]');
+            const listElement = document.getElementById('articleList');
+            
+            if (articles.length === 0) {
+                listElement.innerHTML = '<p>No articles found. Create your first article above!</p>';
+                return;
+            }
+            
+            listElement.innerHTML = articles.map(article => `
+                <div style="padding: 1rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 1rem;">
+                    <h5>${article.title}</h5>
+                    <p class="small">${article.category} • ${article.date} • ${article.published ? 'Published' : 'Draft'}</p>
+                    <button class="btn btn-warning" onclick="editArticle('${article.id}')">Edit</button>
+                    ${!article.published ? '<button class="btn btn-success" onclick="publishArticle(\'' + article.id + '\')">Publish</button>' : ''}
+                </div>
+            `).join('');
+        }
+        
+        function editArticle(id) {
+            // In a real implementation, this would load the article for editing
+            alert('Edit functionality would be implemented here for article: ' + id);
+        }
+        
+        function publishArticle(id) {
+            alert('Publish functionality would be implemented here for article: ' + id);
+        }
+        
+        function uploadImage() {
+            alert('Image upload functionality would be implemented here');
+        }
+        
+        function manageCategories() {
+            alert('Category management would be implemented here');
+        }
+        
+        function exportArticles() {
+            const articles = JSON.parse(localStorage.getItem('cvcwvuaa_articles') || '[]');
+            const dataStr = JSON.stringify(articles, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'cvcwvuaa_articles.json';
+            link.click();
+        }
+        
+        // Load articles on page load
+        document.addEventListener('DOMContentLoaded', loadAllArticles);
+    </script>
+</body>
+</html>

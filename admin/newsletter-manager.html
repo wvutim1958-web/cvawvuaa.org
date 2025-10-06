@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Manager - CVCWVUAA</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .manager-container { max-width: 1200px; margin: 2rem auto; padding: 2rem; }
+        .manager-header { background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .tool-card { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .tool-card h3 { color: #002855; margin-bottom: 1rem; }
+        .btn { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; margin: 5px; font-weight: 600; }
+        .btn:hover { background: #0056b3; text-decoration: none; color: white; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-warning:hover { background: #e0a800; }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #495057; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; }
+        textarea.form-control { min-height: 150px; resize: vertical; }
+        .back-link { display: inline-block; margin-bottom: 2rem; color: #007bff; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .newsletter-item { background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #007bff; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .status-draft { background: #fff3cd; color: #856404; }
+        .status-published { background: #d4edda; color: #155724; }
+        .status-sent { background: #cce4f0; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="manager-container">
+        <a href="index.html" class="back-link">← Back to Admin Hub</a>
+        
+        <div class="manager-header">
+            <h1>📧 Newsletter Manager</h1>
+            <p>Create, manage, and distribute chapter newsletters</p>
+        </div>
+
+        <div class="tools-grid">
+            <!-- Create Newsletter -->
+            <div class="tool-card">
+                <h3>✏️ Create New Newsletter</h3>
+                <form id="newsletterForm">
+                    <div class="form-group">
+                        <label for="newsletter-title">Newsletter Title</label>
+                        <input type="text" id="newsletter-title" class="form-control" placeholder="e.g., October 2025 Newsletter">
+                    </div>
+                    <div class="form-group">
+                        <label for="newsletter-type">Newsletter Type</label>
+                        <select id="newsletter-type" class="form-control">
+                            <option value="monthly">Monthly Newsletter</option>
+                            <option value="special">Special Edition</option>
+                            <option value="announcement">Announcement</option>
+                            <option value="event">Event Newsletter</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newsletter-content">Content</label>
+                        <textarea id="newsletter-content" class="form-control" placeholder="Enter newsletter content (HTML supported)..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="send-date">Scheduled Send Date</label>
+                        <input type="date" id="send-date" class="form-control">
+                    </div>
+                    <button type="button" class="btn btn-success" onclick="saveNewsletter()">💾 Save Draft</button>
+                    <button type="button" class="btn btn-warning" onclick="previewNewsletter()">👁️ Preview</button>
+                </form>
+            </div>
+
+            <!-- Newsletter Templates -->
+            <div class="tool-card">
+                <h3>📄 Newsletter Templates</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <button class="btn" onclick="useTemplate('monthly')">📅 Monthly Newsletter Template</button>
+                    <button class="btn" onclick="useTemplate('event')">🎉 Event Announcement</button>
+                    <button class="btn" onclick="useTemplate('recruiting')">👥 Board Recruitment</button>
+                    <button class="btn" onclick="useTemplate('financial')">💰 Financial Update</button>
+                    <button class="btn" onclick="useTemplate('alumni')">🎓 Alumni Spotlight</button>
+                </div>
+                
+                <hr style="margin: 1.5rem 0;">
+                
+                <h4>Quick Actions</h4>
+                <div style="display: grid; gap: 0.5rem;">
+                    <a href="../CVCWVUAA-October-Newsletter-FINAL.html" class="btn" target="_blank">📖 View Current Newsletter</a>
+                    <button class="btn btn-warning" onclick="duplicateLastNewsletter()">📋 Duplicate Last Newsletter</button>
+                    <button class="btn" onclick="importNewsletter()">📤 Import Newsletter</button>
+                </div>
+            </div>
+
+            <!-- Newsletter List -->
+            <div class="tool-card">
+                <h3>📋 Newsletter Archive</h3>
+                <div id="newsletterList">
+                    <div class="newsletter-item">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h5>October 2025 Newsletter</h5>
+                                <span class="status-badge status-published">Published</span>
+                                <span class="status-badge status-sent">Sent</span>
+                            </div>
+                            <div>
+                                <a href="../CVCWVUAA-October-Newsletter-FINAL.html" class="btn" target="_blank">View</a>
+                                <button class="btn btn-warning" onclick="editNewsletter('oct-2025')">Edit</button>
+                            </div>
+                        </div>
+                        <p class="small" style="margin-top: 0.5rem; color: #666;">Created: Oct 6, 2025 • Sent to 134 members</p>
+                    </div>
+                    
+                    <div class="newsletter-item">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h5>Board Recruitment Letter</h5>
+                                <span class="status-badge status-draft">Draft</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-warning" onclick="editNewsletter('board-recruit')">Edit</button>
+                                <button class="btn btn-success" onclick="publishNewsletter('board-recruit')">Publish</button>
+                            </div>
+                        </div>
+                        <p class="small" style="margin-top: 0.5rem; color: #666;">Created: Oct 6, 2025 • Not sent</p>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="loadAllNewsletters()">📄 Load All Newsletters</button>
+            </div>
+
+            <!-- Distribution Tools -->
+            <div class="tool-card">
+                <h3>📤 Distribution & Analytics</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 6px;">
+                        <h5>📊 Last Newsletter Stats</h5>
+                        <p class="small">October 2025 Newsletter</p>
+                        <p>📧 Sent: 134 members<br>
+                        📖 Opened: 89 (66.4%)<br>
+                        🔗 Clicked: 23 (17.2%)</p>
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="sendTestEmail()">📧 Send Test Email</button>
+                    <button class="btn" onclick="viewSubscribers()">👥 View Subscribers (134)</button>
+                    <a href="mailchimp-config.html" class="btn">🔧 Mailchimp Settings</a>
+                    <button class="btn" onclick="exportNewsletters()">📤 Export All Newsletters</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Modal -->
+        <div id="previewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;">
+            <div style="background: white; margin: 2rem; padding: 2rem; border-radius: 12px; max-height: 80vh; overflow-y: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2>Newsletter Preview</h2>
+                    <button onclick="closePreview()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                </div>
+                <div id="previewContent"></div>
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button class="btn btn-success" onclick="publishFromPreview()">📧 Send Now</button>
+                    <button class="btn btn-warning" onclick="scheduleNewsletter()">📅 Schedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function saveNewsletter() {
+            const title = document.getElementById('newsletter-title').value;
+            const type = document.getElementById('newsletter-type').value;
+            const content = document.getElementById('newsletter-content').value;
+            const sendDate = document.getElementById('send-date').value;
+            
+            if (!title || !content) {
+                alert('Please fill in title and content');
+                return;
+            }
+            
+            const newsletter = {
+                id: Date.now(),
+                title: title,
+                type: type,
+                content: content,
+                sendDate: sendDate,
+                created: new Date().toISOString(),
+                status: 'draft'
+            };
+            
+            const newsletters = JSON.parse(localStorage.getItem('cvcwvuaa_newsletters') || '[]');
+            newsletters.unshift(newsletter);
+            localStorage.setItem('cvcwvuaa_newsletters', JSON.stringify(newsletters));
+            
+            alert('Newsletter saved as draft!');
+            document.getElementById('newsletterForm').reset();
+            loadAllNewsletters();
+        }
+        
+        function previewNewsletter() {
+            const title = document.getElementById('newsletter-title').value;
+            const content = document.getElementById('newsletter-content').value;
+            
+            if (!title || !content) {
+                alert('Please fill in title and content to preview');
+                return;
+            }
+            
+            const previewHTML = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h1 style="color: #002855; text-align: center;">${title}</h1>
+                    <p style="text-align: center; color: #666; margin-bottom: 2rem;">Central Virginia Chapter WVU Alumni Association</p>
+                    <div>${content.replace(/\n/g, '<br>')}</div>
+                </div>
+            `;
+            
+            document.getElementById('previewContent').innerHTML = previewHTML;
+            document.getElementById('previewModal').style.display = 'block';
+        }
+        
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+        
+        function useTemplate(templateType) {
+            let template = '';
+            
+            switch(templateType) {
+                case 'monthly':
+                    template = `<h2>President's Message</h2>
+<p>Dear Alumni and Friends,</p>
+<p>[Your monthly message here...]</p>
+
+<h2>Chapter News</h2>
+<p>[Chapter updates and news...]</p>
+
+<h2>Upcoming Events</h2>
+<p>[List of upcoming events...]</p>
+
+<h2>Alumni Spotlight</h2>
+<p>[Feature an alumnus/alumna...]</p>
+
+<h2>Financial Update</h2>
+<p>Current Treasury Balance: $[amount]</p>
+
+<h2>Sports Update</h2>
+<p>[WVU sports news and schedules...]</p>`;
+                    break;
+                case 'event':
+                    template = `<h2>You're Invited!</h2>
+<p>[Event name and description...]</p>
+
+<h2>Event Details</h2>
+<ul>
+<li><strong>Date:</strong> [Date]</li>
+<li><strong>Time:</strong> [Time]</li>
+<li><strong>Location:</strong> [Location]</li>
+<li><strong>Cost:</strong> [Cost]</li>
+</ul>
+
+<h2>RSVP Information</h2>
+<p>[RSVP instructions...]</p>`;
+                    break;
+                case 'recruiting':
+                    template = `<h2>We Need You!</h2>
+<p>The Central Virginia Chapter is seeking dedicated alumni to join our Board of Directors.</p>
+
+<h2>Why Join?</h2>
+<ul>
+<li>Make a difference in your local WVU community</li>
+<li>Network with fellow Mountaineers</li>
+<li>Help shape chapter activities and events</li>
+</ul>
+
+<h2>Positions Available</h2>
+<ul>
+<li>Vice President</li>
+<li>Secretary</li>
+<li>Board Members at Large</li>
+</ul>
+
+<h2>Contact Information</h2>
+<p>Interested? Contact us at [email] or [phone]</p>`;
+                    break;
+                case 'financial':
+                    template = `<h2>Financial Transparency Update</h2>
+<p>As part of our commitment to transparency, here's our current financial status:</p>
+
+<h2>Treasury Balance</h2>
+<p><strong>Current Balance:</strong> $[amount]</p>
+
+<h2>Recent Income</h2>
+<ul>
+<li>Membership Dues: $[amount]</li>
+<li>Event Revenue: $[amount]</li>
+<li>Donations: $[amount]</li>
+</ul>
+
+<h2>Recent Expenses</h2>
+<ul>
+<li>Event Costs: $[amount]</li>
+<li>Administrative: $[amount]</li>
+<li>Other: $[amount]</li>
+</ul>`;
+                    break;
+                case 'alumni':
+                    template = `<h2>Alumni Spotlight</h2>
+<p><strong>Featured Alumnus/Alumna:</strong> [Name]</p>
+<p><strong>Graduation Year:</strong> [Year]</p>
+<p><strong>Degree:</strong> [Degree]</p>
+
+<h2>Career Highlights</h2>
+<p>[Career information...]</p>
+
+<h2>WVU Memories</h2>
+<p>[WVU memories and experiences...]</p>
+
+<h2>Current Activities</h2>
+<p>[Current involvement with WVU/chapter...]</p>
+
+<h2>Message to Fellow Alumni</h2>
+<p>[Personal message...]</p>`;
+                    break;
+            }
+            
+            document.getElementById('newsletter-content').value = template;
+            document.getElementById('newsletter-title').value = `[Template] ${templateType.charAt(0).toUpperCase() + templateType.slice(1)} Newsletter`;
+        }
+        
+        function loadAllNewsletters() {
+            // This would load from database in real implementation
+            console.log('Loading all newsletters...');
+        }
+        
+        function editNewsletter(id) {
+            alert('Edit newsletter functionality would be implemented here for: ' + id);
+        }
+        
+        function publishNewsletter(id) {
+            alert('Publish newsletter functionality would be implemented here for: ' + id);
+        }
+        
+        function sendTestEmail() {
+            alert('Test email functionality would be implemented here');
+        }
+        
+        function viewSubscribers() {
+            alert('Subscriber management would open here');
+        }
+        
+        function exportNewsletters() {
+            alert('Export functionality would be implemented here');
+        }
+        
+        function duplicateLastNewsletter() {
+            alert('Duplicate last newsletter functionality would be implemented here');
+        }
+        
+        function importNewsletter() {
+            alert('Import newsletter functionality would be implemented here');
+        }
+        
+        function publishFromPreview() {
+            alert('Publish from preview would be implemented here');
+        }
+        
+        function scheduleNewsletter() {
+            alert('Schedule newsletter functionality would be implemented here');
+        }
+    </script>
+</body>
+</html>

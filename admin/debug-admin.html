@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Admin Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Admin System Debug Test</h1>
+        <p>Testing admin page functionality...</p>
+        
+        <h2>Main Admin Tools</h2>
+        <a href="index.html" class="test-button">📋 Main Admin Index</a>
+        <a href="advanced-member-manager.html" class="test-button">🏢 Advanced Member Manager</a>
+        <a href="quick-fix.html" class="test-button">🔧 Quick Fix</a>
+        <a href="receipt-generator.html" class="test-button">🧾 Receipt Generator</a>
+        
+        <h2>Debug Information</h2>
+        <div id="debug-info">
+            <p><strong>Current URL:</strong> <span id="current-url"></span></p>
+            <p><strong>Admin Index Status:</strong> <span id="admin-status"></span></p>
+            <p><strong>Member Manager Status:</strong> <span id="manager-status"></span></p>
+            <p><strong>CSS Loaded:</strong> <span id="css-status"></span></p>
+        </div>
+        
+        <h2>Console Log</h2>
+        <div id="console-log" style="background: #f8f9fa; padding: 1rem; border-radius: 5px; font-family: monospace; white-space: pre-wrap;"></div>
+    </div>
+
+    <script>
+        // Debug information
+        document.getElementById('current-url').textContent = window.location.href;
+        
+        // Test if admin index loads
+        fetch('index.html')
+            .then(response => {
+                document.getElementById('admin-status').textContent = response.ok ? 'OK' : 'ERROR';
+            })
+            .catch(error => {
+                document.getElementById('admin-status').textContent = 'FAILED: ' + error.message;
+            });
+            
+        // Test if member manager loads
+        fetch('advanced-member-manager.html')
+            .then(response => {
+                document.getElementById('manager-status').textContent = response.ok ? 'OK' : 'ERROR';
+            })
+            .catch(error => {
+                document.getElementById('manager-status').textContent = 'FAILED: ' + error.message;
+            });
+            
+        // Test CSS
+        fetch('../css/styles.css')
+            .then(response => {
+                document.getElementById('css-status').textContent = response.ok ? 'OK' : 'ERROR';
+            })
+            .catch(error => {
+                document.getElementById('css-status').textContent = 'FAILED: ' + error.message;
+            });
+        
+        // Capture console messages
+        const originalLog = console.log;
+        const originalError = console.error;
+        const logElement = document.getElementById('console-log');
+        
+        console.log = function(...args) {
+            logElement.textContent += 'LOG: ' + args.join(' ') + '\n';
+            originalLog.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            logElement.textContent += 'ERROR: ' + args.join(' ') + '\n';
+            originalError.apply(console, args);
+        };
+        
+        // Test JavaScript functionality
+        console.log('Debug page loaded successfully');
+        console.log('Testing admin system...');
+    </script>
+</body>
+</html>

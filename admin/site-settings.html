@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Settings - CVCWVUAA</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .settings-container { max-width: 800px; margin: 2rem auto; padding: 2rem; }
+        .settings-header { background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .settings-card { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; }
+        .btn { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; margin: 5px; font-weight: 600; border: none; cursor: pointer; }
+        .btn:hover { background: #0056b3; }
+        .btn-success { background: #28a745; }
+        .back-link { display: inline-block; margin-bottom: 2rem; color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <a href="index.html" class="back-link">← Back to Admin Hub</a>
+        
+        <div class="settings-header">
+            <h1>⚙️ Site Settings</h1>
+            <p>Configure website settings and preferences</p>
+        </div>
+
+        <div class="settings-card">
+            <h3>🏢 Chapter Information</h3>
+            <div class="form-group">
+                <label>Chapter Name</label>
+                <input type="text" class="form-control" value="Central Virginia Chapter WVU Alumni Association">
+            </div>
+            <div class="form-group">
+                <label>Contact Email</label>
+                <input type="email" class="form-control" value="president@cvawvuaa.org">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" class="form-control" value="(804) 555-0123">
+            </div>
+            <button class="btn btn-success">💾 Save Changes</button>
+        </div>
+
+        <div class="settings-card">
+            <h3>🎨 Appearance</h3>
+            <div class="form-group">
+                <label>Site Theme</label>
+                <select class="form-control">
+                    <option>WVU Official Colors (Default)</option>
+                    <option>Light Theme</option>
+                    <option>Dark Theme</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Logo URL</label>
+                <input type="url" class="form-control" value="/assets/logo.png">
+            </div>
+            <button class="btn btn-success">💾 Save Appearance</button>
+        </div>
+
+        <div class="settings-card">
+            <h3>📧 Email Configuration</h3>
+            <div class="form-group">
+                <label>SMTP Server</label>
+                <input type="text" class="form-control" placeholder="smtp.gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Sender Email</label>
+                <input type="email" class="form-control" value="noreply@cvawvuaa.org">
+            </div>
+            <button class="btn btn-success">💾 Save Email Settings</button>
+        </div>
+    </div>
+</body>
+</html>
