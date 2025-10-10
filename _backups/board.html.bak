@@ -1,14 +1,6 @@
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CVCWVUAA • Board</title>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-G14Q10H6Y2');
-</script>
 <link rel="stylesheet" href="/css/styles.css">
 <link rel="stylesheet" href="/css/social-media.css">
 </head><body>
@@ -91,15 +83,44 @@
   </div>
 
   <!-- Social Media Section -->
-  <section class="social-section">
-    <div class="wrapper">
-      <div class="social-grid">
-        <div class="social-links"></div>
-        <div class="share-buttons"></div>
-      </div>
-      <div class="social-feed"></div>
+  <div class="social-media-section" style="margin-top: 32px;">
+    <h3>Connect With Our Board</h3>
+    <p>Follow us to stay updated on board activities, leadership changes, and opportunities to get involved.</p>
+    
+    <div class="social-links-grid">
+      <a href="#" class="social-link facebook" target="_blank" rel="noopener">
+        <span class="social-icon">📘</span>
+        <span class="social-label">Facebook</span>
+      </a>
+      <a href="#" class="social-link twitter" target="_blank" rel="noopener">
+        <span class="social-icon">🐦</span>
+        <span class="social-label">Twitter</span>
+      </a>
+      <a href="#" class="social-link instagram" target="_blank" rel="noopener">
+        <span class="social-icon">📸</span>
+        <span class="social-label">Instagram</span>
+      </a>
+      <a href="#" class="social-link linkedin" target="_blank" rel="noopener">
+        <span class="social-icon">💼</span>
+        <span class="social-label">LinkedIn</span>
+      </a>
     </div>
-  </section>
+
+    <div class="social-share-section" style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #eee;">
+      <h4 style="margin-bottom: 12px;">Share Our Leadership</h4>
+      <div class="social-share-buttons">
+        <button class="share-btn facebook" onclick="socialMediaManager.shareToFacebook()">
+          <span class="social-icon">📘</span> Share
+        </button>
+        <button class="share-btn twitter" onclick="socialMediaManager.shareToTwitter()">
+          <span class="social-icon">🐦</span> Tweet
+        </button>
+        <button class="share-btn linkedin" onclick="socialMediaManager.shareToLinkedIn()">
+          <span class="social-icon">💼</span> Share
+        </button>
+      </div>
+    </div>
+  </div>
 
 </div></main>
 

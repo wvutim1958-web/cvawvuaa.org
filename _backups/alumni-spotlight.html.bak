@@ -4,31 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Alumni Spotlight • CVCWVUAA</title>
-  <meta name="description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!" />
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://cvawvuaa.org/alumni-spotlight.html">
-  <meta property="og:title" content="Alumni Spotlight • CVCWVUAA">
-  <meta property="og:description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!">
-  <meta property="og:image" content="https://cvawvuaa.org/assets/chapter-logo.jpg">
-  
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://cvawvuaa.org/alumni-spotlight.html">
-  <meta property="twitter:title" content="Alumni Spotlight • CVCWVUAA">
-  <meta property="twitter:description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!">
-  <meta property="twitter:image" content="https://cvawvuaa.org/assets/chapter-logo.jpg">
-  
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-G14Q10H6Y2');
-  </script>
-  
   <link rel="stylesheet" href="/css/styles.css" />
   <style>
     .spot-grid{display:grid;gap:18px;grid-template-columns:1fr}
@@ -92,20 +67,11 @@
 
   <main>
     <div class="wrapper">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1em;">
-        <div>
-          <h2 style="margin-bottom: 0.5em;">Alumni Spotlight</h2>
-          <p class="small">Celebrating outstanding Mountaineers in Central Virginia</p>
-        </div>
-        <a href="/alumni-spotlight-submit.html" style="display: inline-block; padding: 0.75em 1.5em; background: linear-gradient(135deg, #ffd100 0%, #ffed4e 100%); color: #002855; text-decoration: none; border-radius: 8px; font-weight: bold; transition: transform 0.2s;">
-          ✨ Nominate an Alumnus
-        </a>
-      </div>
+      <h2>Alumni Spotlight</h2>
+      <p class="small">Celebrating Mountaineers in Central Virginia—share a nomination via our <a href="/contact.html">contact form</a>.</p>
 
       <div id="spot-grid" class="spot-grid"></div>
-      <div id="spot-empty" class="card" style="display:none;">
-        <p>No spotlights yet. <a href="/alumni-spotlight-submit.html">Be the first to nominate</a> an outstanding Mountaineer!</p>
-      </div>
+      <div id="spot-empty" class="card" style="display:none"><p>No spotlights yet. Add entries to <code>/content/spotlight.json</code>.</p></div>
     </div>
   </main>
 
@@ -142,7 +108,6 @@
         if(s.image){
           const img = document.createElement('img');
           img.src = s.image; img.alt = s.alt || s.name || 'Alumni spotlight photo';
-          img.loading = 'lazy';
           card.appendChild(img);
         }
         const h3 = document.createElement('h3');

@@ -2,30 +2,6 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CVCWVUAA • Events</title>
 <meta name="description" content="Join CVCWVUAA events! Game watch parties, social gatherings, alumni meetups, and community service events for West Virginia University alumni in Central Virginia.">
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://cvawvuaa.org/events.html">
-<meta property="og:title" content="CVCWVUAA Events • Game Watches & Alumni Gatherings">
-<meta property="og:description" content="Join us for game watch parties, social gatherings, alumni meetups, and community service events in Richmond & Central Virginia.">
-<meta property="og:image" content="https://cvawvuaa.org/assets/wvu-watch-party-large.png">
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://cvawvuaa.org/events.html">
-<meta property="twitter:title" content="CVCWVUAA Events • Game Watches & Alumni Gatherings">
-<meta property="twitter:description" content="Join us for game watch parties, social gatherings, alumni meetups, and community service events in Richmond & Central Virginia.">
-<meta property="twitter:image" content="https://cvawvuaa.org/assets/wvu-watch-party-large.png">
-
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-G14Q10H6Y2');
-</script>
-
 <link rel="stylesheet" href="/css/styles.css">
 <link rel="stylesheet" href="/css/social-media.css">
 </head><body>
@@ -72,7 +48,7 @@
       <a href="/scholarship.html">Scholarship</a>
       <a href="/media.html">Media</a>
       <a href="/contact.html">Contact</a>
-      <!-- <a href="/member-portal.html" class="member-portal-link">🔐 Members</a> -->
+      <a href="/member-portal.html" class="member-portal-link">🔐 Members</a>
       <a href="/search.html" class="search-btn">🔍</a>
       
       <!-- Theme toggle -->
@@ -82,23 +58,52 @@
 </header>
 
 <main><div class="wrapper">
-  <div class="photo-strip"><img src="/assets/photos/download.jpg" alt="WVU" loading="lazy"><img src="/assets/photos/download (10).jpg" alt="WVU" loading="lazy"><img src="/assets/photos/550539255_10163868473745295_3650245405852649566_n.jpg" alt="WVU" loading="lazy"><img src="/assets/photos/watch party carolina ale house.jpg" alt="WVU" loading="lazy"><img src="/assets/photos/82279131_2510255619097031_4820471456792051712_n.jpg" alt="WVU" loading="lazy"><img src="/assets/photos/509803515_10230940383442184_7809526464395943925_n.jpg" alt="WVU" loading="lazy"><img src="/assets/photos/509914204_10230940387802293_7404552104597369588_n.jpg" alt="WVU" loading="lazy"><img src="/assets/photos/509971801_10230940388282305_467355079869857461_n.jpg" alt="WVU" loading="lazy"></div>
+  <div class="photo-strip"><img src="/assets/photos/download.jpg" alt="WVU"><img src="/assets/photos/download (10).jpg" alt="WVU"><img src="/assets/photos/550539255_10163868473745295_3650245405852649566_n.jpg" alt="WVU"><img src="/assets/photos/watch party carolina ale house.jpg" alt="WVU"><img src="/assets/photos/82279131_2510255619097031_4820471456792051712_n.jpg" alt="WVU"><img src="/assets/photos/509803515_10230940383442184_7809526464395943925_n.jpg" alt="WVU"><img src="/assets/photos/509914204_10230940387802293_7404552104597369588_n.jpg" alt="WVU"><img src="/assets/photos/509971801_10230940388282305_467355079869857461_n.jpg" alt="WVU"></div>
   <h2>Upcoming Events</h2>
   <div id="events-upcoming" class="grid" style="grid-template-columns:1fr;gap:16px"></div>
   <p class="small">Tip: Click RSVP to open the detailed RSVP page pre-filled for the event.</p>
   <h3 style="margin-top:18px">Past Events</h3>
   <div id="events-past" class="grid" style="grid-template-columns:1fr;gap:16px"></div>
 
-  <!-- Social Media Section -->
-  <section class="social-section">
-    <div class="wrapper">
-      <div class="social-grid">
-        <div class="social-links"></div>
-        <div class="share-buttons"></div>
-      </div>
-      <div class="social-feed"></div>
+  <!-- Social Media Events Section -->
+  <div class="social-media-section" style="margin-top: 32px;">
+    <h3>Share & Follow Our Events</h3>
+    <p>Don't miss out! Follow us on social media for event updates and share with fellow Mountaineers.</p>
+    
+    <div class="social-links-grid">
+      <a href="#" class="social-link facebook" target="_blank" rel="noopener">
+        <span class="social-icon">📘</span>
+        <span class="social-label">Facebook Events</span>
+      </a>
+      <a href="#" class="social-link twitter" target="_blank" rel="noopener">
+        <span class="social-icon">🐦</span>
+        <span class="social-label">Twitter Updates</span>
+      </a>
+      <a href="#" class="social-link instagram" target="_blank" rel="noopener">
+        <span class="social-icon">📸</span>
+        <span class="social-label">Instagram Stories</span>
+      </a>
+      <a href="#" class="social-link linkedin" target="_blank" rel="noopener">
+        <span class="social-icon">💼</span>
+        <span class="social-label">Professional Network</span>
+      </a>
     </div>
-  </section>
+
+    <div class="social-share-section" style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #eee;">
+      <h4 style="margin-bottom: 12px;">Share Our Events</h4>
+      <div class="social-share-buttons">
+        <button class="share-btn facebook" onclick="socialMediaManager.shareToFacebook()">
+          <span class="social-icon">📘</span> Share
+        </button>
+        <button class="share-btn twitter" onclick="socialMediaManager.shareToTwitter()">
+          <span class="social-icon">🐦</span> Tweet
+        </button>
+        <button class="share-btn linkedin" onclick="socialMediaManager.shareToLinkedIn()">
+          <span class="social-icon">💼</span> Share
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Mailchimp Newsletter Signup -->
   <div class="mailchimp-signup-container" 

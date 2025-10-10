@@ -3,42 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Alumni Spotlight • CVCWVUAA</title>
-  <meta name="description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!" />
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://cvawvuaa.org/alumni-spotlight.html">
-  <meta property="og:title" content="Alumni Spotlight • CVCWVUAA">
-  <meta property="og:description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!">
-  <meta property="og:image" content="https://cvawvuaa.org/assets/chapter-logo.jpg">
-  
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://cvawvuaa.org/alumni-spotlight.html">
-  <meta property="twitter:title" content="Alumni Spotlight • CVCWVUAA">
-  <meta property="twitter:description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!">
-  <meta property="twitter:image" content="https://cvawvuaa.org/assets/chapter-logo.jpg">
-  
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-G14Q10H6Y2');
-  </script>
-  
+  <title>CVCWVUAA • Resources & Links</title>
   <link rel="stylesheet" href="/css/styles.css" />
   <style>
-    .spot-grid{display:grid;gap:18px;grid-template-columns:1fr}
-    @media(min-width:960px){.spot-grid{grid-template-columns:1fr 1fr}}
-    .spot-card img{width:100%;height:220px;object-fit:cover;border-radius:12px}
-    .spot-meta{font-size:14px;color:#5b6777}
+    /* Page-specific polish for resource cards */
+    .res-cards .card ul{margin:.5rem 0 0 1.1rem;padding:0}
+    .res-cards .card li{margin:.25rem 0}
+    .res-cards .card a{font-weight:700}
   </style>
 </head>
 <body>
-  <!-- HEADER (match your current header markup) -->
+
+  <!-- Header (keeps the clean v44 nav) -->
   <header class="site">
   <div class="wrapper topbar">
     <a class="brand" href="/index.html" aria-label="CVCWVUAA">
@@ -92,25 +68,96 @@
 
   <main>
     <div class="wrapper">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1em;">
-        <div>
-          <h2 style="margin-bottom: 0.5em;">Alumni Spotlight</h2>
-          <p class="small">Celebrating outstanding Mountaineers in Central Virginia</p>
-        </div>
-        <a href="/alumni-spotlight-submit.html" style="display: inline-block; padding: 0.75em 1.5em; background: linear-gradient(135deg, #ffd100 0%, #ffed4e 100%); color: #002855; text-decoration: none; border-radius: 8px; font-weight: bold; transition: transform 0.2s;">
-          ✨ Nominate an Alumnus
-        </a>
-      </div>
+      <h2>Resources &amp; Links</h2>
 
-      <div id="spot-grid" class="spot-grid"></div>
-      <div id="spot-empty" class="card" style="display:none;">
-        <p>No spotlights yet. <a href="/alumni-spotlight-submit.html">Be the first to nominate</a> an outstanding Mountaineer!</p>
+      <div class="grid grid-3 res-cards">
+
+        <section class="card">
+          <h3>WVU Homepage</h3>
+          <ul>
+            <li><a href="https://www.wvu.edu/" target="_blank" rel="noopener">West Virginia University</a></li>
+            <li><a href="https://admissions.wvu.edu/" target="_blank" rel="noopener">Admissions</a></li>
+            <li><a href="https://registrar.wvu.edu/" target="_blank" rel="noopener">Registrar</a></li>
+            <li><a href="https://studentaccounts.wvu.edu/" target="_blank" rel="noopener">Student Accounts</a></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>WVU Alumni Association</h3>
+          <ul>
+            <li><a href="https://www.alumni.wvu.edu/" target="_blank" rel="noopener">Alumni Home</a></li>
+            <li><a href="https://www.alumni.wvu.edu/events" target="_blank" rel="noopener">Alumni Events</a></li>
+            <li><a href="https://www.alumni.wvu.edu/connect" target="_blank" rel="noopener">Connect &amp; Learning</a></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>Giving &amp; Scholarships</h3>
+          <ul>
+            <li><a href="/scholarship.html">CVCWVUAA Scholarship</a></li>
+            <li><a href="/pay.html">Donate / Pay Dues</a></li>
+            <li><a href="https://www.wvuf.org/" target="_blank" rel="noopener">WVU Foundation</a></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>City &amp; Travel</h3>
+          <ul>
+            <li><a href="https://www.morgantownwv.gov/" target="_blank" rel="noopener">City of Morgantown</a></li>
+            <li><a href="https://www.visitmountaineercountry.com/" target="_blank" rel="noopener">Visit Mountaineer Country</a></li>
+            <li><a href="https://transportation.wvu.edu/" target="_blank" rel="noopener">WVU Transportation</a></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>Band &amp; Spirit</h3>
+          <ul>
+            <li><a href="https://bands.wvu.edu/" target="_blank" rel="noopener">WVU Bands (The Pride)</a></li>
+            <li><a href="https://spirit.wvu.edu/" target="_blank" rel="noopener">WVU Spirit Programs</a></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>Tickets &amp; Venues</h3>
+          <ul>
+            <li><a href="https://wvusports.com/tickets" target="_blank" rel="noopener">WVU Tickets</a></li>
+            <li><a href="https://wvusports.com/" target="_blank" rel="noopener">WVU Athletics</a></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>Schedules &amp; Scores</h3>
+          <ul>
+            <li><a href="https://wvusports.com/calendar" target="_blank" rel="noopener">Master Athletics Calendar</a></li>
+            <li><a href="/scores.html">CVCWVUAA Scores Page</a></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>Fan / Coverage</h3>
+          <ul>
+            <li><a href="https://www.on3.com/teams/west-virginia-mountaineers/" target="_blank" rel="noopener">On3 — WVU</a></li>
+            <li><a href="https://247sports.com/college/west-virginia/" target="_blank" rel="noopener">247Sports — WVU</a></li>
+            <li><a href="https://bluegoldnews.com/" target="_blank" rel="noopener">Blue &amp; Gold News</a></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>WV News</h3>
+          <ul>
+            <li><a href="https://www.wvnews.com/" target="_blank" rel="noopener">WV News</a></li>
+            <li><a href="https://www.dominionpost.com/" target="_blank" rel="noopener">The Dominion Post</a></li>
+            <li><a href="https://wvpublic.org/" target="_blank" rel="noopener">WV Public Broadcasting</a></li>
+            <li><a href="https://www.thedaonline.com/" target="_blank" rel="noopener">The Daily Athenaeum</a></li>
+          </ul>
+        </section>
+
       </div>
     </div>
   </main>
 
-  <!-- FOOTER (match your current footer markup) -->
-  <footer class="site-footer">
+  <!-- Footer (compact) -->
+ <footer class="site-footer">
   <div class="wrapper">
     <div class="footer-bar">
       <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
@@ -123,44 +170,6 @@
 <script>
   // year stamp
   document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
-<script>
-  // Load spotlight entries from JSON
-  (async function(){
-    try {
-      const res = await fetch('/content/spotlight.json', {cache:'no-store'});
-      if(!res.ok) throw new Error('missing spotlight.json');
-      const items = await res.json();
-      const grid = document.getElementById('spot-grid');
-      if(!Array.isArray(items) || items.length === 0){
-        document.getElementById('spot-empty').style.display = 'block';
-        return;
-      }
-      items.forEach(s => {
-        const card = document.createElement('article');
-        card.className = 'card spot-card';
-        if(s.image){
-          const img = document.createElement('img');
-          img.src = s.image; img.alt = s.alt || s.name || 'Alumni spotlight photo';
-          img.loading = 'lazy';
-          card.appendChild(img);
-        }
-        const h3 = document.createElement('h3');
-        h3.textContent = s.title || s.name || 'Alumni Spotlight';
-        const meta = document.createElement('div');
-        meta.className = 'spot-meta';
-        meta.textContent = s.meta || '';
-        const p = document.createElement('p');
-        p.textContent = s.text || '';
-        card.appendChild(h3);
-        if(meta.textContent) card.appendChild(meta);
-        if(p.textContent) card.appendChild(p);
-        grid.appendChild(card);
-      });
-    } catch(e){
-      document.getElementById('spot-empty').style.display = 'block';
-    }
-  })();
 </script>
 <script>
   // Mobile: open/close main nav
@@ -204,6 +213,7 @@
     });
   }
 </script>
+
 
 </body>
 </html>
