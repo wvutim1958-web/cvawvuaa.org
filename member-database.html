@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CVCWVUAA Membership Database</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    h1 { color: #003366; }
+    .tab-nav { margin-bottom: 1.5em; }
+    .tab-nav button { background: #003366; color: #fff; border: none; padding: 0.7em 1.5em; border-radius: 4px 4px 0 0; margin-right: 0.5em; cursor: pointer; font-size: 1em; }
+    .tab-nav button.active { background: #fff; color: #003366; border: 1px solid #003366; border-bottom: none; }
+    .tab-content { display: none; background: #f4f8fb; padding: 1.5em; border-radius: 0 0 8px 8px; border: 1px solid #003366; border-top: none; }
+    .tab-content.active { display: block; }
+    label { display: block; margin-top: 0.5em; }
+    input, select, textarea { width: 100%; padding: 0.4em; margin-top: 0.2em; }
+    button[type=submit], #saveBtn { margin-top: 1em; background: #003366; color: #fff; border: none; padding: 0.6em 1.2em; border-radius: 4px; cursor: pointer; }
+    table { border-collapse: collapse; width: 100%; margin-top: 2em; }
+    th, td { border: 1px solid #ccc; padding: 0.5em; text-align: left; }
+    th { background: #e6eef7; }
+    .reminder { background: #fffbe6; border: 1px solid #ffe58f; color: #ad8b00; padding: 1em; margin-bottom: 1.5em; border-radius: 6px; }
+    .filter-btns { margin-bottom: 1em; }
+    .filter-btns button { background: #007b00; color: #fff; border: none; padding: 0.5em 1em; border-radius: 4px; margin-right: 0.5em; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>CVCWVUAA Membership Database</h1>
+
+  <div class="tab-nav">
+    <button id="tabImportBtn" onclick="showTab('import')" class="active">Import CSV</button>
+    <button id="tabAddBtn" onclick="showTab('add')">Add New Member</button>
+    <button id="tabListBtn" onclick="showTab('list')">Member List</button>
+  </div>
+
+  <div class="reminder">
+    <b>Reminder:</b> After adding or editing members, click <b>Export CSV</b> and replace <code>content/CVCWVUAA-Master-Database-2025-10-06.csv</code> with the new file to keep your master database up to date.
+  </div>
+
+  <div id="tabImport" class="tab-content active">
+    <h2>Import Members from CSV</h2>
+    <input type="file" id="csvFileInput" accept=".csv" />
+    <button onclick="importCSV()">Import CSV</button>
+  </div>
+
+  <div id="tabAdd" class="tab-content">
+    <form id="memberForm">
+      <h2 id="formTitle">Add New Member</h2>
+      <label>First Name <input type="text" name="First Name" required></label>
+      <label>Last Name <input type="text" name="Last Name" required></label>
+      <label>Member Type
+        <select name="Member Type">
+          <option value="Individual">Individual</option>
+          <option value="Family">Family</option>
+        </select>
+      </label>
+      <label>Email <input type="email" name="Email"></label>
+      <label>Phone <input type="text" name="Phone"></label>
+      <label>Address <input type="text" name="Address"></label>
+      <label>Join Date <input type="date" name="Join Date"></label>
+      <label>Renewal Date <input type="date" name="Renewal Date"></label>
+      <label>Dues Status
+        <select name="Dues Status">
+          <option value="Current">Current</option>
+          <option value="Unpaid">Unpaid</option>
+        </select>
+      </label>
+      <label>Dues Amount <input type="number" name="Dues Amount" min="0" step="0.01"></label>
+      <label>Donation Amount <input type="number" name="Donation Amount" min="0" step="0.01"></label>
+      <label>Scholarship Donation Amount <input type="number" name="Scholarship Donation Amount" min="0" step="0.01"></label>
+      <label>Notes <textarea name="Notes"></textarea></label>
+      <button type="submit" id="addBtn">Add Member</button>
+      <button type="button" id="saveBtn" style="display:none; margin-left:10px;">Save Changes</button>
+    </form>
+  </div>
+
+  <div id="tabList" class="tab-content">
+    <div class="filter-btns">
+      <button onclick="filterMembers('all')" type="button">Show All</button>
+      <button onclick="filterMembers('Current')" type="button">Show Current</button>
+      <button onclick="filterMembers('Unpaid')" type="button">Show Unpaid</button>
+    </div>
+  <button onclick="exportCSV()" style="background:#007b00; color:#fff; margin-bottom:1em;">Export CSV</button>
+  <button onclick="printMemberTable()" style="background:#003366; color:#fff; margin-bottom:1em; margin-left:0.5em;">Print</button>
+    // Print function for member table
+    function printMemberTable() {
+      // Hide non-table elements for print
+      const originalTitle = document.title;
+      document.title = 'CVCWVUAA Member List';
+      // Hide all except the table
+      const elementsToHide = [
+        ...document.querySelectorAll('.tab-nav, .reminder, #tabImport, #tabAdd, #tabList .filter-btns, #tabList button:not([onclick^=printMemberTable])')
+      ];
+      elementsToHide.forEach(el => el.style.display = 'none');
+      // Print only the table
+      window.print();
+      // Restore after print
+      setTimeout(() => {
+        elementsToHide.forEach(el => el.style.display = '');
+        document.title = originalTitle;
+      }, 500);
+    }
+    <table id="memberTable">
+      <thead>
+        <tr id="tableHeaderRow">
+          <!-- Headers will be inserted here -->
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    function showTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(div => div.classList.remove('active'));
+      document.querySelectorAll('.tab-nav button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+      document.getElementById('tab' + (tab === 'import' ? 'Import' : tab === 'add' ? 'Add' : 'List') + 'Btn').classList.add('active');
+    }
+
+    // Helper: Robust CSV parser for quoted fields and commas, with mapping for chapter CSV
+    function parseCSV(csv) {
+      const lines = csv.trim().split(/\r?\n/);
+      if (lines.length < 2) return [];
+      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+      // Detect if this is an exported file (internal field names)
+      const isExported = headers.includes("First Name") && headers.includes("Last Name") && headers.includes("Member Type");
+      return lines.slice(1).map(line => {
+        const values = [];
+        let current = '', inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i];
+          if (char === '"') {
+            if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
+            else { inQuotes = !inQuotes; }
+          } else if (char === ',' && !inQuotes) {
+            values.push(current); current = '';
+          } else { current += char; }
+        }
+        values.push(current);
+        const get = (col) => {
+          const idx = headers.indexOf(col); return idx >= 0 ? (values[idx]||'').replace(/^"|"$/g, '').trim() : '';
+        };
+        if (isExported) {
+          // Direct mapping for exported files
+          return {
+            "First Name": get("First Name"),
+            "Last Name": get("Last Name"),
+            "Member Type": get("Member Type"),
+            "Email": get("Email"),
+            "Phone": get("Phone"),
+            "Address": get("Address"),
+            "Join Date": get("Join Date"),
+            "Renewal Date": get("Renewal Date"),
+            "Dues Status": get("Dues Status"),
+            "Dues Amount": get("Dues Amount"),
+            "Donation Amount": get("Donation Amount"),
+            "Scholarship Donation Amount": get("Scholarship Donation Amount"),
+            "Notes": get("Notes")
+          };
+        } else {
+          // Map chapter CSV columns to membership fields
+          return {
+            "First Name": get("First Name(s)"),
+            "Last Name": get("Last Name"),
+            "Member Type": get("Type of Membership").replace(" Membership", ""),
+            "Email": get("E-mail Address (Primary)"),
+            "Phone": get("Primary Phone"),
+            "Address": [get("Home Address"), get("City"), get("State"), get("Zip Code")].filter(Boolean).join(", "),
+            "Join Date": '',
+            "Renewal Date": get("Membership Last Paid"),
+            "Dues Status": get("Dues") && Number(get("Dues")) > 0 ? "Current" : "Unpaid",
+            "Dues Amount": get("Dues"),
+            "Donation Amount": get("General Fund"),
+            "Scholarship Donation Amount": get("Scholarship"),
+            "Notes": ''
+          };
+        }
+      });
+    }
+
+    // Render table (dynamic headers)
+    // Sorting state
+    let sortKey = null;
+    let sortAsc = true;
+
+    function renderTable(members) {
+      let data = (filteredMembers !== null) ? filteredMembers : members;
+      const tbody = document.querySelector('#memberTable tbody');
+      const headerRow = document.getElementById('tableHeaderRow');
+      tbody.innerHTML = '';
+      if (!data.length) {
+        headerRow.innerHTML = '';
+        return;
+      }
+      const keys = Object.keys(data[0]);
+      // Sort if a sortKey is set
+      if (sortKey) {
+        data = [...data].sort((a, b) => {
+          const valA = (a[sortKey] || '').toLowerCase();
+          const valB = (b[sortKey] || '').toLowerCase();
+          if (valA < valB) return sortAsc ? -1 : 1;
+          if (valA > valB) return sortAsc ? 1 : -1;
+          return 0;
+        });
+      }
+      // Clickable headers for sorting
+      headerRow.innerHTML = keys.map(k => `<th style=\"cursor:pointer\" onclick=\"sortTableBy('${k}')\">${k}${sortKey===k ? (sortAsc ? ' ▲' : ' ▼') : ''}</th>`).join('') + '<th>Edit</th>';
+      data.forEach((member) => {
+        const row = document.createElement('tr');
+        keys.forEach(key => {
+          const td = document.createElement('td');
+          td.textContent = member[key] || '';
+          row.appendChild(td);
+        });
+        // Edit button
+        const editTd = document.createElement('td');
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        // Find the index in the main members array
+        const mainIdx = members.indexOf(member);
+        editBtn.onclick = function() { editMember(mainIdx); };
+        editTd.appendChild(editBtn);
+        row.appendChild(editTd);
+        tbody.appendChild(row);
+      });
+    }
+
+    // Sorting handler
+    function sortTableBy(key) {
+      if (sortKey === key) {
+        sortAsc = !sortAsc;
+      } else {
+        sortKey = key;
+        sortAsc = true;
+      }
+      renderTable(members);
+    }
+
+    // Store members in memory
+    let members = [];
+    let editIndex = null;
+    let filteredMembers = null;
+
+    // Template for all member fields
+    const memberTemplate = {
+      "First Name": "",
+      "Last Name": "",
+      "Member Type": "",
+      "Email": "",
+      "Phone": "",
+      "Address": "",
+      "Join Date": "",
+      "Renewal Date": "",
+      "Dues Status": "",
+      "Dues Amount": "",
+      "Donation Amount": "",
+      "Scholarship Donation Amount": "",
+      "Notes": ""
+    };
+
+    function filterMembers(status) {
+      if (status === 'all') {
+        filteredMembers = null;
+        renderTable(members);
+      } else {
+        filteredMembers = members.filter(m => (m["Dues Status"]||'').toLowerCase() === status.toLowerCase());
+        renderTable(filteredMembers);
+      }
+    }
+
+    // Form submit handler (Add)
+    document.getElementById('memberForm').onsubmit = function(e) {
+      e.preventDefault();
+      if (editIndex !== null) return; // Prevent add if editing
+      const form = e.target;
+      const member = {...memberTemplate};
+      Array.from(form.elements).forEach(el => {
+        if (el.name) member[el.name] = el.value;
+      });
+      members.push(member);
+      renderTable(members);
+      form.reset();
+    };
+
+    // Save button handler (Edit)
+    document.getElementById('saveBtn').onclick = function() {
+      const form = document.getElementById('memberForm');
+      const member = {...memberTemplate};
+      Array.from(form.elements).forEach(el => {
+        if (el.name) member[el.name] = el.value;
+      });
+      if (editIndex !== null) {
+        members[editIndex] = member;
+        editIndex = null;
+        renderTable(members);
+        form.reset();
+        document.getElementById('addBtn').style.display = '';
+        document.getElementById('saveBtn').style.display = 'none';
+        document.getElementById('formTitle').textContent = 'Add New Member';
+      }
+    };
+
+    // CSV import handler
+    function importCSV() {
+      const fileInput = document.getElementById('csvFileInput');
+      if (!fileInput.files.length) return alert('Please select a CSV file.');
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const csv = e.target.result;
+        // Ensure all imported members have all fields
+        members = parseCSV(csv).map(m => ({...memberTemplate, ...m}));
+        renderTable(members);
+        // Debug output
+        // document.getElementById('csvDebug').textContent = 'Parsed CSV: ' + JSON.stringify(members, null, 2);
+      };
+      reader.readAsText(fileInput.files[0]);
+    }
+
+    // Edit member
+    function editMember(idx) {
+      const member = (filteredMembers !== null ? filteredMembers : members)[idx];
+      const form = document.getElementById('memberForm');
+      Object.keys(member).forEach(key => {
+        if (form.elements[key]) {
+          // Convert MM/DD/YYYY to YYYY-MM-DD for date fields
+          if ((key === 'Renewal Date' || key === 'Join Date') && member[key]) {
+            let val = member[key];
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(val)) {
+              const [mm, dd, yyyy] = val.split('/');
+              val = `${yyyy}-${mm.padStart(2, '0')}-${dd.padStart(2, '0')}`;
+            }
+            form.elements[key].value = val;
+          } else {
+            form.elements[key].value = member[key];
+          }
+        }
+      });
+      editIndex = members.indexOf(member); // Use index in main array
+      document.getElementById('addBtn').style.display = 'none';
+      document.getElementById('saveBtn').style.display = '';
+      document.getElementById('formTitle').textContent = 'Edit Member';
+      showTab('add');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // Export CSV
+    function exportCSV() {
+      if (!members.length) return alert('No members to export!');
+      // Fixed field order for export
+      const keys = [
+        "First Name",
+        "Last Name",
+        "Member Type",
+        "Email",
+        "Phone",
+        "Address",
+        "Join Date",
+        "Renewal Date",
+        "Dues Status",
+        "Dues Amount",
+        "Donation Amount",
+        "Scholarship Donation Amount",
+        "Notes"
+      ];
+      const csvRows = [keys.join(',')];
+      members.forEach(m => {
+        // Ensure all fields are present for each member
+        csvRows.push(keys.map(k => '"' + ((m[k] !== undefined ? m[k] : '') + '').replace(/"/g,'""') + '"').join(','));
+      });
+  // Add UTF-8 BOM for Excel compatibility
+  const csvContent = '\uFEFF' + csvRows.join('\r\n');
+  const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'CVCWVUAA-Master-Database-2025-10-06.csv';
+  a.click();
+    }
+  </script>
+</body>
+</html>

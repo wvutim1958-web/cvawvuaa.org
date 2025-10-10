@@ -1,0 +1,4 @@
+Member ID,First Name,Last Name,Email,Phone,Address,Join Date,Renewal Date,Dues Status,Donation Amount,Scholarship Donation,Notes
+1001,John,Doe,john.doe@email.com,555-123-4567,"123 Main St, Chester, VA 23831",2025-01-15,2026-01-15,Current,50,25,Board Member
+1002,Jane,Smith,jane.smith@email.com,555-987-6543,"456 Oak Ave, Richmond, VA 23220",2025-03-10,2026-03-10,Unpaid,25,0,Needs renewal
+1003,Bob,Johnson,bob.j@email.com,555-555-5555,"789 Pine Rd, Midlothian, VA 23112",2024-11-01,2025-11-01,Current,100,100,Scholarship donor
