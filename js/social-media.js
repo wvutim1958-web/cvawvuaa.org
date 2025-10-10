@@ -242,32 +242,33 @@ class SocialMediaManager {
 
     feedContainers.forEach(container => {
       if (SOCIAL_CONFIG.accounts.facebook) {
+        // Load SDK first, then render
+        this.loadFacebookSDK();
+        
+        // Set up the HTML for Facebook plugin
         container.innerHTML = `
           <div class="social-feed-container">
             <h3>Latest from Facebook</h3>
-            <div class="fb-page" 
-                 data-href="${SOCIAL_CONFIG.accounts.facebook}"
-                 data-tabs="timeline" 
-                 data-width="500" 
-                 data-height="600"
-                 data-small-header="false"
-                 data-adapt-container-width="true"
-                 data-hide-cover="false"
-                 data-show-facepile="true">
-              <blockquote cite="${SOCIAL_CONFIG.accounts.facebook}" class="fb-xfbml-parse-ignore">
-                <a href="${SOCIAL_CONFIG.accounts.facebook}">Central Virginia WVU Alumni</a>
-              </blockquote>
+            <div class="fb-page-wrapper">
+              <div class="fb-page" 
+                   data-href="${SOCIAL_CONFIG.accounts.facebook}"
+                   data-tabs="timeline" 
+                   data-width="500" 
+                   data-height="600"
+                   data-small-header="false"
+                   data-adapt-container-width="true"
+                   data-hide-cover="false"
+                   data-show-facepile="true">
+                <blockquote cite="${SOCIAL_CONFIG.accounts.facebook}" class="fb-xfbml-parse-ignore">
+                  <a href="${SOCIAL_CONFIG.accounts.facebook}">Loading Facebook feed...</a>
+                </blockquote>
+              </div>
+            </div>
+            <div class="fb-fallback" style="margin-top: 16px; text-align: center;">
+              <p>Can't see the feed? <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener" style="color: #3b5998; font-weight: 600;">Visit our Facebook page →</a></p>
             </div>
           </div>
         `;
-        
-        // Load Facebook SDK if not already loaded
-        if (!window.FB) {
-          this.loadFacebookSDK();
-        } else {
-          // If SDK already loaded, parse the new plugin
-          window.FB.XFBML.parse();
-        }
       } else {
         // Fallback if no Facebook account
         container.innerHTML = `
@@ -282,19 +283,39 @@ class SocialMediaManager {
 
   // Load Facebook SDK
   loadFacebookSDK() {
-    // Add Facebook SDK script
-    const script = document.createElement('script');
-    script.async = true;
-    script.defer = true;
-    script.crossOrigin = 'anonymous';
-    script.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0';
-    
     // Add Facebook root div if not exists
     if (!document.getElementById('fb-root')) {
       const fbRoot = document.createElement('div');
       fbRoot.id = 'fb-root';
       document.body.insertBefore(fbRoot, document.body.firstChild);
     }
+    
+    // Initialize Facebook SDK
+    window.fbAsyncInit = function() {
+      FB.init({
+        xfbml: true,
+        version: 'v18.0'
+      });
+    };
+    
+    // Add Facebook SDK script
+    const script = document.createElement('script');
+    script.async = true;
+    script.defer = true;
+    script.crossOrigin = 'anonymous';
+    script.src = 'https://connect.facebook.net/en_US/sdk.js';
+    script.onerror = () => {
+      console.error('Failed to load Facebook SDK');
+      // Show fallback message
+      document.querySelectorAll('.social-feed').forEach(container => {
+        container.innerHTML = `
+          <div class="social-feed-placeholder">
+            <h3>Latest from Facebook</h3>
+            <p>Visit our <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener">Facebook page</a> to see our latest posts and updates!</p>
+          </div>
+        `;
+      });
+    };
     
     document.body.appendChild(script);
   }
