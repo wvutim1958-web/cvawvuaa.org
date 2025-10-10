@@ -270,33 +270,11 @@ class SocialMediaManager {
               ` : ''}
             </div>
             
-            <!-- Facebook Plugin (will show if page is public) -->
-            <div class="fb-plugin-section" style="margin-top: 24px;">
-              <h4 style="text-align: center; color: #002855; margin-bottom: 16px;">Latest Facebook Posts</h4>
-              <div class="fb-page-wrapper">
-                <div class="fb-page" 
-                     data-href="${SOCIAL_CONFIG.accounts.facebook}"
-                     data-tabs="timeline" 
-                     data-width="500" 
-                     data-height="400"
-                     data-small-header="true"
-                     data-adapt-container-width="true"
-                     data-hide-cover="false"
-                     data-show-facepile="false">
-                  <blockquote cite="${SOCIAL_CONFIG.accounts.facebook}" class="fb-xfbml-parse-ignore">
-                    <a href="${SOCIAL_CONFIG.accounts.facebook}">Loading posts from Central Virginia WVU Alumni...</a>
-                  </blockquote>
-                </div>
-              </div>
-              <p style="text-align: center; margin-top: 12px; font-size: 0.9rem; color: #666;">
-                <em>Note: Feed requires public Facebook page visibility</em>
-              </p>
-            </div>
+
           </div>
         `;
         
-        // Load Facebook SDK
-        this.loadFacebookSDK();
+        // Facebook SDK not needed since we're not using the feed plugin
       } else {
         // Fallback if no Facebook account
         container.innerHTML = `
