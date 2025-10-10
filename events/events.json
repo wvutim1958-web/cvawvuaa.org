@@ -6,7 +6,7 @@
 		"time": "14:00",
 		"location": "Carolina Ale House, Short Pump",
 		"description": "Join fellow Mountaineers for our season opener watch party. Family friendly!",
-		"published": true
+		"published": false
 	},
 	{
 		"slug": "watch-party-pittsburgh",
@@ -15,6 +15,15 @@
 		"time": "15:30",
 		"location": "Carolina Ale House, Short Pump",
 		"description": "Bring your gold and blue! Raffles and giveaways during halftime.",
+		"published": false
+	},
+	{
+		"slug": "watch-party-ucf-october-18",
+		"title": "Watch Party — at UCF",
+		"date": "2025-10-18",
+		"time": "12:30",
+		"location": "Capital Ale House, 4024 Cox Rd, Glen Allen, VA 23060",
+		"description": "Join fellow Mountaineers as we watch WVU take on UCF! Doors open at 12:30 PM, kickoff at 1:00 PM. Great food, drinks, and Mountaineer spirit!",
 		"published": true
 	}
 ]

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Central Virginia Game Watch Flyer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --wvu-blue: #002855;
+      --wvu-gold: #eaaa00;
+      --text-light: #f8f9fb;
+      --card-width: 820px;
+      --card-height: 540px;
+      --overlay-opacity: 0.48;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #0d1626;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 32px;
+    }
+
+    .flyer {
+      position: relative;
+      width: min(100%, var(--card-width));
+      aspect-ratio: 820 / 540;
+      background: linear-gradient(90deg, rgba(0, 16, 40, 0.92) 0%, rgba(0, 16, 40, 0.78) 48%, rgba(0, 16, 40, 0.28) 100%),
+        url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80') center/cover;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 34px 54px rgba(5, 10, 25, 0.35);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      color: var(--text-light);
+    }
+
+    .flyer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 16, 40, 0.72) 0%, rgba(0, 16, 40, 0.25) 100%);
+      z-index: 0;
+    }
+
+    .flyer > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .top-strip {
+      margin: 0;
+      background: var(--wvu-gold);
+      color: var(--wvu-blue);
+      text-transform: uppercase;
+      font-weight: 800;
+      font-size: clamp(2.6rem, 6vw, 3.8rem);
+      letter-spacing: 0.22em;
+      text-align: center;
+      padding: clamp(18px, 3vw, 26px);
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(14px, 3vw, 24px);
+      padding: clamp(28px, 5vw, 40px) clamp(32px, 6vw, 48px) 0;
+      text-align: center;
+      text-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+    }
+
+    .date-line {
+      margin: 0;
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      font-weight: 600;
+      letter-spacing: 0.14em;
+    }
+
+    .matchup-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(18px, 4vw, 34px);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      font-size: clamp(1rem, 2.8vw, 1.4rem);
+    }
+
+    .matchup-line img {
+      width: clamp(72px, 14vw, 110px);
+      height: auto;
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.6));
+    }
+
+    .matchup-line .at-label {
+      color: var(--wvu-gold);
+      font-size: clamp(1rem, 2.8vw, 1.4rem);
+      letter-spacing: 0.3em;
+    }
+
+    .bottom-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 clamp(28px, 6vw, 48px) clamp(28px, 6vw, 46px);
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    .venue-block {
+      max-width: min(50%, 320px);
+    }
+
+    .venue-block .venue {
+      margin: 0;
+      font-size: clamp(1.3rem, 4vw, 1.9rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--wvu-gold);
+    }
+
+    .venue-block .address {
+      margin: 8px 0 0;
+      font-size: clamp(1rem, 2.8vw, 1.2rem);
+      line-height: 1.5;
+    }
+
+    .chapter-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: clamp(0.9rem, 2.4vw, 1.1rem);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .chapter-block img {
+      height: clamp(120px, 24vw, 170px);
+      width: auto;
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.75)) brightness(1.1);
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 16px;
+      }
+
+      .flyer {
+        aspect-ratio: auto;
+      }
+
+      .bottom-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+      }
+
+      .venue-block {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="flyer" aria-labelledby="banner-title">
+    <h1 class="top-strip" id="banner-title">Game Watch</h1>
+
+    <div class="main-content">
+      <p class="date-line">Saturday, October 18 · Doors 12:30 p.m. · Kickoff 1:00 p.m.</p>
+      <div class="matchup-line" aria-label="West Virginia at UCF">
+        <img src="https://a.espncdn.com/i/teamlogos/ncaa/500/277.png" alt="West Virginia University logo" />
+        <span class="at-label">AT</span>
+        <img src="https://a.espncdn.com/i/teamlogos/ncaa/500/2116.png" alt="University of Central Florida logo" />
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="venue-block">
+        <p class="venue">Capital Ale House</p>
+        <p class="address">4024 Cox Rd<br />Glen Allen, VA 23060</p>
+      </div>
+      <div class="chapter-block">
+        <img src="assets/logo.png" alt="Central Virginia WVU Alumni Association logo" />
+      </div>
+    </div>
+  </section>
+</body>
+</html>

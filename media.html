@@ -1,18 +1,9 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-G14Q10H6Y2');
-</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CVCWVUAA â€¢ Media Uploads</title>
+  <title>CVCWVUAA • Media Uploads</title>
   <link rel="stylesheet" href="/css/styles.css">
   <style>
     .gallery-grid { display:grid; gap:16px; grid-template-columns:1fr; }
@@ -32,7 +23,7 @@
     </a>
 
     <!-- Mobile menu button -->
-    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">â˜°</button>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
 
     <nav id="site-nav" class="nav">
       <a href="/index.html">Home</a>
@@ -45,7 +36,7 @@
           <a role="menuitem" href="/pay.html">Membership</a>
           <a role="menuitem" href="/board.html">Board Members</a>
           <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
-          <a role="menuitem" href="/bylaws.html">Bylaws Â· Proclamation</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
         </div>
       </div>
 
@@ -67,10 +58,10 @@
       <a href="/scholarship.html">Scholarship</a>
       <a href="/media.html">Media</a>
       <a href="/contact.html">Contact</a>
-      <a href="/search.html" class="search-btn">ðŸ”</a>
+      <a href="/search.html" class="search-btn">🔍</a>
       
       <!-- Theme toggle -->
-      <button class="theme-toggle" aria-label="Toggle theme">ðŸŒ™</button>
+      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
     </nav>
   </div>
 </header>
@@ -133,10 +124,10 @@
 <footer class="site-footer">
   <div class="wrapper">
     <div class="footer-bar">
-      <div class="brandline">CVCWVUAA â€” Central Virginia Chapter</div>
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
   <a href="/contact.html">Contact Us</a>
     </div>
-    <div class="small footer-meta">Â© <span id="year"></span> CVCWVUAA â€” Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
   </div>
 </footer>
 
@@ -191,7 +182,7 @@
       fig.appendChild(img);
     }
     const cap = document.createElement('figcaption');
-    const meta = [item.credit || '', item.date || ''].filter(Boolean).join(' â€¢ ');
+    const meta = [item.credit || '', item.date || ''].filter(Boolean).join(' • ');
     cap.innerHTML = `<div><strong>${item.caption || ''}</strong></div>
                      <div class="small" style="color:#5b6777">${meta}</div>`;
     fig.appendChild(cap);
@@ -243,7 +234,7 @@
       // Load saved theme or default to light
       const savedTheme = localStorage.getItem('theme') || 'light';
       document.documentElement.setAttribute('data-theme', savedTheme);
-      themeToggle.textContent = savedTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
+      themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
       
       themeToggle.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -251,7 +242,7 @@
         
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
-        themeToggle.textContent = newTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
+        themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
       });
     }
   })();
@@ -259,4 +250,3 @@
 
 </body>
 </html>
-
