@@ -15,10 +15,18 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    X-Frame-Options = "SAMEORIGIN"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Cache-Control = "public, max-age=3600"
+
+# PDF files - allow embedding and set proper content type
+[[headers]]
+  for = "/assets/docs/*.pdf"
+  [headers.values]
+    Content-Type = "application/pdf"
+    X-Frame-Options = "SAMEORIGIN"
+    Cache-Control = "public, max-age=31536000"
 
 # Cache CSS and JS files for longer
 [[headers]]
