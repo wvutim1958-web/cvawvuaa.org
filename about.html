@@ -202,19 +202,7 @@
     });
   }
   
-  // Mobile: tap to open dropdowns
-  document.querySelectorAll('.menu.dropdown').forEach(menu => {
-    const btn = menu.querySelector('.dropbtn');
-    if (btn) {
-      btn.addEventListener('click', (e) => {
-        if (window.matchMedia('(max-width: 900px)').matches) {
-          e.preventDefault();
-          menu.classList.toggle('open');
-          btn.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
-        }
-      });
-    }
-  });
+
 
   // Theme toggle functionality
   const themeToggle = document.querySelector('.theme-toggle');
@@ -234,6 +222,9 @@
     });
   }
 </script>
+
+<!-- Dropdown Navigation -->
+<script src="/js/dropdown.js"></script>
 
 <!-- Social Media Integration -->
 <script src="/js/social-media.js"></script>
