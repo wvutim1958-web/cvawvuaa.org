@@ -235,25 +235,68 @@ class SocialMediaManager {
     }
   }
 
-  // Initialize social media feeds (placeholder for future API integration)
+  // Initialize social media feeds with Facebook Page Plugin
   initSocialFeeds() {
     const feedContainers = document.querySelectorAll('.social-feed');
     if (feedContainers.length === 0) return;
 
     feedContainers.forEach(container => {
-      container.innerHTML = `
-        <div class="social-feed-placeholder">
-          <h3>Latest from Social Media</h3>
-          <p>🔄 Social media feeds will be displayed here.</p>
-          <p>Connect with us on our social platforms for the latest updates!</p>
-          <div class="feed-links">
-            <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank">Facebook</a>
-            <a href="${SOCIAL_CONFIG.accounts.twitter}" target="_blank">Twitter</a>
-            <a href="${SOCIAL_CONFIG.accounts.instagram}" target="_blank">Instagram</a>
+      if (SOCIAL_CONFIG.accounts.facebook) {
+        container.innerHTML = `
+          <div class="social-feed-container">
+            <h3>Latest from Facebook</h3>
+            <div class="fb-page" 
+                 data-href="${SOCIAL_CONFIG.accounts.facebook}"
+                 data-tabs="timeline" 
+                 data-width="500" 
+                 data-height="600"
+                 data-small-header="false"
+                 data-adapt-container-width="true"
+                 data-hide-cover="false"
+                 data-show-facepile="true">
+              <blockquote cite="${SOCIAL_CONFIG.accounts.facebook}" class="fb-xfbml-parse-ignore">
+                <a href="${SOCIAL_CONFIG.accounts.facebook}">Central Virginia WVU Alumni</a>
+              </blockquote>
+            </div>
           </div>
-        </div>
-      `;
+        `;
+        
+        // Load Facebook SDK if not already loaded
+        if (!window.FB) {
+          this.loadFacebookSDK();
+        } else {
+          // If SDK already loaded, parse the new plugin
+          window.FB.XFBML.parse();
+        }
+      } else {
+        // Fallback if no Facebook account
+        container.innerHTML = `
+          <div class="social-feed-placeholder">
+            <h3>Latest from Social Media</h3>
+            <p>Connect with us on our social platforms for the latest updates!</p>
+          </div>
+        `;
+      }
     });
+  }
+
+  // Load Facebook SDK
+  loadFacebookSDK() {
+    // Add Facebook SDK script
+    const script = document.createElement('script');
+    script.async = true;
+    script.defer = true;
+    script.crossOrigin = 'anonymous';
+    script.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0';
+    
+    // Add Facebook root div if not exists
+    if (!document.getElementById('fb-root')) {
+      const fbRoot = document.createElement('div');
+      fbRoot.id = 'fb-root';
+      document.body.insertBefore(fbRoot, document.body.firstChild);
+    }
+    
+    document.body.appendChild(script);
   }
 }
 

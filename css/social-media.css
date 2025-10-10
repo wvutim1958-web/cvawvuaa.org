@@ -304,3 +304,46 @@
   border-color: #475569;
   color: #f1f5f9;
 }
+
+/* Facebook Page Plugin Styles */
+.social-feed-container {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  margin: 24px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.social-feed-container h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.5rem;
+  color: #002855;
+  text-align: center;
+}
+
+.social-feed-container .fb-page {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Responsive adjustments for Facebook plugin */
+@media (max-width: 768px) {
+  .social-feed-container {
+    padding: 16px;
+  }
+  
+  .social-feed-container .fb-page {
+    width: 100% !important;
+  }
+}
+
+/* Dark theme for feed container */
+.theme-dark .social-feed-container {
+  background: #1e293b;
+}
+
+.theme-dark .social-feed-container h3 {
+  color: #ffd100;
+}
