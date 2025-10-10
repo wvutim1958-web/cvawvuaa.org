@@ -96,187 +96,102 @@ Your story matters. Let's share it!
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alumni Spotlight Launch</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f5f5f5;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #ffffff;
-        }
-        .header-banner {
-            background: linear-gradient(135deg, #002855 0%, #0039a6 100%);
-            padding: 40px 20px;
-            text-align: center;
-            color: white;
-        }
-        .header-banner h1 {
-            margin: 0 0 10px 0;
-            font-size: 28px;
-        }
-        .header-banner .subtitle {
-            font-size: 18px;
-            color: #ffd100;
-            font-weight: bold;
-        }
-        .content {
-            padding: 30px;
-        }
-        .content h2 {
-            color: #002855;
-            font-size: 22px;
-            margin-top: 0;
-        }
-        .content p {
-            line-height: 1.7;
-            color: #333;
-            font-size: 16px;
-        }
-        .highlight-box {
-            background: #f8f9fa;
-            border-left: 4px solid #ffd100;
-            padding: 20px;
-            margin: 25px 0;
-        }
-        .highlight-box h3 {
-            margin-top: 0;
-            color: #002855;
-            font-size: 18px;
-        }
-        .highlight-box ul {
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-        .highlight-box li {
-            margin-bottom: 8px;
-            color: #333;
-        }
-        .cta-button {
-            text-align: center;
-            margin: 30px 0;
-        }
-        .cta-button a {
-            display: inline-block;
-            padding: 15px 40px;
-            background: linear-gradient(135deg, #ffd100 0%, #ffed4e 100%);
-            color: #002855;
-            text-decoration: none;
-            border-radius: 30px;
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(255,209,0,0.4);
-        }
-        .examples {
-            background: #e6f3ff;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 25px 0;
-        }
-        .examples h3 {
-            color: #002855;
-            margin-top: 0;
-        }
-        .examples p {
-            margin: 10px 0;
-            font-style: italic;
-        }
-        .footer {
-            background: #f5f5f5;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-        }
-        .social-links {
-            margin: 20px 0;
-        }
-        .social-links a {
-            color: #0039a6;
-            text-decoration: none;
-            margin: 0 10px;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alumni Spotlight Launch</title>
+<style>
+body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background-color: #f5f5f5; }
+.email-container { max-width: 600px; margin: 0 auto; background: #ffffff; }
+.header-banner { background: linear-gradient(135deg, #002855 0%, #0039a6 100%); padding: 40px 20px; text-align: center; color: white; }
+.header-banner h1 { margin: 0 0 10px 0; font-size: 28px; }
+.header-banner .subtitle { font-size: 18px; color: #ffd100; font-weight: bold; }
+.content { padding: 30px; }
+.content h2 { color: #002855; font-size: 22px; margin-top: 0; }
+.content p { line-height: 1.7; color: #333; font-size: 16px; }
+.highlight-box { background: #f8f9fa; border-left: 4px solid #ffd100; padding: 20px; margin: 25px 0; }
+.highlight-box h3 { margin-top: 0; color: #002855; font-size: 18px; }
+.highlight-box ul { margin: 10px 0; padding-left: 20px; }
+.highlight-box li { margin-bottom: 8px; color: #333; }
+.cta-button { text-align: center; margin: 30px 0; }
+.cta-button a { display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #ffd100 0%, #ffed4e 100%); color: #002855; text-decoration: none; border-radius: 30px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 12px rgba(255,209,0,0.4); }
+.examples { background: #e6f3ff; padding: 20px; border-radius: 8px; margin: 25px 0; }
+.examples h3 { color: #002855; margin-top: 0; }
+.examples p { margin: 10px 0; font-style: italic; }
+.footer { background: #f5f5f5; padding: 20px; text-align: center; color: #666; font-size: 14px; }
+.social-links { margin: 20px 0; }
+.social-links a { color: #0039a6; text-decoration: none; margin: 0 10px; font-weight: bold; }
+</style>
 </head>
 <body>
-    <div class="email-container">
-        
-        <!-- Header Banner -->
-        <div class="header-banner">
-            <h1>✨ Introducing ✨</h1>
-            <div class="subtitle">CVCWVUAA ALUMNI SPOTLIGHT</div>
-        </div>
-        
-        <!-- Main Content -->
-        <div class="content">
-            <h2>Celebrate Outstanding Mountaineers in Our Community!</h2>
-            
-            <p>Dear Fellow Mountaineers,</p>
-            
-            <p>We're excited to launch a brand new feature on our website: the <strong>CVCWVUAA Alumni Spotlight</strong>! This is your opportunity to recognize and celebrate the amazing WVU graduates making a difference right here in Central Virginia.</p>
-            
-            <div class="highlight-box">
-                <h3>🌟 Who Should Be Spotlighted?</h3>
-                <p>Alumni who exemplify Mountaineer spirit through:</p>
-                <ul>
-                    <li><strong>Community Leadership</strong> – organizing initiatives, nonprofit work</li>
-                    <li><strong>Professional Achievement</strong> – career milestones, industry recognition</li>
-                    <li><strong>Service & Volunteering</strong> – giving back, making a difference</li>
-                    <li><strong>Chapter Involvement</strong> – active participation in CVCWVUAA</li>
-                    <li><strong>Entrepreneurship</strong> – launching businesses, innovation</li>
-                    <li><strong>Education & Mentorship</strong> – teaching, coaching, guiding others</li>
-                </ul>
-            </div>
-            
-            <p><strong>The best part?</strong> Nominations take just 2-3 minutes! Share their name, graduation year, and a brief story about what makes them special. That's it!</p>
-            
-            <div class="examples">
-                <h3>💡 Spotlight Examples:</h3>
-                <p>"<em>Sarah organized quarterly networking events that helped 15+ recent grads land jobs...</em>"</p>
-                <p>"<em>Mike's free legal clinic has served 200+ families in Richmond...</em>"</p>
-                <p>"<em>Jessica founded a scholarship program that has sent 5 local students to WVU...</em>"</p>
-            </div>
-            
-            <div class="cta-button">
-                <a href="https://cvawvuaa.org/alumni-spotlight-submit.html">✨ Nominate an Alumnus Now</a>
-            </div>
-            
-            <p><strong>Yes, you can nominate yourself!</strong> We want to hear your story too. Don't be shy — if you're making a difference, we want to celebrate it!</p>
-            
-            <p>Featured alumni will be highlighted on our website and shared across our social media channels, helping to inspire and connect our Mountaineer community.</p>
-            
-            <p style="margin-top: 30px;">Let's show Central Virginia what Mountaineers are made of!</p>
-            
-            <p style="color: #002855; font-weight: bold; font-size: 18px; margin-top: 20px;">Let's Go Mountaineers! 🏔️💙💛</p>
-            
-            <p style="margin-top: 30px;">
-                <strong>The CVCWVUAA Board</strong><br>
-                Central Virginia Chapter<br>
-                WVU Alumni Association
-            </p>
-        </div>
-        
-        <!-- Footer -->
-        <div class="footer">
-            <div class="social-links">
-                <a href="https://cvawvuaa.org">Website</a> |
-                <a href="https://www.facebook.com/CentralVirginiaWVUAlumni">Facebook</a> |
-                <a href="https://www.instagram.com/cvcwvuaa">Instagram</a>
-            </div>
-            <p>© 2025 CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association</p>
-            <p style="font-size: 12px; margin-top: 10px;">
-                Questions? Contact us at cvcwvuaa@gmail.com
-            </p>
-        </div>
-        
-    </div>
+<div class="email-container">
+
+<!-- Header Banner -->
+<div class="header-banner">
+<h1>✨ Introducing ✨</h1>
+<div class="subtitle">CVCWVUAA ALUMNI SPOTLIGHT</div>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+<h2>Celebrate Outstanding Mountaineers in Our Community!</h2>
+
+<p>Dear Fellow Mountaineers,</p>
+
+<p>We're excited to launch a brand new feature on our website: the <strong>CVCWVUAA Alumni Spotlight</strong>! This is your opportunity to recognize and celebrate the amazing WVU graduates making a difference right here in Central Virginia.</p>
+
+<div class="highlight-box">
+<h3>🌟 Who Should Be Spotlighted?</h3>
+<p>Alumni who exemplify Mountaineer spirit through:</p>
+<ul>
+<li><strong>Community Leadership</strong> – organizing initiatives, nonprofit work</li>
+<li><strong>Professional Achievement</strong> – career milestones, industry recognition</li>
+<li><strong>Service & Volunteering</strong> – giving back, making a difference</li>
+<li><strong>Chapter Involvement</strong> – active participation in CVCWVUAA</li>
+<li><strong>Entrepreneurship</strong> – launching businesses, innovation</li>
+<li><strong>Education & Mentorship</strong> – teaching, coaching, guiding others</li>
+</ul>
+</div>
+
+<p><strong>The best part?</strong> Nominations take just 2-3 minutes! Share their name, graduation year, and a brief story about what makes them special. That's it!</p>
+
+<div class="examples">
+<h3>💡 Spotlight Examples:</h3>
+<p>"<em>Sarah organized quarterly networking events that helped 15+ recent grads land jobs...</em>"</p>
+<p>"<em>Mike's free legal clinic has served 200+ families in Richmond...</em>"</p>
+<p>"<em>Jessica founded a scholarship program that has sent 5 local students to WVU...</em>"</p>
+</div>
+
+<div class="cta-button">
+<a href="https://cvawvuaa.org/alumni-spotlight-submit.html">✨ Nominate an Alumnus Now</a>
+</div>
+
+<p><strong>Yes, you can nominate yourself!</strong> We want to hear your story too. Don't be shy — if you're making a difference, we want to celebrate it!</p>
+
+<p>Featured alumni will be highlighted on our website and shared across our social media channels, helping to inspire and connect our Mountaineer community.</p>
+
+<p style="margin-top: 30px;">Let's show Central Virginia what Mountaineers are made of!</p>
+
+<p style="color: #002855; font-weight: bold; font-size: 18px; margin-top: 20px;">Let's Go Mountaineers! 🏔️💙💛</p>
+
+<p style="margin-top: 30px;">
+<strong>The CVCWVUAA Board</strong><br>
+Central Virginia Chapter<br>
+WVU Alumni Association
+</p>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+<div class="social-links">
+<a href="https://cvawvuaa.org">Website</a> |
+<a href="https://www.facebook.com/CentralVirginiaWVUAlumni">Facebook</a> |
+<a href="https://www.instagram.com/cvcwvuaa">Instagram</a>
+</div>
+<p>© 2025 CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association</p>
+<p style="font-size: 12px; margin-top: 10px;">Questions? Contact us at cvcwvuaa@gmail.com</p>
+</div>
+
+</div>
 </body>
 </html>
 ```
