@@ -67,11 +67,20 @@
 
   <main>
     <div class="wrapper">
-      <h2>Alumni Spotlight</h2>
-      <p class="small">Celebrating Mountaineers in Central Virginia—share a nomination via our <a href="/contact.html">contact form</a>.</p>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1em;">
+        <div>
+          <h2 style="margin-bottom: 0.5em;">Alumni Spotlight</h2>
+          <p class="small">Celebrating outstanding Mountaineers in Central Virginia</p>
+        </div>
+        <a href="/alumni-spotlight-submit.html" style="display: inline-block; padding: 0.75em 1.5em; background: linear-gradient(135deg, #ffd100 0%, #ffed4e 100%); color: #002855; text-decoration: none; border-radius: 8px; font-weight: bold; transition: transform 0.2s;">
+          ✨ Nominate an Alumnus
+        </a>
+      </div>
 
       <div id="spot-grid" class="spot-grid"></div>
-      <div id="spot-empty" class="card" style="display:none"><p>No spotlights yet. Add entries to <code>/content/spotlight.json</code>.</p></div>
+      <div id="spot-empty" class="card" style="display:none;">
+        <p>No spotlights yet. <a href="/alumni-spotlight-submit.html">Be the first to nominate</a> an outstanding Mountaineer!</p>
+      </div>
     </div>
   </main>
 
