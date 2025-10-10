@@ -766,6 +766,7 @@ img.critical {
 .mobile-device select {
   font-size: 16px; /* Prevents zoom on iOS */
   -webkit-appearance: none;
+  appearance: none;
   border-radius: 8px;
 }
 

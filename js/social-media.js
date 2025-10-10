@@ -2,13 +2,13 @@
 // Handles sharing buttons, social feeds, and social media management
 
 const SOCIAL_CONFIG = {
-  // Social Media Accounts (update these with real handles)
+  // Social Media Accounts - Real CVCWVUAA accounts
   accounts: {
-    facebook: 'https://facebook.com/CVCWVUAA',
-    twitter: 'https://twitter.com/CVCWVUAA', 
-    instagram: 'https://instagram.com/CVCWVUAA',
-    linkedin: 'https://linkedin.com/company/CVCWVUAA',
-    youtube: 'https://youtube.com/@CVCWVUAA'
+    facebook: 'https://www.facebook.com/CentralVirginiaWVUAlumni',
+    twitter: null, // Not active yet
+    instagram: 'https://www.instagram.com/cvcwvuaa',
+    linkedin: null, // Not active yet
+    youtube: null // Not active yet
   },
   
   // Sharing configuration
@@ -39,25 +39,49 @@ class SocialMediaManager {
     const socialContainer = document.querySelector('.social-links');
     if (!socialContainer) return;
 
+    // Build links only for active accounts
+    let linksHTML = '';
+    
+    if (SOCIAL_CONFIG.accounts.facebook) {
+      linksHTML += `
+        <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener" class="social-link facebook" aria-label="Follow us on Facebook">
+          Facebook
+        </a>`;
+    }
+    
+    if (SOCIAL_CONFIG.accounts.twitter) {
+      linksHTML += `
+        <a href="${SOCIAL_CONFIG.accounts.twitter}" target="_blank" rel="noopener" class="social-link twitter" aria-label="Follow us on Twitter">
+          Twitter
+        </a>`;
+    }
+    
+    if (SOCIAL_CONFIG.accounts.instagram) {
+      linksHTML += `
+        <a href="${SOCIAL_CONFIG.accounts.instagram}" target="_blank" rel="noopener" class="social-link instagram" aria-label="Follow us on Instagram">
+          Instagram
+        </a>`;
+    }
+    
+    if (SOCIAL_CONFIG.accounts.linkedin) {
+      linksHTML += `
+        <a href="${SOCIAL_CONFIG.accounts.linkedin}" target="_blank" rel="noopener" class="social-link linkedin" aria-label="Follow us on LinkedIn">
+          LinkedIn
+        </a>`;
+    }
+    
+    if (SOCIAL_CONFIG.accounts.youtube) {
+      linksHTML += `
+        <a href="${SOCIAL_CONFIG.accounts.youtube}" target="_blank" rel="noopener" class="social-link youtube" aria-label="Subscribe to our YouTube">
+          YouTube
+        </a>`;
+    }
+
     const socialHTML = `
       <div class="social-media-links">
         <h3>Follow Us</h3>
         <div class="social-icons">
-          <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener" class="social-link facebook" aria-label="Follow us on Facebook">
-            <span class="social-icon">📘</span> Facebook
-          </a>
-          <a href="${SOCIAL_CONFIG.accounts.twitter}" target="_blank" rel="noopener" class="social-link twitter" aria-label="Follow us on Twitter">
-            <span class="social-icon">🐦</span> Twitter
-          </a>
-          <a href="${SOCIAL_CONFIG.accounts.instagram}" target="_blank" rel="noopener" class="social-link instagram" aria-label="Follow us on Instagram">
-            <span class="social-icon">📷</span> Instagram
-          </a>
-          <a href="${SOCIAL_CONFIG.accounts.linkedin}" target="_blank" rel="noopener" class="social-link linkedin" aria-label="Follow us on LinkedIn">
-            <span class="social-icon">💼</span> LinkedIn
-          </a>
-          <a href="${SOCIAL_CONFIG.accounts.youtube}" target="_blank" rel="noopener" class="social-link youtube" aria-label="Subscribe to our YouTube">
-            <span class="social-icon">📺</span> YouTube
-          </a>
+          ${linksHTML}
         </div>
       </div>
     `;
@@ -78,19 +102,19 @@ class SocialMediaManager {
         <h4>Share This Page</h4>
         <div class="share-buttons-grid">
           <button onclick="socialManager.shareOn('facebook')" class="share-btn facebook" aria-label="Share on Facebook">
-            📘 Facebook
+            Facebook
           </button>
           <button onclick="socialManager.shareOn('twitter')" class="share-btn twitter" aria-label="Share on Twitter">
-            🐦 Twitter
+            Twitter
           </button>
           <button onclick="socialManager.shareOn('linkedin')" class="share-btn linkedin" aria-label="Share on LinkedIn">
-            💼 LinkedIn
+            LinkedIn
           </button>
           <button onclick="socialManager.shareOn('email')" class="share-btn email" aria-label="Share via Email">
-            ✉️ Email
+            Email
           </button>
           <button onclick="socialManager.copyLink()" class="share-btn copy" aria-label="Copy Link">
-            🔗 Copy Link
+            Copy Link
           </button>
         </div>
       </div>
