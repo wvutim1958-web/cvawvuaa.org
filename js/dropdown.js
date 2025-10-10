@@ -21,21 +21,35 @@
       });
     }
 
-    // Handle dropdown functionality - only intercept clicks on mobile/touch devices
-    // On desktop, CSS :hover handles dropdowns naturally
+    // Handle dropdown functionality
+    // On desktop: hover shows dropdown, click goes to main page
+    // On mobile: click toggles dropdown
     const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     const isMobile = window.innerWidth <= 768;
     
-    if (isTouchDevice || isMobile) {
-      document.querySelectorAll('.menu.dropdown').forEach(menu => {
-        const btn = menu.querySelector('.dropbtn');
-        const panel = menu.querySelector('.dropdown-panel');
+    document.querySelectorAll('.menu.dropdown').forEach(menu => {
+      const btn = menu.querySelector('.dropbtn');
+      const panel = menu.querySelector('.dropdown-panel');
+      
+      if (btn && panel) {
+        // Determine the main page URL based on button text
+        const btnText = btn.textContent.trim().toLowerCase();
+        let mainPageUrl = '/about.html';
+        if (btnText.includes('news')) {
+          mainPageUrl = '/news/';
+        }
         
-        if (btn && panel) {
-          // Click functionality for mobile/touch devices
+        if (isTouchDevice || isMobile) {
+          // Mobile: Click toggles dropdown
           btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
+            
+            // If already open, navigate to main page instead
+            if (menu.classList.contains('open')) {
+              window.location.href = mainPageUrl;
+              return;
+            }
             
             // Close other dropdowns first
             document.querySelectorAll('.menu.dropdown').forEach(otherMenu => {
@@ -46,13 +60,19 @@
               }
             });
             
-            // Toggle current dropdown
-            const isOpen = menu.classList.toggle('open');
-            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            // Open current dropdown
+            menu.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          });
+        } else {
+          // Desktop: Click navigates to main page, hover shows dropdown (CSS handles hover)
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = mainPageUrl;
           });
         }
-      });
-    }
+      }
+    });
 
     // Close dropdown when clicking outside (mobile/touch only)
     if (isTouchDevice || isMobile) {
