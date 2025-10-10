@@ -242,33 +242,61 @@ class SocialMediaManager {
 
     feedContainers.forEach(container => {
       if (SOCIAL_CONFIG.accounts.facebook) {
-        // Load SDK first, then render
-        this.loadFacebookSDK();
-        
-        // Set up the HTML for Facebook plugin
+        // Create enhanced social card with Facebook plugin attempt
         container.innerHTML = `
           <div class="social-feed-container">
-            <h3>Latest from Facebook</h3>
-            <div class="fb-page-wrapper">
-              <div class="fb-page" 
-                   data-href="${SOCIAL_CONFIG.accounts.facebook}"
-                   data-tabs="timeline" 
-                   data-width="500" 
-                   data-height="600"
-                   data-small-header="false"
-                   data-adapt-container-width="true"
-                   data-hide-cover="false"
-                   data-show-facepile="true">
-                <blockquote cite="${SOCIAL_CONFIG.accounts.facebook}" class="fb-xfbml-parse-ignore">
-                  <a href="${SOCIAL_CONFIG.accounts.facebook}">Loading Facebook feed...</a>
-                </blockquote>
-              </div>
+            <h3>Connect With Us</h3>
+            
+            <!-- Social Media Cards -->
+            <div class="social-cards-grid">
+              <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener" class="social-card facebook-card">
+                <div class="social-card-icon">📘</div>
+                <div class="social-card-content">
+                  <h4>Follow on Facebook</h4>
+                  <p>See our latest posts, photos, and event updates</p>
+                  <span class="social-card-button">Visit Page →</span>
+                </div>
+              </a>
+              
+              ${SOCIAL_CONFIG.accounts.instagram ? `
+              <a href="${SOCIAL_CONFIG.accounts.instagram}" target="_blank" rel="noopener" class="social-card instagram-card">
+                <div class="social-card-icon">📷</div>
+                <div class="social-card-content">
+                  <h4>Follow on Instagram</h4>
+                  <p>View photos and stories from our events</p>
+                  <span class="social-card-button">View Profile →</span>
+                </div>
+              </a>
+              ` : ''}
             </div>
-            <div class="fb-fallback" style="margin-top: 16px; text-align: center;">
-              <p>Can't see the feed? <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener" style="color: #3b5998; font-weight: 600;">Visit our Facebook page →</a></p>
+            
+            <!-- Facebook Plugin (will show if page is public) -->
+            <div class="fb-plugin-section" style="margin-top: 24px;">
+              <h4 style="text-align: center; color: #002855; margin-bottom: 16px;">Latest Facebook Posts</h4>
+              <div class="fb-page-wrapper">
+                <div class="fb-page" 
+                     data-href="${SOCIAL_CONFIG.accounts.facebook}"
+                     data-tabs="timeline" 
+                     data-width="500" 
+                     data-height="400"
+                     data-small-header="true"
+                     data-adapt-container-width="true"
+                     data-hide-cover="false"
+                     data-show-facepile="false">
+                  <blockquote cite="${SOCIAL_CONFIG.accounts.facebook}" class="fb-xfbml-parse-ignore">
+                    <a href="${SOCIAL_CONFIG.accounts.facebook}">Loading posts from Central Virginia WVU Alumni...</a>
+                  </blockquote>
+                </div>
+              </div>
+              <p style="text-align: center; margin-top: 12px; font-size: 0.9rem; color: #666;">
+                <em>Note: Feed requires public Facebook page visibility</em>
+              </p>
             </div>
           </div>
         `;
+        
+        // Load Facebook SDK
+        this.loadFacebookSDK();
       } else {
         // Fallback if no Facebook account
         container.innerHTML = `
