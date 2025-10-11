@@ -25,13 +25,13 @@
   function cardFor(item){
     const fig = el('figure'); fig.className = 'card'; fig.style.padding = '8px';
     if(item.type === 'video'){
-      const v = el('video', {controls:'', playsinline:'', preload:'metadata', style:'width:100%;height:220px;object-fit:cover;border-radius:8px'});
+      const v = el('video', {controls:'', playsinline:'', preload:'metadata', style:'width:100%;max-height:400px;object-fit:contain;border-radius:8px;background:#f5f5f5'});
       if(item.poster) v.setAttribute('poster', item.poster);
       const src = el('source', {src:item.src, type:'video/mp4'});
       v.appendChild(src); fig.appendChild(v);
     } else {
       const img = el('img', {src:item.src, alt:item.alt||''});
-      img.style.cssText = 'width:100%;height:220px;object-fit:cover;border-radius:8px';
+      img.style.cssText = 'width:100%;height:auto;border-radius:8px;display:block';
       fig.appendChild(img);
     }
     const cap = el('figcaption'); cap.style.marginTop = '.5rem';
