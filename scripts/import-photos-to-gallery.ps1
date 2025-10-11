@@ -113,7 +113,7 @@ foreach ($eventFolder in $eventFolders) {
     # Get all image files (skip metadata files)
     $imageFiles = Get-ChildItem -Path $eventFolder.FullName -File | 
                   Where-Object { 
-                      $_.Extension -match '\.(jpg|jpeg|png|gif)$' -and 
+                      $_.Extension -match '\.(jpg|jpeg|png|gif|bmp)$' -and 
                       $_.Name -notmatch '\.json$' 
                   }
     
