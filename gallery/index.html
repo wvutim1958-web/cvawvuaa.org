@@ -1,6 +1,7 @@
 <!doctype html><html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <title>CVCWVUAA • Photo Gallery</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -41,7 +42,7 @@
 <footer class="site-footer"><div class="wrapper"><div class="footer-bar"><div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
   <a href="/contact.html">Contact Us</a>
     </div><div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div></div></footer>
-<script src="/js/gallery.js"></script>
+<script src="/js/gallery.js?v=2"></script>
 <script>
   document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
   (function(){const b=document.querySelector('.nav-toggle'),n=document.getElementById('site-nav');if(b&&n){b.addEventListener('click',()=>{const o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});}const m=document.querySelector('.menu.dropdown'),d=document.querySelector('.menu.dropdown .dropbtn');if(d&&m){d.addEventListener('click',e=>{if(window.matchMedia('(max-width: 900px)').matches){e.preventDefault();m.classList.toggle('open');d.setAttribute('aria-expanded',m.classList.contains('open')?'true':'false');}});}})();
