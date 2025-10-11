@@ -21,6 +21,9 @@
   function yearOf(item){
     if(item.year) return String(item.year);
     if(item.date && /\d{4}/.test(item.date)) return item.date.slice(0,4);
+    // Check for archive folder first
+    if((item.src||'').includes('/gallery/archive/')) return 'Archive';
+    // Then check for 4-digit year
     const m = (item.src||'').match(/\/gallery\/(\d{4})\//); if(m) return m[1];
     return 'Unknown';
   }
