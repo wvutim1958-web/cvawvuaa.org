@@ -1,4 +1,4 @@
-// Gallery renderer with optional year filter
+// Gallery renderer with optional year filter and lightbox
 (function(){
   async function loadJSON(){
     const urls = ['content/gallery.json', '/content/gallery.json'];
@@ -18,23 +18,90 @@
   function yearOf(item){
     if(item.year) return String(item.year);
     if(item.date && /\d{4}/.test(item.date)) return item.date.slice(0,4);
-    const m = (item.src||'').match(/\/(\d{4})\//); if(m) return m[1];
+    const m = (item.src||'').match(/\/gallery\/(\d{4})\//); if(m) return m[1];
     return 'Unknown';
   }
 
+  // Lightbox functionality
+  function createLightbox(){
+    const lightbox = el('div');
+    lightbox.id = 'lightbox';
+    lightbox.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;cursor:pointer;align-items:center;justify-content:center;';
+    
+    const img = el('img');
+    img.id = 'lightbox-img';
+    img.style.cssText = 'max-width:90%;max-height:90vh;object-fit:contain;border-radius:8px;';
+    
+    const close = el('div', {}, '×');
+    close.style.cssText = 'position:absolute;top:20px;right:40px;color:white;font-size:60px;font-weight:bold;cursor:pointer;user-select:none;';
+    close.title = 'Close (Esc)';
+    
+    lightbox.appendChild(img);
+    lightbox.appendChild(close);
+    document.body.appendChild(lightbox);
+    
+    // Close on click
+    lightbox.addEventListener('click', () => closeLightbox());
+    close.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+    
+    // Close on Esc key
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && lightbox.style.display === 'flex') closeLightbox();
+    });
+    
+    return lightbox;
+  }
+
+  function openLightbox(src){
+    const lightbox = document.getElementById('lightbox') || createLightbox();
+    const img = document.getElementById('lightbox-img');
+    img.src = src;
+    lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox(){
+    const lightbox = document.getElementById('lightbox');
+    if(lightbox){
+      lightbox.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  }
+
   function cardFor(item){
-    const fig = el('figure'); fig.className = 'card'; fig.style.padding = '8px';
+    const fig = el('figure'); 
+    fig.className = 'card'; 
+    fig.style.padding = '8px';
+    
     if(item.type === 'video'){
       const v = el('video', {controls:'', playsinline:'', preload:'metadata', style:'width:100%;max-height:400px;object-fit:contain;border-radius:8px;background:#f5f5f5'});
       if(item.poster) v.setAttribute('poster', item.poster);
       const src = el('source', {src:item.src, type:'video/mp4'});
-      v.appendChild(src); fig.appendChild(v);
+      v.appendChild(src); 
+      fig.appendChild(v);
     } else {
+      const link = el('a');
+      link.href = '#';
+      link.style.cssText = 'cursor:pointer;display:block;';
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        openLightbox(item.src);
+      });
+      
       const img = el('img', {src:item.src, alt:item.alt||''});
-      img.style.cssText = 'width:100%;height:auto;border-radius:8px;display:block';
-      fig.appendChild(img);
+      img.style.cssText = 'width:100%;height:auto;border-radius:8px;display:block;transition:opacity 0.2s;';
+      img.title = 'Click to enlarge';
+      
+      // Hover effect
+      link.addEventListener('mouseenter', () => img.style.opacity = '0.85');
+      link.addEventListener('mouseleave', () => img.style.opacity = '1');
+      
+      link.appendChild(img);
+      fig.appendChild(link);
     }
-    const cap = el('figcaption'); cap.style.marginTop = '.5rem';
+    
+    const cap = el('figcaption'); 
+    cap.style.marginTop = '.5rem';
     cap.innerHTML = `
       <div><strong>${item.caption||''}</strong></div>
       <div class="small" style="color:#5b6777">${[item.credit||'', item.date||''].filter(Boolean).join(' • ')}</div>
