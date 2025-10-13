@@ -12,6 +12,75 @@
             margin: 0;
             padding: 20px;
         }
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #002855 0%, #1e40af 100%);
+            z-index: 10000;
+        }
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .login-box h1 {
+            color: #002855;
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+        .login-box p {
+            color: #666;
+            margin: 0 0 2rem;
+            font-size: 0.9rem;
+        }
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 1rem;
+        }
+        .login-box input[type="password"]:focus {
+            outline: none;
+            border-color: #002855;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .login-box button:hover {
+            transform: translateY(-2px);
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        #adminContent {
+            display: none;
+        }
         .hub-container {
             max-width: 900px;
             margin: 0 auto;
@@ -105,6 +174,19 @@
     </style>
 </head>
 <body>
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <h1>🔒 Admin Login</h1>
+            <p>Central Virginia Chapter Administration</p>
+            <input type="password" id="passwordInput" placeholder="Enter admin password" onkeypress="if(event.key==='Enter') checkPassword()">
+            <button onclick="checkPassword()">🔓 Login</button>
+            <div class="error-message" id="errorMessage">❌ Incorrect password. Please try again.</div>
+        </div>
+    </div>
+
+    <!-- Admin Content (Hidden Until Login) -->
+    <div id="adminContent">
     <div class="hub-container">
         <!-- Header -->
         <div class="hub-header">
@@ -236,5 +318,51 @@
             <p>✅ All your content management tools are restored! Start with the Complete Management Hub for member tools.</p>
         </div>
     </div>
+    </div>
+
+    <script>
+        // Password protection
+        const ADMIN_PASSWORD = 'T58C62';
+        
+        // Check if already logged in (session storage)
+        if (sessionStorage.getItem('adminAuth') === 'true') {
+            showAdminContent();
+        }
+        
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (input.value === ADMIN_PASSWORD) {
+                // Correct password
+                sessionStorage.setItem('adminAuth', 'true');
+                showAdminContent();
+            } else {
+                // Wrong password
+                errorMsg.style.display = 'block';
+                input.value = '';
+                input.focus();
+                
+                // Shake animation
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+            }
+        }
+        
+        function showAdminContent() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
+        }
+    </script>
+
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
 </body>
 </html>
