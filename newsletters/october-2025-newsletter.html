@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCWVUAA October 2025 Newsletter</title>
+    <style>
+        @page {
+            margin: 0.75in;
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        .email-container {
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+            }
+            
+            .email-container {
+                max-width: 100%;
+                margin: 0;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+            }
+            
+            .urgent-box,
+            .game-watch-box,
+            .scholarship-box,
+            .website-updates,
+            .membership-alert,
+            .financial-table,
+            .closing {
+                page-break-inside: avoid;
+            }
+            
+            .section-header {
+                page-break-after: avoid;
+            }
+            
+            h2, h3 {
+                page-break-after: avoid;
+            }
+            
+            .photo-grid {
+                page-break-inside: avoid;
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #002855 0%, #EAAA00 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            page-break-after: avoid;
+        }
+        
+        .header h1 {
+            margin: 0 0 8px 0;
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .header p {
+            margin: 4px 0;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .greeting {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+        
+        .section-header {
+            background: #002855;
+            color: #EAAA00;
+            padding: 12px 18px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-left: 5px solid #EAAA00;
+            page-break-after: avoid;
+        }
+        
+        .urgent-box {
+            background: linear-gradient(135deg, #EAAA00 0%, #ffd700 100%);
+            border: 3px solid #002855;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            page-break-inside: avoid;
+        }
+        
+        .urgent-box h2 {
+            color: #002855;
+            margin: 0 0 12px 0;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+        
+        .urgent-box p {
+            color: #002855;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        
+        .game-watch-box {
+            background: #002855;
+            color: white;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+            border-radius: 10px;
+            border: 5px solid #EAAA00;
+            page-break-inside: avoid;
+        }
+        
+        .game-watch-box h2 {
+            color: #EAAA00;
+            margin: 0 0 15px 0;
+            font-size: 26px;
+        }
+        
+        .game-watch-box .date {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+        
+        .game-watch-box .location {
+            font-size: 18px;
+            margin: 8px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #EAAA00;
+            color: #002855;
+            padding: 12px 35px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin: 15px 10px 8px 10px;
+            border: 2px solid #EAAA00;
+        }
+        
+        .cta-button:hover {
+            background: #ffd700;
+            border-color: #ffd700;
+        }
+        
+        .scholarship-box {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d4edda 100%);
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            page-break-inside: avoid;
+        }
+        
+        .scholarship-box h3 {
+            color: #155724;
+            margin: 0 0 12px 0;
+            font-size: 20px;
+        }
+        
+        .scholarship-amount {
+            font-size: 42px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 12px 0;
+        }
+        
+        .financial-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+        }
+        
+        .financial-table th {
+            background: #002855;
+            color: #EAAA00;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .financial-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+        }
+        
+        .financial-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .balance-positive {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .balance-negative {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .total-row {
+            background: #f8f9fa !important;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .total-row td {
+            padding: 12px 10px;
+            border-top: 3px solid #002855;
+        }
+        
+        .website-updates {
+            background: #fff3cd;
+            border-left: 5px solid #EAAA00;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            page-break-inside: avoid;
+        }
+        
+        .website-updates h3 {
+            color: #856404;
+            margin: 0 0 12px 0;
+            font-size: 20px;
+        }
+        
+        .website-updates ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .website-updates li {
+            padding: 6px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 14px;
+        }
+        
+        .website-updates li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #002855 0%, #0039a6 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #EAAA00;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .membership-alert {
+            background: #fff0f0;
+            border: 3px solid #dc3545;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+        
+        .membership-alert h3 {
+            color: #dc3545;
+            margin: 0 0 12px 0;
+            font-size: 22px;
+        }
+        
+        .membership-alert p {
+            font-size: 16px;
+            color: #721c24;
+            margin: 8px 0;
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        
+        .photo-box {
+            background: #002855;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        
+        .photo-box img {
+            width: 100%;
+            height: auto;
+            border-radius: 3px;
+        }
+        
+        .photo-caption {
+            color: #EAAA00;
+            font-size: 12px;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .closing {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #EAAA00;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            page-break-inside: avoid;
+        }
+        
+        .signature {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #002855;
+        }
+        
+        .footer {
+            background: #002855;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+        
+        .footer a {
+            color: #EAAA00;
+            text-decoration: none;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .urgent-box h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="email-container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>🏔️ MOUNTAINEER NEWSLETTER</h1>
+        <p><strong>Central Virginia Chapter • October 2025</strong></p>
+        <p>Your Monthly Update from the CVCWVUAA</p>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+    
+        <div class="greeting">
+            <strong>Dear Fellow Mountaineers,</strong><br><br>
+            
+            October is here, and our chapter is more active than ever! We have exciting news to share about our scholarship donations, major website improvements, upcoming game watches, and a critical update about membership renewals. This is YOUR chapter, and we're working hard to make it fun, engaging, and meaningful for all our members!
+        </div>
+
+        <!-- URGENT: THIS SATURDAY -->
+        <div class="urgent-box">
+            <h2>🚨 THIS SATURDAY! 🚨</h2>
+            <p style="font-size: 32px; margin: 20px 0;">🏈 WVU vs UCF 🏈</p>
+            <p>SATURDAY, OCTOBER 18 • 12:30 PM</p>
+            <p>Capital Ale House</p>
+            <p style="font-size: 16px;">4024 Cox Rd, Glen Allen, VA 23060</p>
+        </div>
+
+        <!-- GAME WATCH DETAILS -->
+        <div class="game-watch-box">
+            <h2>🍺 COME MEET TIM! 🍺</h2>
+            <p style="font-size: 18px; margin: 20px 0;">
+                Join us this Saturday for the UCF game watch! This is a great opportunity to meet your new chapter president, Tim Casten, connect with fellow Mountaineers, and watch the game on big screens with great food and drinks!
+            </p>
+            
+            <div class="date">📍 Why Capital Ale House?</div>
+            <p style="font-size: 16px;">
+                ✓ 60+ Beers on Tap<br>
+                ✓ Multiple Big Screens<br>
+                ✓ Excellent Food Menu<br>
+                ✓ Family Friendly Atmosphere<br>
+                ✓ Free Parking<br>
+            </p>
+            
+            <a href="https://maps.google.com/?q=Capital+Ale+House+4024+Cox+Rd+Glen+Allen+VA+23060" class="cta-button">📍 GET DIRECTIONS</a>
+            <a href="https://go.wvu.edu/MND2025" class="cta-button">🎁 REGISTER FOR PRIZE PACK</a>
+            
+            <p style="font-size: 14px; margin-top: 30px; opacity: 0.9;">
+                <strong>LET'S GO MOUNTAINEERS!</strong> Wear your gold and blue!
+            </p>
+        </div>
+
+        <!-- MAJOR ANNOUNCEMENT: SCHOLARSHIP -->
+        <div class="section">
+            <div class="section-header">💙 MAJOR SCHOLARSHIP DONATION 💛</div>
+            
+            <div class="scholarship-box">
+                <h3>🎓 Blake E. Fought Scholarship Fund</h3>
+                
+                <div style="background: #fff3cd; border-left: 5px solid #856404; padding: 18px; margin: 20px 0; border-radius: 5px;">
+                    <p style="font-size: 16px; color: #721c24; line-height: 1.6; margin: 0 0 10px 0; text-align: center;">
+                        <strong>⚠️ THE FUND WAS NEARLY DEPLETED!</strong>
+                    </p>
+                    <p style="font-size: 15px; color: #333; line-height: 1.6; text-align: center; margin: 0;">
+                        As of June 30, 2024, the Blake E. Fought Memorial Scholarship had only <strong style="color: #dc3545; font-size: 17px;">$2,374.61</strong> in cash balance - barely enough for ONE scholarship! The fund awarded $2,000 in FY2024 and was running dangerously low.
+                    </p>
+                </div>
+                
+                <p style="font-size: 18px; color: #333; line-height: 1.8;">
+                    We are proud to announce that the Central Virginia Chapter has made a significant contribution to the <strong>Blake E. Fought Scholarship Fund (#3s844)</strong> at the WVU Foundation!
+                </p>
+                
+                <div class="scholarship-amount">$5,675</div>
+                
+                <p style="font-size: 16px; color: #666; line-height: 1.6;">
+                    <strong>Donation Breakdown:</strong><br>
+                    • Chapter General Fund: <strong>$5,000.00</strong><br>
+                    • Nancy J. Scrimizzi (INH IRA): <strong>$600.00</strong><br>
+                    • Melvin B. Fletcher Jr.: <strong>$75.00</strong>
+                </p>
+                
+                <div style="background: linear-gradient(135deg, #002855 0%, #0039a6 100%); color: white; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                    <p style="font-size: 19px; font-weight: bold; margin: 0 0 10px 0; color: #EAAA00;">
+                        🎉 HUGE IMPACT! 🎉
+                    </p>
+                    <p style="font-size: 15px; line-height: 1.6; margin: 0;">
+                        This $5,675 donation MORE THAN DOUBLES the available scholarship funds!<br>
+                        From <strong>$2,374.61</strong> to approximately <strong>$8,050</strong> - enough to help <strong>MULTIPLE Richmond-area students</strong> attend WVU!
+                    </p>
+                </div>
+                
+                <p style="font-size: 16px; color: #333; margin-top: 20px; line-height: 1.6;">
+                    This donation represents our chapter's commitment to supporting WVU students and ensuring future Mountaineers can achieve their educational dreams. Thank you to Nancy and Melvin for their generous additional contributions!
+                </p>
+                
+                <p style="font-size: 13px; color: #999; text-align: center; margin-top: 15px; font-style: italic;">
+                    Fund established June 7, 2002 | Historical Gift Value: $53,336.29 | Market Value: $67,579.24 (FY2024)
+                </p>
+            </div>
+        </div>
+
+        <!-- SUPPORT OUR SCHOLARSHIP FUND -->
+        <div class="section">
+            <div class="section-header">💝 SUPPORT OUR SCHOLARSHIP FUND</div>
+            
+            <div style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border: 3px solid #28a745; padding: 20px; margin: 15px 0; border-radius: 10px; text-align: center;">
+                <h3 style="color: #155724; font-size: 20px; margin: 0 0 15px 0;">
+                    🎓 Help Us Support Local Students Attending WVU!
+                </h3>
+                
+                <p style="font-size: 15px; color: #333; line-height: 1.6; margin-bottom: 20px;">
+                    Many members have expressed interest in supporting the scholarship fund! Every dollar helps a deserving student achieve their Mountaineer dreams.
+                </p>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <p style="font-size: 16px; color: #002855; font-weight: bold; margin: 0 0 15px 0;">
+                        💙 Make a Tax-Deductible Donation Today! 💛
+                    </p>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                        Your donation supports the Blake E. Fought Scholarship and helps Central Virginia students attend WVU.
+                    </p>
+                    <a href="https://cvawvuaa.org/scholarship.html" class="cta-button" style="background: #28a745; color: white; border-color: #28a745;">💰 DONATE NOW</a>
+                </div>
+                
+                <p style="font-size: 13px; color: #666; margin-top: 15px; font-style: italic;">
+                    Thank you to Nancy J. Scrimizzi and Melvin B. Fletcher Jr. for their generous donations this month!
+                </p>
+            </div>
+        </div>
+
+        <!-- WEBSITE UPDATES -->
+        <div class="section">
+            <div class="section-header">🌐 MAJOR WEBSITE IMPROVEMENTS!</div>
+            
+            <div class="website-updates">
+                <h3>📸 Check Out Our Enhanced Website!</h3>
+                <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
+                    We've been working hard to make <strong>cvawvuaa.org</strong> better than ever! Here's what's new:
+                </p>
+                
+                <ul>
+                    <li><strong>MASSIVE Photo Gallery Expansion!</strong> We've added historic photos dating back to 2005! Relive memories from past events, game watches, and chapter activities.</li>
+                    <li><strong>812+ Photos Available!</strong> Browse through nearly two decades of Central Virginia Mountaineer memories.</li>
+                    <li><strong>Improved Navigation</strong> - Easier to find events, news, and member information.</li>
+                    <li><strong>Updated Event Calendar</strong> - Never miss a game watch or chapter gathering!</li>
+                    <li><strong>Mobile Friendly Design</strong> - Access everything from your phone or tablet.</li>
+                    <li><strong>Member Portal Enhancements</strong> - Easier access to member-only content.</li>
+                </ul>
+                
+                <div style="text-align: center; margin-top: 25px;">
+                    <a href="https://cvawvuaa.org/gallery/" class="cta-button" style="background: #002855; color: #EAAA00;">📸 VISIT THE GALLERY</a>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">812+</div>
+                    <div class="stat-label">Photos in Gallery</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">2005</div>
+                    <div class="stat-label">Earliest Photos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">Years of History</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AMAZING TOOLS -->
+        <div class="section">
+            <div class="section-header">🛠️ AMAZING BEHIND-THE-SCENES TOOLS!</div>
+            
+            <div style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left: 5px solid #28a745; padding: 20px; margin: 15px 0; border-radius: 5px;">
+                <h3 style="color: #155724; font-size: 18px; margin: 0 0 15px 0;">
+                    🚀 Making Admin Life SO MUCH EASIER!
+                </h3>
+                
+                <p style="font-size: 14px; color: #333; line-height: 1.6; margin-bottom: 15px;">
+                    Powerful technology has been built into the new website to make administrative duties simple and efficient for board members:
+                </p>
+                
+                <div style="background: white; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    <h4 style="color: #28a745; margin: 0 0 10px 0; font-size: 16px;">✨ Available Admin Features:</h4>
+                    <ul style="font-size: 13px; line-height: 1.7; color: #333; margin: 0;">
+                        <li><strong>📊 Member Database</strong> - Track all member information in one place</li>
+                        <li><strong>🧾 Automatic Receipt Generation</strong> - When recording dues payments, receipts automatically generate for email</li>
+                        <li><strong>📝 Content Management System</strong> - Update website pages from an admin panel (no coding needed!)</li>
+                        <li><strong>📧 Membership Updates</strong> - Send newsletters and announcements directly from the website</li>
+                        <li><strong>📸 Photo Gallery Management</strong> - Easily add new photos to the gallery</li>
+                        <li><strong>💰 Financial Display</strong> - Publish transparent financial reports</li>
+                        <li><strong>📅 Event Management</strong> - Post upcoming game watches and activities</li>
+                        <li><strong>🎫 RSVP Tracking</strong> - See who's coming to events</li>
+                        <li><strong>📱 Mobile-Friendly</strong> - Manage everything from your phone</li>
+                    </ul>
+                </div>
+                
+                <p style="font-size: 14px; color: #155724; text-align: center; margin-top: 15px; font-weight: bold; line-height: 1.6;">
+                    All these tools are ready to use - the chapter just needs volunteers to help!
+                </p>
+            </div>
+        </div>
+
+        <!-- FINANCIAL REPORT -->
+        <div class="section">
+            <div class="section-header">💰 FINANCIAL TRANSPARENCY</div>
+            
+            <p style="font-size: 16px; color: #333; line-height: 1.8; margin-bottom: 20px;">
+                As your chapter leadership, we believe in complete financial transparency. Below is our detailed financial activity from May through October 2025:
+            </p>
+            
+            <table class="financial-table">
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background: #f8f9fa; font-weight: bold; color: #002855; text-align: center;">Opening Balance as of 5/1/2025: $15,062.90</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background: #e8f4f8; font-weight: bold; color: #002855;">Month Ending 5/31/2025</td>
+                </tr>
+                <tr>
+                    <td>5/16/2025</td>
+                    <td>ATM - Site Lock 480 (Online/Internet Service)</td>
+                    <td class="balance-negative">($30.00)</td>
+                    <td>$15,032.90</td>
+                </tr>
+                <tr>
+                    <td>5/30/2025</td>
+                    <td>Towne Bank - Interest</td>
+                    <td class="balance-positive">$1.86</td>
+                    <td>$15,034.76</td>
+                </tr>
+                <tr style="background: #f0f0f0;">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Total Month Ending 5/31/2025:</td>
+                    <td class="balance-negative">($28.14)</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background: #e8f4f8; font-weight: bold; color: #002855;">Month Ending 6/30/2025</td>
+                </tr>
+                <tr>
+                    <td>6/6/2025</td>
+                    <td>Towne Bank - Interest</td>
+                    <td class="balance-positive">$0.43</td>
+                    <td>$15,035.19</td>
+                </tr>
+                <tr>
+                    <td>6/30/2025</td>
+                    <td>Towne Bank - Interest</td>
+                    <td class="balance-positive">$0.10</td>
+                    <td>$15,035.29</td>
+                </tr>
+                <tr style="background: #f0f0f0;">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Total Month Ending 6/30/2025:</td>
+                    <td class="balance-positive">$0.53</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background: #e8f4f8; font-weight: bold; color: #002855;">Month Ending 7/31/2025</td>
+                </tr>
+                <tr>
+                    <td>7/25/2025</td>
+                    <td>Merchant Purchase - Bluehost.com (Online/Internet Service)</td>
+                    <td class="balance-negative">($21.17)</td>
+                    <td>$15,014.12</td>
+                </tr>
+                <tr>
+                    <td>7/31/2025</td>
+                    <td>Towne Bank - Interest</td>
+                    <td class="balance-positive">$0.13</td>
+                    <td>$15,014.25</td>
+                </tr>
+                <tr style="background: #f0f0f0;">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Total Month Ending 7/31/2025:</td>
+                    <td class="balance-negative">($21.04)</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background: #e8f4f8; font-weight: bold; color: #002855;">Month Ending 8/31/2025</td>
+                </tr>
+                <tr>
+                    <td>8/31/2025</td>
+                    <td>Towne Bank - Interest</td>
+                    <td class="balance-positive">$0.12</td>
+                    <td>$15,014.37</td>
+                </tr>
+                <tr style="background: #f0f0f0;">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Total Month Ending 8/31/2025:</td>
+                    <td class="balance-positive">$0.12</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background: #e8f4f8; font-weight: bold; color: #002855;">Month Ending 9/30/2025</td>
+                </tr>
+                <tr>
+                    <td>9/17/2025</td>
+                    <td>POS Purchase - USPS (Postage)</td>
+                    <td class="balance-negative">($244.00)</td>
+                    <td>$14,770.37</td>
+                </tr>
+                <tr>
+                    <td>9/26/2025</td>
+                    <td>USPS - Refund</td>
+                    <td class="balance-positive">$244.00</td>
+                    <td>$15,014.37</td>
+                </tr>
+                <tr>
+                    <td>9/28/2025</td>
+                    <td>Check #2107 - State Corporation Commission (Fees)</td>
+                    <td class="balance-negative">($25.00)</td>
+                    <td>$14,989.37</td>
+                </tr>
+                <tr>
+                    <td>9/30/2025</td>
+                    <td>Towne Bank - Interest</td>
+                    <td class="balance-positive">$0.13</td>
+                    <td>$14,989.50</td>
+                </tr>
+                <tr style="background: #f0f0f0;">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Total Month Ending 9/30/2025:</td>
+                    <td class="balance-negative">($24.87)</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background: #e8f4f8; font-weight: bold; color: #002855;">Month Ending 10/31/2025 (Year to Date)</td>
+                </tr>
+                <tr>
+                    <td>10/2/2025</td>
+                    <td>POS Purchase - Amazon (Printing/Copying)</td>
+                    <td class="balance-negative">($42.38)</td>
+                    <td>$14,947.12</td>
+                </tr>
+                <tr>
+                    <td>10/6/2025</td>
+                    <td>PayPal Transfer - Member Dues (17 payments)<br>
+                    <span style="font-size: 11px; color: #666;">Includes chapter donations: $23.52</span></td>
+                    <td class="balance-positive">$425.47</td>
+                    <td>$15,372.59</td>
+                </tr>
+                <tr>
+                    <td>10/6/2025</td>
+                    <td>Deposit - Member Dues ($75.00)<br>
+                    <span style="font-size: 11px; color: #666;">Includes scholarship donation: $75.00 (Melvin B. Fletcher Jr.)</span></td>
+                    <td class="balance-positive">$150.00</td>
+                    <td>$15,522.59</td>
+                </tr>
+                <tr>
+                    <td>10/12/2025</td>
+                    <td>Deposit - Member Dues ($75.00)<br>
+                    <span style="font-size: 11px; color: #666;">Includes scholarship donation: $600.00 (Nancy J. Scrimizzi INH IRA)</span></td>
+                    <td class="balance-positive">$675.00</td>
+                    <td>$16,197.59</td>
+                </tr>
+                <tr>
+                    <td>10/12/2025</td>
+                    <td>Check #2108 - WVU Foundation (Blake E. Fought Scholarship #3s844)<br>
+                    <span style="font-size: 11px; color: #666;">Chapter: $5,000 | N. Scrimizzi: $600 | M. Fletcher: $75</span></td>
+                    <td class="balance-negative">($5,675.00)</td>
+                    <td>$10,522.59</td>
+                </tr>
+                <tr>
+                    <td>10/12/2025</td>
+                    <td>Merchant Purchase - Bluehost.com (Online/Internet Service)</td>
+                    <td class="balance-negative">($11.88)</td>
+                    <td>$10,510.71</td>
+                </tr>
+                <tr style="background: #f0f0f0;">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Total Month Ending 10/31/2025:</td>
+                    <td class="balance-negative">($4,478.79)</td>
+                </tr>
+                <tr style="background: #fff3cd;">
+                    <td colspan="3" style="text-align: right; font-weight: bold; color: #856404;">Grand Total (Change from 5/1/2025):</td>
+                    <td class="balance-negative" style="color: #856404;">($4,552.19)</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="3" style="text-align: right;"><strong>CURRENT BALANCE (As of 10/12/2025):</strong></td>
+                    <td class="balance-positive" style="font-size: 20px;">$10,510.71</td>
+                </tr>
+            </table>
+            
+            <div style="background: #d4edda; padding: 20px; margin-top: 20px; border-radius: 5px; border-left: 5px solid #28a745;">
+                <p style="font-size: 18px; color: #155724; margin: 0; line-height: 1.6;">
+                    <strong>✓ Financial Health:</strong> Our chapter remains in strong financial standing with $10,510.71 in assets. Even after our generous $5,000 scholarship donation, we maintain a healthy balance to support chapter activities, events, and future scholarships.
+                </p>
+            </div>
+        </div>
+
+        <!-- MEMBERSHIP ALERT -->
+        <div class="section">
+            <div class="section-header">⚠️ IMPORTANT: MEMBERSHIP RENEWAL</div>
+            
+            <div class="membership-alert">
+                <h3>🚨 ONLY 21 MEMBERS HAVE RENEWED! 🚨</h3>
+                <p style="font-size: 22px; margin: 20px 0;">
+                    <strong>Membership Year: July 1, 2025 - June 30, 2026</strong>
+                </p>
+                <p>
+                    The chapter currently has only <strong>21 paid members</strong> for the 2025/26 year. Your support is needed to keep this chapter thriving!
+                </p>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: left;">
+                    <h4 style="color: #dc3545; margin: 0 0 12px 0; font-size: 18px;">💙 Why Membership Dues Matter:</h4>
+                    <ul style="font-size: 14px; line-height: 1.8; color: #333; text-align: left; margin: 10px 0; padding-left: 30px;">
+                        <li><strong>Fund Scholarships</strong> - Support local students attending WVU</li>
+                        <li><strong>Host Events</strong> - Game watches, picnics, fundraisers</li>
+                        <li><strong>Maintain Operations</strong> - Website, communications, insurance</li>
+                        <li><strong>Build Community</strong> - Connect Central Virginia Mountaineers</li>
+                        <li><strong>Stay Active</strong> - Keep our chapter officially recognized</li>
+                    </ul>
+                    <p style="font-size: 13px; color: #721c24; margin-top: 15px; font-weight: bold;">
+                        Without member dues, the chapter cannot function or support its mission!
+                    </p>
+                </div>
+                
+                <p style="font-size: 16px; margin-top: 20px;">
+                    <strong>Annual Dues: $25 Individual / $40 Family</strong>
+                </p>
+                <div style="margin-top: 30px;">
+                    <a href="https://cvawvuaa.org/membership.html" class="cta-button" style="background: #dc3545; color: white; border-color: #dc3545;">💳 RENEW NOW</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- YOUR CHAPTER NEEDS YOU -->
+        <div class="section">
+            <div class="section-header">� YOUR CHAPTER NEEDS YOU!</div>
+            
+            <!-- SURVEY -->
+            <div style="background: linear-gradient(135deg, #002855 0%, #0039a6 100%); color: white; padding: 25px; margin: 15px 0; border-radius: 10px; border: 3px solid #EAAA00; text-align: center;">
+                <h3 style="color: #EAAA00; font-size: 22px; margin: 0 0 15px 0;">
+                    📊 TAKE OUR 2-MINUTE MEMBERSHIP SURVEY!
+                </h3>
+                
+                <p style="font-size: 16px; line-height: 1.6; margin: 15px 0;">
+                    Your voice matters! Help shape the future of the Central Virginia Chapter by telling us what you like, what you don't like, and what you want to see.
+                </p>
+                
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <p style="font-size: 15px; margin: 10px 0;">
+                        ✓ What events interest you most?<br>
+                        ✓ What days/times work best?<br>
+                        ✓ What can the chapter improve?<br>
+                        ✓ What activities would you attend?<br>
+                        ✓ How can leadership serve you better?
+                    </p>
+                </div>
+                
+                <p style="font-size: 14px; margin: 20px 0; opacity: 0.9;">
+                    <strong>Takes only 2 minutes!</strong> Your feedback helps the chapter plan events YOU actually want to attend!
+                </p>
+                
+                <div style="margin-top: 25px;">
+                    <a href="https://cvawvuaa.org/survey" class="cta-button" style="background: #EAAA00; color: #002855; border-color: #EAAA00; font-size: 18px;">📋 TAKE SURVEY NOW</a>
+                </div>
+                
+                <p style="font-size: 12px; margin-top: 20px; opacity: 0.8;">
+                    Anonymous responses welcomed! Honest feedback helps the chapter serve members better.
+                </p>
+            </div>
+            
+            <!-- BOARD POSITIONS -->
+            <div style="background: #fff3cd; border: 3px solid #856404; padding: 20px; margin: 15px 0; border-radius: 10px;">
+                <h3 style="color: #856404; font-size: 20px; margin: 0 0 12px 0; text-align: center;">
+                    📋 BOARD TRANSITION & VOLUNTEER OPPORTUNITIES
+                </h3>
+                
+                <p style="font-size: 14px; color: #333; line-height: 1.6; margin-bottom: 15px; text-align: center;">
+                    As notified by Past President Jen, the previous board turned in their resignations and their terms officially ended on <strong>June 30, 2025</strong>. The chapter is grateful for their years of service!
+                </p>
+                
+                <div style="background: #dc3545; color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
+                    <p style="font-size: 16px; margin: 10px 0; line-height: 1.6;">
+                        <strong>Donate a few hours of your time to serve on the Executive Board!</strong>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- EVENT IDEAS -->
+            <div style="background: #e8f4f8; border-left: 5px solid #002855; padding: 20px; margin: 15px 0; border-radius: 5px;">
+                <h3 style="color: #002855; font-size: 20px; margin: 0 0 15px 0;">
+                    🤝 YOUR IDEAS & EXPERTISE NEEDED!
+                </h3>
+                
+                <p style="font-size: 14px; color: #333; line-height: 1.6; margin-bottom: 15px;">
+                    <strong>The chapter needs members with experience</strong> in organizing watch parties, raffles, auctions, and other fundraising activities at game watches. <strong>Any help, ideas, or guidance would be greatly appreciated!</strong>
+                </p>
+                
+                <div style="background: white; padding: 18px; border-radius: 5px; margin: 15px 0;">
+                    <h4 style="color: #002855; margin: 0 0 12px 0; font-size: 17px;">💡 GREAT IDEAS WE'VE HEARD FROM MEMBERS:</h4>
+                    <ul style="font-size: 14px; line-height: 1.8; color: #333; margin: 0; padding-left: 20px;">
+                        <li><strong>🐷 Pig Roast</strong> - Traditional BBQ fundraiser <span style="background: #EAAA00; color: #002855; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: bold;">IN PLANNING!</span></li>
+                        <li><strong>Picnics</strong> - Summer family gatherings</li>
+                        <li><strong>Fishing Tournament</strong> - Fun competition + fundraiser <span style="background: #EAAA00; color: #002855; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: bold;">IN PLANNING!</span></li>
+                        <li><strong>Game Watch Raffles</strong> - Raise scholarship funds</li>
+                        <li><strong>Silent Auctions</strong> - WVU memorabilia and prizes</li>
+                        <li><strong>Tailgate Parties</strong> - Before home games</li>
+                        <li><strong>Family Activities</strong> - Engage all ages</li>
+                    </ul>
+                    <p style="font-size: 13px; color: #856404; margin: 15px 0 0 0; font-style: italic;">
+                        <strong>🎉 More details coming soon!</strong> Stay tuned for announcements about our upcoming Pig Roast and Fishing Tournament fundraisers!
+                    </p>
+                </div>
+                
+                <p style="font-size: 15px; color: #002855; text-align: center; margin-top: 20px; font-weight: bold; line-height: 1.6;">
+                    These events aren't just about fun - they help the chapter ENGAGE with fellow alumni and RAISE MONEY for the scholarship program to support local students. That's what this chapter is all about!
+                </p>
+            </div>
+            
+            <!-- COVERAGE AREA -->
+        <div class="section">
+            <div class="section-header">📅 UPCOMING EVENTS & ACTIVITIES</div>
+            
+            <p style="font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 20px; text-align: center;">
+                Mark your calendars! Here's what's coming up for the Central Virginia Chapter:
+            </p>
+
+            <!-- BEARS AND BLANKETS -->
+            <div style="background: linear-gradient(135deg, #e8f4f8 0%, #d4edda 100%); border-left: 5px solid #002855; padding: 20px; margin: 15px 0; border-radius: 5px;">
+                <h3 style="color: #002855; font-size: 20px; margin: 0 0 15px 0;">
+                    🧸 Bears & Blankets Program - THIS SATURDAY (Oct 18)
+                </h3>
+                
+                <p style="font-size: 14px; color: #333; line-height: 1.6; margin-bottom: 15px;">
+                    <strong>Step out and pick up a teddy bear and soft blanket to donate to the Bears and Blankets Program!</strong> This wonderful initiative provides comfort items to WVU students in need.
+                </p>
+                
+                <div style="background: #002855; color: white; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                    <h4 style="margin: 0 0 15px 0; color: #EAAA00; font-size: 18px;">📦 HOW TO DONATE:</h4>
+                    <p style="font-size: 15px; line-height: 1.8; margin: 10px 0;">
+                        1. Purchase a teddy bear and/or soft blanket<br>
+                        2. Bring it to THIS SATURDAY'S game watch (Oct 18)<br>
+                        3. Give it to President Tim Casten<br>
+                        4. Tim will ensure it gets delivered to Morgantown!
+                    </p>
+                </div>
+                
+                <p style="font-size: 13px; color: #666; text-align: center; margin-top: 15px; font-style: italic;">
+                    Your donation provides comfort to a WVU student during difficult times. Thank you for caring!
+                </p>
+                
+                <p style="font-size: 9px; color: #999; text-align: center; margin-top: 8px; font-style: italic;">
+                    speaking of caring... scholarship donations are also comforting... 🎓
+                </p>
+            </div>
+
+            <!-- ALUMNI CHARITY CHALLENGE -->
+            <div style="background: #d4edda; border: 3px solid #28a745; padding: 20px; margin: 15px 0; border-radius: 10px;">
+                <h3 style="color: #155724; font-size: 22px; margin: 0 0 15px 0; text-align: center;">
+                    🏆 13th Annual Alumni Charity Challenge - November 19
+                </h3>
+                
+                <div style="background: linear-gradient(135deg, #EAAA00 0%, #ffd700 100%); padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; border: 2px solid #002855;">
+                    <p style="font-size: 18px; color: #002855; font-weight: bold; margin: 0 0 10px 0;">
+                        📅 Wednesday, November 19, 2025
+                    </p>
+                    <p style="font-size: 16px; color: #002855; font-weight: bold; margin: 0 0 10px 0;">
+                        🕔 5:00 PM - 8:00 PM
+                    </p>
+                    <p style="font-size: 16px; color: #002855; font-weight: bold; margin: 0;">
+                        📍 River City Roll (NEW LOCATION!)
+                    </p>
+                </div>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <p style="font-size: 15px; color: #333; line-height: 1.6; margin-bottom: 15px;">
+                        <strong>A little collegiate competition is always fun in November!</strong> The 13th annual Alumni Charity Challenge brings together 40+ colleges and universities to compete in donating canned goods for <strong>FeedMore</strong> (Central Virginia Food Bank).
+                    </p>
+                    
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 5px; border-left: 4px solid #002855; margin: 15px 0;">
+                        <p style="font-size: 14px; color: #333; line-height: 1.6; margin: 0;">
+                            <strong style="color: #002855;">Impact:</strong> This event is the <strong>#2 event for FeedMore</strong> and has collected over <strong>1,078,613 pounds (539 tons)</strong> of food distributed to neighbors in need across <strong>34 cities and counties in Central Virginia!</strong>
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #856404;">
+                    <p style="font-size: 15px; color: #721c24; line-height: 1.6; margin-bottom: 15px; text-align: center;">
+                        <strong>⚠️ VOLUNTEER NEEDED TO REPRESENT WVU!</strong>
+                    </p>
+                    <p style="font-size: 14px; color: #333; line-height: 1.6;">
+                        <strong>The chapter needs a volunteer to:</strong>
+                    </p>
+                    <ul style="font-size: 14px; line-height: 1.8; color: #333; padding-left: 25px; margin-top: 10px;">
+                        <li>Staff the WVU tent (5:00 PM - 8:00 PM)</li>
+                        <li>Greet alumni and collect canned goods</li>
+                        <li>Represent WVU in the competition</li>
+                        <li>Network with other Mountaineers!</li>
+                    </ul>
+                </div>
+                
+                <div style="text-align: center; margin-top: 25px;">
+                    <a href="https://forms.gle/219VpHx14twLt7jp7" style="display: inline-block; background: #28a745; color: white; padding: 15px 35px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; margin: 10px;">
+                        📝 VOLUNTEER OR LEARN MORE
+                    </a>
+                </div>
+                
+                <p style="font-size: 9px; color: #999; text-align: center; margin-top: 8px; font-style: italic;">
+                    volunteering is awesome... donating is also awesome... just FYI... 💸
+                </p>
+            </div>
+
+            <!-- CHRISTMAS PARTY -->
+            <div style="background: linear-gradient(135deg, #28a745 0%, #218838 100%); color: white; padding: 25px; margin: 15px 0; border-radius: 10px; border: 3px solid #dc3545;">
+                <h3 style="color: #EAAA00; font-size: 22px; margin: 0 0 15px 0; text-align: center; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+                    🎄 CHRISTMAS PARTY - WE NEED YOUR INPUT!
+                </h3>
+                
+                <p style="font-size: 16px; line-height: 1.7; margin-bottom: 20px; text-align: center; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+                    We need a <strong>GOOD TURNOUT</strong> for our Christmas Party! Please help us pick a date and venue:
+                </p>
+                
+                <div style="background: white; color: #333; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #dc3545; margin: 0 0 15px 0; font-size: 18px; text-align: center;">Help Us Plan!</h4>
+                    <ul style="font-size: 15px; line-height: 1.8; padding-left: 25px; margin-bottom: 15px;">
+                        <li><strong>When:</strong> 1st or 2nd week of December (it's coming up fast and places will be booked!)</li>
+                        <li><strong>Format:</strong> Would you prefer a sit-down dinner OR heavy hors d'oeuvres with music?</li>
+                        <li><strong>Important:</strong> According to the bylaws, we're supposed to have a Membership Meeting during the Christmas Party</li>
+                    </ul>
+                    <p style="font-size: 14px; color: #666; text-align: center; font-style: italic; margin: 0;">
+                        Please email your preferences to <strong>cvcwvuaa@gmail.com</strong> or call <strong>804-566-8058!</strong>
+                    </p>
+                </div>
+                
+                <p style="font-size: 16px; text-align: center; margin-top: 20px; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+                    Your input matters! Help us make this a memorable holiday celebration! 🎅💙💛
+                </p>
+            </div>
+
+            <!-- PEPPERONI ROLL CONTEST -->
+            <div style="background: linear-gradient(135deg, #EAAA00 0%, #ffd700 100%); border: 3px solid #002855; padding: 20px; margin: 15px 0; border-radius: 10px;">
+                <h3 style="color: #002855; font-size: 20px; margin: 0 0 15px 0; text-align: center;">
+                    🥖 Pepperoni Roll Contest Idea - Future Event!
+                </h3>
+                
+                <p style="font-size: 15px; color: #333; line-height: 1.6; text-align: center; margin-bottom: 20px;">
+                    <strong>Exciting new game watch idea:</strong> A homemade pepperoni roll contest!
+                </p>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4 style="color: #002855; margin: 0 0 12px 0; font-size: 17px;">🥖 How It Would Work:</h4>
+                    <ul style="font-size: 14px; line-height: 1.8; color: #333; padding-left: 25px;">
+                        <li>Everyone attending brings a half dozen (or so) homemade pepperoni rolls</li>
+                        <li>Set up tasting tables at the game watch</li>
+                        <li>Members vote for their favorites</li>
+                        <li>Winner receives a prize or gift certificate!</li>
+                    </ul>
+                    
+                    <p style="font-size: 14px; color: #666; margin-top: 15px; line-height: 1.6;">
+                        <strong>Why pepperoni rolls?</strong> They're a West Virginia tradition! Homemade pepperoni rolls bring back memories of home and showcase member cooking talents.
+                    </p>
+                </div>
+                
+                <p style="font-size: 15px; color: #002855; text-align: center; margin-top: 20px; font-weight: bold;">
+                    Interested in organizing this event? Contact the chapter president!
+                </p>
+                
+                <p style="font-size: 9px; color: #999; text-align: center; margin-top: 8px; font-style: italic;">
+                    pepperoni rolls are great... but so are scholarship donations... hint hint... 😏
+                </p>
+            </div>
+        </div>
+
+        <!-- GETTING BACK ON TRACK -->
+        <div class="section">
+            <div class="section-header">🎯 GETTING BACK ON TRACK!</div>
+            
+            <div style="background: linear-gradient(135deg, #EAAA00 0%, #ffd700 100%); padding: 25px; border-radius: 10px; border: 3px solid #002855;">
+                <h3 style="color: #002855; font-size: 22px; margin: 0 0 15px 0; text-align: center;">
+                    MAKING THIS CHAPTER FUN & INTERESTING AGAIN!
+                </h3>
+                
+                <p style="color: #333; font-size: 16px; line-height: 1.6; text-align: center; margin-bottom: 20px;">
+                    The chapter is committed to revitalizing and becoming the best Mountaineer community in Virginia!
+                </p>
+                
+                <div style="text-align: left; color: #333; font-size: 14px; line-height: 1.8;">
+                    <strong style="color: #002855; font-size: 16px;">Here's What We're Doing:</strong><br>
+                    ✓ <strong>Regular Game Watches</strong> - Every home and away game opportunity!<br>
+                    ✓ <strong>Enhanced Website</strong> - Easy access to photos, events, and member info<br>
+                    ✓ <strong>Social Media Presence</strong> - Connecting members online<br>
+                    ✓ <strong>Scholarship Support</strong> - Making a real difference for WVU students<br>
+                    ✓ <strong>Member Engagement</strong> - YOUR input shapes our activities!<br>
+                    ✓ <strong>Family-Friendly Events</strong> - Activities for all ages<br>
+                    ✓ <strong>Transparent Leadership</strong> - Open communication and financial reporting<br>
+                    ✓ <strong>Fun Fundraisers</strong> - Pig roasts, picnics, fishing tournaments, pepperoni roll contests!<br>
+                    ✓ <strong>Community Service</strong> - Food drives, Bears & Blankets donations<br>
+                    ✓ <strong>Regional Representation</strong> - Events across ALL of Central Virginia!<br>
+                </div>
+                
+                <p style="color: #333; font-size: 16px; text-align: center; margin-top: 25px; font-weight: bold;">
+                    This is YOUR chapter. Let's build something great together!
+                </p>
+                
+                <p style="font-size: 9px; color: #999; text-align: center; margin-top: 8px; font-style: italic;">
+                    (building costs money... just saying... 👀)
+                </p>
+            </div>
+        </div>
+
+        <!-- PRESIDENT'S PERSONAL NOTE -->
+        <div class="section">
+            <div class="section-header">💙 A Personal Note from President Tim</div>
+            
+            <div style="background: linear-gradient(135deg, #e8f4f8 0%, #fff9e6 100%); padding: 25px; border-radius: 10px; border: 3px solid #002855;">
+                <p style="font-size: 15px; color: #333; line-height: 1.7; margin-bottom: 15px; font-style: italic;">
+                    I have to say, I am genuinely enjoying being president of this chapter! I can think of nothing better I could have done for the past 2 months than work almost 24x7 to build a new website from scratch and get up to speed on all of the programs available to get information to you all.
+                </p>
+                
+                <p style="font-size: 15px; color: #333; line-height: 1.7; margin-bottom: 15px;">
+                    There is still <strong>so much more to do</strong>, and the learning curve was incredibly steep. But hopefully I have found some ways to make it less time-consuming and shorten the workload considerably going forward.
+                </p>
+                
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #EAAA00;">
+                    <p style="font-size: 14px; color: #333; line-height: 1.6; margin: 0;">
+                        <strong style="color: #002855;">The good news:</strong> The foundation is built! The website works, the admin tools are ready, the processes are in place. Now it's about refining and growing - and that's where <strong>YOUR help</strong> makes all the difference!
+                    </p>
+                </div>
+                
+                <p style="font-size: 15px; color: #002855; text-align: center; margin-top: 20px; font-weight: bold;">
+                    Thank you for your patience as we've rebuilt this chapter together! 🏔️💙💛
+                </p>
+                
+                <p style="font-size: 9px; color: #999; text-align: center; margin-top: 8px; font-style: italic;">
+                    rebuilding takes resources... scholarships need funding... I'm just saying... 💡
+                </p>
+            </div>
+        </div>
+
+        <!-- FINAL PERSONAL MESSAGE -->
+        <div class="section">
+            <div class="section-header">💙 A Final Word from Tim 💛</div>
+            
+            <div style="background: linear-gradient(135deg, #fff9e6 0%, #e8f4f8 100%); padding: 25px; border-radius: 10px; border: 3px solid #EAAA00;">
+                <p style="font-size: 15px; color: #333; line-height: 1.7; margin-bottom: 15px;">
+                    I apologize for being so long-winded in this member update, but there is just <strong>so much to bring to your attention</strong> regarding our chapter and what has been happening in 2025!
+                </p>
+                
+                <p style="font-size: 15px; color: #333; line-height: 1.7; margin-bottom: 15px;">
+                    Not much happened after Past President Jen's announcement to the membership that the entire board would be stepping down on June 30, 2025. But here we are in October, and we are <strong>chugging along</strong>, getting back up to speed and ready to complete 2025 strong!
+                </p>
+                
+                <div style="background: linear-gradient(135deg, #002855 0%, #0039a6 100%); color: white; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                    <p style="font-size: 18px; font-weight: bold; margin: 0 0 10px 0; color: #EAAA00;">
+                        🇺🇸 Looking Ahead to 2026! 🇺🇸
+                    </p>
+                    <p style="font-size: 15px; line-height: 1.6; margin: 0;">
+                        2026 will be an even better year with the <strong>Country's 250th Birthday</strong> coming up! Many of us celebrated the 200th - now we get to celebrate the 250th! That's an accomplishment! 🎆
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p style="font-size: 18px; margin-bottom: 20px;">
+            <strong>Central Virginia Chapter • WVU Alumni Foundation</strong>
+        </p>
+        <p>
+            <a href="https://cvawvuaa.org">cvawvuaa.org</a> | 
+            <a href="mailto:cvcwvuaa@gmail.com">cvcwvuaa@gmail.com</a> | 
+            804-566-8058
+        </p>
+        <p style="margin-top: 20px;">
+            <a href="https://www.facebook.com/cvcwvuaa">Facebook</a> | 
+            <a href="https://cvawvuaa.org/membership.html">Join/Renew</a> | 
+            <a href="https://cvawvuaa.org/events.html">Events</a> | 
+            <a href="https://cvawvuaa.org/gallery/">Photo Gallery</a>
+        </p>
+        <p style="font-size: 24px; margin-top: 30px;">
+            🏔️ LET'S GO MOUNTAINEERS! 🏔️
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

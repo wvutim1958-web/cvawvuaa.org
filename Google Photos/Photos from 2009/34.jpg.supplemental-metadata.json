@@ -1,0 +1,21 @@
+{
+  "title": "34.jpg",
+  "description": "And the winner is ...",
+  "imageViews": "70",
+  "creationTime": {
+    "timestamp": "1248734141",
+    "formatted": "Jul 27, 2009, 10:35:41 PM UTC"
+  },
+  "photoTakenTime": {
+    "timestamp": "1248734141",
+    "formatted": "Jul 27, 2009, 10:35:41 PM UTC"
+  },
+  "geoData": {
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "altitude": 0.0,
+    "latitudeSpan": 0.0,
+    "longitudeSpan": 0.0
+  },
+  "url": "https://photos.google.com/photo/AF1QipPFJCoqE1U_xZBQO4Cb1EUQvSOsuIvlRfsh7NQz"
+}
