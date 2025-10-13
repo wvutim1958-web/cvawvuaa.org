@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members Portal | CVCWVUAA</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #002855 0%, #1e40af 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* Login Screen Styles */
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo h1 {
+            color: #002855;
+            font-size: 2rem;
+            margin: 0 0 0.5rem;
+        }
+
+        .login-logo p {
+            color: #666;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .login-form {
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #002855;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-help {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f0f8ff;
+            border-radius: 10px;
+            border-left: 4px solid #EAAA00;
+        }
+
+        .login-help h4 {
+            color: #002855;
+            margin: 0 0 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .login-help p {
+            color: #666;
+            font-size: 0.85rem;
+            margin: 0.3rem 0;
+            line-height: 1.5;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c00;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Member Portal Styles */
+        #memberContent {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+
+        .portal-header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .portal-header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .portal-title h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .portal-title p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+        }
+
+        .portal-user {
+            text-align: right;
+        }
+
+        .portal-user .welcome {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .portal-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .portal-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            color: #002855;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .card-link {
+            display: inline-block;
+            color: #002855;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid #EAAA00;
+            padding-bottom: 2px;
+            transition: color 0.3s;
+        }
+
+        .card-link:hover {
+            color: #1e40af;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #EAAA00, #ffd700);
+            color: #002855;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .welcome-banner h2 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+
+        .welcome-banner p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .portal-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .portal-user {
+                text-align: center;
+                margin-top: 1rem;
+            }
+
+            .portal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">
+                <h1>🏔️ Members Portal</h1>
+                <p>Central Virginia WVU Alumni Chapter</p>
+            </div>
+
+            <div class="error-message" id="errorMessage">
+                ❌ Invalid login credentials. Please try again.
+            </div>
+
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginInput">Member Login</label>
+                    <input 
+                        type="text" 
+                        id="loginInput" 
+                        placeholder="lastname + street number (e.g., casten4701)"
+                        required
+                        autocomplete="off">
+                </div>
+
+                <button type="submit" class="login-button">
+                    🔓 Access Member Portal
+                </button>
+            </form>
+
+            <div class="login-help">
+                <h4>📋 How to Login:</h4>
+                <p><strong>Format:</strong> Your last name + street address number (no spaces)</p>
+                <p><strong>Example:</strong> If your name is Tim Casten at 4701 Stoney Creek Parkway, enter: <code>casten4701</code></p>
+                <p><strong>Note:</strong> All lowercase, no spaces or special characters</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MEMBER PORTAL CONTENT -->
+    <div id="memberContent">
+        <div class="portal-header">
+            <div class="portal-header-content">
+                <div class="portal-title">
+                    <h1>🏔️ Member Portal</h1>
+                    <p>Central Virginia WVU Alumni Chapter</p>
+                </div>
+                <div class="portal-user">
+                    <div class="welcome">Welcome, <span id="memberName"></span>!</div>
+                    <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="portal-container">
+            <div class="welcome-banner">
+                <h2>💙 Welcome to Your Member Portal! 💛</h2>
+                <p>Access exclusive member resources, photo galleries, and chapter information</p>
+            </div>
+
+            <div class="portal-grid">
+                <!-- Photo Gallery -->
+                <div class="portal-card">
+                    <div class="card-icon">📸</div>
+                    <h3 class="card-title">Photo Gallery</h3>
+                    <p class="card-description">Browse 812+ photos from chapter events dating back to 2005. Relive memories from game watches, gatherings, and special occasions.</p>
+                    <a href="/gallery/" class="card-link">View Photo Gallery →</a>
+                </div>
+
+                <!-- Chapter Documents -->
+                <div class="portal-card">
+                    <div class="card-icon">📄</div>
+                    <h3 class="card-title">Chapter Documents</h3>
+                    <p class="card-description">Access bylaws, meeting minutes, financial reports, and important chapter documents.</p>
+                    <a href="/bylaws.html" class="card-link">View Documents →</a>
+                </div>
+
+                <!-- Member Directory -->
+                <div class="portal-card">
+                    <div class="card-icon">👥</div>
+                    <h3 class="card-title">Member Directory</h3>
+                    <p class="card-description">Connect with fellow alumni. View member contact information and stay in touch with your Mountaineer family.</p>
+                    <a href="/member-database.html" class="card-link">View Directory →</a>
+                </div>
+
+                <!-- Event Calendar -->
+                <div class="portal-card">
+                    <div class="card-icon">📅</div>
+                    <h3 class="card-title">Events & RSVPs</h3>
+                    <p class="card-description">View upcoming chapter events, game watches, and social gatherings. RSVP to let us know you're coming!</p>
+                    <a href="/events.html" class="card-link">View Events →</a>
+                </div>
+
+                <!-- Scholarship Info -->
+                <div class="portal-card">
+                    <div class="card-icon">🎓</div>
+                    <h3 class="card-title">Scholarship Program</h3>
+                    <p class="card-description">Learn about the Blake E. Fought Scholarship and how your membership supports local students attending WVU.</p>
+                    <a href="/scholarship.html" class="card-link">Learn More →</a>
+                </div>
+
+                <!-- Member Benefits -->
+                <div class="portal-card">
+                    <div class="card-icon">⭐</div>
+                    <h3 class="card-title">Member Benefits</h3>
+                    <p class="card-description">Discover exclusive member perks, discounts, and benefits available to Central Virginia chapter members.</p>
+                    <a href="/membership.html" class="card-link">View Benefits →</a>
+                </div>
+
+                <!-- Newsletters -->
+                <div class="portal-card">
+                    <div class="card-icon">📰</div>
+                    <h3 class="card-title">Newsletter Archive</h3>
+                    <p class="card-description">Read past newsletters and stay informed about chapter news, updates, and Mountaineer happenings.</p>
+                    <a href="/newsletters/" class="card-link">Read Newsletters →</a>
+                </div>
+
+                <!-- Contact Board -->
+                <div class="portal-card">
+                    <div class="card-icon">📧</div>
+                    <h3 class="card-title">Contact Leadership</h3>
+                    <p class="card-description">Get in touch with the chapter board members. Share ideas, feedback, or volunteer opportunities.</p>
+                    <a href="/contact.html" class="card-link">Contact Us →</a>
+                </div>
+
+                <!-- Merchandise -->
+                <div class="portal-card">
+                    <div class="card-icon">🛍️</div>
+                    <h3 class="card-title">WVU Gear</h3>
+                    <p class="card-description">Shop official WVU merchandise and show your Mountaineer pride at chapter events and game watches.</p>
+                    <a href="https://shop.wvu.edu" target="_blank" class="card-link">Shop Now →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Member database (lastname + street number format)
+        const memberCredentials = {
+            'casten4701': { name: 'Tim Casten', email: 'cvcwvuaa@gmail.com' },
+            'scrimizzi': { name: 'Nancy Scrimizzi', email: '' },
+            'fletcher': { name: 'Melvin Fletcher', email: '' },
+            // Add more members here in format: 'lastnamestreeetnumber': { name: 'Full Name', email: 'email@example.com' }
+        };
+
+        // Check if already logged in
+        if (sessionStorage.getItem('memberAuth')) {
+            showMemberPortal();
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const input = document.getElementById('loginInput');
+            const loginValue = input.value.toLowerCase().trim();
+            const errorMsg = document.getElementById('errorMessage');
+            
+            // Check if credentials match
+            if (memberCredentials[loginValue]) {
+                // Successful login
+                sessionStorage.setItem('memberAuth', 'true');
+                sessionStorage.setItem('memberLogin', loginValue);
+                sessionStorage.setItem('memberName', memberCredentials[loginValue].name);
+                showMemberPortal();
+            } else {
+                // Failed login
+                errorMsg.style.display = 'block';
+                input.value = '';
+                input.classList.add('shake');
+                
+                setTimeout(() => {
+                    input.classList.remove('shake');
+                    errorMsg.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function showMemberPortal() {
+            const memberName = sessionStorage.getItem('memberName');
+            
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('memberContent').style.display = 'block';
+            document.getElementById('memberName').textContent = memberName;
+        }
+
+        function logout() {
+            sessionStorage.removeItem('memberAuth');
+            sessionStorage.removeItem('memberLogin');
+            sessionStorage.removeItem('memberName');
+            
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('memberContent').style.display = 'none';
+            document.getElementById('loginInput').value = '';
+        }
+    </script>
+
+</body>
+</html>
