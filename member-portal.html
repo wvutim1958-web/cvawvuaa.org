@@ -160,13 +160,15 @@
             }
             topics.forEach(function(topic, idx) {
                 var topicHtml = '<div style="border:1px solid #ccc;padding:15px;margin-bottom:15px;border-radius:8px;">';
-                topicHtml += '<strong>' + topic.title + '</strong> <span style="color:#888;font-size:13px;">by ' + topic.author + '</span>';
+                var authorDisplay = topic.author.split(/\d+/)[0];
+                topicHtml += '<strong>' + topic.title + '</strong> <span style="color:#888;font-size:13px;">by ' + authorDisplay + '</span>';
                 topicHtml += '<p>' + topic.message + '</p>';
                 topicHtml += '<div style="margin-left:20px;">';
                 if (topic.replies && topic.replies.length > 0) {
                     topic.replies.forEach(function(reply) {
                         topicHtml += '<div style="border-left:2px solid #0066cc;padding-left:10px;margin-bottom:8px;">';
-                        topicHtml += '<span style="color:#0066cc;font-weight:600;">' + reply.author + ':</span> ' + reply.message;
+                        var replyAuthorDisplay = reply.author.split(/\d+/)[0];
+                        topicHtml += '<span style="color:#0066cc;font-weight:600;">' + replyAuthorDisplay + ':</span> ' + reply.message;
                         topicHtml += '</div>';
                     });
                 }
