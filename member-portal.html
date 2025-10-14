@@ -96,21 +96,122 @@
     </nav>
 
     <main>
-        <div class="coming-soon-container">
-            <div class="coming-soon-icon"></div>
-            
+        <div class="coming-soon-container" id="portal-container">
             <h1 class="coming-soon-title">Member Portal</h1>
-            
-            <div class="coming-soon-subtitle">Coming Soon</div>
-            
-            <div class="coming-soon-description">
-                We are currently working on an enhanced Member Portal experience for our CVAWVUAA alumni community. 
-                The new portal will provide exclusive access to member benefits, events, networking opportunities, 
-                and much more. Thank you for your patience as we build something amazing for our members!
+            <div id="login-section">
+                <div class="coming-soon-subtitle">Members Login</div>
+                <div class="coming-soon-description">
+                    Please log in using your username (lastname + address numbers).<br>
+                    <input type="text" id="username" placeholder="Username" style="margin-top:10px;">
+                    <button onclick="loginMember()" style="margin-left:10px;">Login</button>
+                    <div id="login-error" style="color:#e74c3c;margin-top:10px;"></div>
+                </div>
             </div>
-
+            <div id="forum-section" style="display:none;">
+                <div class="coming-soon-subtitle">Member Forum & Discussions</div>
+                <div class="coming-soon-description">
+                    Welcome to the members-only forum! Start a new topic or join the discussion below.
+                </div>
+                <div id="forum-topics"></div>
+                <div style="margin-top:30px;text-align:left;">
+                    <h3>Start a New Topic</h3>
+                    <input type="text" id="topic-title" placeholder="Topic Title" style="width:60%;">
+                    <br>
+                    <textarea id="topic-message" placeholder="Your message" style="width:60%;height:60px;margin-top:10px;"></textarea>
+                    <br>
+                    <button onclick="postTopic()" style="margin-top:10px;">Post Topic</button>
+                    <div id="topic-error" style="color:#e74c3c;margin-top:10px;"></div>
+                </div>
+            </div>
             <a href="/" class="back-home"> Back to Home</a>
         </div>
+        <script>
+        // Simple member login (username: lastname + address numbers)
+        function loginMember() {
+            var username = document.getElementById('username').value.trim();
+            if (username.length < 4) {
+                document.getElementById('login-error').innerText = 'Invalid username.';
+                return;
+            }
+            // For demo, accept any non-empty username
+            localStorage.setItem('memberUsername', username);
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('forum-section').style.display = 'block';
+            loadForum();
+        }
+
+        // If already logged in, show forum
+        window.onload = function() {
+            if (localStorage.getItem('memberUsername')) {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('forum-section').style.display = 'block';
+                loadForum();
+            }
+        };
+
+        // Forum logic
+        function loadForum() {
+            var topics = JSON.parse(localStorage.getItem('forumTopics') || '[]');
+            var forumDiv = document.getElementById('forum-topics');
+            forumDiv.innerHTML = '';
+            if (topics.length === 0) {
+                forumDiv.innerHTML = '<p>No topics yet. Be the first to post!</p>';
+                return;
+            }
+            topics.forEach(function(topic, idx) {
+                var topicHtml = '<div style="border:1px solid #ccc;padding:15px;margin-bottom:15px;border-radius:8px;">';
+                topicHtml += '<strong>' + topic.title + '</strong> <span style="color:#888;font-size:13px;">by ' + topic.author + '</span>';
+                topicHtml += '<p>' + topic.message + '</p>';
+                topicHtml += '<div style="margin-left:20px;">';
+                if (topic.replies && topic.replies.length > 0) {
+                    topic.replies.forEach(function(reply) {
+                        topicHtml += '<div style="border-left:2px solid #0066cc;padding-left:10px;margin-bottom:8px;">';
+                        topicHtml += '<span style="color:#0066cc;font-weight:600;">' + reply.author + ':</span> ' + reply.message;
+                        topicHtml += '</div>';
+                    });
+                }
+                topicHtml += '</div>';
+                topicHtml += '<textarea id="reply-' + idx + '" placeholder="Reply..." style="width:80%;height:40px;margin-top:10px;"></textarea>';
+                topicHtml += '<br><button onclick="postReply(' + idx + ')" style="margin-top:5px;">Reply</button>';
+                topicHtml += '<div id="reply-error-' + idx + '" style="color:#e74c3c;margin-top:5px;"></div>';
+                topicHtml += '</div>';
+                forumDiv.innerHTML += topicHtml;
+            });
+        }
+
+        function postTopic() {
+            var title = document.getElementById('topic-title').value.trim();
+            var message = document.getElementById('topic-message').value.trim();
+            var author = localStorage.getItem('memberUsername') || 'Member';
+            if (!title || !message) {
+                document.getElementById('topic-error').innerText = 'Please enter both a title and message.';
+                return;
+            }
+            var topics = JSON.parse(localStorage.getItem('forumTopics') || '[]');
+            topics.unshift({ title: title, message: message, author: author, replies: [] });
+            localStorage.setItem('forumTopics', JSON.stringify(topics));
+            document.getElementById('topic-title').value = '';
+            document.getElementById('topic-message').value = '';
+            document.getElementById('topic-error').innerText = '';
+            loadForum();
+        }
+
+        function postReply(idx) {
+            var replyMsg = document.getElementById('reply-' + idx).value.trim();
+            var author = localStorage.getItem('memberUsername') || 'Member';
+            if (!replyMsg) {
+                document.getElementById('reply-error-' + idx).innerText = 'Reply cannot be empty.';
+                return;
+            }
+            var topics = JSON.parse(localStorage.getItem('forumTopics') || '[]');
+            if (!topics[idx].replies) topics[idx].replies = [];
+            topics[idx].replies.push({ author: author, message: replyMsg });
+            localStorage.setItem('forumTopics', JSON.stringify(topics));
+            document.getElementById('reply-' + idx).value = '';
+            document.getElementById('reply-error-' + idx).innerText = '';
+            loadForum();
+        }
+        </script>
     </main>
 
     <footer class="footer">
