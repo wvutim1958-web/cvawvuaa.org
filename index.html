@@ -330,54 +330,26 @@
 </script>
 <script>
   // Mobile: open/close main nav
-  (function(){
-    const navBtn = document.querySelector('.nav-toggle');
-    const nav = document.getElementById('site-nav');
-    if (navBtn && nav) {
-      navBtn.addEventListener('click', () => {
-        const open = nav.classList.toggle('open');
-        navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      });
-    }
-    // Enhanced dropdown functionality - only add click handlers on mobile/touch devices
-    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    
-    if (isTouchDevice || window.innerWidth <= 768) {
-      document.querySelectorAll('.menu.dropdown').forEach(menu => {
-        const btn = menu.querySelector('.dropbtn');
-        if (btn) {
-          btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Close other dropdowns
-            document.querySelectorAll('.menu.dropdown').forEach(otherMenu => {
-              if (otherMenu !== menu) {
-                otherMenu.classList.remove('open');
-                const otherBtn = otherMenu.querySelector('.dropbtn');
-                if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
-              }
-            });
-            
-            // Toggle this dropdown
-            const isOpen = menu.classList.toggle('open');
-            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-          });
-        }
-      });
-      
-      // Close dropdowns when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.menu.dropdown')) {
-          document.querySelectorAll('.menu.dropdown').forEach(menu => {
-            menu.classList.remove('open');
-            const btn = menu.querySelector('.dropbtn');
-            if (btn) btn.setAttribute('aria-expanded', 'false');
-          });
-        }
-      });
-    }
-  })();
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+  // Mobile: tap to open About dropdown
+  const aboutMenu = document.querySelector('.menu.dropdown');
+  const aboutBtn = document.querySelector('.menu.dropdown .dropbtn');
+  if (aboutBtn && aboutMenu) {
+    aboutBtn.addEventListener('click', (e) => {
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        e.preventDefault();
+        aboutMenu.classList.toggle('open');
+        aboutBtn.setAttribute('aria-expanded', aboutMenu.classList.contains('open') ? 'true' : 'false');
+      }
+    });
+  }
 </script>
 <script src="/js/social-media.js"></script>
 <script src="/js/theme-toggle.js"></script>
