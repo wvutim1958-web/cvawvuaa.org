@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Tracking - CVCWVUAA Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .filter-group select {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-export {
+            padding: 12px 24px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-export:hover {
+            background: #1b5e20;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-card .subvalue {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #667eea;
+            color: white;
+        }
+
+        thead th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        thead th:hover {
+            background: #5568d3;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f5f5f5;
+        }
+
+        tbody td {
+            padding: 15px;
+            color: #333;
+        }
+
+        .payment-type {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .payment-type.dues {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .payment-type.chapter {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .payment-type.scholarship {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .amount {
+            font-weight: 600;
+        }
+
+        .amount.gross {
+            color: #666;
+        }
+
+        .amount.net {
+            color: #2e7d32;
+        }
+
+        .fee {
+            color: #c62828;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 18px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .sort-indicator {
+            margin-left: 5px;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/admin/admin-fresh.html" class="back-link">← Back to Admin Dashboard</a>
+
+        <div class="header">
+            <h1>💰 Payment Tracking</h1>
+            <p>View and export all member payments</p>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Payments</h3>
+                <div class="value" id="totalPayments">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Gross Amount</h3>
+                <div class="value" id="grossTotal">$0.00</div>
+                <div class="subvalue">Expected</div>
+            </div>
+            <div class="stat-card">
+                <h3>Net Amount</h3>
+                <div class="value" id="netTotal">$0.00</div>
+                <div class="subvalue">Received</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Fees</h3>
+                <div class="value" id="totalFees">$0.00</div>
+                <div class="subvalue">PayPal & Other</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Search by member name...">
+            </div>
+            <div class="filter-group">
+                <label>Type:</label>
+                <select id="typeFilter">
+                    <option value="all">All Types</option>
+                    <option value="dues">Dues</option>
+                    <option value="chapter">Chapter Donations</option>
+                    <option value="scholarship">Scholarship Donations</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Method:</label>
+                <select id="methodFilter">
+                    <option value="all">All Methods</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="Check">Check</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <button class="btn-export" onclick="exportToCSV()">📥 Export CSV</button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <div id="loadingMessage" class="loading">Loading payments...</div>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">💳</div>
+                <h3>No Payments Found</h3>
+                <p>No payments have been recorded yet.</p>
+            </div>
+            <table id="paymentTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('date')">Date <span class="sort-indicator" id="sort-date"></span></th>
+                        <th onclick="sortTable('member')">Member Name <span class="sort-indicator" id="sort-member"></span></th>
+                        <th onclick="sortTable('type')">Type <span class="sort-indicator" id="sort-type"></span></th>
+                        <th onclick="sortTable('gross')">Gross Amount <span class="sort-indicator" id="sort-gross"></span></th>
+                        <th onclick="sortTable('net')">Net Amount <span class="sort-indicator" id="sort-net"></span></th>
+                        <th onclick="sortTable('method')">Method <span class="sort-indicator" id="sort-method"></span></th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="/admin/js/firebase-config.js?v=20251020-1538"></script>
+    <script src="/admin/js/payment-tracking.js?v=20251020212000"></script>
+</body>
+</html>
