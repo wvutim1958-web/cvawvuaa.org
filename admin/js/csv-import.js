@@ -4,14 +4,14 @@
  */
 
 let parsedMembers = [];
-let db = null;
+let importDb = null;
 
 /**
  * Initialize Firebase connection
  */
 function init() {
     if (typeof firebase !== 'undefined' && firebase.firestore) {
-        db = firebase.firestore();
+        importDb = firebase.firestore();
         console.log('Firebase connected for CSV import');
     } else {
         console.error('Firebase not available');
@@ -277,7 +277,7 @@ function displayPreview() {
  * Import all members to Firebase
  */
 async function importMembers() {
-    if (!db) {
+    if (!importDb) {
         addLog('ERROR: Firebase not connected', 'error');
         return;
     }
@@ -307,7 +307,7 @@ async function importMembers() {
         
         for (const member of batch) {
             try {
-                await db.collection('members').add(member);
+                await importDb.collection('members').add(member);
                 imported++;
                 addLog(`✓ Imported: ${member.name}`, 'success');
             } catch (error) {
