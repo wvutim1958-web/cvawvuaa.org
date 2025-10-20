@@ -1175,6 +1175,72 @@ img.critical {
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3) !important;
 }
 
+/* SVG Icon Styles */
+.icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  stroke: currentColor;
+  fill: none;
+  transition: transform 0.2s ease;
+}
+
+.icon-search {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-moon,
+.icon-sun {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-lock,
+.icon-user {
+  width: 18px;
+  height: 18px;
+}
+
+a .icon,
+button .icon {
+  margin-right: 4px;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+}
+
+/* Search button with icon */
+.search-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.search-btn:hover {
+  background-color: rgba(247, 221, 99, 0.1);
+}
+
+/* Theme toggle button improvements */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Member portal link with icon */
+.member-portal-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
 @media (max-width: 768px) {
   .member-portal-link {
     margin: 4px 0 !important;
