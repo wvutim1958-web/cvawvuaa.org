@@ -287,46 +287,15 @@
 <!-- WVU Global Footer Component -->
 <div id="wvu-footer"></div>
 
-<script>
-  // Load WVU Components
-  (function() {
-    // Load Masthead
-    fetch('/includes/masthead.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('wvu-masthead').innerHTML = html;
-      })
-      .catch(err => console.error('Error loading masthead:', err));
-    
-    // Load Navigation
-    fetch('/includes/navigation.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('wvu-navigation').innerHTML = html;
-        // Load navigation JavaScript after HTML is inserted
-        const script = document.createElement('script');
-        script.src = '/js/wvu-navigation.js';
-        document.body.appendChild(script);
-      })
-      .catch(err => console.error('Error loading navigation:', err));
-    
-    // Load Footer
-    fetch('/includes/footer.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('wvu-footer').innerHTML = html;
-      })
-      .catch(err => console.error('Error loading footer:', err));
-  })();
-  
-  // year stamp
-  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
+<!-- Social Media Integration -->
 <script src="/js/social-media.js"></script>
 <script src="/js/theme-toggle.js"></script>
 <script src="/js/pwa.js"></script>
 <script src="/js/image-optimizer.js"></script>
 <script src="/js/mobile-enhancer.js"></script>
+
+<!-- Load WVU Components (Masthead, Navigation, Footer) -->
+<script src="/includes/component-loader.js"></script>
 
 </body>
 </html>

@@ -26,6 +26,11 @@
       .then(response => response.text())
       .then(html => {
         document.getElementById('wvu-footer').innerHTML = html;
+        // Update year stamp after footer loads
+        const yearElement = document.getElementById('year');
+        if (yearElement) {
+          yearElement.textContent = new Date().getFullYear();
+        }
       })
       .catch(err => console.error('Error loading footer:', err));
   })();
