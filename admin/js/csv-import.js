@@ -23,16 +23,31 @@ function init() {
  * Handle file selection
  */
 function handleFileSelect(event) {
+    console.log('File select triggered');
     const file = event.target.files[0];
-    if (!file) return;
     
-    document.getElementById('fileName').textContent = file.name;
+    if (!file) {
+        console.log('No file selected');
+        return;
+    }
+    
+    console.log('File selected:', file.name, 'Size:', file.size, 'Type:', file.type);
+    document.getElementById('fileName').textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
     
     const reader = new FileReader();
+    
+    reader.onerror = function(e) {
+        console.error('FileReader error:', e);
+        alert('Error reading file: ' + e.target.error);
+    };
+    
     reader.onload = function(e) {
+        console.log('File loaded, length:', e.target.result.length);
         const csvText = e.target.result;
         parseCSV(csvText);
     };
+    
+    console.log('Starting to read file...');
     reader.readAsText(file);
 }
 
@@ -40,8 +55,14 @@ function handleFileSelect(event) {
  * Parse CSV file and convert to member objects
  */
 function parseCSV(csvText) {
+    console.log('=== PARSING CSV ===');
+    console.log('CSV text length:', csvText.length);
+    
     const lines = csvText.split('\n');
+    console.log('Total lines:', lines.length);
+    
     const headers = lines[0].split(',').map(h => h.trim());
+    console.log('Headers:', headers);
     
     parsedMembers = [];
     
