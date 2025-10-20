@@ -71,7 +71,8 @@
       <legend><strong>Upload your ZIP file</strong></legend>
       <p class="small" style="margin-top:0">Select one .zip file. If your photos are large, create multiple ZIPs and submit separately.</p>
       <p class="small" style="margin-top:0">Select one .zip file. If large, split into multiple ZIPs and submit each.</p>
-      <input type="file" name="attachment" accept=".zip" required>
+      <label for="zipfile" class="sr-only">Select ZIP file</label>
+      <input type="file" id="zipfile" name="attachment" accept=".zip" required>
     </fieldset>
 
     <label>Message (optional)
