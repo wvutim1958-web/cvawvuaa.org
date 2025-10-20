@@ -28,7 +28,7 @@ The `/admin/index.html` page received a **complete performance and security over
 
 - Same password works exactly as before
 - Now stored as SHA-256 hash in source code
-- Hash: `8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918`
+- Hash: `8a94a85dbd0350424573522812c87d6b9c3cb1c6fdf2a08eb23af6b05233b532`
 - Location: `/admin/js/admin-hub.js` (line ~10)
 
 ---
