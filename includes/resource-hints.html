@@ -1,0 +1,39 @@
+<!--
+    Performance Resource Hints for CVCWVUAA Website
+    Include this in the <head> section of all pages for optimal performance
+    
+    This file provides:
+    - DNS prefetching for external domains
+    - Preconnect for frequently used resources
+    - Preload for critical assets
+-->
+
+<!-- DNS Prefetch for external domains -->
+<link rel="dns-prefetch" href="//fast.fonts.net">
+<link rel="dns-prefetch" href="//www.facebook.com">
+<link rel="dns-prefetch" href="//platform.twitter.com">
+<link rel="dns-prefetch" href="//www.instagram.com">
+<link rel="dns-prefetch" href="//www.linkedin.com">
+<link rel="dns-prefetch" href="//www.youtube.com">
+
+<!-- Preconnect for critical external resources -->
+<link rel="preconnect" href="https://fast.fonts.net" crossorigin>
+
+<!-- Preload critical CSS -->
+<link rel="preload" href="/css/styles.min.css" as="style">
+<link rel="preload" href="/css/wvu-components.css" as="style">
+
+<!-- Preload critical JavaScript -->
+<link rel="preload" href="/js/main.min.js" as="script">
+<link rel="preload" href="/includes/component-loader.min.js" as="script">
+
+<!-- Preload WVU fonts (if using specific weights) -->
+<link rel="preload" href="https://fast.fonts.net/cssapi/[FONT-ID].css" as="style" crossorigin>
+
+<!-- Prefetch next likely pages (for improved navigation) -->
+<link rel="prefetch" href="/about.html">
+<link rel="prefetch" href="/events.html">
+<link rel="prefetch" href="/membership.html">
+
+<!-- Module preload for ES6 modules (if applicable) -->
+<!-- <link rel="modulepreload" href="/js/modules/app.js"> -->

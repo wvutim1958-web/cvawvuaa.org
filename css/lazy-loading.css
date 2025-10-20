@@ -1,0 +1,115 @@
+/**
+ * Lazy Loading Styles for CVCWVUAA Website
+ * Provides visual feedback during image loading
+ */
+
+/* Lazy loading placeholder */
+img[data-src],
+img[loading="lazy"],
+.lazy-loading {
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 25%,
+        #e0e0e0 50%,
+        #f0f0f0 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+/* Shimmer animation for loading state */
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Loaded state */
+.lazy-loaded {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Error state */
+.lazy-error {
+    background: #f8d7da;
+    border: 2px dashed #dc3545;
+    padding: 20px;
+    text-align: center;
+}
+
+.lazy-error::after {
+    content: '⚠️ Image failed to load';
+    display: block;
+    color: #721c24;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Blur-up effect for progressive loading */
+img[data-src].blur-up {
+    filter: blur(10px);
+    transition: filter 0.3s;
+}
+
+img[data-src].blur-up.lazy-loaded {
+    filter: blur(0);
+}
+
+/* Background image lazy loading */
+[data-bg] {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+[data-bg]:not(.lazy-loaded) {
+    background: #f0f0f0;
+}
+
+/* Iframe lazy loading */
+iframe[data-src] {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    img[data-src],
+    .lazy-loading {
+        animation: none;
+    }
+    
+    .lazy-loaded {
+        animation: none;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    img[data-src],
+    img[loading="lazy"],
+    .lazy-loading {
+        background: linear-gradient(
+            90deg,
+            #2a2a2a 25%,
+            #1a1a1a 50%,
+            #2a2a2a 75%
+        );
+    }
+    
+    [data-bg]:not(.lazy-loaded) {
+        background: #2a2a2a;
+    }
+}
