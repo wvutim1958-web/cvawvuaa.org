@@ -151,8 +151,8 @@ iframe.embed{width:100%;min-height:900px;border:1px solid #e6e9ef;border-radius:
 .menu.dropdown:focus-within .dropdown-panel,
 .menu.dropdown:hover .dropdown-panel,
 .menu.dropdown.open .dropdown-panel { display:block !important; }
-.dropdown-panel a { display:block; padding:8px 10px; border-radius:8px; transition:background 0.2s ease; }
-.dropdown-panel a:hover { background:rgba(0, 40, 85, 0.08); color:var(--navy); }
+.dropdown-panel a { display:block; padding:8px 10px; border-radius:8px; transition:background 0.2s ease; color:#333; }
+.dropdown-panel a:hover { background:rgba(0, 40, 85, 0.08) !important; color:#002855 !important; }
 
 /* Dark mode toggle */
 .theme-toggle {
