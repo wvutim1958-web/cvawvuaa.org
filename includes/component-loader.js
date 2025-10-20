@@ -1,68 +1,71 @@
-// Load WVU Components
+// Load WVU Components with cache busting
 (function() {
   // Wait for DOM to be ready
   function loadComponents() {
-    console.log('Loading WVU components...');
+    console.log('🔄 Loading WVU components...');
+    
+    // Cache buster - forces fresh content
+    const cacheBust = Date.now();
     
     // Load Masthead
-    fetch('/includes/masthead.html')
+    fetch(`/includes/masthead.html?v=${cacheBust}`)
       .then(response => {
-        console.log('Masthead fetch response:', response.status);
+        console.log('✅ Masthead fetch response:', response.status);
         return response.text();
       })
       .then(html => {
         const mastheadEl = document.getElementById('wvu-masthead');
         if (mastheadEl) {
           mastheadEl.innerHTML = html;
-          console.log('Masthead loaded successfully');
+          console.log('✅ Masthead loaded successfully');
         } else {
-          console.error('Element #wvu-masthead not found');
+          console.error('❌ Element #wvu-masthead not found');
         }
       })
-      .catch(err => console.error('Error loading masthead:', err));
+      .catch(err => console.error('❌ Error loading masthead:', err));
     
     // Load Navigation  
-    fetch('/includes/navigation.html')
+    fetch(`/includes/navigation.html?v=${cacheBust}`)
       .then(response => {
-        console.log('Navigation fetch response:', response.status);
+        console.log('✅ Navigation fetch response:', response.status);
         return response.text();
       })
       .then(html => {
         const navEl = document.getElementById('wvu-navigation');
         if (navEl) {
           navEl.innerHTML = html;
-          console.log('Navigation loaded successfully');
+          console.log('✅ Navigation loaded successfully');
           // Load navigation JavaScript after HTML is inserted
           const script = document.createElement('script');
-          script.src = '/js/wvu-navigation.js';
+          script.src = `/js/wvu-navigation.js?v=${cacheBust}`;
           document.body.appendChild(script);
         } else {
-          console.error('Element #wvu-navigation not found');
+          console.error('❌ Element #wvu-navigation not found');
         }
       })
-      .catch(err => console.error('Error loading navigation:', err));
+      .catch(err => console.error('❌ Error loading navigation:', err));
     
     // Load Footer
-    fetch('/includes/footer.html')
+    fetch(`/includes/footer.html?v=${cacheBust}`)
       .then(response => {
-        console.log('Footer fetch response:', response.status);
+        console.log('✅ Footer fetch response:', response.status);
         return response.text();
       })
       .then(html => {
         const footerEl = document.getElementById('wvu-footer');
         if (footerEl) {
           footerEl.innerHTML = html;
-          console.log('Footer loaded successfully');
+          console.log('✅ Footer loaded successfully');
           // Update year stamp after footer loads
           const yearElement = document.getElementById('year');
           if (yearElement) {
             yearElement.textContent = new Date().getFullYear();
           }
         } else {
-          console.error('Element #wvu-footer not found');
+          console.error('❌ Element #wvu-footer not found');
         }
       })
-      .catch(err => console.error('Error loading footer:', err));
+      .catch(err => console.error('❌ Error loading footer:', err));
   }
   
   // Load components when DOM is ready
