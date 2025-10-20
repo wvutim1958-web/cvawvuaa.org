@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CVCWVUAA Financial Reports - Category breakdowns and analysis">
+    <title>Financial Reports - CVCWVUAA Admin</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    
+    <style>
+        .reports-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .reports-header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .reports-header h1 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .filters-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            color: #002855;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 0.75rem;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0069d9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .summary-card h3 {
+            margin: 0 0 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .summary-card .amount {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .summary-card.income .amount {
+            color: #28a745;
+        }
+        
+        .summary-card.expense .amount {
+            color: #dc3545;
+        }
+        
+        .summary-card.net .amount {
+            color: #007bff;
+        }
+        
+        .summary-card .count {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .report-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .report-card h2 {
+            margin: 0 0 1.5rem;
+            color: #002855;
+            font-size: 1.3rem;
+        }
+        
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .category-item:last-child {
+            border-bottom: none;
+        }
+        
+        .category-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #002855;
+        }
+        
+        .category-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        
+        .category-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        .category-fill.income {
+            background: linear-gradient(90deg, #28a745, #1e7e34);
+        }
+        
+        .category-fill.expense {
+            background: linear-gradient(90deg, #dc3545, #bd2130);
+        }
+        
+        .category-amount {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        
+        .category-count {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .transactions-detail {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .transactions-detail h2 {
+            margin: 0 0 1.5rem;
+            color: #002855;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f8f9fa;
+        }
+        
+        th {
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #002855;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .amount-positive {
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .amount-negative {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        @media print {
+            .filters-card,
+            .filter-buttons,
+            .reports-header a {
+                display: none;
+            }
+            
+            .reports-container {
+                padding: 1rem;
+            }
+            
+            .summary-card,
+            .report-card,
+            .transactions-detail {
+                break-inside: avoid;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="reports-container">
+        <!-- Header -->
+        <header class="reports-header">
+            <h1>📊 Financial Reports</h1>
+            <p>Category Analysis & Transaction Reports</p>
+        </header>
+        
+        <!-- Filters -->
+        <div class="filters-card">
+            <h2 style="margin: 0 0 1rem; color: #002855;">Report Filters</h2>
+            
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="date-from">From Date</label>
+                    <input type="date" id="date-from">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="date-to">To Date</label>
+                    <input type="date" id="date-to">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-type">Transaction Type</label>
+                    <select id="filter-type">
+                        <option value="all">All Transactions</option>
+                        <option value="deposit">Deposits Only</option>
+                        <option value="expense">Expenses Only</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-category">Category</label>
+                    <select id="filter-category">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="filter-buttons">
+                <button class="btn btn-primary" onclick="window.reports.generateReport()">
+                    📊 Generate Report
+                </button>
+                <button class="btn btn-success" onclick="window.reports.exportCSV()">
+                    📥 Export CSV
+                </button>
+                <button class="btn btn-secondary" onclick="window.print()">
+                    🖨️ Print
+                </button>
+                <a href="financial-ledger.html" class="btn btn-secondary">
+                    ← Back to Ledger
+                </a>
+            </div>
+        </div>
+        
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card income">
+                <h3>Total Income</h3>
+                <p class="amount" id="total-income">$0.00</p>
+                <p class="count" id="income-count">0 transactions</p>
+            </div>
+            
+            <div class="summary-card expense">
+                <h3>Total Expenses</h3>
+                <p class="amount" id="total-expenses">$0.00</p>
+                <p class="count" id="expense-count">0 transactions</p>
+            </div>
+            
+            <div class="summary-card net">
+                <h3>Net Change</h3>
+                <p class="amount" id="net-change">$0.00</p>
+                <p class="count" id="total-count">0 total transactions</p>
+            </div>
+            
+            <div class="summary-card">
+                <h3>Date Range</h3>
+                <p class="amount" style="font-size: 1.2rem; color: #002855;" id="date-range">All Time</p>
+                <p class="count" id="period-label">Full history</p>
+            </div>
+        </div>
+        
+        <!-- Category Reports -->
+        <div class="reports-grid">
+            <!-- Income by Category -->
+            <div class="report-card">
+                <h2>💵 Income by Category</h2>
+                <div id="income-categories">
+                    <div class="no-data">No income data available</div>
+                </div>
+            </div>
+            
+            <!-- Expenses by Category -->
+            <div class="report-card">
+                <h2>📤 Expenses by Category</h2>
+                <div id="expense-categories">
+                    <div class="no-data">No expense data available</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Transactions Detail -->
+        <div class="transactions-detail">
+            <h2>Transaction Details</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Type</th>
+                            <th style="text-align: right;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-table">
+                        <tr>
+                            <td colspan="5" class="no-data">Loading transactions...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="/admin/js/firebase-config.js?v=20251020-1538"></script>
+    <script src="/admin/js/financial-reports.js?v=20251020183000"></script>
+</body>
+</html>
