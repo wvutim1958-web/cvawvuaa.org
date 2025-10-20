@@ -8,5 +8,7 @@
     "workbench.editor.enablePreviewFromQuickOpen": true,
     "workbench.editor.highlightModifiedTabs": true,
     "workbench.editor.limit.enabled": true,
-    "workbench.editor.limit.value": 20
+    "workbench.editor.limit.value": 20,
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": []
 }

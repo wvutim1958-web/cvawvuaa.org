@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CVCWVUAA Financial Ledger - Chapter accounting and transaction management">
+    <title>Financial Ledger - CVCWVUAA Admin</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    
+    <style>
+        .ledger-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .ledger-header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .ledger-header h1 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .balance-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .balance-label {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .balance-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #28a745;
+            margin: 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .btn-info {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background: #0069d9;
+        }
+        
+        .transactions-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f8f9fa;
+        }
+        
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #002855;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .amount-positive {
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .amount-negative {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        
+        .transaction-description strong {
+            display: block;
+            color: #002855;
+        }
+        
+        .transaction-category {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        
+        .split-indicator {
+            font-size: 0.85rem;
+            color: #007bff;
+            margin-top: 0.25rem;
+        }
+        
+        .transaction-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-icon {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-icon:hover {
+            opacity: 1;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #002855;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 2rem;
+            height: 2rem;
+            line-height: 1;
+        }
+        
+        .modal-close:hover {
+            color: #dc3545;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 2px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #002855;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #002855;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        #split-transaction-section {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .splits-table {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .splits-table th,
+        .splits-table td {
+            padding: 0.5rem;
+        }
+        
+        .splits-table input,
+        .splits-table select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+        }
+        
+        .btn-remove-split {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+        
+        .split-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            text-align: right;
+        }
+        
+        .offline-notice {
+            background: #ffc107;
+            color: #000;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .ledger-container {
+                padding: 1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .balance-amount {
+                font-size: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ledger-container">
+        <!-- Header -->
+        <header class="ledger-header">
+            <h1>💰 Financial Ledger</h1>
+            <p>Central Virginia Chapter - Accounting System</p>
+        </header>
+        
+        <!-- Offline Notice -->
+        <div id="offline-notice" class="offline-notice">
+            ⚠️ Running in demo mode. Configure Firebase to enable data persistence.
+        </div>
+        
+        <!-- Current Balance -->
+        <div class="balance-card">
+            <div class="balance-label">Current Balance</div>
+            <div id="current-balance" class="balance-amount">$0.00</div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button id="btn-add-deposit" class="btn btn-primary">
+                💵 Add Deposit
+            </button>
+            <button id="btn-add-expense" class="btn btn-secondary">
+                📤 Add Expense
+            </button>
+            <button class="btn btn-info" onclick="alert('Reports feature coming soon!')">
+                📊 View Reports
+            </button>
+            <a href="index.html" class="btn" style="background: #6c757d; color: white;">
+                ← Back to Admin Hub
+            </a>
+        </div>
+        
+        <!-- Transactions Table -->
+        <div class="transactions-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-tbody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem; color: #666;">
+                            Loading transactions...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Transaction Modal -->
+    <div id="transaction-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add Transaction</h2>
+                <button class="modal-close">×</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="transaction-form">
+                    <input type="hidden" id="transaction-type" value="deposit">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transaction-date">Date</label>
+                            <input type="date" id="transaction-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transaction-amount">Amount</label>
+                            <input type="number" id="transaction-amount" step="0.01" min="0" placeholder="0.00" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transaction-description">Description</label>
+                        <input type="text" id="transaction-description" placeholder="e.g., Bank Deposit - 4 membership checks" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transaction-category">Category</label>
+                        <select id="transaction-category" required>
+                            <option value="">Select category...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="split-transaction-toggle">
+                            <label for="split-transaction-toggle" style="margin: 0;">Split this transaction</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Split Transaction Section -->
+                    <div id="split-transaction-section" style="display: none;">
+                        <h3>Split Transaction Details</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Break down this transaction by member and category</p>
+                        
+                        <table class="splits-table">
+                            <thead>
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="splits-tbody">
+                            </tbody>
+                        </table>
+                        
+                        <button type="button" id="btn-add-split" class="btn btn-info" style="margin-top: 1rem;">
+                            + Add Split Line
+                        </button>
+                        
+                        <div class="split-total">
+                            Split Total: <span id="split-total">$0.00</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button id="btn-cancel-transaction" class="btn" style="background: #6c757d; color: white;">
+                    Cancel
+                </button>
+                <button id="btn-save-transaction" class="btn btn-primary">
+                    Save Transaction
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="/admin/js/firebase-config.js"></script>
+    <script src="/admin/js/financial-ledger.js"></script>
+</body>
+</html>
