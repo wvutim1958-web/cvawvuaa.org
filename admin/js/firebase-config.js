@@ -2,12 +2,13 @@
 // Replace these values with your actual Firebase project credentials
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY_HERE",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyDIMIbLTc2OgTTu6qFYdGgzO8CYU-rGmec",
+    authDomain: "cvcwvuaa-904e2.firebaseapp.com",
+    projectId: "cvcwvuaa-904e2",
+    storageBucket: "cvcwvuaa-904e2.firebasestorage.app",
+    messagingSenderId: "182842873773",
+    appId: "1:182842873773:web:cbee30eeff8fee4c2ff324",
+    measurementId: "G-5ZYMGSZBJ3"
 };
 
 // Instructions to get your Firebase credentials:
@@ -43,6 +44,9 @@ function initializeFirebase() {
         return false;
     }
 }
+
+// Auto-initialize Firebase when this script loads
+initializeFirebase();
 
 // Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
