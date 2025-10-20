@@ -2,48 +2,30 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CVCWVUAA • Newsletter Archive</title>
+  
+  <!-- WVU Official Fonts -->
+  <link rel="preconnect" href="https://cdn.fonts.net">
+  <link href="https://cdn.fonts.net/kit/e691d6b8-16c1-4a77-83c8-72cc198cb2dd/e691d6b8-16c1-4a77-83c8-72cc198cb2dd.css" rel="stylesheet">
+  
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/wvu-components.css">
+  <link rel="stylesheet" href="/css/wvu-breadcrumbs.css">
   <style>
     .post-list { display:grid; gap:12px }
     .post-item { padding:12px }
   </style>
   </head>
 <body>
-<header class="site">
-  <div class="wrapper topbar">
-    <a class="brand" href="/index.html" aria-label="CVCWVUAA"><img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo"></a>
-    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
-    <nav id="site-nav" class="nav">
-      <a href="/index.html">Home</a>
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+  
+  <!-- WVU Components -->
+  <div id="wvu-masthead"></div>
+  <div id="wvu-navigation"></div>
+  
+  <!-- Breadcrumb Navigation -->
+  <div id="wvu-breadcrumbs"></div>
 
-      <!-- Dropdown -->
-      <div class="menu dropdown">
-        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
-        <div class="dropdown-panel" role="menu" aria-label="About">
-          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
-          <a role="menuitem" href="/pay.html">Membership</a>
-          <a role="menuitem" href="/board.html">Board Members</a>
-          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
-          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
-        </div>
-      </div>
-
-      <a href="/events.html">Events</a>
-      <a href="/news.html">News</a>
-      <a href="/newsletters/">Newsletters</a>
-      <a href="/scores.html">Scores</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/programs.html">Programs</a>
-      <a href="/scholarship.html">Scholarship</a>
-      <a href="/media.html">Media</a>
-      <a href="/search.html">🔍 Search</a>
-      <button class="theme-toggle" aria-label="Toggle theme">
-        <span class="theme-icon">🌙</span>
-      </button>
-    </nav>
-  </div>
-</header>
-<main><div class="wrapper">
+<main id="main-content"><div class="wrapper">
   <h2>📧 Newsletter Archive</h2>
   <p class="lead">Browse past newsletters from the Central Virginia Chapter. Stay connected with event recaps, upcoming activities, and chapter news.</p>
 
@@ -78,9 +60,10 @@
   </div>
 
 </div></main>
-<footer class="site-footer"><div class="wrapper"><div class="footer-bar"><div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
-  <a href="/contact.html">Contact Us</a>
-    </div><div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div></div></footer>
+
+<!-- WVU Footer Component -->
+<div id="wvu-footer"></div>
+
 <!-- Newsletter System -->
 <script src="/js/newsletter-generator.js"></script>
 <script src="/js/newsletters.js"></script>
@@ -258,5 +241,9 @@
     });
   }
 </script>
+
+<!-- WVU Component Loaders -->
+<script src="/includes/component-loader.js"></script>
+<script src="/js/wvu-breadcrumbs.js"></script>
 <script src="/js/theme-toggle.js"></script>
 </body></html>
