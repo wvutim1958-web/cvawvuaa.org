@@ -9,6 +9,7 @@
   
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/wvu-components.css">
+  <link rel="stylesheet" href="/css/wvu-cta.css">
   <link rel="stylesheet" href="/css/wvu-breadcrumbs.css">
   <style>
     .post-list { display:grid; gap:12px }
@@ -53,8 +54,8 @@
       <h3>🔧 Admin Actions</h3>
       <p>Generate and manage newsletters for the chapter.</p>
       <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <button class="btn" onclick="generateNewsletterFromArchive()">✨ Generate New Newsletter</button>
-        <a class="btn outline" href="/admin/index.html">📊 Admin Dashboard</a>
+        <button class="wvu-cta wvu-cta--primary" onclick="generateNewsletterFromArchive()">✨ Generate New Newsletter</button>
+        <a class="wvu-cta wvu-cta--tertiary" href="/admin/index.html">📊 Admin Dashboard</a>
       </div>
     </div>
   </div>
@@ -142,8 +143,8 @@
               </p>
             </div>
             <div style="display: flex; flex-direction: column; gap: 4px;">
-              <button class="btn outline" style="padding: 4px 8px; font-size: 12px;" onclick="viewNewsletterModal('${newsletter.id}')">👁️ Read</button>
-              <button class="btn outline" style="padding: 4px 8px; font-size: 12px;" onclick="downloadNewsletterFromArchive('${newsletter.id}')">💾 Download</button>
+              <button class="wvu-cta wvu-cta--tertiary wvu-cta--small" onclick="viewNewsletterModal('${newsletter.id}')">👁️ Read</button>
+              <button class="wvu-cta wvu-cta--tertiary wvu-cta--small" onclick="downloadNewsletterFromArchive('${newsletter.id}')">💾 Download</button>
             </div>
           </div>
         </div>
@@ -214,32 +215,10 @@
     window.location.href = '/admin/index.html#newsletters';
   }
 </script>
-  // year stamp
-  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
 
-  // Mobile: open/close main nav
-  const navBtn = document.querySelector('.nav-toggle');
-  const nav = document.getElementById('site-nav');
-  if (navBtn && nav) {
-    navBtn.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-  }
+<!-- WVU Component Loaders -->
+<script src="/includes/component-loader.js"></script>
+<script src="/js/wvu-breadcrumbs.js"></script>
 
-  // Mobile: tap to open About dropdown
-  const aboutMenu = document.querySelector('.menu.dropdown');
-  const aboutBtn = document.querySelector('.menu.dropdown .dropbtn');
-  if (aboutBtn && aboutMenu) {
-    aboutBtn.addEventListener('click', (e) => {
-      if (window.matchMedia('(max-width: 900px)').matches) {
-        e.preventDefault();
-        aboutMenu.classList.toggle('open');
-        aboutBtn.setAttribute('aria-expanded', aboutMenu.classList.contains('open') ? 'true' : 'false');
-      }
-    });
-  }
-</script>
-<script src="/js/theme-toggle.js"></script>
-</body></html>
+</body>
+</html>
