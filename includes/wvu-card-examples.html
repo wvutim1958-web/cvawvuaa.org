@@ -1,0 +1,228 @@
+<!--
+  WVU Card Component Examples
+  Based on WVU Design System v2 Card Patterns
+  Created: October 20, 2025
+  
+  This file provides reference examples for using the WVU Card component system.
+  Copy and paste the examples below into your pages as needed.
+-->
+
+<!-- ============================================ -->
+<!-- BASIC CARD (Standard) -->
+<!-- ============================================ -->
+<div class="wvu-card">
+  <div class="wvu-card__image">
+    <img src="/path/to/image.jpg" alt="Descriptive alt text" loading="lazy">
+  </div>
+  <div class="wvu-card__body">
+    <h3 class="wvu-card__title">
+      <a href="/page-url.html">Card Title Here</a>
+    </h3>
+    <div class="wvu-card__meta">Date or metadata</div>
+    <p class="wvu-card__description">
+      Brief description of the content. Keep it concise and engaging to encourage clicks.
+    </p>
+    <div class="wvu-card__footer">
+      <a href="/page-url.html" class="wvu-card__cta wvu-card__cta--primary">Learn More</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- BORDERED CARD (Gold Top Border) -->
+<!-- ============================================ -->
+<div class="wvu-card wvu-card--bordered">
+  <div class="wvu-card__image">
+    <img src="/path/to/image.jpg" alt="Descriptive alt text" loading="lazy">
+  </div>
+  <div class="wvu-card__body">
+    <h3 class="wvu-card__title">
+      <a href="/page-url.html">Featured Event Title</a>
+    </h3>
+    <div class="wvu-card__meta">November 1, 2025 • 7:00 PM</div>
+    <p class="wvu-card__description">
+      Use the bordered variant to highlight featured or important content with the signature WVU gold accent.
+    </p>
+    <div class="wvu-card__footer">
+      <a href="/page-url.html" class="wvu-card__cta wvu-card__cta--primary">Register Now</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- CARD WITH BADGE (Featured/New/Popular) -->
+<!-- ============================================ -->
+<div class="wvu-card wvu-card--bordered">
+  <div class="wvu-card__image">
+    <img src="/path/to/image.jpg" alt="Descriptive alt text" loading="lazy">
+    <span class="wvu-card__badge">Featured</span>
+    <!-- Other badge options: New, Popular, Exclusive, etc. -->
+  </div>
+  <div class="wvu-card__body">
+    <h3 class="wvu-card__title">
+      <a href="/page-url.html">Special Featured Content</a>
+    </h3>
+    <div class="wvu-card__meta">Limited Time</div>
+    <p class="wvu-card__description">
+      The badge draws attention to special or time-sensitive content. Perfect for featured events or announcements.
+    </p>
+    <div class="wvu-card__footer">
+      <a href="/page-url.html" class="wvu-card__cta wvu-card__cta--primary">View Details</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- OVERLAY CARD (Background Image with Gradient) -->
+<!-- ============================================ -->
+<div class="wvu-card wvu-card--overlay" style="background-image: url('/path/to/background-image.jpg');">
+  <div class="wvu-card__body">
+    <h3 class="wvu-card__title">
+      <a href="/page-url.html" style="color: white;">Dramatic Overlay Title</a>
+    </h3>
+    <div class="wvu-card__meta" style="color: rgba(255,255,255,0.9);">Event Info</div>
+    <p class="wvu-card__description" style="color: white;">
+      The overlay card creates a dramatic effect by placing content over a background image with a gradient overlay.
+    </p>
+    <div class="wvu-card__footer">
+      <a href="/page-url.html" class="wvu-card__cta wvu-card__cta--primary">Explore</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- CARD WITH SECONDARY CTA BUTTON -->
+<!-- ============================================ -->
+<div class="wvu-card wvu-card--bordered">
+  <div class="wvu-card__image">
+    <img src="/path/to/image.jpg" alt="Descriptive alt text" loading="lazy">
+  </div>
+  <div class="wvu-card__body">
+    <h3 class="wvu-card__title">
+      <a href="/page-url.html">Resource or Article Title</a>
+    </h3>
+    <div class="wvu-card__meta">Published: October 15, 2025</div>
+    <p class="wvu-card__description">
+      Use the secondary button style for less prominent actions or when you have multiple CTAs.
+    </p>
+    <div class="wvu-card__footer">
+      <a href="/page-url.html" class="wvu-card__cta wvu-card__cta--secondary">Read Article</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- CARD WITHOUT IMAGE (Text Only) -->
+<!-- ============================================ -->
+<div class="wvu-card wvu-card--bordered">
+  <div class="wvu-card__body">
+    <h3 class="wvu-card__title">
+      <a href="/page-url.html">Text-Only Card Title</a>
+    </h3>
+    <div class="wvu-card__meta">Category or Date</div>
+    <p class="wvu-card__description">
+      Sometimes you don't need an image. Text-only cards work great for announcements, quick links, or supplementary content.
+    </p>
+    <div class="wvu-card__footer">
+      <a href="/page-url.html" class="wvu-card__cta wvu-card__cta--primary">Learn More</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- GRID LAYOUTS -->
+<!-- ============================================ -->
+
+<!-- 3-COLUMN GRID (Default - responsive) -->
+<div class="wvu-cards-grid">
+  <div class="wvu-card wvu-card--bordered">
+    <!-- Card content -->
+  </div>
+  <div class="wvu-card wvu-card--bordered">
+    <!-- Card content -->
+  </div>
+  <div class="wvu-card wvu-card--bordered">
+    <!-- Card content -->
+  </div>
+</div>
+
+<!-- 2-COLUMN GRID -->
+<div class="wvu-cards-grid wvu-cards-grid--2-col">
+  <div class="wvu-card wvu-card--bordered">
+    <!-- Card content -->
+  </div>
+  <div class="wvu-card wvu-card--bordered">
+    <!-- Card content -->
+  </div>
+</div>
+
+<!-- 4-COLUMN GRID -->
+<div class="wvu-cards-grid wvu-cards-grid--4-col">
+  <div class="wvu-card wvu-card--bordered">
+    <!-- Card content -->
+  </div>
+  <div class="wvu-card wvu-card--bordered">
+    <!-- Card content -->
+  </div>
+  <div class="wvu-card wvu-card--bordered">
+    <!-- Card content -->
+  </div>
+  <div class="wvu-card wvu-card--bordered">
+    <!-- Card content -->
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- USAGE GUIDELINES -->
+<!-- ============================================ -->
+<!--
+  CARD VARIANTS:
+  - .wvu-card               = Standard card
+  - .wvu-card--bordered     = Card with gold top border (recommended for events)
+  - .wvu-card--overlay      = Background image with gradient overlay
+  
+  CARD ELEMENTS:
+  - .wvu-card__image        = Image container (200px height, scales on hover)
+  - .wvu-card__badge        = Badge overlay on image (Featured, New, etc.)
+  - .wvu-card__body         = Main content container
+  - .wvu-card__title        = Heading (uses NeueHelvetica97CondensedBlack)
+  - .wvu-card__meta         = Metadata line (date, time, category)
+  - .wvu-card__description  = Body text (uses IowanOldStyleBTRoman)
+  - .wvu-card__footer       = CTA button container
+  - .wvu-card__cta          = Call-to-action button
+  
+  CTA BUTTON STYLES:
+  - .wvu-card__cta--primary   = Blue background (primary action)
+  - .wvu-card__cta--secondary = Outlined style (secondary action)
+  
+  GRID LAYOUTS:
+  - .wvu-cards-grid           = Default 3-column responsive grid
+  - .wvu-cards-grid--2-col    = 2-column grid
+  - .wvu-cards-grid--4-col    = 4-column grid
+  
+  RESPONSIVE BEHAVIOR:
+  - Mobile (<768px):  1 column
+  - Tablet (≥768px):  2 columns
+  - Desktop (≥992px): 3 columns (or 2/4 with modifier classes)
+  
+  ACCESSIBILITY:
+  - Always include descriptive alt text for images
+  - Use loading="lazy" for images below the fold
+  - Ensure sufficient color contrast for text
+  - Card titles should use <h2> or <h3> tags (semantic hierarchy)
+  - Links should have descriptive text (avoid "click here")
+  
+  BEST PRACTICES:
+  - Keep card titles concise (3-8 words)
+  - Limit description to 2-3 sentences
+  - Use consistent image aspect ratios within a grid
+  - Consider using the bordered variant for featured content
+  - Use badges sparingly to maintain impact
+-->
