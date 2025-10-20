@@ -32,6 +32,7 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/assets/logo.png">
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/wvu-components.css">
   <link rel="stylesheet" href="/assets/enhanced-styles.css">
   <link rel="stylesheet" href="/css/social-media.css">
   <!-- Google tag (gtag.js) -->
@@ -46,73 +47,16 @@
 </head>
 <body>
 
-<header class="site">
-  <div class="wrapper topbar">
-    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
-      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
-    </a>
+<!-- Skip to main content for accessibility -->
+<a href="#main-content" class="skip-to-main">Skip to main content</a>
 
-    <!-- Mobile menu button -->
-    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+<!-- WVU Masthead Component -->
+<div id="wvu-masthead"></div>
 
-    <nav id="site-nav" class="nav">
-      <a href="/index.html">Home</a>
+<!-- WVU Primary Navigation Component -->
+<div id="wvu-navigation"></div>
 
-      <!-- Dropdown -->
-      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
-        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
-        <div class="dropdown-panel" role="menu" aria-label="About">
-          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
-          <a role="menuitem" href="/pay.html">Membership</a>
-          <a role="menuitem" href="/board.html">Board Members</a>
-          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
-          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
-        </div>
-      </div>
-
-      <a href="/events.html">Events</a>
-
-      <!-- News Dropdown -->
-      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
-        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
-        <div class="dropdown-panel" role="menu" aria-label="News">
-          <a role="menuitem" href="/news/">News</a>
-          <a role="menuitem" href="/newsletters/">Newsletters</a>
-          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
-        </div>
-      </div>
-
-      <a href="/scores.html">Scores</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/programs.html">Programs</a>
-      <a href="/scholarship.html">Scholarship</a>
-      <a href="/media.html">Media</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/member-portal.html" class="member-portal-link">
-        <svg class="icon icon-user" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span>Members</span>
-      </a>
-      <a href="/search.html" class="search-btn">
-        <svg class="icon icon-search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-      </a>
-      
-      <!-- Theme toggle -->
-      <button class="theme-toggle" aria-label="Toggle theme">
-        <svg class="icon icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
-
-    </nav>
-  </div>
-</header>
-
+<main id="main-content">
 <!-- Hero Header Banner -->
 <div class="hero-header">
 </div>
@@ -204,7 +148,7 @@
   </div>
 </section>
 
-<main><div class="wrapper">
+<div class="wrapper">
   <div class="photo-strip"><img src="/assets/photos/download.jpg" alt="Alumni chapter members at WVU event"><img src="/assets/photos/download (10).jpg" alt="Mountaineers gathering at alumni event"><img src="/assets/photos/550539255_10163868473745295_3650245405852649566_n.jpg" alt="Central Virginia alumni chapter watch party"><img src="/assets/photos/watch party carolina ale house.jpg" alt="Watch party at Carolina Ale House"><img src="/assets/photos/82279131_2510255619097031_4820471456792051712_n.jpg" alt="WVU fans celebrating at alumni gathering"><img src="/assets/photos/509803515_10230940383442184_7809526464395943925_n.jpg" alt="Alumni chapter social event"><img src="/assets/photos/509914204_10230940387802293_7404552104597369588_n.jpg" alt="Mountaineer alumni networking event"><img src="/assets/photos/509971801_10230940388282305_467355079869857461_n.jpg" alt="WVU Central Virginia chapter members together"></div>
  <section class="card" style="background:linear-gradient(90deg,#123e7a 0%,#1d4a8b 100%);color:#fff">
   <h1 style="color:#fff">Stay connected to Mountaineer Nation—right here in Central Virginia.</h1>
@@ -338,42 +282,43 @@
   </section>
 </div></main>
 
-<footer class="site-footer">
-  <div class="wrapper">
-    <div class="footer-bar">
-      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
-  <a href="/contact.html">Contact Us</a>
-    </div>
-    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
-  </div>
-</footer>
+<!-- WVU Global Footer Component -->
+<div id="wvu-footer"></div>
 
 <script>
+  // Load WVU Components
+  (function() {
+    // Load Masthead
+    fetch('/includes/masthead.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('wvu-masthead').innerHTML = html;
+      })
+      .catch(err => console.error('Error loading masthead:', err));
+    
+    // Load Navigation
+    fetch('/includes/navigation.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('wvu-navigation').innerHTML = html;
+        // Load navigation JavaScript after HTML is inserted
+        const script = document.createElement('script');
+        script.src = '/js/wvu-navigation.js';
+        document.body.appendChild(script);
+      })
+      .catch(err => console.error('Error loading navigation:', err));
+    
+    // Load Footer
+    fetch('/includes/footer.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('wvu-footer').innerHTML = html;
+      })
+      .catch(err => console.error('Error loading footer:', err));
+  })();
+  
   // year stamp
   document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
-<script>
-  // Mobile: open/close main nav
-  const navBtn = document.querySelector('.nav-toggle');
-  const nav = document.getElementById('site-nav');
-  if (navBtn && nav) {
-    navBtn.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-  }
-  // Mobile: tap to open About dropdown
-  const aboutMenu = document.querySelector('.menu.dropdown');
-  const aboutBtn = document.querySelector('.menu.dropdown .dropbtn');
-  if (aboutBtn && aboutMenu) {
-    aboutBtn.addEventListener('click', (e) => {
-      if (window.matchMedia('(max-width: 900px)').matches) {
-        e.preventDefault();
-        aboutMenu.classList.toggle('open');
-        aboutBtn.setAttribute('aria-expanded', aboutMenu.classList.contains('open') ? 'true' : 'false');
-      }
-    });
-  }
 </script>
 <script src="/js/social-media.js"></script>
 <script src="/js/theme-toggle.js"></script>
