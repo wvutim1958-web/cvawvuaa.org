@@ -1,0 +1,420 @@
+/**
+ * WVU Call-to-Action (CTA) Components
+ * Based on WVU Design System button patterns
+ * 
+ * Button Hierarchy:
+ * 1. Primary (Gold) - Main actions
+ * 2. Secondary (Blue) - Supporting actions
+ * 3. Tertiary/Outline - Less emphasis
+ * 4. Text - Minimal emphasis
+ */
+
+/* ==========================================================================
+   Base Button Styles
+   ========================================================================== */
+
+.wvu-btn,
+.wvu-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Helvetica Neue W01', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wvu-btn:hover,
+.wvu-cta:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.wvu-btn:active,
+.wvu-cta:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.wvu-btn:focus,
+.wvu-cta:focus {
+  outline: 2px solid #0062A3;
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Primary Button (WVU Gold)
+   ========================================================================== */
+
+.wvu-btn--primary,
+.wvu-cta--primary {
+  background-color: #EAAA00;
+  color: #2C2A29;
+  border-color: #EAAA00;
+}
+
+.wvu-btn--primary:hover,
+.wvu-cta--primary:hover {
+  background-color: #FFB81C;
+  border-color: #FFB81C;
+  color: #2C2A29;
+}
+
+.wvu-btn--primary:active,
+.wvu-cta--primary:active {
+  background-color: #D89000;
+  border-color: #D89000;
+}
+
+/* ==========================================================================
+   Secondary Button (WVU Blue)
+   ========================================================================== */
+
+.wvu-btn--secondary,
+.wvu-cta--secondary {
+  background-color: #0062A3;
+  color: #FFFFFF;
+  border-color: #0062A3;
+}
+
+.wvu-btn--secondary:hover,
+.wvu-cta--secondary:hover {
+  background-color: #003F70;
+  border-color: #003F70;
+  color: #FFFFFF;
+}
+
+.wvu-btn--secondary:active,
+.wvu-cta--secondary:active {
+  background-color: #002A4D;
+  border-color: #002A4D;
+}
+
+/* ==========================================================================
+   Tertiary/Outline Buttons
+   ========================================================================== */
+
+.wvu-btn--tertiary,
+.wvu-btn--outline,
+.wvu-cta--tertiary,
+.wvu-cta--outline {
+  background-color: transparent;
+  color: #0062A3;
+  border-color: #0062A3;
+}
+
+.wvu-btn--tertiary:hover,
+.wvu-btn--outline:hover,
+.wvu-cta--tertiary:hover,
+.wvu-cta--outline:hover {
+  background-color: #0062A3;
+  border-color: #0062A3;
+  color: #FFFFFF;
+}
+
+.wvu-btn--tertiary:active,
+.wvu-btn--outline:active,
+.wvu-cta--tertiary:active,
+.wvu-cta--outline:active {
+  background-color: #003F70;
+  border-color: #003F70;
+}
+
+/* Gold Outline Variant */
+.wvu-btn--outline-gold,
+.wvu-cta--outline-gold {
+  background-color: transparent;
+  color: #EAAA00;
+  border-color: #EAAA00;
+}
+
+.wvu-btn--outline-gold:hover,
+.wvu-cta--outline-gold:hover {
+  background-color: #EAAA00;
+  border-color: #EAAA00;
+  color: #2C2A29;
+}
+
+/* ==========================================================================
+   Text/Ghost Buttons
+   ========================================================================== */
+
+.wvu-btn--text,
+.wvu-cta--text {
+  background-color: transparent;
+  color: #0062A3;
+  border-color: transparent;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.wvu-btn--text:hover,
+.wvu-cta--text:hover {
+  background-color: rgba(0, 98, 163, 0.1);
+  color: #003F70;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   Disabled State
+   ========================================================================== */
+
+.wvu-btn:disabled,
+.wvu-btn[disabled],
+.wvu-cta:disabled,
+.wvu-cta[disabled],
+.wvu-btn--disabled,
+.wvu-cta--disabled {
+  background-color: #E4E4E4;
+  color: #999999;
+  border-color: #E4E4E4;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.wvu-btn:disabled:hover,
+.wvu-btn[disabled]:hover,
+.wvu-cta:disabled:hover,
+.wvu-cta[disabled]:hover,
+.wvu-btn--disabled:hover,
+.wvu-cta--disabled:hover {
+  background-color: #E4E4E4;
+  color: #999999;
+  border-color: #E4E4E4;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   Size Variants
+   ========================================================================== */
+
+.wvu-btn--small,
+.wvu-cta--small {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.wvu-btn--large,
+.wvu-cta--large {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+/* ==========================================================================
+   Full Width
+   ========================================================================== */
+
+.wvu-btn--full,
+.wvu-cta--full {
+  width: 100%;
+  display: flex;
+}
+
+/* ==========================================================================
+   Icon Support
+   ========================================================================== */
+
+.wvu-btn__icon,
+.wvu-cta__icon {
+  display: inline-flex;
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+.wvu-btn__icon--left,
+.wvu-cta__icon--left {
+  margin-right: 0.5rem;
+  margin-left: -0.25rem;
+}
+
+.wvu-btn__icon--right,
+.wvu-cta__icon--right {
+  margin-left: 0.5rem;
+  margin-right: -0.25rem;
+}
+
+/* Icon-only buttons */
+.wvu-btn--icon-only,
+.wvu-cta--icon-only {
+  padding: 0.75rem;
+  min-width: 2.5rem;
+  justify-content: center;
+}
+
+.wvu-btn--icon-only.wvu-btn--small,
+.wvu-cta--icon-only.wvu-cta--small {
+  padding: 0.5rem;
+  min-width: 2rem;
+}
+
+.wvu-btn--icon-only.wvu-btn--large,
+.wvu-cta--icon-only.wvu-cta--large {
+  padding: 1rem;
+  min-width: 3rem;
+}
+
+/* ==========================================================================
+   Button Groups
+   ========================================================================== */
+
+.wvu-btn-group {
+  display: inline-flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.wvu-btn-group--vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.wvu-btn-group--vertical .wvu-btn,
+.wvu-btn-group--vertical .wvu-cta {
+  width: 100%;
+}
+
+/* Connected button group (no gap) */
+.wvu-btn-group--connected {
+  gap: 0;
+}
+
+.wvu-btn-group--connected .wvu-btn,
+.wvu-btn-group--connected .wvu-cta {
+  border-radius: 0;
+}
+
+.wvu-btn-group--connected .wvu-btn:first-child,
+.wvu-btn-group--connected .wvu-cta:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.wvu-btn-group--connected .wvu-btn:last-child,
+.wvu-btn-group--connected .wvu-cta:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.wvu-btn-group--connected .wvu-btn:not(:first-child),
+.wvu-btn-group--connected .wvu-cta:not(:first-child) {
+  margin-left: -2px;
+}
+
+/* ==========================================================================
+   Loading State
+   ========================================================================== */
+
+.wvu-btn--loading,
+.wvu-cta--loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.wvu-btn--loading::after,
+.wvu-cta--loading::after {
+  content: '';
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  top: 50%;
+  left: 50%;
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: wvu-btn-spin 0.6s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes wvu-btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================================
+   Dark Background Variants
+   ========================================================================== */
+
+.wvu-btn--dark,
+.wvu-cta--dark {
+  background-color: #2C2A29;
+  color: #FFFFFF;
+  border-color: #2C2A29;
+}
+
+.wvu-btn--dark:hover,
+.wvu-cta--dark:hover {
+  background-color: #1A1918;
+  border-color: #1A1918;
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .wvu-btn--mobile-full,
+  .wvu-cta--mobile-full {
+    width: 100%;
+    display: flex;
+  }
+  
+  .wvu-btn-group {
+    width: 100%;
+  }
+  
+  .wvu-btn-group .wvu-btn,
+  .wvu-btn-group .wvu-cta {
+    flex: 1;
+  }
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .wvu-btn,
+  .wvu-cta {
+    transition: none;
+  }
+  
+  .wvu-btn:hover,
+  .wvu-cta:hover {
+    transform: none;
+  }
+  
+  .wvu-btn--loading::after,
+  .wvu-cta--loading::after {
+    animation: none;
+    border-color: currentColor;
+    border-top-color: currentColor;
+    opacity: 0.5;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .wvu-btn,
+  .wvu-cta {
+    border-width: 3px;
+  }
+}
