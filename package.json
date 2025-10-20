@@ -22,5 +22,9 @@
   "bugs": {
     "url": "https://github.com/wvutim1958-web/cvawvuaa.org/issues"
   },
-  "homepage": "https://github.com/wvutim1958-web/cvawvuaa.org#readme"
+  "homepage": "https://github.com/wvutim1958-web/cvawvuaa.org#readme",
+  "devDependencies": {
+    "csso-cli": "^4.0.2",
+    "terser": "^5.44.0"
+  }
 }
