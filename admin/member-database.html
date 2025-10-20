@@ -782,6 +782,59 @@
         </div>
     </div>
 
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="paymentModalTitle">Add Payment</h2>
+                <span class="close" onclick="closePaymentModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="paymentForm" onsubmit="savePayment(event)">
+                    <div class="form-group">
+                        <label for="paymentDate">Payment Date <span class="required">*</span></label>
+                        <input type="date" id="paymentDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expectedAmount">Expected Amount <span class="required">*</span></label>
+                        <input type="number" id="expectedAmount" step="0.01" min="0" required 
+                               placeholder="25.00" onchange="calculatePayPalFee()">
+                        <small style="color: #666;">The full amount (e.g., $25 for individual dues)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="actualReceived">Actual Received <span class="required">*</span></label>
+                        <input type="number" id="actualReceived" step="0.01" min="0" required 
+                               placeholder="24.01" onchange="calculatePayPalFee()">
+                        <small style="color: #666;">Amount after PayPal fees (e.g., $24.01)</small>
+                        <div id="paypalFeeDisplay" style="margin-top: 5px; font-weight: bold;"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method <span class="required">*</span></label>
+                        <select id="paymentMethod" required>
+                            <option value="PayPal">PayPal</option>
+                            <option value="Check">Check</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentNotes">Notes</label>
+                        <textarea id="paymentNotes" rows="3" 
+                                  placeholder="Additional notes about this payment..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closePaymentModal()">Cancel</button>
+                <button type="submit" form="paymentForm" class="btn-save">💾 Save Payment</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -789,6 +842,6 @@
     
     <!-- Application Scripts -->
     <script src="/admin/js/firebase-config.js?v=20251020-1538"></script>
-    <script src="/admin/js/member-database.js?v=20251020190000"></script>
+    <script src="/admin/js/member-database.js?v=20251020200000"></script>
 </body>
 </html>

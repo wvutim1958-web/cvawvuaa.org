@@ -384,6 +384,34 @@ function viewMemberDetails(memberId) {
     const member = allMembers.find(m => m.id === memberId);
     if (!member) return;
     
+    // Initialize payments array if not exists
+    const payments = member.payments || [];
+    
+    // Group payments by type
+    const duesPayments = payments.filter(p => p.type === 'dues');
+    const chapterDonations = payments.filter(p => p.type === 'chapter');
+    const scholarshipDonations = payments.filter(p => p.type === 'scholarship');
+    
+    // Helper function to format payment list
+    const formatPaymentList = (paymentList) => {
+        if (paymentList.length === 0) {
+            return '<p style="color: #999; font-style: italic;">No payments recorded</p>';
+        }
+        return paymentList.map(payment => {
+            const fee = payment.expectedAmount - payment.actualReceived;
+            return `
+                <div style="border-left: 3px solid #667eea; padding: 10px; margin: 10px 0; background: white;">
+                    <strong>Date:</strong> ${formatDate(payment.date)}<br>
+                    <strong>Expected:</strong> $${payment.expectedAmount.toFixed(2)}<br>
+                    <strong>Received:</strong> $${payment.actualReceived.toFixed(2)}
+                    ${fee > 0 ? `<span style="color: #c62828;"> (PayPal fee: $${fee.toFixed(2)})</span>` : ''}<br>
+                    <strong>Method:</strong> ${payment.paymentMethod}<br>
+                    ${payment.notes ? `<strong>Notes:</strong> ${escapeHtml(payment.notes)}<br>` : ''}
+                </div>
+            `;
+        }).join('');
+    };
+    
     const details = `
         <div style="font-family: 'Roboto', sans-serif; line-height: 1.8;">
             <h2 style="color: #667eea; margin-bottom: 20px;">${escapeHtml(member.name)}</h2>
@@ -393,6 +421,37 @@ function viewMemberDetails(memberId) {
                 <strong>Status:</strong> <span style="color: ${member.status === 'active' ? '#2e7d32' : '#c62828'}; font-weight: bold;">${member.status.toUpperCase()}</span><br>
                 ${member.familyMemberName ? `<strong>Family Member:</strong> ${escapeHtml(member.familyMemberName)}<br>` : ''}
                 <strong>Member Since:</strong> ${formatDate(member.dateAdded)}
+            </div>
+            
+            <h3 style="color: #666; margin-top: 25px;">
+                Payment History
+                <button onclick="openPaymentModal('${memberId}', 'dues')" style="margin-left: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    ➕ Add Payment
+                </button>
+            </h3>
+            
+            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                <h4 style="color: #667eea; margin-bottom: 10px;">💰 Dues Payments</h4>
+                ${formatPaymentList(duesPayments)}
+                <button onclick="openPaymentModal('${memberId}', 'dues')" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    ➕ Add Dues Payment
+                </button>
+            </div>
+            
+            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                <h4 style="color: #667eea; margin-bottom: 10px;">🏛️ Chapter Donations</h4>
+                ${formatPaymentList(chapterDonations)}
+                <button onclick="openPaymentModal('${memberId}', 'chapter')" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    ➕ Add Chapter Donation
+                </button>
+            </div>
+            
+            <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h4 style="color: #667eea; margin-bottom: 10px;">🎓 Scholarship Donations</h4>
+                ${formatPaymentList(scholarshipDonations)}
+                <button onclick="openPaymentModal('${memberId}', 'scholarship')" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    ➕ Add Scholarship Donation
+                </button>
             </div>
             
             <h3 style="color: #666; margin-top: 25px;">Contact Information</h3>
@@ -624,6 +683,142 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+/**
+ * Open payment modal
+ */
+function openPaymentModal(memberId, paymentType) {
+    const modal = document.getElementById('paymentModal');
+    if (!modal) {
+        console.error('Payment modal not found');
+        return;
+    }
+    
+    // Store current member and payment type
+    window.currentPaymentMemberId = memberId;
+    window.currentPaymentType = paymentType;
+    
+    // Update modal title
+    const typeLabels = {
+        'dues': 'Dues Payment',
+        'chapter': 'Chapter Donation',
+        'scholarship': 'Scholarship Donation'
+    };
+    document.getElementById('paymentModalTitle').textContent = `Add ${typeLabels[paymentType]}`;
+    
+    // Reset form
+    document.getElementById('paymentForm').reset();
+    
+    // Set default date to today
+    document.getElementById('paymentDate').valueAsDate = new Date();
+    
+    // Set expected amount based on type and member
+    const member = allMembers.find(m => m.id === memberId);
+    if (paymentType === 'dues' && member) {
+        const expectedAmount = member.membershipType === 'family' ? 40.00 : 25.00;
+        document.getElementById('expectedAmount').value = expectedAmount.toFixed(2);
+        document.getElementById('actualReceived').value = expectedAmount.toFixed(2);
+    }
+    
+    modal.style.display = 'flex';
+}
+
+/**
+ * Close payment modal
+ */
+function closePaymentModal() {
+    const modal = document.getElementById('paymentModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+    window.currentPaymentMemberId = null;
+    window.currentPaymentType = null;
+}
+
+/**
+ * Calculate PayPal fee
+ */
+function calculatePayPalFee() {
+    const expectedAmount = parseFloat(document.getElementById('expectedAmount').value) || 0;
+    const actualReceived = parseFloat(document.getElementById('actualReceived').value) || 0;
+    
+    if (expectedAmount > 0 && actualReceived > 0) {
+        const fee = expectedAmount - actualReceived;
+        const feeDisplay = document.getElementById('paypalFeeDisplay');
+        if (feeDisplay) {
+            if (fee > 0) {
+                feeDisplay.textContent = `PayPal Fee: $${fee.toFixed(2)}`;
+                feeDisplay.style.color = '#c62828';
+            } else if (fee < 0) {
+                feeDisplay.textContent = `Overpayment: $${Math.abs(fee).toFixed(2)}`;
+                feeDisplay.style.color = '#2e7d32';
+            } else {
+                feeDisplay.textContent = 'No fee';
+                feeDisplay.style.color = '#666';
+            }
+        }
+    }
+}
+
+/**
+ * Save payment
+ */
+async function savePayment(event) {
+    event.preventDefault();
+    
+    const memberId = window.currentPaymentMemberId;
+    const paymentType = window.currentPaymentType;
+    
+    if (!memberId || !paymentType) {
+        showError('Invalid payment context');
+        return;
+    }
+    
+    // Collect payment data
+    const paymentData = {
+        type: paymentType,
+        date: new Date(document.getElementById('paymentDate').value),
+        expectedAmount: parseFloat(document.getElementById('expectedAmount').value) || 0,
+        actualReceived: parseFloat(document.getElementById('actualReceived').value) || 0,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        notes: document.getElementById('paymentNotes').value.trim(),
+        recordedDate: new Date()
+    };
+    
+    try {
+        // Get current member data
+        const memberDoc = await memberDb.collection('members').doc(memberId).get();
+        if (!memberDoc.exists) {
+            throw new Error('Member not found');
+        }
+        
+        const memberData = memberDoc.data();
+        const payments = memberData.payments || [];
+        
+        // Add new payment
+        payments.push(paymentData);
+        
+        // Update member with new payment
+        await memberDb.collection('members').doc(memberId).update({
+            payments: payments,
+            lastModified: new Date()
+        });
+        
+        console.log('Payment added successfully');
+        showSuccess('Payment added successfully!');
+        
+        // Close modal and reload
+        closePaymentModal();
+        await loadMembers();
+        
+        // Re-open member details to show updated payment history
+        viewMemberDetails(memberId);
+        
+    } catch (error) {
+        console.error('Error saving payment:', error);
+        showError('Failed to save payment: ' + error.message);
+    }
 }
 
 /**
