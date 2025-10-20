@@ -15,7 +15,7 @@ let currentMemberId = null;
 let currentView = 'card';
 
 // Firebase connection (initialized by firebase-config.js)
-let db = null;
+let memberDb = null;
 
 /**
  * Initialize the application
@@ -25,7 +25,7 @@ async function init() {
     
     // Wait for Firebase to be ready
     if (typeof firebase !== 'undefined' && firebase.firestore) {
-        db = firebase.firestore();
+        memberDb = firebase.firestore();
         console.log('Firebase connected successfully');
     } else {
         console.error('Firebase not available');
@@ -49,7 +49,7 @@ async function loadMembers() {
     try {
         console.log('Loading members from Firebase...');
         
-        const snapshot = await db.collection('members')
+        const snapshot = await memberDb.collection('members')
             .orderBy('name', 'asc')
             .get();
         
@@ -348,13 +348,13 @@ async function saveMember(event) {
     try {
         if (currentMemberId) {
             // Update existing member
-            await db.collection('members').doc(currentMemberId).update(memberData);
+            await memberDb.collection('members').doc(currentMemberId).update(memberData);
             console.log('Member updated:', currentMemberId);
             showSuccess('Member updated successfully!');
         } else {
             // Add new member
             memberData.dateAdded = new Date();
-            const docRef = await db.collection('members').add(memberData);
+            const docRef = await memberDb.collection('members').add(memberData);
             console.log('New member added:', docRef.id);
             showSuccess('Member added successfully!');
         }
@@ -433,7 +433,7 @@ async function deleteMember(memberId, memberName) {
     }
     
     try {
-        await db.collection('members').doc(memberId).delete();
+        await memberDb.collection('members').doc(memberId).delete();
         console.log('Member deleted:', memberId);
         showSuccess(`${memberName} has been removed from the database.`);
         
