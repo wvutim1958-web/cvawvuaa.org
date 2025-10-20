@@ -1,5 +1,5 @@
 # Performance Test Results
-**Date:** October 20, 2025  
+**Date:** October 20, 2025 at 7:37 AM  
 **Tested By:** CVCWVUAA Web Team  
 **Testing Tool:** Google PageSpeed Insights
 
@@ -36,7 +36,7 @@
 
 | Page | Performance | Accessibility | Best Practices | SEO | Notes |
 |------|------------|---------------|----------------|-----|-------|
-| **index.html** | ___ / 100 | ___ / 100 | ___ / 100 | ___ / 100 | 10 lazy-loaded images |
+| **index.html** | 86 / 100 | 94 / 100 | 100 / 100 | 91 / 100 | 10 lazy-loaded images ✅ |
 | **scholarship.html** | ___ / 100 | ___ / 100 | ___ / 100 | ___ / 100 | 1 lazy-loaded image |
 | **programs.html** | ___ / 100 | ___ / 100 | ___ / 100 | ___ / 100 | 2 lazy-loaded images |
 | **membership.html** | ___ / 100 | ___ / 100 | ___ / 100 | ___ / 100 | 1 lazy-loaded image |

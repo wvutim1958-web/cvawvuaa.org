@@ -1,0 +1,414 @@
+/* ==========================================================================
+   CVCWVUAA Admin Hub - Optimized Stylesheet
+   ========================================================================== */
+
+/* Base Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+    margin: 0;
+    padding: 20px;
+}
+
+/* Login Screen */
+#loginScreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #002855 0%, #1e40af 100%);
+    z-index: 10000;
+}
+
+.login-box {
+    background: white;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-box h1 {
+    color: #002855;
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+}
+
+.login-box p {
+    color: #666;
+    margin: 0 0 2rem;
+    font-size: 0.9rem;
+}
+
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+}
+
+.login-box input[type="password"]:focus {
+    outline: none;
+    border-color: #002855;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #002855, #1e40af);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.login-box button:hover {
+    transform: translateY(-2px);
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    display: none;
+}
+
+/* Admin Content */
+#adminContent {
+    display: none;
+}
+
+.hub-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hub-header {
+    background: linear-gradient(135deg, #002855, #1e40af);
+    color: white;
+    padding: 3rem 2rem;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.hub-header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.hub-header p {
+    margin: 1rem 0 0;
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.main-notice {
+    background: #28a745;
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+}
+
+/* Tools Grid */
+.tools-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.main-tool {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 2.5rem 2rem;
+    border-radius: 15px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    box-shadow: 0 8px 32px rgba(40,167,69,0.3);
+    transition: transform 0.2s ease;
+    display: block;
+}
+
+.main-tool:hover {
+    transform: translateY(-5px);
+    text-decoration: none;
+    color: white;
+}
+
+.secondary-tools {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.secondary-tool {
+    background: white;
+    border: 2px solid #e9ecef;
+    padding: 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    text-align: center;
+    color: #495057;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: block;
+}
+
+.secondary-tool:hover {
+    border-color: #007bff;
+    transform: translateY(-3px);
+    text-decoration: none;
+    color: #007bff;
+    box-shadow: 0 8px 25px rgba(0,123,255,0.2);
+}
+
+.tool-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.tool-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    font-weight: normal;
+}
+
+/* Content Management Section */
+.content-section {
+    margin-top: 3rem;
+}
+
+.section-title {
+    text-align: center;
+    color: #002855;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.content-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
+}
+
+.content-card h3 {
+    color: #002855;
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+}
+
+.content-card p {
+    color: #666;
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+}
+
+.content-card .tool-links {
+    margin-bottom: 1rem;
+}
+
+/* Tool Link Buttons */
+.btn-primary {
+    display: inline-block;
+    background: #ffd100;
+    color: #002855;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #e6bc00;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    display: inline-block;
+    background: #e2e8f0;
+    color: #475569;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e1;
+    transform: translateY(-2px);
+}
+
+.btn-president {
+    display: inline-block;
+    background: linear-gradient(135deg, #002855, #1e40af);
+    color: white;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-president:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,40,85,0.3);
+}
+
+.btn-success {
+    display: inline-block;
+    background: #10b981;
+    color: white;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-success:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+.admin-footer {
+    text-align: center;
+    margin-top: 3rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Loading State */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .hub-header {
+        padding: 2rem 1rem;
+    }
+    
+    .hub-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hub-header p {
+        font-size: 1rem;
+    }
+    
+    .login-box {
+        padding: 2rem;
+    }
+    
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .secondary-tools {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Performance Optimizations */
+* {
+    box-sizing: border-box;
+}
+
+/* Reduce repaints/reflows */
+.main-tool,
+.secondary-tool,
+.btn-primary,
+.btn-secondary,
+.btn-president,
+.btn-success {
+    will-change: transform;
+}
+
+/* Use transform for animations (GPU accelerated) */
+.main-tool:hover,
+.secondary-tool:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-president:hover,
+.btn-success:hover {
+    backface-visibility: hidden;
+}

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVCWVUAA Admin Hub</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+            margin: 0;
+            padding: 20px;
+        }
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #002855 0%, #1e40af 100%);
+            z-index: 10000;
+        }
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .login-box h1 {
+            color: #002855;
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+        .login-box p {
+            color: #666;
+            margin: 0 0 2rem;
+            font-size: 0.9rem;
+        }
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 1rem;
+        }
+        .login-box input[type="password"]:focus {
+            outline: none;
+            border-color: #002855;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .login-box button:hover {
+            transform: translateY(-2px);
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        #adminContent {
+            display: none;
+        }
+        .hub-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hub-header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .hub-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .hub-header p {
+            margin: 1rem 0 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .main-notice {
+            background: #28a745;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+        }
+        .tools-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .main-tool {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            box-shadow: 0 8px 32px rgba(40,167,69,0.3);
+            transition: transform 0.2s ease;
+        }
+        .main-tool:hover {
+            transform: translateY(-5px);
+            text-decoration: none;
+            color: white;
+        }
+        .secondary-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .secondary-tool {
+            background: white;
+            border: 2px solid #e9ecef;
+            padding: 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            text-align: center;
+            color: #495057;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .secondary-tool:hover {
+            border-color: #007bff;
+            transform: translateY(-3px);
+            text-decoration: none;
+            color: #007bff;
+            box-shadow: 0 8px 25px rgba(0,123,255,0.2);
+        }
+        .tool-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .tool-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <h1>🔒 Admin Login</h1>
+            <p>Central Virginia Chapter Administration</p>
+            <input type="password" id="passwordInput" placeholder="Enter admin password" onkeypress="if(event.key==='Enter') checkPassword()">
+            <button onclick="checkPassword()">🔓 Login</button>
+            <div class="error-message" id="errorMessage">❌ Incorrect password. Please try again.</div>
+        </div>
+    </div>
+
+    <!-- Admin Content (Hidden Until Login) -->
+    <div id="adminContent">
+    <div class="hub-container">
+        <!-- Header -->
+        <div class="hub-header">
+            <h1>🏢 CVCWVUAA Admin Hub</h1>
+            <p>Central Virginia Chapter Management Center</p>
+        </div>
+
+        <!-- Main Notice -->
+        <div class="main-notice">
+            ✅ Your Complete Solution: Advanced Member Manager has EVERYTHING in one place!
+        </div>
+
+        <!-- Tools Grid -->
+        <div class="tools-grid">
+            <!-- Main Tool -->
+            <a href="advanced-member-manager.html" class="main-tool">
+                <span class="tool-icon">🏢</span>
+                <div>Complete Management Hub</div>
+                <div class="tool-subtitle">Members • Payments • Receipts • Financial Tracking • Everything!</div>
+            </a>
+
+            <!-- Secondary Tools -->
+            <div class="secondary-tools">
+                <a href="quick-fix.html" class="secondary-tool">
+                    <span class="tool-icon">🔧</span>
+                    <div>Quick Data Fix</div>
+                    <div class="tool-subtitle">Upload & sync CSV data</div>
+                </a>
+
+                <a href="receipt-generator.html" class="secondary-tool">
+                    <span class="tool-icon">🧾</span>
+                    <div>Receipt Generator</div>
+                    <div class="tool-subtitle">Standalone receipt tool</div>
+                </a>
+
+                <a href="unified-member-system.html" class="secondary-tool">
+                    <span class="tool-icon">⚙️</span>
+                    <div>System Setup</div>
+                    <div class="tool-subtitle">Configure unified system</div>
+                </a>
+            </div>
+        </div>
+
+        </div>
+
+        <!-- Content Management Tools -->
+        <div style="margin-top: 3rem;">
+            <h2 style="text-align: center; color: #002855; margin-bottom: 2rem;">📝 Content Management Tools</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+                
+                <!-- Content Management -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e9ecef;">
+                    <h3 style="color: #002855; margin: 0 0 1rem; font-size: 1.2rem;">📝 Content Management</h3>
+                    <p style="color: #666; margin: 0 0 1rem; font-size: 0.9rem;">Create, edit, and manage all website content</p>
+                    <div style="margin-bottom: 1rem;">
+                        <a href="news-manager.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📰 News & Articles</a>
+                        <a href="newsletter-manager.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📧 Newsletters</a>
+                        <a href="alumni-spotlight-manager.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">⭐ Alumni Spotlight</a>
+                        <a href="page-editor.html" style="display: inline-block; background: #e2e8f0; color: #475569; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📄 Static Pages</a>
+                    </div>
+                </div>
+
+                <!-- Presidential Dashboard -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e9ecef;">
+                    <h3 style="color: #002855; margin: 0 0 1rem; font-size: 1.2rem;">🏛️ Presidential Dashboard</h3>
+                    <p style="color: #666; margin: 0 0 1rem; font-size: 0.9rem;">Complete leadership command center</p>
+                    <div style="margin-bottom: 1rem;">
+                        <a href="president-dashboard.html" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">👑 President's Command</a>
+                        <a href="member-directory.html" target="_blank" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">👥 Member Directory</a>
+                        <a href="member-data-import.html" target="_blank" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📊 Member Database</a>
+                        <a href="csv-processor.html" target="_blank" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📂 CSV Processor</a>
+                        <a href="financial-dashboard.html" target="_blank" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">💰 Financial Dashboard</a>
+                    </div>
+                </div>
+
+                <!-- Event Management -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e9ecef;">
+                    <h3 style="color: #002855; margin: 0 0 1rem; font-size: 1.2rem;">🎉 Event Management</h3>
+                    <p style="color: #666; margin: 0 0 1rem; font-size: 0.9rem;">Schedule events, manage RSVPs, track attendance</p>
+                    <div style="margin-bottom: 1rem;">
+                        <a href="event-manager.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📅 Create Event</a>
+                        <a href="rsvp-manager.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📝 RSVP Manager</a>
+                        <a href="meeting-minutes-template.html" target="_blank" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📋 Meeting Minutes</a>
+                        <a href="attendance-reports.html" style="display: inline-block; background: #e2e8f0; color: #475569; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📊 Attendance Reports</a>
+                    </div>
+                </div>
+
+                <!-- Media & Assets -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e9ecef;">
+                    <h3 style="color: #002855; margin: 0 0 1rem; font-size: 1.2rem;">🖼️ Media & Assets</h3>
+                    <p style="color: #666; margin: 0 0 1rem; font-size: 0.9rem;">Upload, organize, and manage digital assets</p>
+                    <div style="margin-bottom: 1rem;">
+                        <a href="media-uploader.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📸 Photo Gallery</a>
+                        <a href="video-library.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">🎥 Video Library</a>
+                        <a href="file-manager.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📁 File Manager</a>
+                        <a href="asset-organization.html" style="display: inline-block; background: #e2e8f0; color: #475569; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">🗂️ Asset Organization</a>
+                    </div>
+                </div>
+
+                <!-- Email & Communications -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e9ecef;">
+                    <h3 style="color: #002855; margin: 0 0 1rem; font-size: 1.2rem;">📧 Email & Communications</h3>
+                    <p style="color: #666; margin: 0 0 1rem; font-size: 0.9rem;">Manage Mailchimp integration and campaigns</p>
+                    <div style="margin-bottom: 1rem;">
+                        <a href="email-campaign.html" style="display: inline-block; background: #10b981; color: white; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">✉️ Send Campaign</a>
+                        <a href="subscriber-lists.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📋 Subscriber Lists</a>
+                        <a href="mailchimp-config.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">🔧 Mailchimp Config</a>
+                        <a href="email-analytics.html" style="display: inline-block; background: #e2e8f0; color: #475569; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📊 Email Analytics</a>
+                    </div>
+                </div>
+
+                <!-- Website Settings -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e9ecef;">
+                    <h3 style="color: #002855; margin: 0 0 1rem; font-size: 1.2rem;">⚙️ Website Settings</h3>
+                    <p style="color: #666; margin: 0 0 1rem; font-size: 0.9rem;">Configure site-wide settings and technical configs</p>
+                    <div style="margin-bottom: 1rem;">
+                        <a href="site-settings.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">🔧 Site Settings</a>
+                        <a href="theme-manager.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">🎨 Theme Manager</a>
+                        <a href="navigation-config.html" style="display: inline-block; background: #ffd100; color: #002855; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">🧭 Navigation</a>
+                        <a href="seo-config.html" style="display: inline-block; background: #e2e8f0; color: #475569; padding: 0.5rem 1rem; margin: 0.25rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">📈 SEO Config</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 3rem; color: #666; font-size: 0.9rem;">
+            <p>✅ All your content management tools are restored! Start with the Complete Management Hub for member tools.</p>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        // Password protection
+        const ADMIN_PASSWORD = 'T58C62';
+        
+        // Check if already logged in (session storage)
+        if (sessionStorage.getItem('adminAuth') === 'true') {
+            showAdminContent();
+        }
+        
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (input.value === ADMIN_PASSWORD) {
+                // Correct password
+                sessionStorage.setItem('adminAuth', 'true');
+                showAdminContent();
+            } else {
+                // Wrong password
+                errorMsg.style.display = 'block';
+                input.value = '';
+                input.focus();
+                
+                // Shake animation
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+            }
+        }
+        
+        function showAdminContent() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
+        }
+    </script>
+
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</body>
+</html>

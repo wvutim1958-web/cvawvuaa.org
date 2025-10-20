@@ -1,0 +1,22 @@
+🚀 QUICK START PERFORMANCE TESTING
+===================================
+
+Copy these URLs and test at: https://pagespeed.web.dev/
+
+1. Homepage: https://cvawvuaa.org/index.html
+2. Scholarship: https://cvawvuaa.org/scholarship.html
+3. Programs: https://cvawvuaa.org/programs.html
+4. Membership: https://cvawvuaa.org/membership.html
+5. Events: https://cvawvuaa.org/events.html
+6. About: https://cvawvuaa.org/about.html
+
+Record results in: docs/performance-test-results-template.md
+
+Target Scores:
+- Mobile: 80+ Performance
+- Desktop: 90+ Performance
+- LCP: < 2.5s (mobile)
+- CLS: < 0.1
+
+Look for: "Defer offscreen images" ✅ PASS on lazy-loaded pages!
+
