@@ -102,7 +102,7 @@
     <div id="recipient-grid" class="grid grid-2" style="gap:12px"></div>
     <div id="recipient-note" class="small" style="color:#8a5300"></div>
   </section>
-  <img src="/assets/photos/wvu-9.avif" alt="Mountaineer statue" style="width:100%;max-width:420px;border-radius:12px;margin:16px auto;display:block"/>
+  <img data-src="/assets/photos/wvu-9.avif" loading="lazy" alt="Mountaineer statue" style="width:100%;max-width:420px;border-radius:12px;margin:16px auto;display:block"/>
 </div></main>
 
   <!-- Footer Component -->
@@ -137,5 +137,16 @@
 <!-- WVU Component Loaders -->
 <script src="/includes/component-loader.min.js"></script>
 <script src="/js/wvu-breadcrumbs.min.js"></script>
+  <!-- Performance Resource Hints -->
+  <link rel="dns-prefetch" href="//fast.fonts.net">
+  <link rel="dns-prefetch" href="//www.facebook.com">
+  <link rel="dns-prefetch" href="//platform.twitter.com">
+  <link rel="dns-prefetch" href="//www.instagram.com">
+  <link rel="dns-prefetch" href="//www.linkedin.com">
+  <link rel="dns-prefetch" href="//www.youtube.com">
+  <link rel="preconnect" href="https://fast.fonts.net" crossorigin>
+  <link rel="prefetch" href="/events.html">
+  <link rel="prefetch" href="/membership.html">
+
 </body>
 </html>
