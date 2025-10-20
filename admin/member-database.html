@@ -784,7 +784,7 @@
 
     <!-- Payment Modal -->
     <div id="paymentModal" class="modal">
-        <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-content" style="max-width: 550px;">
             <div class="modal-header">
                 <h2 id="paymentModalTitle">Add Payment</h2>
                 <span class="close" onclick="closePaymentModal()">&times;</span>
@@ -799,8 +799,8 @@
                     <div class="form-group">
                         <label for="expectedAmount">Expected Amount <span class="required">*</span></label>
                         <input type="number" id="expectedAmount" step="0.01" min="0" required 
-                               placeholder="25.00" onchange="calculatePayPalFee()">
-                        <small style="color: #666;">The full amount (e.g., $25 for individual dues)</small>
+                               placeholder="25.00" onchange="calculatePayPalFee(); checkMembershipUpgrade();">
+                        <small style="color: #666;">The full amount (e.g., $25 for individual, $40 for family)</small>
                     </div>
 
                     <div class="form-group">
@@ -819,6 +819,22 @@
                             <option value="Cash">Cash</option>
                             <option value="Other">Other</option>
                         </select>
+                    </div>
+
+                    <!-- Membership Upgrade Section (shown for dues payments with $40 amount) -->
+                    <div id="membershipUpgradeSection" style="display: none; background: #e8eaf6; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                        <h4 style="color: #667eea; margin: 0 0 10px 0;">👨‍👩‍👧‍👦 Upgrade to Family Membership</h4>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label for="upgradeMembershipType">
+                                <input type="checkbox" id="upgradeMembershipType" onchange="toggleFamilyNameInPayment()">
+                                Convert to Family Membership ($40)
+                            </label>
+                        </div>
+                        <div id="familyNameInPaymentGroup" style="display: none;">
+                            <label for="familyNameInPayment">Family Member Name</label>
+                            <input type="text" id="familyNameInPayment" placeholder="Spouse or family member name">
+                            <small style="color: #666;">Add family member name for family membership</small>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -842,6 +858,6 @@
     
     <!-- Application Scripts -->
     <script src="/admin/js/firebase-config.js?v=20251020-1538"></script>
-    <script src="/admin/js/member-database.js?v=20251020210030"></script>
+    <script src="/admin/js/member-database.js?v=20251020211500"></script>
 </body>
 </html>

@@ -749,6 +749,41 @@ function closePaymentModal() {
 }
 
 /**
+ * Check if membership upgrade section should be shown
+ */
+function checkMembershipUpgrade() {
+    const paymentType = window.currentPaymentType;
+    const expectedAmount = parseFloat(document.getElementById('expectedAmount').value) || 0;
+    const upgradeSection = document.getElementById('membershipUpgradeSection');
+    
+    // Only show upgrade option for dues payments with $40 amount
+    if (paymentType === 'dues' && expectedAmount >= 39 && expectedAmount <= 41) {
+        // Check if member is currently individual
+        const memberId = window.currentPaymentMemberId;
+        const member = allMembers.find(m => m.id === memberId);
+        if (member && member.membershipType === 'individual') {
+            upgradeSection.style.display = 'block';
+        } else {
+            upgradeSection.style.display = 'none';
+        }
+    } else {
+        upgradeSection.style.display = 'none';
+    }
+}
+
+/**
+ * Toggle family name field in payment modal
+ */
+function toggleFamilyNameInPayment() {
+    const checkbox = document.getElementById('upgradeMembershipType');
+    const familyNameGroup = document.getElementById('familyNameInPaymentGroup');
+    
+    if (checkbox && familyNameGroup) {
+        familyNameGroup.style.display = checkbox.checked ? 'block' : 'none';
+    }
+}
+
+/**
  * Calculate PayPal fee
  */
 function calculatePayPalFee() {
@@ -798,6 +833,11 @@ async function savePayment(event) {
         recordedDate: new Date()
     };
     
+    // Check if membership upgrade is requested
+    const upgradeCheckbox = document.getElementById('upgradeMembershipType');
+    const shouldUpgrade = upgradeCheckbox && upgradeCheckbox.checked;
+    const familyMemberName = shouldUpgrade ? document.getElementById('familyNameInPayment').value.trim() : '';
+    
     try {
         // Get current member data
         const memberDoc = await memberDb.collection('members').doc(memberId).get();
@@ -811,14 +851,28 @@ async function savePayment(event) {
         // Add new payment
         payments.push(paymentData);
         
-        // Update member with new payment
-        await memberDb.collection('members').doc(memberId).update({
+        // Prepare update data
+        const updateData = {
             payments: payments,
             lastModified: new Date()
-        });
+        };
+        
+        // If upgrading to family membership, update membership type and family member name
+        if (shouldUpgrade) {
+            updateData.membershipType = 'family';
+            updateData.familyMemberName = familyMemberName;
+            console.log('Upgrading member to family membership with family member:', familyMemberName);
+        }
+        
+        // Update member with new payment (and potentially upgrade)
+        await memberDb.collection('members').doc(memberId).update(updateData);
         
         console.log('Payment added successfully');
-        showSuccess('Payment added successfully!');
+        if (shouldUpgrade) {
+            showSuccess('Payment added and membership upgraded to Family!');
+        } else {
+            showSuccess('Payment added successfully!');
+        }
         
         // Close modal and reload
         closePaymentModal();
