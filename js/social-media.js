@@ -39,54 +39,8 @@ class SocialMediaManager {
     const socialContainer = document.querySelector('.social-links');
     if (!socialContainer) return;
 
-    // Build links only for active accounts
-    let linksHTML = '';
-    
-    if (SOCIAL_CONFIG.accounts.facebook) {
-      linksHTML += `
-        <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener" class="social-link facebook" aria-label="Follow us on Facebook">
-          Facebook
-        </a>`;
-    }
-    
-    if (SOCIAL_CONFIG.accounts.twitter) {
-      linksHTML += `
-        <a href="${SOCIAL_CONFIG.accounts.twitter}" target="_blank" rel="noopener" class="social-link twitter" aria-label="Follow us on Twitter">
-          Twitter
-        </a>`;
-    }
-    
-    if (SOCIAL_CONFIG.accounts.instagram) {
-      linksHTML += `
-        <a href="${SOCIAL_CONFIG.accounts.instagram}" target="_blank" rel="noopener" class="social-link instagram" aria-label="Follow us on Instagram">
-          Instagram
-        </a>`;
-    }
-    
-    if (SOCIAL_CONFIG.accounts.linkedin) {
-      linksHTML += `
-        <a href="${SOCIAL_CONFIG.accounts.linkedin}" target="_blank" rel="noopener" class="social-link linkedin" aria-label="Follow us on LinkedIn">
-          LinkedIn
-        </a>`;
-    }
-    
-    if (SOCIAL_CONFIG.accounts.youtube) {
-      linksHTML += `
-        <a href="${SOCIAL_CONFIG.accounts.youtube}" target="_blank" rel="noopener" class="social-link youtube" aria-label="Subscribe to our YouTube">
-          YouTube
-        </a>`;
-    }
-
-    const socialHTML = `
-      <div class="social-media-links">
-        <h3>Follow Us</h3>
-        <div class="social-icons">
-          ${linksHTML}
-        </div>
-      </div>
-    `;
-    
-    socialContainer.innerHTML = socialHTML;
+    // Hide this section - we'll use the Connect With Us cards instead
+    socialContainer.style.display = 'none';
   }
 
   // Create sharing buttons for current page
