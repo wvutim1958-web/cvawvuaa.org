@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WVU Design System Test Page • CVCWVUAA</title>
+  <meta name="theme-color" content="#EEAA00">
+  
+  <!-- WVU Brand Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/wvu-components.css">
+</head>
+<body>
+
+<!-- Skip to main content link for accessibility -->
+<a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+<!-- WVU Masthead -->
+<div id="masthead-container"></div>
+
+<!-- WVU Primary Navigation -->
+<div id="nav-container"></div>
+
+<!-- Main Content -->
+<main id="main-content">
+  <div style="max-width: 1400px; margin: 0 auto; padding: 3rem 1rem;">
+    <h1 style="color: #002855; font-family: 'Roboto Condensed', sans-serif; font-weight: 900; font-size: 2.5rem; margin-bottom: 1rem;">
+      WVU Design System Components - Test Page
+    </h1>
+    
+    <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem;">
+      This page demonstrates the new WVU Design System components for the Central Virginia WVU Alumni Chapter website.
+    </p>
+    
+    <section style="margin-bottom: 3rem;">
+      <h2 style="color: #002855; font-family: 'Roboto Condensed', sans-serif; font-weight: 700; font-size: 1.875rem; margin-bottom: 1rem;">
+        ✅ Implemented Components
+      </h2>
+      
+      <ul style="line-height: 2;">
+        <li><strong>Masthead:</strong> WVU logo lockup with "Central Virginia Alumni Chapter" branding</li>
+        <li><strong>Primary Navigation:</strong> Accessible navigation with dropdown menus and mobile hamburger</li>
+        <li><strong>Global Footer:</strong> Required legal links, WVU resources, and contact information</li>
+      </ul>
+    </section>
+    
+    <section style="margin-bottom: 3rem;">
+      <h2 style="color: #002855; font-family: 'Roboto Condensed', sans-serif; font-weight: 700; font-size: 1.875rem; margin-bottom: 1rem;">
+        🎨 Design Tokens
+      </h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div style="padding: 1rem; background-color: #002855; color: white; border-radius: 4px;">
+          <strong>WVU Blue</strong><br>
+          #002855
+        </div>
+        <div style="padding: 1rem; background-color: #EEAA00; color: #002855; border-radius: 4px;">
+          <strong>WVU Gold</strong><br>
+          #EEAA00
+        </div>
+        <div style="padding: 1rem; background-color: #2C2A29; color: white; border-radius: 4px;">
+          <strong>Dark Gray</strong><br>
+          #2C2A29
+        </div>
+      </div>
+    </section>
+    
+    <section style="margin-bottom: 3rem;">
+      <h2 style="color: #002855; font-family: 'Roboto Condensed', sans-serif; font-weight: 700; font-size: 1.875rem; margin-bottom: 1rem;">
+        📋 Testing Instructions
+      </h2>
+      
+      <ol style="line-height: 2;">
+        <li><strong>Masthead:</strong> Verify WVU logo displays correctly and "Join Us" / "Donate" buttons work</li>
+        <li><strong>Navigation:</strong> Test all menu items and dropdown menus (About, News)</li>
+        <li><strong>Mobile:</strong> Resize browser to < 992px and test hamburger menu</li>
+        <li><strong>Keyboard:</strong> Tab through navigation and test Enter/Space on links</li>
+        <li><strong>Footer:</strong> Verify all legal links open correctly</li>
+      </ol>
+    </section>
+    
+    <section>
+      <h2 style="color: #002855; font-family: 'Roboto Condensed', sans-serif; font-weight: 700; font-size: 1.875rem; margin-bottom: 1rem;">
+        ♿ Accessibility Features
+      </h2>
+      
+      <ul style="line-height: 2;">
+        <li>✅ Skip to main content link</li>
+        <li>✅ ARIA labels on navigation</li>
+        <li>✅ Keyboard navigation support</li>
+        <li>✅ Color contrast meets WCAG 2.1 AA</li>
+        <li>✅ Screen reader friendly</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<!-- WVU Footer -->
+<div id="footer-container"></div>
+
+<!-- Load component HTML via JavaScript -->
+<script>
+  // Load Masthead
+  fetch('/includes/masthead.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('masthead-container').innerHTML = html;
+    });
+  
+  // Load Navigation
+  fetch('/includes/navigation.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('nav-container').innerHTML = html;
+      // Load navigation JavaScript after HTML is inserted
+      const script = document.createElement('script');
+      script.src = '/js/wvu-navigation.js';
+      document.body.appendChild(script);
+    });
+  
+  // Load Footer
+  fetch('/includes/footer.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('footer-container').innerHTML = html;
+    });
+</script>
+
+<!-- Theme toggle (if needed) -->
+<script src="/js/theme-toggle.js"></script>
+
+</body>
+</html>
