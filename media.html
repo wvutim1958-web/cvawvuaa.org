@@ -3,15 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#EEAA00">
   <title>CVCWVUAA • Media Uploads</title>
-    <!-- WVU Official Fonts -->
-  <link rel="preconnect" href="https://cdn.fonts.net">
-  <link href="https://cdn.fonts.net/kit/b339d500-35c3-11ed-aaf7-06b70d83f6b0/b339d500-35c3-11ed-aaf7-06b70d83f6b0.css" rel="stylesheet">
-
   <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="/css/wvu-components.css">
-  <link rel="stylesheet" href="/css/wvu-breadcrumbs.css">
   <style>
     .gallery-grid { display:grid; gap:16px; grid-template-columns:1fr; }
     @media (min-width:780px) { .gallery-grid { grid-template-columns:1fr 1fr 1fr; } }
@@ -23,16 +16,57 @@
 </head>
 <body>
 
-<!-- Skip to main content for accessibility -->
-<a href="#main-content" class="skip-to-main">Skip to main content</a>
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
 
-    <div id="wvu-masthead"></div>
-    <div id="wvu-navigation"></div>
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
 
-    <!-- Breadcrumb Navigation -->
-    <div id="wvu-breadcrumbs"></div>
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
 
-    <main id="main-content">
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">🔍</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+    </nav>
+  </div>
+</header>
+
+<main><div class="wrapper">
 
   <h2>Share Your Photos</h2>
   <p class="small">
@@ -79,7 +113,10 @@
     </label>
 
     <label>Message (optional) <textarea name="Message" rows="3" placeholder="Anything we should know?"></textarea></label>
-    <button class="btn" type="submit">Send ZIP</button>
+    <button class="wvu-cta wvu-cta--primary" type="submit">
+      <span class="wvu-cta__icon wvu-cta__icon--left">📦</span>
+      Send ZIP
+    </button>
   </form>
 
   <h2 style="margin-top:28px">Chapter Gallery</h2>
@@ -87,11 +124,132 @@
 
 </div></main>
 
-  <!-- Footer Component -->
-    <div id="wvu-footer"></div>
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
 
-<!-- WVU Component Loaders -->
-<script src="/includes/component-loader.js"></script>
-<script src="/js/wvu-breadcrumbs.js"></script>
+<script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+
+<script>
+// Gallery loader
+(async function () {
+  const grid = document.getElementById('gallery-grid');
+
+  function note(html, color="#8a5300"){
+    const msg = document.createElement('div');
+    msg.className = 'card';
+    msg.style.padding = '12px';
+    msg.innerHTML = `<div class="small" style="color:${color}">${html}</div>`;
+    grid && grid.prepend(msg);
+  }
+
+  async function loadJSON() {
+    const urls = ['content/gallery.json', '/content/gallery.json'];
+    for (const u of urls) {
+      try {
+        const r = await fetch(u, { cache: 'no-store' });
+        if (r.ok) return await r.json();
+      } catch {}
+    }
+    throw new Error('Unable to load gallery.json');
+  }
+
+  function norm(src) { return src && src.startsWith('/') ? src : src; }
+
+  function cardFor(item){
+    const fig = document.createElement('figure');
+    fig.className = 'card';
+    if(item.type === 'video'){
+      const v = document.createElement('video');
+      v.controls = true; v.playsInline = true; v.preload = "metadata";
+      v.style.cssText = 'width:100%;height:220px;object-fit:cover';
+      if(item.poster) v.poster = norm(item.poster);
+      const source = document.createElement('source');
+      source.src = norm(item.src);
+      source.type = 'video/mp4';
+      v.appendChild(source);
+      fig.appendChild(v);
+    } else {
+      const img = document.createElement('img');
+      img.src = norm(item.src);
+      img.alt = item.alt || '';
+      fig.appendChild(img);
+    }
+    const cap = document.createElement('figcaption');
+    const meta = [item.credit || '', item.date || ''].filter(Boolean).join(' • ');
+    cap.innerHTML = `<div><strong>${item.caption || ''}</strong></div>
+                     <div class="small" style="color:#5b6777">${meta}</div>`;
+    fig.appendChild(cap);
+    return fig;
+  }
+
+  try{
+    const items = await loadJSON();
+    if(!Array.isArray(items) || !items.length){
+      note('No media yet. Add entries in <code>content/gallery.json</code>.');
+      return;
+    }
+    grid.innerHTML = '';
+    items.forEach(it => grid.appendChild(cardFor(it)));
+  }catch(e){
+    console.error(e);
+    note('Gallery load error. Make sure <code>content/gallery.json</code> exists and images are uploaded.');
+  }
+})();
+</script>
+<script>
+  // Mobile: open/close main nav
+  (function(){
+    const navBtn = document.querySelector('.nav-toggle');
+    const nav = document.getElementById('site-nav');
+    if (navBtn && nav) {
+      navBtn.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+    // Mobile: tap to open dropdowns
+    document.querySelectorAll('.menu.dropdown').forEach(menu => {
+      const btn = menu.querySelector('.dropbtn');
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          if (window.matchMedia('(max-width: 900px)').matches) {
+            e.preventDefault();
+            menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
+          }
+        });
+      }
+    });
+
+    // Theme toggle functionality
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (themeToggle) {
+      // Load saved theme or default to light
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+      
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      });
+    }
+  })();
+</script>
+
 </body>
 </html>
