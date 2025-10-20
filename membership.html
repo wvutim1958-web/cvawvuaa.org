@@ -14,6 +14,7 @@
   gtag('config', 'G-G14Q10H6Y2');
 </script>
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/lazy-loading.css">
 </head><body>
 
 <header class="site">
@@ -68,7 +69,7 @@
 </header>
 
 <main><div class="wrapper">
-  <img class="natural" src="/assets/photos/550539255_10163868473745295_3650245405852649566_n.jpg" alt="Membership Banner">
+  <img class="natural" data-src="/assets/photos/550539255_10163868473745295_3650245405852649566_n.jpg" loading="lazy" alt="Membership Banner">
   <h1>Membership 2025–2026</h1>
   <p class="small">Annual dues: <strong>$25 per member</strong> and <strong>$15 per family member</strong>. After submitting, you’ll be redirected to pay online or you can pay by mail.</p>
 
@@ -166,5 +167,8 @@
     });
   }
 </script>
+
+<script src="/js/lazy-loading.js"></script>
+<script>if(window.LazyLoader){window.LazyLoader.init();}</script>
 
 </body></html>
