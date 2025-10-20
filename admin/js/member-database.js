@@ -425,7 +425,7 @@ function viewMemberDetails(memberId) {
             
             <h3 style="color: #666; margin-top: 25px;">
                 Payment History
-                <button onclick="openPaymentModal('${memberId}', 'dues')" style="margin-left: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                <button class="add-payment-btn" data-member-id="${memberId}" data-payment-type="dues" style="margin-left: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
                     ➕ Add Payment
                 </button>
             </h3>
@@ -433,7 +433,7 @@ function viewMemberDetails(memberId) {
             <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                 <h4 style="color: #667eea; margin-bottom: 10px;">💰 Dues Payments</h4>
                 ${formatPaymentList(duesPayments)}
-                <button onclick="openPaymentModal('${memberId}', 'dues')" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                <button class="add-payment-btn" data-member-id="${memberId}" data-payment-type="dues" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
                     ➕ Add Dues Payment
                 </button>
             </div>
@@ -441,7 +441,7 @@ function viewMemberDetails(memberId) {
             <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                 <h4 style="color: #667eea; margin-bottom: 10px;">🏛️ Chapter Donations</h4>
                 ${formatPaymentList(chapterDonations)}
-                <button onclick="openPaymentModal('${memberId}', 'chapter')" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                <button class="add-payment-btn" data-member-id="${memberId}" data-payment-type="chapter" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
                     ➕ Add Chapter Donation
                 </button>
             </div>
@@ -449,7 +449,7 @@ function viewMemberDetails(memberId) {
             <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                 <h4 style="color: #667eea; margin-bottom: 10px;">🎓 Scholarship Donations</h4>
                 ${formatPaymentList(scholarshipDonations)}
-                <button onclick="openPaymentModal('${memberId}', 'scholarship')" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                <button class="add-payment-btn" data-member-id="${memberId}" data-payment-type="scholarship" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
                     ➕ Add Scholarship Donation
                 </button>
             </div>
@@ -481,6 +481,18 @@ function viewMemberDetails(memberId) {
     `;
     
     showDialog('Member Details', details);
+    
+    // Attach event listeners to payment buttons after dialog is created
+    setTimeout(() => {
+        const paymentButtons = document.querySelectorAll('.add-payment-btn');
+        paymentButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const memberId = this.getAttribute('data-member-id');
+                const paymentType = this.getAttribute('data-payment-type');
+                openPaymentModal(memberId, paymentType);
+            });
+        });
+    }, 100);
 }
 
 /**
