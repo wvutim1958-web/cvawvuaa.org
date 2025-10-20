@@ -76,54 +76,11 @@
     </div>
   </main>
 
-  <!-- FOOTER (match your current footer markup) -->
+  <!-- Footer Component -->
     <div id="wvu-footer"></div>
 
-<script>
-  // year stamp
-  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
-<script>
-  // Load spotlight entries from JSON
-  (async function(){
-    try {
-      const res = await fetch('/content/spotlight.json', {cache:'no-store'});
-      if(!res.ok) throw new Error('missing spotlight.json');
-      const items = await res.json();
-      const grid = document.getElementById('spot-grid');
-      if(!Array.isArray(items) || items.length === 0){
-        document.getElementById('spot-empty').style.display = 'block';
-        return;
-      }
-      items.forEach(s => {
-        const card = document.createElement('article');
-        card.className = 'card spot-card';
-        if(s.image){
-          const img = document.createElement('img');
-          img.src = s.image; img.alt = s.alt || s.name || 'Alumni spotlight photo';
-          img.loading = 'lazy';
-          card.appendChild(img);
-        }
-        const h3 = document.createElement('h3');
-        h3.textContent = s.title || s.name || 'Alumni Spotlight';
-        const meta = document.createElement('div');
-        meta.className = 'spot-meta';
-        meta.textContent = s.meta || '';
-        const p = document.createElement('p');
-        p.textContent = s.text || '';
-        card.appendChild(h3);
-        if(meta.textContent) card.appendChild(meta);
-        if(p.textContent) card.appendChild(p);
-        grid.appendChild(card);
-      });
-    } catch(e){
-      document.getElementById('spot-empty').style.display = 'block';
-    }
-  })();
-</script>
-<script>
-
-    <script src="/includes/component-loader.js"></script>
-    <script src="/js/wvu-breadcrumbs.js"></script>
+<!-- WVU Component Loaders -->
+<script src="/includes/component-loader.js"></script>
+<script src="/js/wvu-breadcrumbs.js"></script>
 </body>
 </html>

@@ -87,83 +87,11 @@
 
 </div></main>
 
+  <!-- Footer Component -->
     <div id="wvu-footer"></div>
 
-<script>
-  // year stamp
-  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
-
-<script>
-// Gallery loader
-(async function () {
-  const grid = document.getElementById('gallery-grid');
-
-  function note(html, color="#8a5300"){
-    const msg = document.createElement('div');
-    msg.className = 'card';
-    msg.style.padding = '12px';
-    msg.innerHTML = `<div class="small" style="color:${color}">${html}</div>`;
-    grid && grid.prepend(msg);
-  }
-
-  async function loadJSON() {
-    const urls = ['content/gallery.json', '/content/gallery.json'];
-    for (const u of urls) {
-      try {
-        const r = await fetch(u, { cache: 'no-store' });
-        if (r.ok) return await r.json();
-      } catch {}
-    }
-    throw new Error('Unable to load gallery.json');
-  }
-
-  function norm(src) { return src && src.startsWith('/') ? src : src; }
-
-  function cardFor(item){
-    const fig = document.createElement('figure');
-    fig.className = 'card';
-    if(item.type === 'video'){
-      const v = document.createElement('video');
-      v.controls = true; v.playsInline = true; v.preload = "metadata";
-      v.style.cssText = 'width:100%;height:220px;object-fit:cover';
-      if(item.poster) v.poster = norm(item.poster);
-      const source = document.createElement('source');
-      source.src = norm(item.src);
-      source.type = 'video/mp4';
-      v.appendChild(source);
-      fig.appendChild(v);
-    } else {
-      const img = document.createElement('img');
-      img.src = norm(item.src);
-      img.alt = item.alt || '';
-      fig.appendChild(img);
-    }
-    const cap = document.createElement('figcaption');
-    const meta = [item.credit || '', item.date || ''].filter(Boolean).join(' • ');
-    cap.innerHTML = `<div><strong>${item.caption || ''}</strong></div>
-                     <div class="small" style="color:#5b6777">${meta}</div>`;
-    fig.appendChild(cap);
-    return fig;
-  }
-
-  try{
-    const items = await loadJSON();
-    if(!Array.isArray(items) || !items.length){
-      note('No media yet. Add entries in <code>content/gallery.json</code>.');
-      return;
-    }
-    grid.innerHTML = '';
-    items.forEach(it => grid.appendChild(cardFor(it)));
-  }catch(e){
-    console.error(e);
-    note('Gallery load error. Make sure <code>content/gallery.json</code> exists and images are uploaded.');
-  }
-})();
-</script>
-<script>
-
-    <script src="/includes/component-loader.js"></script>
-    <script src="/js/wvu-breadcrumbs.js"></script>
+<!-- WVU Component Loaders -->
+<script src="/includes/component-loader.js"></script>
+<script src="/js/wvu-breadcrumbs.js"></script>
 </body>
 </html>

@@ -84,39 +84,11 @@
 
 </div></main>
 
+  <!-- Footer Component -->
     <div id="wvu-footer"></div>
 
-<script>
-  // year stamp
-  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
-<script>
-
-<!-- Social Media Integration -->
-<script src="/js/social-media.js"></script>
-<script>
-  // Initialize social media when page loads
-  document.addEventListener('DOMContentLoaded', () => {
-    // Load social account URLs and update links
-    const savedAccounts = localStorage.getItem('cvcwvuaa-social-accounts');
-    if (savedAccounts) {
-      const accounts = JSON.parse(savedAccounts);
-      const socialLinks = document.querySelectorAll('.social-link');
-      socialLinks.forEach(link => {
-        if (link.classList.contains('facebook') && accounts.facebook) {
-          link.href = accounts.facebook;
-        } else if (link.classList.contains('twitter') && accounts.twitter) {
-          link.href = accounts.twitter;
-        } else if (link.classList.contains('instagram') && accounts.instagram) {
-          link.href = accounts.instagram;
-        } else if (link.classList.contains('linkedin') && accounts.linkedin) {
-          link.href = accounts.linkedin;
-        }
-      });
-    }
-  });
-</script>
-
-    <script src="/includes/component-loader.js"></script>
-    <script src="/js/wvu-breadcrumbs.js"></script>
-</body></html>
+<!-- WVU Component Loaders -->
+<script src="/includes/component-loader.js"></script>
+<script src="/js/wvu-breadcrumbs.js"></script>
+</body>
+</html>
