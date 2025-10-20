@@ -64,7 +64,7 @@
 }
 
 .wvu-masthead__title {
-  font-family: 'Roboto Condensed', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'NeueHelvetica75Bold', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 700;
   font-size: 1.25rem;
   line-height: 1.2;
@@ -147,7 +147,7 @@
   padding: 1rem;
   cursor: pointer;
   font-size: 1rem;
-  font-family: 'Roboto Condensed', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'NeueHelvetica97CondensedBlack', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .wvu-site-nav__toggle:hover {
@@ -220,7 +220,7 @@
   padding: 0.75rem 1rem;
   color: var(--wvu-white);
   text-decoration: none;
-  font-family: 'Roboto Condensed', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'NeueHelvetica97CondensedBlack', 'Helvetica Neue', Arial, sans-serif;
   font-size: 1rem;
   transition: background-color 0.2s;
 }
@@ -310,7 +310,7 @@
   background-color: var(--wvu-dark-gray);
   color: var(--wvu-neutral-75);
   padding: 3rem 0 2rem;
-  font-family: 'Roboto Condensed', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'NeueHelvetica97CondensedBlack', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .wvu-footer__container {
