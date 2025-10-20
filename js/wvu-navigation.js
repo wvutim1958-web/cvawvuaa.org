@@ -48,42 +48,44 @@
   });
   
   // Keyboard navigation support
-  document.addEventListener('keydown', function(e) {
-    // Escape key closes menus
-    if (e.key === 'Escape') {
-      // Close mobile menu
-      if (navToggle && navItems && navItems.classList.contains('open')) {
-        navToggle.click();
+  const navLinks = document.querySelectorAll('.wvu-site-nav__menu a');
+  
+  navLinks.forEach(function(link) {
+    link.addEventListener('keydown', function(e) {
+      const parent = this.parentElement;
+      const submenu = parent.querySelector('.wvu-site-nav__sub-menu');
+      
+      // Enter or Space on parent link opens submenu
+      if (submenu && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        parent.classList.toggle('open');
+        
+        // Focus first submenu item when opening
+        if (parent.classList.contains('open')) {
+          const firstSubmenuLink = submenu.querySelector('a');
+          if (firstSubmenuLink) {
+            firstSubmenuLink.focus();
+          }
+        }
       }
       
-      // Close dropdown menus
-      dropdownParents.forEach(function(parent) {
-        parent.classList.remove('open');
+      // Escape closes submenu
+      if (e.key === 'Escape') {
+        const openParent = this.closest('.wvu-site-nav__menu-item-has-children.open');
+        if (openParent) {
+          openParent.classList.remove('open');
+          openParent.querySelector('a').focus();
+        }
+      }
+    });
+  });
+  
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.wvu-site-nav')) {
+      document.querySelectorAll('.wvu-site-nav__menu-item-has-children.open').forEach(function(item) {
+        item.classList.remove('open');
       });
     }
   });
-  
-  // Close mobile menu when clicking outside
-  document.addEventListener('click', function(e) {
-    if (navItems && navItems.classList.contains('open')) {
-      if (!e.target.closest('.wvu-site-nav')) {
-        navToggle.click();
-      }
-    }
-  });
-  
-  // Handle window resize - close mobile menu if opened when resizing to desktop
-  let resizeTimer;
-  window.addEventListener('resize', function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-      if (window.innerWidth >= 992 && navItems && navItems.classList.contains('open')) {
-        navItems.classList.remove('open');
-        if (navToggle) {
-          navToggle.setAttribute('aria-expanded', 'false');
-        }
-      }
-    }, 250);
-  });
-  
 })();
