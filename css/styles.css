@@ -1,36 +1,60 @@
 :root{
-  --wvu-blue:#002855; --wvu-gold:#ffd100;
-  --ink:#0b2545; --muted:#5b6777; --bg:#f7f9fc;
+  /* WVU Primary Colors (Web-Optimized) */
+  --wvu-gold: #EEAA00; /* Official WVU Gold (web-optimized) */
+  --wvu-blue: #002855; /* Official WVU Blue */
   
-  /* Light theme (default) */
-  --bg-primary: #f7f9fc;
+  /* WVU Secondary Colors */
+  --star-city-blue: #9DDAE6;
+  --safety-blue: #0062A3;
+  --canary: #F7DD63;
+  --sunset: #F58672;
+  --woodburn: #8D4638;
+  --hemlock: #6A724F;
+  --wild-flour: #F2E6C2;
+  --buckskin: #B3A169;
+  --old-gold: #7F6310;
+  
+  /* WVU Neutral Colors */
+  --rattler-gray: #554741;
+  --coopers-gray: #BEB7B3;
+  --seneca-gray: #988E8B;
+  --coal: #1C2B39;
+  --not-quite-white: #F7F7F7;
+  
+  /* Light theme (default) - Using WVU neutrals */
+  --bg-primary: var(--not-quite-white);
   --bg-secondary: #ffffff;
-  --text-primary: #111111;
-  --text-secondary: #5b6777;
-  --text-muted: #999999;
+  --text-primary: var(--coal);
+  --text-secondary: var(--seneca-gray);
+  --text-muted: var(--coopers-gray);
   --border-color: #e6e9ef;
   --border-light: #f0f0f0;
   --card-bg: #ffffff;
-  --header-bg: linear-gradient(180deg,#0f3465 0%,#002855 100%);
-  --footer-bg: #123e7a;
+  --header-bg: linear-gradient(180deg, #0f3465 0%, var(--wvu-blue) 100%);
+  --footer-bg: var(--wvu-blue);
+  
+  /* Legacy support - gradually remove these */
+  --ink: var(--coal);
+  --muted: var(--seneca-gray);
+  --bg: var(--not-quite-white);
 }
 
 /* Dark theme */
 [data-theme="dark"] {
   --bg-primary: #0f1419;
   --bg-secondary: #1a1f2e;
-  --text-primary: #e6e9ef;
-  --text-secondary: #a8b2c4;
-  --text-muted: #6b7583;
+  --text-primary: var(--not-quite-white);
+  --text-secondary: var(--coopers-gray);
+  --text-muted: var(--seneca-gray);
   --border-color: #2a3441;
   --border-light: #232938;
   --card-bg: #1a1f2e;
-  --header-bg: linear-gradient(180deg,#000811 0%,#001122 100%);
+  --header-bg: linear-gradient(180deg, #000811 0%, #001122 100%);
   --footer-bg: #000811;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg-primary);color:var(--text-primary);font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;transition:background-color 0.3s ease, color 0.3s ease}
-a{color:#1b4d8a;text-decoration:none} a:hover{text-decoration:underline}
+a{color:var(--safety-blue);text-decoration:none} a:hover{text-decoration:underline}
 .wrapper{max-width:1120px;margin:0 auto;padding:0 22px}
 header.site{background:var(--header-bg);color:#fff}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
@@ -41,7 +65,7 @@ header.site{background:var(--header-bg);color:#fff}
   background-size:contain;
   background-position:center;
   background-repeat:no-repeat;
-  background-color:#f7f9fc;
+  background-color:var(--not-quite-white);
   height:160px;
   position:relative
 }
@@ -52,7 +76,7 @@ header.site{background:var(--header-bg);color:#fff}
 .brand-wrap{display:flex;justify-content:center;align-items:center;width:100%;padding:12px 0}
 .site-logo{display:block;height:auto!important;width:auto!important;max-height:90px;max-width:180px;object-fit:contain!important;filter:none!important;opacity:1!important;border-radius:0!important;box-shadow:none!important}
 nav{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding-bottom:10px}
-nav a{color:#ffd56e;margin:0 4px;font-weight:600}
+nav a{color:var(--canary);margin:0 4px;font-weight:600}
 nav a.active{box-shadow:inset 0 -3px 0 var(--wvu-gold)}
 nav a.btn{background:var(--wvu-gold);color:var(--wvu-blue);border-radius:999px;padding:.45rem .8rem}
 main{padding:22px 0 28px}
@@ -66,7 +90,7 @@ h1,h2,h3{color:var(--text-primary);margin:16px 0 10px 0;font-weight:800}
 .btn.outline{background:#eef3ff;border:1px solid #cad6ee}
 footer.site-footer{background:var(--footer-bg);color:#fff;margin-top:28px;padding:14px 0}
 footer.site-footer .links a{color:var(--wvu-gold);margin-right:14px;display:inline-block;padding:8px 0}
-footer.site-footer .meta{color:#dfe7f5;font-size:14px;padding-bottom:12px}
+footer.site-footer .meta{color:var(--not-quite-white);font-size:14px;padding-bottom:12px}
 .photo-strip{display:grid;grid-auto-flow:column;gap:8px;overflow:auto;padding:6px 2px}
 .photo-strip img{height:70px;width:170px;object-fit:cover;border-radius:8px}
 .grid{display:grid;gap:18px}
@@ -76,8 +100,8 @@ footer.site-footer .meta{color:#dfe7f5;font-size:14px;padding-bottom:12px}
 .hp-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:14px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;transition:background-color 0.3s ease, border-color 0.3s ease}
 .hp-card img{width:100%;height:190px;object-fit:cover;display:block}
 .hp-body{padding:14px}
-.hp-body h3{margin:4px 0 6px 0;color:#0b2a55;font-weight:800}
-.hp-body p{margin:0 0 10px 0;color:#223}
+.hp-body h3{margin:4px 0 6px 0;color:var(--wvu-blue);font-weight:800}
+.hp-body p{margin:0 0 10px 0;color:var(--coal)}
 .program-img{display:block;width:100%;height:260px;object-fit:cover}
 img.natural{width:auto;max-width:520px;height:auto}
 
@@ -88,12 +112,12 @@ input[type=text],input[type=email],input[type=tel],input[type=number],input[type
   width:100%;padding:10px;border:1px solid var(--border-color);border-radius:10px;background:var(--card-bg);color:var(--text-primary);font:inherit;transition:all 0.3s ease
 }
 input:focus,textarea:focus,select:focus{
-  outline:none;border-color:var(--wvu-gold);box-shadow:0 0 0 3px rgba(255, 209, 0, 0.1)
+  outline:none;border-color:var(--wvu-gold);box-shadow:0 0 0 3px rgba(238, 170, 0, 0.1)
 }
 .pp-W2QGQMAKX8TWN{
   text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;
-  padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;
-  color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;
+  padding:0 2rem;height:2.625rem;font-weight:bold;background-color:var(--wvu-gold);
+  color:var(--wvu-blue);font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;
 }
 iframe.embed{width:100%;min-height:900px;border:1px solid #e6e9ef;border-radius:12px;background:#fff}
 
@@ -105,7 +129,7 @@ iframe.embed{width:100%;min-height:900px;border:1px solid #e6e9ef;border-radius:
 
 /* Dropdown */
 .menu.dropdown { position:relative; }
-.dropbtn { background:none; border:0; font:inherit; font-weight:700; cursor:pointer; padding:8px 4px; color:#ffd56e; transition:all 0.2s ease; }
+.dropbtn { background:none; border:0; font:inherit; font-weight:700; cursor:pointer; padding:8px 4px; color:var(--canary); transition:all 0.2s ease; }
 .dropbtn:after { content:"▼"; font-size:0.7em; margin-left:4px; opacity:0.7; }
 .dropbtn:hover, .dropbtn:focus { background:rgba(255, 213, 110, 0.1); border-radius:4px; outline:none; }
 .dropbtn:active { background:rgba(255, 213, 110, 0.2); transform:translateY(1px); }
@@ -126,7 +150,7 @@ iframe.embed{width:100%;min-height:900px;border:1px solid #e6e9ef;border-radius:
   border: 1px solid rgba(255,255,255,0.3);
   border-radius: 20px;
   padding: 6px 12px;
-  color: #ffd56e;
+  color: var(--canary);
   font-size: 14px;
   cursor: pointer;
   display: flex;
@@ -152,8 +176,8 @@ iframe.embed{width:100%;min-height:900px;border:1px solid #e6e9ef;border-radius:
 }
 
 /* --- Footer --- */
-.site-footer { background:#123e7a; color:#fff; padding:14px 0; margin-top:40px; }
-.site-footer a { color:#ffd100; }
+.site-footer { background:var(--wvu-blue); color:#fff; padding:14px 0; margin-top:40px; }
+.site-footer a { color:var(--wvu-gold); }
 .footer-grid { display:grid; gap:20px; grid-template-columns:1fr; }
 .footer-links { display:grid; gap:6px; }
 .footer-bottom { border-top:1px solid rgba(255,255,255,.18); margin-top:10px; padding-top:10px; }
@@ -351,13 +375,13 @@ iframe.embed{width:100%;min-height:900px;border:1px solid #e6e9ef;border-radius:
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #ffd56e;
+  color: var(--canary);
   font-size: 16px;
   transition: all 0.3s ease;
 }
 
 .theme-toggle:hover {
-  background: rgba(255, 213, 110, 0.1);
+  background: rgba(247, 221, 99, 0.1);
   transform: scale(1.05);
 }
 
@@ -391,9 +415,9 @@ iframe.embed{width:100%;min-height:900px;border:1px solid #e6e9ef;border-radius:
 
 /* --- PWA Styles --- */
 .pwa-install-btn {
-  background: rgba(255, 209, 0, 0.1);
-  border: 1px solid rgba(255, 209, 0, 0.3);
-  color: #ffd56e;
+  background: rgba(238, 170, 0, 0.1);
+  border: 1px solid rgba(238, 170, 0, 0.3);
+  color: var(--canary);
   cursor: pointer;
   padding: 6px 10px;
   border-radius: 6px;
