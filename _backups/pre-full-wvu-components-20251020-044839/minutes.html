@@ -1,0 +1,162 @@
+﻿<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#EEAA00">
+<title>CVCWVUAA • Meeting Minutes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/wvu-components.css">
+</head><body>
+
+<!-- Skip to main content for accessibility -->
+<a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+
+      <!-- Dropdown -->
+      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">
+        <svg class="icon icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Search">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Toggle dark mode">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+    </nav>
+  </div>
+</header>
+
+<main><div class="wrapper">
+  <h2>Meeting Minutes</h2>
+  
+  <div class="search-compact" style="margin: 16px 0;">
+    <div id="search-container"></div>
+  </div>
+  <div id="minutes-list" class="grid grid-2"></div>
+  <div id="minutes-empty" class="card" style="display:none"><p>No minutes published yet. Add PDF files to <code>/assets/minutes/</code> and update <code>assets/minutes/minutes.json</code>.</p></div>
+</div></main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
+
+<script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+<script src="/js/theme-toggle.js"></script>
+<script src="/js/search.js"></script>
+<script>
+  // Load minutes JSON and render list
+  (async function(){
+    try {
+      const res = await fetch('/assets/minutes/minutes.json', {cache:'no-store'});
+      if(!res.ok) throw new Error('missing minutes.json');
+      const items = await res.json();
+      const list = document.getElementById('minutes-list');
+      if(!Array.isArray(items) || items.length === 0){
+        document.getElementById('minutes-empty').style.display = 'block';
+        return;
+      }
+      // newest first by date (YYYY-MM-DD)
+      items.sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+      items.forEach(m => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        const title = document.createElement('h3');
+        title.textContent = m.title || m.file || 'Meeting Minutes';
+        const meta = document.createElement('div');
+        meta.className = 'small';
+        meta.textContent = (m.date ? (m.date + (m.note ? ' • ' : '')) : '') + (m.note || '');
+        const link = document.createElement('a');
+        link.href = m.url || ('/assets/minutes/' + m.file);
+        link.className = 'btn outline';
+        link.textContent = 'View PDF';
+        link.target = '_blank'; link.rel = 'noopener';
+        card.appendChild(title);
+        if(meta.textContent) card.appendChild(meta);
+        card.appendChild(link);
+        list.appendChild(card);
+      });
+    } catch(e){
+      document.getElementById('minutes-empty').style.display = 'block';
+    }
+  })();
+  </script>
+<script>
+  // Mobile: open/close main nav
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+  // Mobile: tap to open About dropdown
+  const aboutMenu = document.querySelector('.menu.dropdown');
+  const aboutBtn  = document.querySelector('.menu.dropdown .dropbtn');
+  if (aboutBtn && aboutMenu) {
+    aboutBtn.addEventListener('click', (e) => {
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        e.preventDefault();
+        aboutMenu.classList.toggle('open');
+        aboutBtn.setAttribute('aria-expanded', aboutMenu.classList.contains('open') ? 'true' : 'false');
+      }
+    });
+  }
+</script>
+
+</body></html>

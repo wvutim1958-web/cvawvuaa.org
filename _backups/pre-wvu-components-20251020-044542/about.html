@@ -41,13 +41,61 @@
 </head>
 <body>
 
-<!-- Skip to main content for accessibility -->
-<a href="#main-content" class="skip-to-main">Skip to main content</a>
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws  Proclamation</a>
+        </div>
+      </div>
+      <a href="/events.html">Events</a>
 
-    <div id="wvu-masthead"></div>
-    <div id="wvu-navigation"></div>
+      <!-- News Dropdown -->
+      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
 
-    <main id="main-content">
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">
+        <svg class="icon icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Search">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Toggle dark mode">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
   <div class="wrapper">
 
     <h2 id="proclamation">Proclamation</h2>
@@ -115,14 +163,54 @@
   </div>
 </main>
 
-    <div id="wvu-footer"></div>
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
 
 <script>
   // year stamp
   document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
 </script>
 <script>
+  // Mobile: open/close main nav
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+  
 
+
+  // Theme toggle functionality
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.innerHTML = savedTheme === 'dark' ? '<svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Toggle light mode"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>' : '<svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Toggle dark mode"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggle.innerHTML = newTheme === 'dark' ? '<svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Toggle light mode"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>' : '<svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Toggle dark mode"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+    });
+  }
+</script>
+
+<!-- Dropdown Navigation -->
+<script src="/js/dropdown.js"></script>
 
 <!-- Social Media Integration -->
 <script src="/js/social-media.js"></script>
@@ -149,7 +237,6 @@
   });
 </script>
 
-    <script src="/includes/component-loader.js"></script>
 </body>
 </html>
 
