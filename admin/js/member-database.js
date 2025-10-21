@@ -683,7 +683,21 @@ function formatMembershipType(type) {
  */
 function formatDate(date) {
     if (!date) return '-';
+    
+    // Handle Firestore Timestamp objects
+    if (date.toDate && typeof date.toDate === 'function') {
+        date = date.toDate();
+    }
+    
+    // Convert to Date if it's a string or other format
     const d = date instanceof Date ? date : new Date(date);
+    
+    // Check if date is valid
+    if (isNaN(d.getTime())) {
+        console.error('Invalid date:', date);
+        return 'Invalid Date';
+    }
+    
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
