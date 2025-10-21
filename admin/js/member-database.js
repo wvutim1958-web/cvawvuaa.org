@@ -722,8 +722,12 @@ function openPaymentModal(memberId, paymentType) {
     // Reset form
     document.getElementById('paymentForm').reset();
     
-    // Set default date to today
-    document.getElementById('paymentDate').valueAsDate = new Date();
+    // Set default date to today (format: YYYY-MM-DD)
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    document.getElementById('paymentDate').value = `${yyyy}-${mm}-${dd}`;
     
     // Set expected amount based on type and member
     const member = allMembers.find(m => m.id === memberId);
@@ -731,6 +735,12 @@ function openPaymentModal(memberId, paymentType) {
         const expectedAmount = member.membershipType === 'family' ? 40.00 : 25.00;
         document.getElementById('expectedAmount').value = expectedAmount.toFixed(2);
         document.getElementById('actualReceived').value = expectedAmount.toFixed(2);
+    }
+    
+    // Hide upgrade section initially
+    const upgradeSection = document.getElementById('membershipUpgradeSection');
+    if (upgradeSection) {
+        upgradeSection.style.display = 'none';
     }
     
     modal.style.display = 'flex';
