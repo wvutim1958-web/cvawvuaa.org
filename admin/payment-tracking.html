@@ -333,7 +333,15 @@
             <div id="emptyState" class="empty-state" style="display: none;">
                 <div class="empty-state-icon">💳</div>
                 <h3>No Payments Found</h3>
-                <p>No payments have been recorded yet.</p>
+                <p>No payments have been recorded yet. To add payments:</p>
+                <ol style="text-align: left; display: inline-block; margin-top: 15px;">
+                    <li>Go to <a href="member-database.html" style="color: #667eea;">Member Database</a></li>
+                    <li>Click on a member's name to view their details</li>
+                    <li>Scroll to "Payment History" section</li>
+                    <li>Click "➕ Add Dues Payment" or other payment type</li>
+                    <li>Enter payment details and save</li>
+                </ol>
+                <p style="margin-top: 15px;">Once you add payments to member records, they will appear here automatically.</p>
             </div>
             <table id="paymentTable" style="display: none;">
                 <thead>
@@ -360,6 +368,6 @@
     
     <!-- Application Scripts -->
     <script src="/admin/js/firebase-config.js?v=20251020-1538"></script>
-    <script src="/admin/js/payment-tracking.js?v=20251020212000"></script>
+    <script src="/admin/js/payment-tracking.js?v=20251021000100"></script>
 </body>
 </html>

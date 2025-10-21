@@ -55,9 +55,15 @@ async function loadAllPayments() {
         }
         
         // Extract payments from each member
+        let membersWithPayments = 0;
         membersSnapshot.forEach(doc => {
             const member = doc.data();
             const payments = member.payments || [];
+            
+            if (payments.length > 0) {
+                membersWithPayments++;
+                console.log(`Member "${member.name}" has ${payments.length} payment(s)`);
+            }
             
             payments.forEach(payment => {
                 allPayments.push({
@@ -74,7 +80,7 @@ async function loadAllPayments() {
             });
         });
         
-        console.log(`Loaded ${allPayments.length} payments from ${membersSnapshot.size} members`);
+        console.log(`Loaded ${allPayments.length} payments from ${membersSnapshot.size} members (${membersWithPayments} members have payments)`);
         
         if (allPayments.length === 0) {
             showEmptyState();
