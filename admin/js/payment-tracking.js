@@ -205,6 +205,11 @@ function renderPayments() {
             'scholarship': 'Scholarship'
         }[payment.type] || payment.type;
         
+        // Get timestamp for receipt link
+        const timestamp = payment.recordedDate && payment.recordedDate.toMillis 
+            ? payment.recordedDate.toMillis() 
+            : Date.now();
+        
         return `
             <tr>
                 <td>${formatDate(payment.date)}</td>
@@ -217,6 +222,12 @@ function renderPayments() {
                 </td>
                 <td>${escapeHtml(payment.paymentMethod)}</td>
                 <td>${escapeHtml(payment.notes)}</td>
+                <td style="text-align: center;">
+                    <button onclick="window.open('/admin/receipt-viewer.html?memberId=${payment.memberId}&timestamp=${timestamp}', '_blank')" 
+                            style="background: #2e7d32; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 13px;">
+                        📄 Receipt
+                    </button>
+                </td>
             </tr>
         `;
     }).join('');
