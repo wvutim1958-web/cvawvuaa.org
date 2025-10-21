@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator - CVCWVUAA</title>
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white;
+            }
+            .invoice-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .controls {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            margin: 5px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-print {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: #1b5e20;
+        }
+
+        .btn-back {
+            background: #666;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #444;
+        }
+
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #002855;
+        }
+
+        .org-info h1 {
+            color: #002855;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .org-info p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .invoice-title {
+            text-align: right;
+        }
+
+        .invoice-title h2 {
+            color: #c62828;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .invoice-number {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .invoice-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .bill-to h3,
+        .invoice-info h3 {
+            color: #002855;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .bill-to p,
+        .invoice-info p {
+            color: #333;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .invoice-table {
+            margin: 40px 0;
+            border: 2px solid #e0e0e0;
+        }
+
+        .invoice-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .invoice-table th {
+            background: #002855;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .invoice-table td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .invoice-table .amount {
+            text-align: right;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .invoice-total {
+            display: flex;
+            justify-content: flex-end;
+            margin: 20px 0 40px;
+        }
+
+        .total-box {
+            background: #002855;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            min-width: 300px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .total-row.main {
+            font-size: 24px;
+            font-weight: 700;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            margin-top: 15px;
+        }
+
+        .payment-instructions {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #2e7d32;
+            margin-bottom: 30px;
+        }
+
+        .payment-instructions h3 {
+            color: #002855;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .payment-method {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+        }
+
+        .payment-method strong {
+            color: #2e7d32;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .payment-method p {
+            color: #666;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: #666;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls no-print">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Print Invoice</button>
+        <button class="btn btn-back" onclick="window.close()">← Close</button>
+    </div>
+
+    <div id="loading" class="loading">
+        Loading invoice...
+    </div>
+
+    <div id="invoice" class="invoice-container" style="display: none;">
+        <div class="invoice-header">
+            <div class="org-info">
+                <h1>Central Virginia Chapter<br>West Virginia University Alumni Association</h1>
+                <p>
+                    4701 Stoney Creek Pkwy<br>
+                    Chester, VA 23831<br>
+                    Email: info@cvawvuaa.org<br>
+                    Website: www.cvawvuaa.org
+                </p>
+            </div>
+            <div class="invoice-title">
+                <h2>INVOICE</h2>
+                <p class="invoice-number">Invoice #<span id="invoiceNumber"></span></p>
+                <p class="invoice-number">Date: <span id="invoiceDate"></span></p>
+            </div>
+        </div>
+
+        <div class="invoice-details">
+            <div class="bill-to">
+                <h3>Bill To:</h3>
+                <p id="memberInfo">
+                    <!-- Member info will be inserted here -->
+                </p>
+            </div>
+            <div class="invoice-info">
+                <h3>Membership Period:</h3>
+                <p>
+                    <strong id="membershipPeriod"></strong><br>
+                    Due Date: <span id="dueDate"></span>
+                </p>
+            </div>
+        </div>
+
+        <div class="invoice-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th style="text-align: center;">Qty</th>
+                        <th class="amount">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="invoiceItems">
+                    <!-- Invoice items will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="invoice-total">
+            <div class="total-box">
+                <div class="total-row main">
+                    <span>TOTAL DUE:</span>
+                    <span id="totalAmount"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-instructions">
+            <h3>💳 Payment Instructions</h3>
+            
+            <div class="payment-method">
+                <strong>Option 1: Pay Online (Preferred)</strong>
+                <p>Visit: <a href="https://cvawvuaa.org/pay.html" target="_blank">www.cvawvuaa.org/pay.html</a></p>
+                <p>Pay securely with PayPal or Credit Card</p>
+            </div>
+
+            <div class="payment-method">
+                <strong>Option 2: Mail Check</strong>
+                <p>Make checks payable to: <strong>CVCWVUAA</strong></p>
+                <p>Mail to: 4701 Stoney Creek Pkwy, Chester, VA 23831</p>
+                <p>Please include this invoice number in the memo: <span id="invoiceNumberRef"></span></p>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <p>Thank you for your continued support of the Central Virginia Chapter!</p>
+            <p>Questions? Contact us at info@cvawvuaa.org</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script src="/admin/js/firebase-config.js?v=20251020-1538"></script>
+    <script>
+        let invoiceDb = null;
+
+        // Get member ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const memberId = urlParams.get('memberId');
+
+        if (!memberId) {
+            document.getElementById('loading').innerHTML = 
+                '<p style="color: #c62828;">❌ No member ID provided</p>';
+        }
+
+        // Initialize and load invoice
+        window.addEventListener('load', async () => {
+            setTimeout(async () => {
+                invoiceDb = firebase.firestore();
+                await loadInvoice();
+            }, 500);
+        });
+
+        async function loadInvoice() {
+            try {
+                if (!memberId) return;
+
+                // Get member data
+                const memberDoc = await invoiceDb.collection('members').doc(memberId).get();
+                
+                if (!memberDoc.exists) {
+                    document.getElementById('loading').innerHTML = 
+                        '<p style="color: #c62828;">❌ Member not found</p>';
+                    return;
+                }
+
+                const member = memberDoc.data();
+                
+                // Generate invoice
+                const invoiceNumber = `INV-${new Date().getFullYear()}-${memberId.substring(0, 8).toUpperCase()}`;
+                const today = new Date();
+                const invoiceDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                
+                // Get membership year (July 1 - June 30)
+                const year = today.getFullYear();
+                const month = today.getMonth();
+                const membershipYear = month < 6 ? `${year - 1}-${year}` : `${year}-${year + 1}`;
+                const membershipPeriod = `July 1, ${membershipYear.split('-')[0]} - June 30, ${membershipYear.split('-')[1]}`;
+                
+                // Due date (30 days from today)
+                const dueDate = new Date(today);
+                dueDate.setDate(dueDate.getDate() + 30);
+                const dueDateStr = dueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                
+                // Calculate amount
+                const membershipType = member.membershipType || 'individual';
+                const amount = membershipType === 'family' ? 40.00 : 25.00;
+                const typeLabel = membershipType === 'family' ? 'Family' : 'Individual';
+                
+                // Fill in invoice
+                document.getElementById('invoiceNumber').textContent = invoiceNumber;
+                document.getElementById('invoiceNumberRef').textContent = invoiceNumber;
+                document.getElementById('invoiceDate').textContent = invoiceDate;
+                document.getElementById('membershipPeriod').textContent = membershipPeriod;
+                document.getElementById('dueDate').textContent = dueDateStr;
+                
+                // Member info
+                let memberInfo = `<strong>${member.name}</strong><br>`;
+                if (member.address) memberInfo += `${member.address}<br>`;
+                if (member.city || member.zip) memberInfo += `${member.city || ''}, WV ${member.zip || ''}<br>`;
+                if (member.email) memberInfo += `Email: ${member.email}<br>`;
+                if (member.phone) memberInfo += `Phone: ${member.phone}`;
+                document.getElementById('memberInfo').innerHTML = memberInfo;
+                
+                // Invoice items
+                let itemsHtml = `
+                    <tr>
+                        <td>
+                            <strong>${typeLabel} Membership Dues</strong><br>
+                            <span style="color: #666; font-size: 14px;">Annual membership for ${membershipYear}</span>
+                        </td>
+                        <td style="text-align: center;">1</td>
+                        <td class="amount">$${amount.toFixed(2)}</td>
+                    </tr>
+                `;
+                
+                // Add family member if applicable
+                if (membershipType === 'family' && member.familyMemberName) {
+                    itemsHtml += `
+                        <tr>
+                            <td colspan="3" style="color: #666; font-size: 14px; padding: 10px 15px;">
+                                Family Member: ${member.familyMemberName}
+                            </td>
+                        </tr>
+                    `;
+                }
+                
+                document.getElementById('invoiceItems').innerHTML = itemsHtml;
+                document.getElementById('totalAmount').textContent = `$${amount.toFixed(2)}`;
+                
+                // Show invoice
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('invoice').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading invoice:', error);
+                document.getElementById('loading').innerHTML = 
+                    `<p style="color: #c62828;">❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
