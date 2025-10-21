@@ -774,6 +774,15 @@ function formatMembershipType(type) {
 }
 
 /**
+ * Utility: Create date at noon to avoid timezone shifting
+ */
+function createDateAtNoon(dateString) {
+    if (!dateString) return new Date();
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day, 12, 0, 0);
+}
+
+/**
  * Utility: Format date for display
  */
 function formatDate(date) {
@@ -944,7 +953,7 @@ async function savePayment(event) {
     // Collect payment data
     const paymentData = {
         type: paymentType,
-        date: new Date(document.getElementById('paymentDate').value),
+        date: createDateAtNoon(document.getElementById('paymentDate').value),
         expectedAmount: parseFloat(document.getElementById('expectedAmount').value) || 0,
         actualReceived: parseFloat(document.getElementById('actualReceived').value) || 0,
         paymentMethod: document.getElementById('paymentMethod').value,
