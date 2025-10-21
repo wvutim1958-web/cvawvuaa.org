@@ -399,14 +399,13 @@ function viewMemberDetails(memberId) {
         }
         return paymentList.map((payment, index) => {
             const fee = payment.expectedAmount - payment.actualReceived;
-            // Create a unique identifier for this payment (type + index)
-            const paymentIdentifier = `${paymentType}-${index}`;
+            // Use recorded timestamp as unique identifier
+            const paymentTimestamp = payment.recordedDate ? payment.recordedDate.toMillis() : Date.now();
             return `
                 <div style="border-left: 3px solid #667eea; padding: 10px; margin: 10px 0; background: white; position: relative;">
                     <button class="delete-payment-btn" 
                             data-member-id="${memberId}" 
-                            data-payment-type="${paymentType}" 
-                            data-payment-index="${index}"
+                            data-payment-timestamp="${paymentTimestamp}"
                             style="position: absolute; top: 10px; right: 10px; background: #c62828; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 12px;">
                         🗑️ Delete
                     </button>
@@ -496,7 +495,11 @@ function viewMemberDetails(memberId) {
         // Add payment buttons
         const paymentButtons = document.querySelectorAll('.add-payment-btn');
         paymentButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            // Remove any existing listeners by cloning
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', function() {
                 const memberId = this.getAttribute('data-member-id');
                 const paymentType = this.getAttribute('data-payment-type');
                 openPaymentModal(memberId, paymentType);
@@ -506,11 +509,14 @@ function viewMemberDetails(memberId) {
         // Delete payment buttons
         const deleteButtons = document.querySelectorAll('.delete-payment-btn');
         deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            // Remove any existing listeners by cloning
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', function() {
                 const memberId = this.getAttribute('data-member-id');
-                const paymentType = this.getAttribute('data-payment-type');
-                const paymentIndex = parseInt(this.getAttribute('data-payment-index'));
-                deletePayment(memberId, paymentType, paymentIndex);
+                const paymentTimestamp = this.getAttribute('data-payment-timestamp');
+                deletePayment(memberId, paymentTimestamp);
             });
         });
     }, 100);
@@ -519,14 +525,8 @@ function viewMemberDetails(memberId) {
 /**
  * Delete payment
  */
-async function deletePayment(memberId, paymentType, paymentIndex) {
-    const typeLabels = {
-        'dues': 'Dues Payment',
-        'chapter': 'Chapter Donation',
-        'scholarship': 'Scholarship Donation'
-    };
-    
-    if (!confirm(`Are you sure you want to delete this ${typeLabels[paymentType]}?\n\nThis action cannot be undone.`)) {
+async function deletePayment(memberId, paymentTimestamp) {
+    if (!confirm(`Are you sure you want to delete this payment?\n\nThis action cannot be undone.`)) {
         return;
     }
     
@@ -540,19 +540,16 @@ async function deletePayment(memberId, paymentType, paymentIndex) {
         const memberData = memberDoc.data();
         const allPayments = memberData.payments || [];
         
-        // Filter payments by type
-        const paymentsOfType = allPayments.filter(p => p.type === paymentType);
-        const otherPayments = allPayments.filter(p => p.type !== paymentType);
+        // Find and remove the payment with matching timestamp
+        const timestampNum = parseInt(paymentTimestamp);
+        const updatedPayments = allPayments.filter(payment => {
+            const paymentTime = payment.recordedDate ? payment.recordedDate.toMillis() : 0;
+            return paymentTime !== timestampNum;
+        });
         
-        // Remove the payment at the specified index
-        if (paymentIndex >= 0 && paymentIndex < paymentsOfType.length) {
-            paymentsOfType.splice(paymentIndex, 1);
-        } else {
+        if (updatedPayments.length === allPayments.length) {
             throw new Error('Payment not found');
         }
-        
-        // Combine back together
-        const updatedPayments = [...otherPayments, ...paymentsOfType];
         
         // Update in Firebase
         await memberDb.collection('members').doc(memberId).update({
