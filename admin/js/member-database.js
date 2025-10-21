@@ -403,6 +403,12 @@ function viewMemberDetails(memberId) {
             const paymentTimestamp = payment.recordedDate ? payment.recordedDate.toMillis() : Date.now();
             return `
                 <div style="border-left: 3px solid #667eea; padding: 10px; margin: 10px 0; background: white; position: relative;">
+                    <button class="view-receipt-btn" 
+                            data-member-id="${memberId}" 
+                            data-payment-timestamp="${paymentTimestamp}"
+                            style="position: absolute; top: 10px; right: 90px; background: #2e7d32; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 12px;">
+                        📄 Receipt
+                    </button>
                     <button class="delete-payment-btn" 
                             data-member-id="${memberId}" 
                             data-payment-timestamp="${paymentTimestamp}"
@@ -517,6 +523,20 @@ function viewMemberDetails(memberId) {
                 const memberId = this.getAttribute('data-member-id');
                 const paymentTimestamp = this.getAttribute('data-payment-timestamp');
                 deletePayment(memberId, paymentTimestamp);
+            });
+        });
+        
+        // View receipt buttons
+        const receiptButtons = document.querySelectorAll('.view-receipt-btn');
+        receiptButtons.forEach(button => {
+            // Remove any existing listeners by cloning
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', function() {
+                const memberId = this.getAttribute('data-member-id');
+                const paymentTimestamp = this.getAttribute('data-payment-timestamp');
+                window.open(`/admin/receipt-viewer.html?memberId=${memberId}&timestamp=${paymentTimestamp}`, '_blank');
             });
         });
     }, 100);
