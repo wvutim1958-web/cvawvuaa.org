@@ -393,14 +393,23 @@ function viewMemberDetails(memberId) {
     const scholarshipDonations = payments.filter(p => p.type === 'scholarship');
     
     // Helper function to format payment list
-    const formatPaymentList = (paymentList) => {
+    const formatPaymentList = (paymentList, paymentType) => {
         if (paymentList.length === 0) {
             return '<p style="color: #999; font-style: italic;">No payments recorded</p>';
         }
-        return paymentList.map(payment => {
+        return paymentList.map((payment, index) => {
             const fee = payment.expectedAmount - payment.actualReceived;
+            // Create a unique identifier for this payment (type + index)
+            const paymentIdentifier = `${paymentType}-${index}`;
             return `
-                <div style="border-left: 3px solid #667eea; padding: 10px; margin: 10px 0; background: white;">
+                <div style="border-left: 3px solid #667eea; padding: 10px; margin: 10px 0; background: white; position: relative;">
+                    <button class="delete-payment-btn" 
+                            data-member-id="${memberId}" 
+                            data-payment-type="${paymentType}" 
+                            data-payment-index="${index}"
+                            style="position: absolute; top: 10px; right: 10px; background: #c62828; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 12px;">
+                        🗑️ Delete
+                    </button>
                     <strong>Date:</strong> ${formatDate(payment.date)}<br>
                     <strong>Expected:</strong> $${payment.expectedAmount.toFixed(2)}<br>
                     <strong>Received:</strong> $${payment.actualReceived.toFixed(2)}
@@ -432,7 +441,7 @@ function viewMemberDetails(memberId) {
             
             <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                 <h4 style="color: #667eea; margin-bottom: 10px;">💰 Dues Payments</h4>
-                ${formatPaymentList(duesPayments)}
+                ${formatPaymentList(duesPayments, 'dues')}
                 <button class="add-payment-btn" data-member-id="${memberId}" data-payment-type="dues" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
                     ➕ Add Dues Payment
                 </button>
@@ -440,7 +449,7 @@ function viewMemberDetails(memberId) {
             
             <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                 <h4 style="color: #667eea; margin-bottom: 10px;">🏛️ Chapter Donations</h4>
-                ${formatPaymentList(chapterDonations)}
+                ${formatPaymentList(chapterDonations, 'chapter')}
                 <button class="add-payment-btn" data-member-id="${memberId}" data-payment-type="chapter" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
                     ➕ Add Chapter Donation
                 </button>
@@ -448,7 +457,7 @@ function viewMemberDetails(memberId) {
             
             <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                 <h4 style="color: #667eea; margin-bottom: 10px;">🎓 Scholarship Donations</h4>
-                ${formatPaymentList(scholarshipDonations)}
+                ${formatPaymentList(scholarshipDonations, 'scholarship')}
                 <button class="add-payment-btn" data-member-id="${memberId}" data-payment-type="scholarship" style="margin-top: 10px; padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
                     ➕ Add Scholarship Donation
                 </button>
@@ -484,6 +493,7 @@ function viewMemberDetails(memberId) {
     
     // Attach event listeners to payment buttons after dialog is created
     setTimeout(() => {
+        // Add payment buttons
         const paymentButtons = document.querySelectorAll('.add-payment-btn');
         paymentButtons.forEach(button => {
             button.addEventListener('click', function() {
@@ -492,7 +502,75 @@ function viewMemberDetails(memberId) {
                 openPaymentModal(memberId, paymentType);
             });
         });
+        
+        // Delete payment buttons
+        const deleteButtons = document.querySelectorAll('.delete-payment-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const memberId = this.getAttribute('data-member-id');
+                const paymentType = this.getAttribute('data-payment-type');
+                const paymentIndex = parseInt(this.getAttribute('data-payment-index'));
+                deletePayment(memberId, paymentType, paymentIndex);
+            });
+        });
     }, 100);
+}
+
+/**
+ * Delete payment
+ */
+async function deletePayment(memberId, paymentType, paymentIndex) {
+    const typeLabels = {
+        'dues': 'Dues Payment',
+        'chapter': 'Chapter Donation',
+        'scholarship': 'Scholarship Donation'
+    };
+    
+    if (!confirm(`Are you sure you want to delete this ${typeLabels[paymentType]}?\n\nThis action cannot be undone.`)) {
+        return;
+    }
+    
+    try {
+        // Get current member data
+        const memberDoc = await memberDb.collection('members').doc(memberId).get();
+        if (!memberDoc.exists) {
+            throw new Error('Member not found');
+        }
+        
+        const memberData = memberDoc.data();
+        const allPayments = memberData.payments || [];
+        
+        // Filter payments by type
+        const paymentsOfType = allPayments.filter(p => p.type === paymentType);
+        const otherPayments = allPayments.filter(p => p.type !== paymentType);
+        
+        // Remove the payment at the specified index
+        if (paymentIndex >= 0 && paymentIndex < paymentsOfType.length) {
+            paymentsOfType.splice(paymentIndex, 1);
+        } else {
+            throw new Error('Payment not found');
+        }
+        
+        // Combine back together
+        const updatedPayments = [...otherPayments, ...paymentsOfType];
+        
+        // Update in Firebase
+        await memberDb.collection('members').doc(memberId).update({
+            payments: updatedPayments,
+            lastModified: new Date()
+        });
+        
+        console.log('Payment deleted successfully');
+        showSuccess('Payment deleted successfully!');
+        
+        // Reload members and re-open details
+        await loadMembers();
+        viewMemberDetails(memberId);
+        
+    } catch (error) {
+        console.error('Error deleting payment:', error);
+        showError('Failed to delete payment: ' + error.message);
+    }
 }
 
 /**
