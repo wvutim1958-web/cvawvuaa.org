@@ -120,7 +120,14 @@
             
             transactions = [];
             snapshot.forEach(doc => {
-                transactions.push({ id: doc.id, ...doc.data() });
+                const data = doc.data();
+                // Convert Firestore Timestamp to JavaScript Date
+                if (data.date && data.date.toDate) {
+                    data.date = data.date.toDate();
+                } else if (data.date && typeof data.date === 'string') {
+                    data.date = new Date(data.date);
+                }
+                transactions.push({ id: doc.id, ...data });
             });
             
             calculateBalance();
@@ -133,40 +140,11 @@
     
     /**
      * Load demo data for testing
+     * DISABLED - Using real Firebase data only
      */
     function loadDemoData() {
-        transactions = [
-            {
-                id: 'demo1',
-                date: new Date('2025-10-20'),
-                type: 'deposit',
-                amount: 100,
-                description: 'Bank Deposit - 4 membership checks',
-                category: 'Split Transaction',
-                splits: [
-                    { member: 'Tim Casten', category: 'Member Dues', amount: 25 },
-                    { member: 'Joe Smith', category: 'Chapter Donations', amount: 25 },
-                    { member: 'Sally Ride', category: 'Scholarship Donations', amount: 50 }
-                ]
-            },
-            {
-                id: 'demo2',
-                date: new Date('2025-10-18'),
-                type: 'expense',
-                amount: 245,
-                description: 'Game Watch Event - Pizza & Drinks',
-                category: 'Event Costs'
-            },
-            {
-                id: 'demo3',
-                date: new Date('2025-10-15'),
-                type: 'deposit',
-                amount: 100,
-                description: 'John Doe - Annual Donation',
-                category: 'Chapter Donations'
-            }
-        ];
-        
+        // Demo data disabled - show empty state
+        transactions = [];
         calculateBalance();
         renderTransactions();
     }
@@ -179,8 +157,25 @@
         
         // Sort by date (oldest first) for accurate running balance
         const sorted = [...transactions].sort((a, b) => {
-            const dateA = a.date instanceof Date ? a.date : new Date(a.date);
-            const dateB = b.date instanceof Date ? b.date : new Date(b.date);
+            // Handle Firestore Timestamps
+            let dateA, dateB;
+            
+            if (a.date && a.date.toDate) {
+                dateA = a.date.toDate();
+            } else if (a.date instanceof Date) {
+                dateA = a.date;
+            } else {
+                dateA = new Date(a.date);
+            }
+            
+            if (b.date && b.date.toDate) {
+                dateB = b.date.toDate();
+            } else if (b.date instanceof Date) {
+                dateB = b.date;
+            } else {
+                dateB = new Date(b.date);
+            }
+            
             return dateA - dateB;
         });
         
@@ -228,8 +223,25 @@
         
         // Sort by date (newest first) for display
         const sorted = [...transactions].sort((a, b) => {
-            const dateA = a.date instanceof Date ? a.date : new Date(a.date);
-            const dateB = b.date instanceof Date ? b.date : new Date(b.date);
+            // Handle Firestore Timestamps
+            let dateA, dateB;
+            
+            if (a.date && a.date.toDate) {
+                dateA = a.date.toDate();
+            } else if (a.date instanceof Date) {
+                dateA = a.date;
+            } else {
+                dateA = new Date(a.date);
+            }
+            
+            if (b.date && b.date.toDate) {
+                dateB = b.date.toDate();
+            } else if (b.date instanceof Date) {
+                dateB = b.date;
+            } else {
+                dateB = new Date(b.date);
+            }
+            
             return dateB - dateA;
         });
         
@@ -246,8 +258,8 @@
         });
         
         tbody.innerHTML = sorted.map(transaction => {
-            const date = transaction.date instanceof Date ? transaction.date : new Date(transaction.date);
-            const formattedDate = formatDate(date);
+            // Pass the original date object to formatDate - it will handle Timestamps, Dates, and strings
+            const formattedDate = formatDate(transaction.date);
             const amountStr = transaction.type === 'deposit' 
                 ? '+' + formatCurrency(transaction.amount)
                 : '-' + formatCurrency(transaction.amount);
@@ -259,6 +271,8 @@
             return `
                 <tr class="transaction-row" data-id="${transaction.id}">
                     <td>${formattedDate}</td>
+                    <td>${escapeHtml(transaction.payee || 'N/A')}</td>
+                    <td style="text-align: center; color: #666;">${escapeHtml(transaction.checkNumber || '—')}</td>
                     <td>
                         <div class="transaction-description">
                             <strong>${escapeHtml(transaction.description)}</strong>
@@ -269,9 +283,9 @@
                     <td class="${amountClass}">${amountStr}</td>
                     <td>${formatCurrency(transaction.runningBalance)}</td>
                     <td class="transaction-actions">
-                        ${hasSplits ? '<button class="btn-icon" onclick="window.ledger.viewSplits(\'' + transaction.id + '\')" title="View splits">📊</button>' : ''}
-                        <button class="btn-icon" onclick="window.ledger.editTransaction(\'' + transaction.id + '\')" title="Edit">✏️</button>
-                        <button class="btn-icon" onclick="window.ledger.deleteTransaction(\'' + transaction.id + '\')" title="Delete">🗑️</button>
+                        ${hasSplits ? `<button class="btn-icon" onclick="window.ledger.viewSplits('${transaction.id}')" title="View splits">📊</button>` : ''}
+                        <button class="btn-icon" onclick="window.ledger.editTransaction('${transaction.id}')" title="Edit">✏️</button>
+                        <button class="btn-icon" onclick="window.ledger.deleteTransaction('${transaction.id}')" title="Delete">🗑️</button>
                     </td>
                 </tr>
             `;
@@ -287,6 +301,9 @@
         const form = document.getElementById('transaction-form');
         
         if (!modal || !form) return;
+        
+        // Clear any editing ID
+        delete form.dataset.editingId;
         
         // Reset form
         form.reset();
@@ -305,10 +322,14 @@
         // Populate category dropdown
         populateCategoryDropdown(type);
         
-        // Set default date to today
+        // Set default date to today (use local timezone)
         const dateInput = document.getElementById('transaction-date');
         if (dateInput) {
-            dateInput.value = new Date().toISOString().split('T')[0];
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            dateInput.value = `${year}-${month}-${day}`;
         }
         
         // Hide split section by default
@@ -316,6 +337,10 @@
         const splitToggle = document.getElementById('split-transaction-toggle');
         if (splitSection) splitSection.style.display = 'none';
         if (splitToggle) splitToggle.checked = false;
+        
+        // Clear split rows
+        const tbody = document.getElementById('splits-tbody');
+        if (tbody) tbody.innerHTML = '';
         
         // Show modal
         modal.style.display = 'flex';
@@ -432,10 +457,18 @@
         const form = document.getElementById('transaction-form');
         if (!form) return;
         
+        // Check if we're editing an existing transaction
+        const editingId = form.dataset.editingId;
+        
         // Get form values
         const type = document.getElementById('transaction-type').value;
-        const date = new Date(document.getElementById('transaction-date').value);
+        // Parse date in local timezone to avoid date shifting
+        const dateString = document.getElementById('transaction-date').value;
+        const [year, month, day] = dateString.split('-').map(Number);
+        const date = new Date(year, month - 1, day, 12, 0, 0); // Set to noon to avoid timezone issues
         const amount = parseFloat(document.getElementById('transaction-amount').value);
+        const payee = document.getElementById('transaction-payee').value;
+        const checkNumber = document.getElementById('transaction-check-number').value;
         const description = document.getElementById('transaction-description').value;
         const category = document.getElementById('transaction-category').value;
         const isSplit = document.getElementById('split-transaction-toggle').checked;
@@ -443,6 +476,11 @@
         // Validate
         if (!amount || amount <= 0) {
             alert('Please enter a valid amount');
+            return;
+        }
+        
+        if (!payee.trim()) {
+            alert('Please enter a payee/payor');
             return;
         }
         
@@ -456,9 +494,11 @@
             type,
             date,
             amount,
+            payee: payee.trim(),
+            checkNumber: checkNumber.trim() || null,
             description: description.trim(),
             category,
-            createdAt: new Date()
+            createdAt: editingId ? transactions.find(t => t.id === editingId)?.createdAt : new Date()
         };
         
         // Handle splits
@@ -492,19 +532,37 @@
         
         // Save to Firebase or local storage
         try {
-            if (db) {
-                const docRef = await db.collection('transactions').add(transaction);
-                transaction.id = docRef.id;
+            if (editingId) {
+                // Update existing transaction
+                if (db) {
+                    await db.collection('transactions').doc(editingId).update(transaction);
+                }
+                
+                const index = transactions.findIndex(t => t.id === editingId);
+                if (index !== -1) {
+                    transactions[index] = { ...transaction, id: editingId };
+                }
+                
+                showNotification('Transaction updated successfully!', 'success');
             } else {
-                transaction.id = 'local-' + Date.now();
+                // Add new transaction
+                if (db) {
+                    const docRef = await db.collection('transactions').add(transaction);
+                    transaction.id = docRef.id;
+                } else {
+                    transaction.id = 'local-' + Date.now();
+                }
+                
+                transactions.push(transaction);
+                showNotification('Transaction saved successfully!', 'success');
             }
             
-            transactions.push(transaction);
             calculateBalance();
             renderTransactions();
             closeTransactionModal();
             
-            showNotification('Transaction saved successfully!', 'success');
+            // Clear editing ID
+            delete form.dataset.editingId;
         } catch (error) {
             console.error('Error saving transaction:', error);
             showNotification('Error saving transaction', 'error');
@@ -539,6 +597,8 @@
                 <div class="modal-body">
                     <h3>${escapeHtml(transaction.description)}</h3>
                     <p><strong>Date:</strong> ${formatDate(transaction.date)}</p>
+                    <p><strong>Payee:</strong> ${escapeHtml(transaction.payee || 'N/A')}</p>
+                    ${transaction.checkNumber ? `<p><strong>Check #:</strong> ${escapeHtml(transaction.checkNumber)}</p>` : ''}
                     <p><strong>Total Amount:</strong> ${formatCurrency(transaction.amount)}</p>
                     
                     <h4 style="margin-top: 1.5rem;">Split Breakdown:</h4>
@@ -573,32 +633,130 @@
     /**
      * Edit transaction
      */
+    /**
+     * Edit transaction
+     */
     function editTransaction(transactionId) {
-        // TODO: Implement edit functionality
-        alert('Edit functionality coming soon!');
+        const transaction = transactions.find(t => t.id === transactionId);
+        if (!transaction) {
+            showNotification('Transaction not found', 'error');
+            return;
+        }
+        
+        const modal = document.getElementById('transaction-modal');
+        const title = document.getElementById('modal-title');
+        const form = document.getElementById('transaction-form');
+        
+        if (!modal || !form) return;
+        
+        // Set title
+        if (title) {
+            title.textContent = transaction.type === 'deposit' ? 'Edit Deposit' : 'Edit Expense';
+        }
+        
+        // Populate category dropdown
+        populateCategoryDropdown(transaction.type);
+        
+        // Set form values
+        document.getElementById('transaction-type').value = transaction.type;
+        
+        // Format date for input (YYYY-MM-DD) - use local timezone
+        let date;
+        if (transaction.date && transaction.date.toDate) {
+            // Firestore Timestamp
+            date = transaction.date.toDate();
+        } else if (transaction.date instanceof Date) {
+            date = transaction.date;
+        } else {
+            date = new Date(transaction.date);
+        }
+        
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        document.getElementById('transaction-date').value = `${year}-${month}-${day}`;
+        
+        document.getElementById('transaction-amount').value = transaction.amount;
+        document.getElementById('transaction-payee').value = transaction.payee || '';
+        document.getElementById('transaction-check-number').value = transaction.checkNumber || '';
+        document.getElementById('transaction-description').value = transaction.description;
+        document.getElementById('transaction-category').value = transaction.category;
+        
+        // Handle splits if present
+        const splitToggle = document.getElementById('split-transaction-toggle');
+        const splitSection = document.getElementById('split-transaction-section');
+        
+        if (transaction.splits && transaction.splits.length > 0) {
+            splitToggle.checked = true;
+            splitSection.style.display = 'block';
+            
+            // Clear existing split rows
+            const tbody = document.getElementById('splits-tbody');
+            tbody.innerHTML = '';
+            
+            // Add split rows with data
+            transaction.splits.forEach(split => {
+                addSplitLine();
+                const lastRow = tbody.lastElementChild;
+                lastRow.querySelector('.split-member').value = split.member;
+                lastRow.querySelector('.split-category').value = split.category;
+                lastRow.querySelector('.split-amount').value = split.amount;
+            });
+            
+            updateSplitTotal();
+        } else {
+            splitToggle.checked = false;
+            splitSection.style.display = 'none';
+        }
+        
+        // Store the transaction ID for updating
+        form.dataset.editingId = transactionId;
+        
+        // Show modal
+        modal.style.display = 'flex';
     }
     
     /**
      * Delete transaction
      */
     async function deleteTransaction(transactionId) {
+        console.log('deleteTransaction called with ID:', transactionId);
+        
+        if (!transactionId) {
+            console.error('No transaction ID provided');
+            showNotification('Error: No transaction ID', 'error');
+            return;
+        }
+        
         if (!confirm('Are you sure you want to delete this transaction?')) {
+            console.log('Delete cancelled by user');
             return;
         }
         
         try {
+            console.log('Attempting to delete transaction:', transactionId);
+            
             if (db) {
+                console.log('Deleting from Firestore...');
                 await db.collection('transactions').doc(transactionId).delete();
+                console.log('Deleted from Firestore successfully');
+            } else {
+                console.log('No database connection, deleting from local array only');
             }
             
+            const beforeCount = transactions.length;
             transactions = transactions.filter(t => t.id !== transactionId);
+            const afterCount = transactions.length;
+            console.log(`Transactions before: ${beforeCount}, after: ${afterCount}`);
+            
             calculateBalance();
             renderTransactions();
             
             showNotification('Transaction deleted successfully', 'success');
         } catch (error) {
             console.error('Error deleting transaction:', error);
-            showNotification('Error deleting transaction', 'error');
+            console.error('Error details:', error.message, error.stack);
+            showNotification('Error deleting transaction: ' + error.message, 'error');
         }
     }
     
@@ -636,7 +794,24 @@
     }
     
     function formatDate(date) {
-        const d = date instanceof Date ? date : new Date(date);
+        if (!date) return 'N/A';
+        
+        // Handle Firestore Timestamp
+        let d;
+        if (date.toDate && typeof date.toDate === 'function') {
+            d = date.toDate();
+        } else if (date instanceof Date) {
+            d = date;
+        } else {
+            d = new Date(date);
+        }
+        
+        // Check if date is valid
+        if (isNaN(d.getTime())) {
+            console.error('Invalid date:', date);
+            return 'Invalid Date';
+        }
+        
         return (d.getMonth() + 1).toString().padStart(2, '0') + '/' +
                d.getDate().toString().padStart(2, '0') + '/' +
                d.getFullYear();
