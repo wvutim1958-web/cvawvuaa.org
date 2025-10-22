@@ -1,0 +1,50 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.autoSave": "afterDelay",
+		"files.autoSaveDelay": 1000,
+		"editor.formatOnSave": true,
+		"editor.tabSize": 4,
+		"editor.detectIndentation": true,
+		"files.exclude": {
+			"**/.git": true,
+			"**/node_modules": true,
+			"**/.DS_Store": true
+		},
+		"search.exclude": {
+			"**/node_modules": true,
+			"**/bower_components": true,
+			"**/.git": true
+		},
+		"files.associations": {
+			"*.html": "html",
+			"*.css": "css",
+			"*.js": "javascript"
+		},
+		"emmet.includeLanguages": {
+			"javascript": "javascriptreact"
+		},
+		"terminal.integrated.defaultProfile.linux": "bash",
+		"git.enableSmartCommit": true,
+		"git.confirmSync": false,
+		"git.autofetch": true
+	},
+	"extensions": {
+		"recommendations": [
+			"dbaeumer.vscode-eslint",
+			"esbenp.prettier-vscode",
+			"ritwickdey.liveserver",
+			"formulahendry.auto-close-tag",
+			"formulahendry.auto-rename-tag",
+			"ms-vscode.vscode-typescript-next"
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": []
+	}
+}
