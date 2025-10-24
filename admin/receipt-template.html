@@ -395,13 +395,67 @@
     
     <div class="action-buttons no-print">
         <button class="btn" onclick="printReceipt()">🖨️ Print Receipt</button>
+        <button class="btn btn-secondary" onclick="saveAsPDF()">📄 Save as PDF</button>
         <button class="btn btn-secondary" onclick="emailReceipt()">📧 Email Receipt</button>
-        <button class="btn btn-secondary" onclick="showHTMLEmailDialog(document.getElementById('memberEmail').textContent, 'CVCWVUAA Payment Receipt ' + document.getElementById('receiptNumber').textContent)">📧 HTML Email</button>
-        <button class="btn btn-secondary" onclick="saveReceipt()">💾 Save as PDF</button>
+        <button class="btn btn-secondary" onclick="showHTMLEmail()">📧 HTML Email Code</button>
         <button class="btn" onclick="newReceipt()">📝 New Receipt</button>
     </div>
+    
+    <!-- Delivery Status Tracking -->
+    <div class="delivery-status no-print" id="deliveryStatus" style="max-width: 800px; margin: 20px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h3 style="color: #003366; margin-top: 0;">📬 Receipt Delivery Tracking</h3>
+        <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Mark how this receipt was delivered to the member:</p>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 10px 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid transparent; transition: all 0.2s;">
+                <input type="checkbox" id="status-print" onchange="updateDeliveryStatus()" style="width: 18px; height: 18px; cursor: pointer;">
+                <span style="font-weight: 600; color: #003366;">🖨️ Printed/Mailed</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 10px 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid transparent; transition: all 0.2s;">
+                <input type="checkbox" id="status-email-attach" onchange="updateDeliveryStatus()" style="width: 18px; height: 18px; cursor: pointer;">
+                <span style="font-weight: 600; color: #003366;">📧 Emailed (Attached PDF)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 10px 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid transparent; transition: all 0.2s;">
+                <input type="checkbox" id="status-email-html" onchange="updateDeliveryStatus()" style="width: 18px; height: 18px; cursor: pointer;">
+                <span style="font-weight: 600; color: #003366;">📧 Emailed (HTML)</span>
+            </label>
+        </div>
+        <div id="statusMessage" style="margin-top: 15px; padding: 10px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; color: #155724; display: none;">
+            ✅ Delivery status saved successfully!
+        </div>
+    </div>
+    
+    <!-- HTML Email Modal -->
+    <div id="htmlEmailModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 15px; max-width: 800px; width: 90%; max-height: 90vh; overflow: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+            <div style="background: linear-gradient(135deg, #003366, #004080); color: white; padding: 20px; border-radius: 15px 15px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0;">📧 HTML Email Code</h3>
+                <button onclick="closeHTMLEmailModal()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; width: 30px; height: 30px;">×</button>
+            </div>
+            <div style="padding: 20px;">
+                <p style="color: #666; margin-bottom: 15px;">Copy this HTML code and paste it into your email client for a professional-looking receipt email:</p>
+                <textarea id="htmlEmailCode" readonly style="width: 100%; height: 300px; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 12px; resize: vertical;"></textarea>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button onclick="copyHTMLCode()" style="flex: 1; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">📋 Copy to Clipboard</button>
+                    <button onclick="closeHTMLEmailModal()" style="flex: 1; padding: 12px; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Firebase -->
+    <script src="/admin/js/firebase-config.js"></script>
     <script>
+        let db = null;
+        let currentReceiptData = null;
+        
+        // Initialize Firebase
+        if (typeof initializeFirebase === 'function') {
+            initializeFirebase();
+            if (typeof firebase !== 'undefined') {
+                db = firebase.firestore();
+            }
+        }
+        
         // Set generated date
         document.getElementById('generatedDate').textContent = new Date().toLocaleString();
         
@@ -468,14 +522,40 @@
         
         function printReceipt() {
             window.print();
+            // Auto-check the print status after printing
+            setTimeout(() => {
+                document.getElementById('status-print').checked = true;
+                updateDeliveryStatus();
+            }, 1000);
         }
         
-        function emailReceipt() {
+        async function saveAsPDF() {
+            alert('To save as PDF:\n\n1. Click OK to open the print dialog\n2. Choose "Save as PDF" or "Microsoft Print to PDF"\n3. Choose your destination folder\n4. Click Save');
+            window.print();
+            // Auto-check the email-attach status after saving PDF
+            setTimeout(() => {
+                if (confirm('Did you save the PDF to attach to an email?')) {
+                    document.getElementById('status-email-attach').checked = true;
+                    updateDeliveryStatus();
+                }
+            }, 1000);
+        }
+        
+        async function emailReceipt() {
             console.log('Email receipt function called');
             
             const memberEmail = document.getElementById('memberEmail').textContent;
             const memberName = document.getElementById('memberName').textContent;
             const receiptNumber = document.getElementById('receiptNumber').textContent;
+            
+            if (!memberEmail || memberEmail === 'Not provided' || memberEmail.trim() === '') {
+                alert('No email address available for this member. Please add an email address in the member information first.');
+                return;
+            }
+            
+            // Save receipt to Firebase first
+            await saveReceiptToFirebase();
+            
             const totalAmount = document.getElementById('totalAmount').textContent;
             const paymentDate = document.getElementById('paymentDate').textContent;
             const paymentMethod = document.getElementById('paymentMethod').textContent;
@@ -489,12 +569,12 @@
             const otherAmount = document.getElementById('otherAmount').textContent;
             const paymentMemo = document.getElementById('paymentMemo').textContent;
             
-            console.log('Member email:', memberEmail);
-            console.log('Member name:', memberName);
-            
             const emailSubject = `CVCWVUAA Payment Receipt ${receiptNumber}`;
             
-            // Create a detailed plain text email that will work in all email clients
+            // Create receipt viewer URL
+            const receiptViewerURL = `${window.location.origin}/admin/receipt-viewer.html?receipt=${receiptNumber}`;
+            
+            // Create email body with link to view online
             const emailBody = `Dear ${memberName},
 
 Thank you for your payment to the Central Virginia Chapter of the West Virginia University Alumni Association.
@@ -513,6 +593,9 @@ PAYMENT BREAKDOWN:
 - Donation: ${donationAmount}
 - Other Fees: ${otherAmount}${paymentMemo ? '\n\nPAYMENT NOTES:\n' + paymentMemo : ''}
 
+VIEW RECEIPT ONLINE:
+${receiptViewerURL}
+
 TAX INFORMATION:
 The Central Virginia Chapter of the WVU Alumni Association is a registered non-profit organization. 
 Portions of this payment may be tax-deductible. Please consult with your tax advisor for specific guidance.
@@ -530,22 +613,16 @@ Website: www.cvawvuaa.org
 
 This receipt was generated on ${new Date().toLocaleString()}`;
             
-            if (memberEmail && memberEmail !== 'Not provided' && memberEmail.trim() !== '') {
-                console.log('Opening email client directly');
-                // Open email client directly with populated fields
-                const mailtoLink = `mailto:${memberEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-                window.open(mailtoLink);
-                
-                // Also offer HTML version
-                setTimeout(() => {
-                    if (confirm('Email client opened with plain text receipt. Would you like to also get the HTML version for a more professional look?')) {
-                        showHTMLEmailDialog(memberEmail, emailSubject);
-                    }
-                }, 1000);
-            } else {
-                console.log('No valid email address');
-                alert('No email address available for this member. Please add an email address in the member information first.');
-            }
+            // Open email client
+            const mailtoLink = `mailto:${memberEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            window.location.href = mailtoLink;
+            
+            // Show option for HTML email
+            setTimeout(() => {
+                if (confirm('Email client opened with receipt link. Would you like to also get the HTML email code for a more professional look?')) {
+                    showHTMLEmail();
+                }
+            }, 1000);
         }
         
         function showHTMLEmailDialog(emailAddress, subject) {
@@ -804,22 +881,154 @@ Website: www.cvawvuaa.org
 ========================================`;
         }
         
+        /**
+         * Save receipt to Firebase
+         */
+        async function saveReceiptToFirebase() {
+            if (!db || !currentReceiptData) {
+                console.log('Firebase not available or no receipt data');
+                return;
+            }
+            
+            try {
+                const receiptNumber = document.getElementById('receiptNumber').textContent;
+                const receiptDoc = {
+                    receiptNumber: receiptNumber,
+                    memberName: document.getElementById('memberName').textContent,
+                    memberEmail: document.getElementById('memberEmail').textContent,
+                    memberPhone: document.getElementById('memberPhone').textContent,
+                    memberAddress: document.getElementById('memberAddress').textContent,
+                    paymentDate: document.getElementById('paymentDate').textContent,
+                    paymentMethod: document.getElementById('paymentMethod').textContent,
+                    transactionId: document.getElementById('transactionId').textContent,
+                    totalAmount: document.getElementById('totalAmount').textContent,
+                    breakdown: {
+                        membership: document.getElementById('membershipAmount').textContent,
+                        event: document.getElementById('eventAmount').textContent,
+                        scholarship: document.getElementById('scholarshipAmount').textContent,
+                        donation: document.getElementById('donationAmount').textContent,
+                        other: document.getElementById('otherAmount').textContent
+                    },
+                    memo: document.getElementById('paymentMemo').textContent,
+                    processedBy: document.getElementById('processedBy').textContent,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdBy: 'CVCWVUAA Admin',
+                    deliveryStatus: {
+                        printedMailed: false,
+                        emailedAttach: false,
+                        emailedHTML: false,
+                        lastUpdated: null
+                    }
+                };
+                
+                await db.collection('receipts').doc(receiptNumber).set(receiptDoc);
+                console.log('✅ Receipt saved to Firebase:', receiptNumber);
+            } catch (error) {
+                console.error('Error saving receipt to Firebase:', error);
+            }
+        }
+        
+        /**
+         * Update delivery status in Firebase
+         */
+        async function updateDeliveryStatus() {
+            const receiptNumber = document.getElementById('receiptNumber').textContent;
+            
+            const statusPrint = document.getElementById('status-print').checked;
+            const statusEmailAttach = document.getElementById('status-email-attach').checked;
+            const statusEmailHTML = document.getElementById('status-email-html').checked;
+            
+            // Auto-check email-html when HTML code is copied
+            if (statusEmailHTML) {
+                document.getElementById('status-email-html').checked = true;
+            }
+            
+            if (!db) {
+                console.log('Firebase not available, delivery status not saved');
+                return;
+            }
+            
+            try {
+                await db.collection('receipts').doc(receiptNumber).update({
+                    'deliveryStatus.printedMailed': statusPrint,
+                    'deliveryStatus.emailedAttach': statusEmailAttach,
+                    'deliveryStatus.emailedHTML': statusEmailHTML,
+                    'deliveryStatus.lastUpdated': firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Show success message
+                const statusMessage = document.getElementById('statusMessage');
+                statusMessage.style.display = 'block';
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 3000);
+                
+                console.log('✅ Delivery status updated');
+            } catch (error) {
+                console.error('Error updating delivery status:', error);
+            }
+        }
+        
+        /**
+         * Show HTML email modal with code
+         */
+        async function showHTMLEmail() {
+            // Save receipt first if not already saved
+            await saveReceiptToFirebase();
+            
+            const htmlCode = createHTMLEmailReceipt();
+            document.getElementById('htmlEmailCode').value = htmlCode;
+            document.getElementById('htmlEmailModal').style.display = 'flex';
+        }
+        
+        /**
+         * Close HTML email modal
+         */
+        function closeHTMLEmailModal() {
+            document.getElementById('htmlEmailModal').style.display = 'none';
+        }
+        
+        /**
+         * Copy HTML code to clipboard
+         */
+        async function copyHTMLCode() {
+            const code = document.getElementById('htmlEmailCode');
+            code.select();
+            code.setSelectionRange(0, 99999); // For mobile devices
+            
+            try {
+                await navigator.clipboard.writeText(code.value);
+                alert('✅ HTML code copied to clipboard!\n\nYou can now paste it into your email client.');
+                
+                // Mark as sent via HTML email
+                document.getElementById('status-email-html').checked = true;
+                updateDeliveryStatus();
+            } catch (err) {
+                // Fallback for older browsers
+                document.execCommand('copy');
+                alert('✅ HTML code copied to clipboard!\n\nYou can now paste it into your email client.');
+                
+                document.getElementById('status-email-html').checked = true;
+                updateDeliveryStatus();
+            }
+        }
+        
+        function showHTMLEmailDialog(emailAddress, subject) {
+            showHTMLEmail();
+        }
+        
         function saveReceipt() {
-            // This would typically integrate with a PDF generation service
-            // For now, we'll suggest using browser's print to PDF feature
-            alert('To save as PDF:\n\n1. Click "Print Receipt"\n2. Choose "Save as PDF" in the print dialog\n3. Select your desired location');
-            printReceipt();
+            saveAsPDF();
         }
         
         function newReceipt() {
             if (confirm('Create a new receipt? This will redirect to the receipt generator.')) {
-                // Redirect to receipt generator to create a new receipt
                 window.location.href = 'receipt-generator.html';
             }
         }
         
         // Check for receipt data from multiple sources
-        window.onload = function() {
+        window.onload = async function() {
             console.log('Receipt template loading...');
             
             // First try to get data from localStorage (new method)
@@ -828,7 +1037,11 @@ Website: www.cvawvuaa.org
                 try {
                     const receiptData = JSON.parse(storedData);
                     console.log('Using stored receipt data:', receiptData);
+                    currentReceiptData = receiptData;
                     populateReceipt(receiptData.member, receiptData.payment);
+                    
+                    // Save to Firebase
+                    await saveReceiptToFirebase();
                     
                     // Clear the stored data after using it
                     localStorage.removeItem('currentReceiptData');
@@ -841,7 +1054,9 @@ Website: www.cvawvuaa.org
             // Check if data was passed via window object (backup method)
             if (window.receiptData && window.receiptData.member) {
                 console.log('Using window receipt data:', window.receiptData);
+                currentReceiptData = window.receiptData;
                 populateReceipt(window.receiptData.member, window.receiptData.payment);
+                await saveReceiptToFirebase();
                 return;
             }
             
@@ -867,6 +1082,7 @@ Website: www.cvawvuaa.org
                 }
             };
             
+            currentReceiptData = window.receiptData;
             populateReceipt(window.receiptData.member, window.receiptData.payment);
         };
     </script>
