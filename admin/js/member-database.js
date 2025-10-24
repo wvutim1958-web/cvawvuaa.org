@@ -401,8 +401,21 @@ function viewMemberDetails(memberId) {
             const fee = payment.expectedAmount - payment.actualReceived;
             // Use recorded timestamp as unique identifier
             const paymentTimestamp = payment.recordedDate ? payment.recordedDate.toMillis() : Date.now();
+            const receiptSent = payment.receiptSent || false;
+            const receiptSentDate = payment.receiptSentDate || null;
+            
+            // Border color changes if receipt sent
+            const borderColor = receiptSent ? '#10b981' : '#667eea';
+            
             return `
-                <div style="border-left: 3px solid #667eea; padding: 10px; margin: 10px 0; background: white; position: relative;">
+                <div style="border-left: 3px solid ${borderColor}; padding: 10px; margin: 10px 0; background: white; position: relative;">
+                    ${receiptSent ? `<span style="position: absolute; top: 10px; left: 10px; background: #10b981; color: white; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">✓ Receipt Sent</span>` : ''}
+                    <button class="email-receipt-btn" 
+                            data-member-id="${memberId}" 
+                            data-payment-timestamp="${paymentTimestamp}"
+                            style="position: absolute; top: 10px; right: 170px; background: ${receiptSent ? '#6c757d' : '#4a90e2'}; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 12px;">
+                        ${receiptSent ? '📧 Resend' : '📧 Email'}
+                    </button>
                     <button class="view-receipt-btn" 
                             data-member-id="${memberId}" 
                             data-payment-timestamp="${paymentTimestamp}"
@@ -421,6 +434,7 @@ function viewMemberDetails(memberId) {
                     ${fee > 0 ? `<span style="color: #c62828;"> (PayPal fee: $${fee.toFixed(2)})</span>` : ''}<br>
                     <strong>Method:</strong> ${payment.paymentMethod}<br>
                     ${payment.notes ? `<strong>Notes:</strong> ${escapeHtml(payment.notes)}<br>` : ''}
+                    ${receiptSent && receiptSentDate ? `<em style="color: #666; font-size: 0.9em;">Receipt emailed: ${new Date(receiptSentDate).toLocaleDateString()}</em>` : ''}
                 </div>
             `;
         }).join('');
@@ -539,6 +553,20 @@ function viewMemberDetails(memberId) {
                 window.open(`/admin/receipt-viewer.html?memberId=${memberId}&timestamp=${paymentTimestamp}`, '_blank');
             });
         });
+        
+        // Email receipt buttons
+        const emailButtons = document.querySelectorAll('.email-receipt-btn');
+        emailButtons.forEach(button => {
+            // Remove any existing listeners by cloning
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', async function() {
+                const memberId = this.getAttribute('data-member-id');
+                const paymentTimestamp = this.getAttribute('data-payment-timestamp');
+                await emailReceipt(memberId, paymentTimestamp);
+            });
+        });
     }, 100);
 }
 
@@ -587,6 +615,98 @@ async function deletePayment(memberId, paymentTimestamp) {
     } catch (error) {
         console.error('Error deleting payment:', error);
         showError('Failed to delete payment: ' + error.message);
+    }
+}
+
+/**
+ * Email receipt to member
+ */
+async function emailReceipt(memberId, paymentTimestamp) {
+    try {
+        // Get member data
+        const memberDoc = await memberDb.collection('members').doc(memberId).get();
+        if (!memberDoc.exists) {
+            throw new Error('Member not found');
+        }
+        
+        const memberData = memberDoc.data();
+        const memberName = memberData.name;
+        const memberEmail = memberData.email || '';
+        const allPayments = memberData.payments || [];
+        
+        if (!memberEmail) {
+            alert(`Cannot email receipt: ${memberName} has no email address on file.`);
+            return;
+        }
+        
+        // Find the payment
+        const timestampNum = parseInt(paymentTimestamp);
+        const payment = allPayments.find(p => {
+            const paymentTime = p.recordedDate ? p.recordedDate.toMillis() : 0;
+            return paymentTime === timestampNum;
+        });
+        
+        if (!payment) {
+            throw new Error('Payment not found');
+        }
+        
+        // Create mailto link
+        const subject = encodeURIComponent(`CVCWVUAA Membership Payment Receipt`);
+        const body = encodeURIComponent(
+            `Dear ${memberName},\n\n` +
+            `Thank you for your payment to the Central Virginia Chapter WVU Alumni Association.\n\n` +
+            `Payment Details:\n` +
+            `Date: ${formatDate(payment.date)}\n` +
+            `Amount: $${payment.actualReceived.toFixed(2)}\n` +
+            `Method: ${payment.paymentMethod}\n\n` +
+            `Your continued support helps us strengthen our Mountaineer community!\n\n` +
+            `Go Mountaineers!\n` +
+            `Central Virginia Chapter WVU Alumni Association`
+        );
+        
+        // Open mailto
+        window.location.href = `mailto:${memberEmail}?subject=${subject}&body=${body}`;
+        
+        // Mark receipt as sent
+        const updatedPayments = allPayments.map(p => {
+            const paymentTime = p.recordedDate ? p.recordedDate.toMillis() : 0;
+            if (paymentTime === timestampNum) {
+                return {
+                    ...p,
+                    receiptSent: true,
+                    receiptSentDate: new Date().toISOString()
+                };
+            }
+            return p;
+        });
+        
+        // Update in Firebase
+        await memberDb.collection('members').doc(memberId).update({
+            payments: updatedPayments,
+            lastModified: new Date()
+        });
+        
+        // Log to communications
+        await memberDb.collection('communications').add({
+            memberId: memberId,
+            memberName: memberName,
+            type: 'Payment Receipt',
+            subject: 'Membership Payment Receipt',
+            message: `Receipt emailed for $${payment.actualReceived.toFixed(2)} payment`,
+            date: firebase.firestore.Timestamp.now(),
+            sentBy: 'Admin'
+        });
+        
+        console.log('Receipt sent and logged');
+        showSuccess('Receipt email opened! Status updated.');
+        
+        // Reload members and re-open details
+        await loadMembers();
+        viewMemberDetails(memberId);
+        
+    } catch (error) {
+        console.error('Error emailing receipt:', error);
+        showError('Failed to email receipt: ' + error.message);
     }
 }
 
