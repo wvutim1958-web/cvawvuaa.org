@@ -285,6 +285,19 @@
         }
         
         container.innerHTML = filteredTransactions.map(transaction => {
+            // Debug logging for first transaction
+            if (filteredTransactions.indexOf(transaction) === 0) {
+                console.log('First transaction splits:', transaction.splits);
+                console.log('Categories.income:', CATEGORIES.income);
+                console.log('Categories.expense:', CATEGORIES.expense);
+                transaction.splits.forEach(split => {
+                    console.log(`Split category: "${split.category}"`, {
+                        isIncome: CATEGORIES.income.includes(split.category),
+                        isExpense: CATEGORIES.expense.includes(split.category)
+                    });
+                });
+            }
+            
             // Separate splits into income and expense
             const incomeSplits = transaction.splits.filter(split => 
                 CATEGORIES.income.includes(split.category)
