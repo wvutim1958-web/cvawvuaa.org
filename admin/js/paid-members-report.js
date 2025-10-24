@@ -238,7 +238,7 @@ function renderTable() {
     const tbody = document.getElementById('membersTableBody');
     
     if (paidMembers.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #666;">No members have paid current year dues yet.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px; color: #666;">No members have paid current year dues yet.</td></tr>';
         return;
     }
     
@@ -267,9 +267,15 @@ function renderTable() {
                 <td class="amount">$${payment.actualReceived.toFixed(2)}</td>
                 <td>${escapeHtml(payment.paymentMethod)}</td>
                 <td>${member.email ? escapeHtml(member.email) : '<span style="color: #999;">No email</span>'}</td>
-                <td>
-                    <button class="btn btn-primary" onclick="viewReceipt('${member.id}', ${member.paymentTimestamp})" style="padding: 8px 16px; font-size: 13px;">
+                <td style="white-space: nowrap;">
+                    <button class="btn btn-primary" onclick="viewReceipt('${member.id}', ${member.paymentTimestamp})" style="padding: 8px 12px; font-size: 13px; margin-right: 5px;">
                         📄 Receipt
+                    </button>
+                    <button class="btn" onclick="editPayment('${member.id}', ${member.paymentTimestamp})" style="padding: 8px 12px; font-size: 13px; background: #4a90e2; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;">
+                        ✏️ Edit
+                    </button>
+                    <button class="btn" onclick="deletePayment('${member.id}', ${member.paymentTimestamp})" style="padding: 8px 12px; font-size: 13px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        🗑️ Delete
                     </button>
                 </td>
             </tr>
@@ -361,6 +367,67 @@ function printReceipts() {
             window.open(`/admin/receipt-viewer.html?memberId=${member.id}&timestamp=${member.paymentTimestamp}`, '_blank');
         }, index * 500); // Stagger by 500ms to avoid browser blocking
     });
+}
+
+/**
+ * Edit a payment
+ */
+function editPayment(memberId, timestamp) {
+    // Redirect to member database to edit the payment
+    window.location.href = `/admin/member-database.html?id=${memberId}&editPayment=${timestamp}`;
+}
+
+/**
+ * Delete a payment from a member's record
+ */
+async function deletePayment(memberId, timestamp) {
+    if (!confirm('Are you sure you want to delete this payment? This action cannot be undone.')) {
+        return;
+    }
+    
+    try {
+        console.log(`Deleting payment for member ${memberId} with timestamp ${timestamp}`);
+        
+        // Get the member document
+        const memberRef = db.collection('members').doc(memberId);
+        const memberDoc = await memberRef.get();
+        
+        if (!memberDoc.exists) {
+            alert('Error: Member not found');
+            return;
+        }
+        
+        const memberData = memberDoc.data();
+        const payments = memberData.payments || [];
+        
+        // Find and remove the payment with matching timestamp
+        const updatedPayments = payments.filter(payment => {
+            const paymentTimestamp = payment.recordedDate && payment.recordedDate.toMillis 
+                ? payment.recordedDate.toMillis() 
+                : Date.now();
+            return paymentTimestamp !== timestamp;
+        });
+        
+        if (updatedPayments.length === payments.length) {
+            alert('Error: Payment not found');
+            return;
+        }
+        
+        // Update the member document
+        await memberRef.update({
+            payments: updatedPayments
+        });
+        
+        console.log('Payment deleted successfully');
+        alert('✅ Payment deleted successfully!');
+        
+        // Reload the report
+        await loadPaidMembers();
+        
+    } catch (error) {
+        console.error('Error deleting payment:', error);
+        alert('Error deleting payment: ' + error.message);
+    }
 }
 
 /**
