@@ -244,42 +244,62 @@ function emailReceipt() {
         return;
     }
     
-    const subject = `Tax-Deductible Donation Receipt - ${currentReceipt.receiptNumber}`;
-    const body = `Dear ${currentReceipt.donorName},
-
-Thank you for your generous donation to the Central Virginia Chapter of the WVU Alumni Association!
-
-OFFICIAL TAX RECEIPT
-Receipt Number: ${currentReceipt.receiptNumber}
-
-Donor Information:
-${currentReceipt.donorName}
-${currentReceipt.donorAddress}
-
-Donation Details:
-Date: ${formatDate(new Date(currentReceipt.donationDate))}
-Type: ${currentReceipt.donationType}
-Amount: $${currentReceipt.donationAmount.toFixed(2)}
-Payment Method: ${currentReceipt.paymentMethod}
-
-Tax Deduction Information:
-The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization. Your contribution is tax-deductible to the extent allowed by law.
-
-EIN: 54-1991299
-
-No goods or services were provided in exchange for this donation.
-
-${currentReceipt.donationNotes ? `Notes: ${currentReceipt.donationNotes}\n\n` : ''}Thank you for your generous support of the Central Virginia Chapter WVU Alumni Association!
-
-Best regards,
-CVCWVUAA Treasurer
-cvcwvuaa@gmail.com
-https://cvawvuaa.org`;
+    // Create receipt URL (we'll save to Firebase and create a viewer)
+    const receiptURL = `https://cvawvuaa.org/admin/tax-receipt-viewer.html?receipt=${currentReceipt.receiptNumber}`;
     
-    const mailtoLink = `mailto:${currentReceipt.donorEmail || ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const subject = encodeURIComponent(`Tax-Deductible Donation Receipt - ${currentReceipt.receiptNumber}`);
+    
+    // Create both plain text and HTML-friendly email
+    const emailBody = encodeURIComponent(
+        `Dear ${currentReceipt.donorName},\n\n` +
+        `Thank you for your generous donation to the Central Virginia Chapter of the WVU Alumni Association!\n\n` +
+        `Your official tax-deductible receipt is available at:\n` +
+        `${receiptURL}\n\n` +
+        `RECEIPT SUMMARY\n` +
+        `Receipt Number: ${currentReceipt.receiptNumber}\n` +
+        `Date: ${formatDate(new Date(currentReceipt.donationDate))}\n` +
+        `Donation Type: ${currentReceipt.donationType}\n` +
+        `Amount: $${currentReceipt.donationAmount.toFixed(2)}\n` +
+        `Payment Method: ${currentReceipt.paymentMethod}\n\n` +
+        `TAX INFORMATION\n` +
+        `The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization.\n` +
+        `EIN: 54-1991299\n` +
+        `Your contribution is tax-deductible to the extent allowed by law.\n` +
+        `No goods or services were provided in exchange for this donation.\n\n` +
+        `${currentReceipt.donationNotes ? `Notes: ${currentReceipt.donationNotes}\n\n` : ''}` +
+        `You can view, print, or save your official receipt using the link above.\n\n` +
+        `Thank you for your generous support!\n\n` +
+        `Let's Go! Mountaineers!!!!\n\n` +
+        `Central Virginia Chapter\n` +
+        `West Virginia University Alumni Association\n` +
+        `cvcwvuaa@gmail.com\n` +
+        `https://cvawvuaa.org`
+    );
+    
+    const mailtoLink = `mailto:${currentReceipt.donorEmail || ''}?subject=${subject}&body=${emailBody}`;
+    
+    // Save receipt to Firebase for URL access
+    saveReceiptToFirebase();
+    
     window.location.href = mailtoLink;
     
-    alert('📧 Email client opened!\n\n⚠️ IMPORTANT: Please send this email from cvcwvuaa@gmail.com\n\nReview the receipt details and click Send.');
+    alert('📧 Email client opened!\n\n⚠️ IMPORTANT: Please send this email from cvcwvuaa@gmail.com\n\nThe email includes:\n✓ Link to official receipt\n✓ Receipt summary\n✓ Tax information\n\nReview and click Send.');
+}
+
+// Save receipt to Firebase for URL-based viewing
+async function saveReceiptToFirebase() {
+    if (!currentReceipt) return;
+    
+    try {
+        await db.collection('taxReceipts').doc(currentReceipt.receiptNumber).set({
+            ...currentReceipt,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdBy: 'Admin'
+        });
+        console.log('Receipt saved to Firebase:', currentReceipt.receiptNumber);
+    } catch (error) {
+        console.error('Error saving receipt to Firebase:', error);
+    }
 }
 
 // Set default date to today

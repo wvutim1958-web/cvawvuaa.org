@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tax Receipt Viewer - CVCWVUAA">
+    <title>Tax Receipt - CVCWVUAA</title>
+    
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/wvu-components.min.css">
+    
+    <style>
+        body {
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .error {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c00;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .receipt-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #003057;
+        }
+        
+        .receipt-header h1 {
+            color: #003057;
+            margin: 0 0 0.25rem;
+            font-size: 1.75rem;
+        }
+        
+        .receipt-header p {
+            margin: 0.15rem 0;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .receipt-content {
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .receipt-content p {
+            margin-bottom: 0.75rem;
+        }
+        
+        .receipt-details {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .receipt-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .receipt-details td {
+            padding: 0.4rem;
+        }
+        
+        .receipt-details td:first-child {
+            font-weight: 600;
+            width: 40%;
+        }
+        
+        .tax-notice {
+            background: #fef3c7;
+            padding: 0.75rem;
+            border-left: 4px solid #f59e0b;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .signature-line {
+            margin-top: 2rem;
+            padding-top: 0.75rem;
+            border-top: 2px solid #ccc;
+        }
+        
+        .signature-image {
+            max-width: 200px;
+            height: auto;
+            margin: 1rem 0 0.5rem 0;
+        }
+        
+        .actions {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #059669;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        @media print {
+            body {
+                margin: 0.25in;
+                background: white;
+            }
+            
+            .actions {
+                display: none;
+            }
+            
+            .receipt-container {
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .receipt-header {
+                margin-bottom: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+            
+            .receipt-header h1 {
+                font-size: 1.3rem;
+                margin: 0;
+            }
+            
+            .receipt-header p {
+                font-size: 0.75rem;
+                margin: 0.1rem 0;
+                line-height: 1.2;
+            }
+            
+            .receipt-content {
+                line-height: 1.3;
+                font-size: 0.85rem;
+            }
+            
+            .receipt-content p {
+                margin-bottom: 0.4rem;
+            }
+            
+            .receipt-details {
+                padding: 0.5rem;
+                margin: 0.5rem 0;
+            }
+            
+            .receipt-details td {
+                padding: 0.2rem;
+                font-size: 0.85rem;
+            }
+            
+            .tax-notice {
+                padding: 0.4rem;
+                margin: 0.5rem 0;
+                font-size: 0.75rem;
+            }
+            
+            .signature-line {
+                margin-top: 1rem;
+                padding-top: 0.5rem;
+                font-size: 0.85rem;
+            }
+            
+            .signature-image {
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <div class="container">
+        <div id="loadingMessage" class="loading">
+            Loading receipt...
+        </div>
+        
+        <div id="errorMessage" class="error" style="display: none;"></div>
+        
+        <div id="receiptDisplay" style="display: none;">
+            <div class="actions">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
+                <button class="btn btn-secondary" onclick="downloadPDF()">💾 Save as PDF</button>
+            </div>
+            
+            <div class="receipt-container" id="receiptContent">
+                <!-- Receipt content will be inserted here -->
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
+                <button class="btn btn-secondary" onclick="downloadPDF()">💾 Save as PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/admin/js/firebase-config.js"></script>
+    
+    <script>
+        let db = null;
+        let receiptData = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize Firebase
+            if (typeof initializeFirebase === 'function') {
+                const initialized = initializeFirebase();
+                if (initialized && typeof firebase !== 'undefined') {
+                    db = firebase.firestore();
+                }
+            }
+            
+            // Get receipt number from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const receiptNumber = urlParams.get('receipt');
+            
+            if (!receiptNumber) {
+                showError('No receipt specified in URL.');
+                return;
+            }
+            
+            await loadReceipt(receiptNumber);
+        });
+        
+        async function loadReceipt(receiptNumber) {
+            try {
+                const doc = await db.collection('taxReceipts').doc(receiptNumber).get();
+                
+                if (!doc.exists) {
+                    showError('Receipt not found. It may have been deleted or the link is invalid.');
+                    return;
+                }
+                
+                receiptData = doc.data();
+                displayReceipt(receiptData);
+                
+            } catch (error) {
+                console.error('Error loading receipt:', error);
+                showError('Failed to load receipt: ' + error.message);
+            }
+        }
+        
+        function displayReceipt(receipt) {
+            const content = document.getElementById('receiptContent');
+            
+            const html = `
+                <div class="receipt-header">
+                    <h1>Central Virginia Chapter</h1>
+                    <p>West Virginia University Alumni Association</p>
+                    <p>Richmond, Virginia</p>
+                    <p><strong>EIN:</strong> 54-1991299</p>
+                </div>
+                
+                <div class="receipt-content">
+                    <h2 style="text-align: center; color: #003057; margin: 1rem 0;">OFFICIAL TAX RECEIPT</h2>
+                    
+                    <p><strong>Receipt Number:</strong> ${receipt.receiptNumber}</p>
+                    <p><strong>Date Issued:</strong> ${formatDate(new Date())}</p>
+                    
+                    <div class="receipt-details">
+                        <h3 style="margin-top: 0; color: #003057;">Donor Information</h3>
+                        <table>
+                            <tr>
+                                <td>Name:</td>
+                                <td>${receipt.donorName}</td>
+                            </tr>
+                            <tr>
+                                <td>Address:</td>
+                                <td>${receipt.donorAddress.replace(/\n/g, '<br>')}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="receipt-details">
+                        <h3 style="margin-top: 0; color: #003057;">Donation Details</h3>
+                        <table>
+                            <tr>
+                                <td>Date of Donation:</td>
+                                <td>${formatDate(new Date(receipt.donationDate))}</td>
+                            </tr>
+                            <tr>
+                                <td>Donation Type:</td>
+                                <td>${receipt.donationType}</td>
+                            </tr>
+                            <tr>
+                                <td>Amount:</td>
+                                <td style="font-size: 1.2rem; font-weight: bold; color: #10b981;">$${receipt.donationAmount.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td>Payment Method:</td>
+                                <td>${receipt.paymentMethod}</td>
+                            </tr>
+                            ${receipt.donationNotes ? `
+                            <tr>
+                                <td>Notes:</td>
+                                <td>${receipt.donationNotes}</td>
+                            </tr>
+                            ` : ''}
+                        </table>
+                    </div>
+                    
+                    <div class="tax-notice">
+                        <h4 style="margin-top: 0; color: #856404;">Tax Deduction Information</h4>
+                        <p style="margin: 0.5rem 0;">The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization under Internal Revenue Code Section 501(c)(3). Your contribution is tax-deductible to the extent allowed by law.</p>
+                        <p style="margin: 0.5rem 0;"><strong>No goods or services were provided in exchange for this donation.</strong></p>
+                        <p style="margin: 0.5rem 0;">Please retain this receipt for your tax records.</p>
+                    </div>
+                    
+                    <p>Thank you for your generous support! Your contribution helps us provide scholarships to deserving students 
+                    and build a strong WVU community in Central Virginia.</p>
+                    
+                    <p style="margin-top: 2rem;">Let's Go! Mountaineers!!!!</p>
+                    
+                    <div class="signature-line">
+                        <p><strong>Authorized Signature</strong></p>
+                        <img src="/assets/signatures/president-signature.png" alt="Signature" class="signature-image">
+                        <p>Central Virginia Chapter WVUAA</p>
+                        <p style="color: #666; font-size: 0.9rem;">Date: ${formatDate(new Date())}</p>
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+            
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('receiptDisplay').style.display = 'block';
+        }
+        
+        function formatDate(date) {
+            if (!date) return '';
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+        
+        function showError(message) {
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+        
+        function downloadPDF() {
+            alert('To save as PDF:\n\n1. Click the Print button\n2. Choose "Save as PDF" as your printer\n3. Click Save');
+            window.print();
+        }
+    </script>
+</body>
+</html>
