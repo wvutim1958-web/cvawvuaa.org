@@ -296,26 +296,21 @@
         }
         
         container.innerHTML = filteredTransactions.map((transaction, idx) => {
-            // Debug logging for each transaction
-            console.log(`\n=== Transaction ${idx + 1}: ${transaction.description} ===`);
-            console.log('Splits:', transaction.splits);
-            
-            // Separate splits into income and expense (case-insensitive)
-            const incomeSplits = transaction.splits.filter(split => {
-                const isIncome = categoryMatches(split.category, CATEGORIES.income);
-                const isExpense = categoryMatches(split.category, CATEGORIES.expense);
-                console.log(`  "${split.category}" -> Income: ${isIncome}, Expense: ${isExpense}`);
-                return isIncome;
-            });
-            const expenseSplits = transaction.splits.filter(split => 
-                categoryMatches(split.category, CATEGORIES.expense)
+            // Separate splits into income, expense, and uncategorized (case-insensitive)
+            const incomeSplits = transaction.splits.filter(split => 
+                split.category && categoryMatches(split.category, CATEGORIES.income)
             );
-            
-            console.log(`Income splits: ${incomeSplits.length}, Expense splits: ${expenseSplits.length}`);
+            const expenseSplits = transaction.splits.filter(split => 
+                split.category && categoryMatches(split.category, CATEGORIES.expense)
+            );
+            const uncategorizedSplits = transaction.splits.filter(split => 
+                !split.category || (!categoryMatches(split.category, CATEGORIES.income) && !categoryMatches(split.category, CATEGORIES.expense))
+            );
             
             // Calculate totals
             const incomeTotal = incomeSplits.reduce((sum, split) => sum + split.amount, 0);
             const expenseTotal = expenseSplits.reduce((sum, split) => sum + split.amount, 0);
+            const uncategorizedTotal = uncategorizedSplits.reduce((sum, split) => sum + split.amount, 0);
             
             // Generate HTML for income splits
             const incomeSplitsHtml = incomeSplits.length > 0 ? `
@@ -367,6 +362,31 @@
                 </div>
             ` : '';
             
+            // Generate HTML for uncategorized splits
+            const uncategorizedSplitsHtml = uncategorizedSplits.length > 0 ? `
+                <div class="split-section">
+                    <h4 class="split-section-title uncategorized-title">⚠️ Uncategorized Splits (${formatCurrency(uncategorizedTotal)})</h4>
+                    <table class="split-table">
+                        <thead>
+                            <tr>
+                                <th>Member / Payee</th>
+                                <th>Category</th>
+                                <th style="text-align: right;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${uncategorizedSplits.map(split => `
+                                <tr>
+                                    <td>${escapeHtml(split.member || 'N/A')}</td>
+                                    <td><span class="category-badge uncategorized-badge">${escapeHtml(split.category || 'No Category')}</span></td>
+                                    <td class="amount-cell">${formatCurrency(split.amount)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            ` : '';
+            
             return `
                 <div class="split-transaction">
                     <div class="split-header">
@@ -381,11 +401,13 @@
                             <span><strong>Total Splits:</strong> ${transaction.splits.length} items</span>
                             ${incomeSplits.length > 0 ? `<span><strong>Income:</strong> ${incomeSplits.length} (${formatCurrency(incomeTotal)})</span>` : ''}
                             ${expenseSplits.length > 0 ? `<span><strong>Expense:</strong> ${expenseSplits.length} (${formatCurrency(expenseTotal)})</span>` : ''}
+                            ${uncategorizedSplits.length > 0 ? `<span style="color: #ff9800;"><strong>⚠️ Uncategorized:</strong> ${uncategorizedSplits.length} (${formatCurrency(uncategorizedTotal)})</span>` : ''}
                         </div>
                     </div>
                     <div class="split-details">
                         ${incomeSplitsHtml}
                         ${expenseSplitsHtml}
+                        ${uncategorizedSplitsHtml}
                     </div>
                 </div>
             `;
