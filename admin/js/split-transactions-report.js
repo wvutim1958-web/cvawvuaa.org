@@ -34,9 +34,9 @@
         ['income', 'expense'].forEach(type => {
             const categoryData = hierarchical[type];
             Object.keys(categoryData).forEach(mainCat => {
-                // Add main category
+                // Add main category (keep original case)
                 flat[type].push(mainCat);
-                // Add subcategories with full path
+                // Add subcategories with full path (keep original case)
                 const subcats = categoryData[mainCat];
                 if (Array.isArray(subcats)) {
                     subcats.forEach(subcat => {
@@ -47,6 +47,15 @@
         });
         
         return flat;
+    }
+    
+    /**
+     * Check if a category matches (case-insensitive)
+     */
+    function categoryMatches(splitCategory, categoryList) {
+        if (!splitCategory) return false;
+        const splitCatLower = splitCategory.toLowerCase();
+        return categoryList.some(cat => cat.toLowerCase() === splitCatLower);
     }
     
     try {
@@ -200,11 +209,13 @@
             });
         }
         
-        // Category filter
+        // Category filter (case-insensitive)
         const categoryFilter = document.getElementById('filter-category').value;
         if (categoryFilter !== 'all') {
             filteredTransactions = filteredTransactions.filter(t => {
-                return t.splits.some(s => s.category === categoryFilter);
+                return t.splits.some(s => 
+                    s.category && s.category.toLowerCase() === categoryFilter.toLowerCase()
+                );
             });
         }
         
@@ -233,11 +244,11 @@
             totalAmount += t.amount;
             totalLines += t.splits.length;
             
-            // Calculate income and expense splits
+            // Calculate income and expense splits (case-insensitive)
             t.splits.forEach(split => {
-                if (CATEGORIES.income.includes(split.category)) {
+                if (categoryMatches(split.category, CATEGORIES.income)) {
                     totalIncome += split.amount;
-                } else if (CATEGORIES.expense.includes(split.category)) {
+                } else if (categoryMatches(split.category, CATEGORIES.expense)) {
                     totalExpense += split.amount;
                 }
             });
@@ -298,12 +309,12 @@
                 });
             }
             
-            // Separate splits into income and expense
+            // Separate splits into income and expense (case-insensitive)
             const incomeSplits = transaction.splits.filter(split => 
-                CATEGORIES.income.includes(split.category)
+                categoryMatches(split.category, CATEGORIES.income)
             );
             const expenseSplits = transaction.splits.filter(split => 
-                CATEGORIES.expense.includes(split.category)
+                categoryMatches(split.category, CATEGORIES.expense)
             );
             
             // Calculate totals
