@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard - CVCWVUAA">
+    <title>Admin Dashboard - CVCWVUAA</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    
+    <style>
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .page-header h1 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .page-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card.balance {
+            border-left-color: #28a745;
+        }
+        
+        .stat-card.outstanding {
+            border-left-color: #dc3545;
+        }
+        
+        .stat-card.paid {
+            border-left-color: #007bff;
+        }
+        
+        .stat-card.total-members {
+            border-left-color: #6f42c1;
+        }
+        
+        .stat-card h3 {
+            margin: 0 0 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        
+        .stat-card.balance .value {
+            color: #28a745;
+        }
+        
+        .stat-card.outstanding .value {
+            color: #dc3545;
+        }
+        
+        .stat-card.paid .value {
+            color: #007bff;
+        }
+        
+        .stat-card.total-members .value {
+            color: #6f42c1;
+        }
+        
+        .stat-card .subtitle {
+            font-size: 0.85rem;
+            color: #999;
+        }
+        
+        .stat-card .action-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #003057;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .stat-card .action-link:hover {
+            text-decoration: underline;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section h2 {
+            margin: 0 0 1.5rem;
+            color: #003057;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .recent-payments-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+        
+        .payment-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .payment-item:last-child {
+            border-bottom: none;
+        }
+        
+        .payment-info {
+            flex: 1;
+        }
+        
+        .payment-name {
+            font-weight: 600;
+            color: #003057;
+            margin-bottom: 0.25rem;
+        }
+        
+        .payment-details {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .payment-amount {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .action-card {
+            background: linear-gradient(135deg, #003057, #004a7f);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #004a7f, #0066aa);
+        }
+        
+        .action-card .icon {
+            font-size: 2rem;
+        }
+        
+        .action-card .content h3 {
+            margin: 0 0 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .action-card .content p {
+            margin: 0;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="page-header">
+            <h1>📊 Admin Dashboard</h1>
+            <p>Welcome back! Here's your chapter overview</p>
+        </div>
+        
+        <!-- Key Statistics -->
+        <div class="dashboard-grid">
+            <div class="stat-card balance">
+                <h3>Current Balance</h3>
+                <div class="value" id="currentBalance">$0.00</div>
+                <div class="subtitle">Checking account</div>
+                <a href="balance-sheet.html" class="action-link">View Balance Sheet →</a>
+            </div>
+            
+            <div class="stat-card outstanding">
+                <h3>Outstanding Dues</h3>
+                <div class="value" id="outstandingCount">0</div>
+                <div class="subtitle">Members owe dues</div>
+                <a href="outstanding-dues-report.html" class="action-link">View Report →</a>
+            </div>
+            
+            <div class="stat-card paid">
+                <h3>Paid Members</h3>
+                <div class="value" id="paidCount">0</div>
+                <div class="subtitle">Current year (2025-26)</div>
+                <a href="paid-members-report.html" class="action-link">View Report →</a>
+            </div>
+            
+            <div class="stat-card total-members">
+                <h3>Total Members</h3>
+                <div class="value" id="totalMembers">0</div>
+                <div class="subtitle">In database</div>
+                <a href="member-database.html" class="action-link">Manage Members →</a>
+            </div>
+        </div>
+        
+        <!-- Recent Payments -->
+        <div class="section">
+            <h2>💰 Recent Payments</h2>
+            <div id="recentPaymentsLoading" class="loading">Loading recent payments...</div>
+            <ul id="recentPaymentsList" class="recent-payments-list" style="display: none;"></ul>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="section">
+            <h2>⚡ Quick Actions</h2>
+            <div class="quick-actions">
+                <a href="member-database.html" class="action-card">
+                    <div class="icon">👥</div>
+                    <div class="content">
+                        <h3>Member Database</h3>
+                        <p>View and manage all members</p>
+                    </div>
+                </a>
+                
+                <a href="financial-ledger.html" class="action-card">
+                    <div class="icon">📒</div>
+                    <div class="content">
+                        <h3>Financial Ledger</h3>
+                        <p>Record transactions</p>
+                    </div>
+                </a>
+                
+                <a href="outstanding-dues-report.html" class="action-card">
+                    <div class="icon">📧</div>
+                    <div class="content">
+                        <h3>Send Dues Reminders</h3>
+                        <p>Email members who owe dues</p>
+                    </div>
+                </a>
+                
+                <a href="payment-tracking.html" class="action-card">
+                    <div class="icon">💳</div>
+                    <div class="content">
+                        <h3>Payment Tracking</h3>
+                        <p>View all member payments</p>
+                    </div>
+                </a>
+                
+                <a href="financial-reports.html" class="action-card">
+                    <div class="icon">📊</div>
+                    <div class="content">
+                        <h3>Financial Reports</h3>
+                        <p>Income and expense analysis</p>
+                    </div>
+                </a>
+                
+                <a href="manage-categories.html" class="action-card">
+                    <div class="icon">📁</div>
+                    <div class="content">
+                        <h3>Manage Categories</h3>
+                        <p>Edit financial categories</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
