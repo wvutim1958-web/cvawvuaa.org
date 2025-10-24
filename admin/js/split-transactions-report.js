@@ -170,15 +170,32 @@
         const totalTransactions = filteredTransactions.length;
         let totalAmount = 0;
         let totalLines = 0;
+        let totalIncome = 0;
+        let totalExpense = 0;
         
         filteredTransactions.forEach(t => {
             totalAmount += t.amount;
             totalLines += t.splits.length;
+            
+            // Calculate income and expense splits
+            t.splits.forEach(split => {
+                if (CATEGORIES.income.includes(split.category)) {
+                    totalIncome += split.amount;
+                } else if (CATEGORIES.expense.includes(split.category)) {
+                    totalExpense += split.amount;
+                }
+            });
         });
         
         document.getElementById('stat-total').textContent = totalTransactions;
         document.getElementById('stat-amount').textContent = formatCurrency(totalAmount);
         document.getElementById('stat-lines').textContent = totalLines;
+        
+        // Add income and expense breakdown if elements exist
+        const incomeEl = document.getElementById('stat-income');
+        const expenseEl = document.getElementById('stat-expense');
+        if (incomeEl) incomeEl.textContent = formatCurrency(totalIncome);
+        if (expenseEl) expenseEl.textContent = formatCurrency(totalExpense);
         
         // Update date range
         const dateFrom = document.getElementById('date-from').value;
@@ -212,13 +229,67 @@
         }
         
         container.innerHTML = filteredTransactions.map(transaction => {
-            const splitsHtml = transaction.splits.map(split => `
-                <tr>
-                    <td>${escapeHtml(split.member || 'N/A')}</td>
-                    <td><span class="category-badge">${escapeHtml(split.category || 'No Category')}</span></td>
-                    <td class="amount-cell">${formatCurrency(split.amount)}</td>
-                </tr>
-            `).join('');
+            // Separate splits into income and expense
+            const incomeSplits = transaction.splits.filter(split => 
+                CATEGORIES.income.includes(split.category)
+            );
+            const expenseSplits = transaction.splits.filter(split => 
+                CATEGORIES.expense.includes(split.category)
+            );
+            
+            // Calculate totals
+            const incomeTotal = incomeSplits.reduce((sum, split) => sum + split.amount, 0);
+            const expenseTotal = expenseSplits.reduce((sum, split) => sum + split.amount, 0);
+            
+            // Generate HTML for income splits
+            const incomeSplitsHtml = incomeSplits.length > 0 ? `
+                <div class="split-section">
+                    <h4 class="split-section-title income-title">Income Splits (${formatCurrency(incomeTotal)})</h4>
+                    <table class="split-table">
+                        <thead>
+                            <tr>
+                                <th>Member</th>
+                                <th>Category</th>
+                                <th style="text-align: right;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${incomeSplits.map(split => `
+                                <tr>
+                                    <td>${escapeHtml(split.member || 'N/A')}</td>
+                                    <td><span class="category-badge income-badge">${escapeHtml(split.category)}</span></td>
+                                    <td class="amount-cell">${formatCurrency(split.amount)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            ` : '';
+            
+            // Generate HTML for expense splits
+            const expenseSplitsHtml = expenseSplits.length > 0 ? `
+                <div class="split-section">
+                    <h4 class="split-section-title expense-title">Expense Splits (${formatCurrency(expenseTotal)})</h4>
+                    <table class="split-table">
+                        <thead>
+                            <tr>
+                                <th>Payee</th>
+                                <th>Category</th>
+                                <th style="text-align: right;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${expenseSplits.map(split => `
+                                <tr>
+                                    <td>${escapeHtml(split.member || 'N/A')}</td>
+                                    <td><span class="category-badge expense-badge">${escapeHtml(split.category)}</span></td>
+                                    <td class="amount-cell">${formatCurrency(split.amount)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            ` : '';
             
             return `
                 <div class="split-transaction">
@@ -231,22 +302,14 @@
                             <span><strong>Date:</strong> ${formatDate(transaction.date)}</span>
                             <span><strong>Payee:</strong> ${escapeHtml(transaction.payee || 'N/A')}</span>
                             ${transaction.checkNumber ? `<span><strong>Check #:</strong> ${escapeHtml(transaction.checkNumber)}</span>` : ''}
-                            <span><strong>Splits:</strong> ${transaction.splits.length} items</span>
+                            <span><strong>Total Splits:</strong> ${transaction.splits.length} items</span>
+                            ${incomeSplits.length > 0 ? `<span><strong>Income:</strong> ${incomeSplits.length} (${formatCurrency(incomeTotal)})</span>` : ''}
+                            ${expenseSplits.length > 0 ? `<span><strong>Expense:</strong> ${expenseSplits.length} (${formatCurrency(expenseTotal)})</span>` : ''}
                         </div>
                     </div>
                     <div class="split-details">
-                        <table class="split-table">
-                            <thead>
-                                <tr>
-                                    <th>Member / Payee</th>
-                                    <th>Category</th>
-                                    <th style="text-align: right;">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${splitsHtml}
-                            </tbody>
-                        </table>
+                        ${incomeSplitsHtml}
+                        ${expenseSplitsHtml}
                     </div>
                 </div>
             `;

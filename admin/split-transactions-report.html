@@ -215,6 +215,44 @@
             font-weight: 500;
         }
         
+        .income-badge {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .expense-badge {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .split-section {
+            padding: 1rem 0;
+        }
+        
+        .split-section:first-child {
+            padding-top: 0;
+        }
+        
+        .split-section-title {
+            margin: 0 0 0.75rem 1rem;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-left: 4px solid #ccc;
+        }
+        
+        .income-title {
+            color: #155724;
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .expense-title {
+            color: #721c24;
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        
         .amount-cell {
             text-align: right;
             font-weight: 600;
@@ -304,6 +342,14 @@
             <div class="stat-card">
                 <div class="stat-label">Total Amount</div>
                 <div class="stat-value" id="stat-amount">$0.00</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Income Splits</div>
+                <div class="stat-value" id="stat-income" style="color: #28a745;">$0.00</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Expense Splits</div>
+                <div class="stat-value" id="stat-expense" style="color: #dc3545;">$0.00</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Total Split Lines</div>
