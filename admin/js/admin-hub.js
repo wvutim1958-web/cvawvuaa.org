@@ -79,23 +79,11 @@
     }
     
     /**
-     * Show admin content with fade-in animation
+     * Show admin content - redirect to dashboard
      */
     function showAdminContent() {
-        if (!elements.loginScreen || !elements.adminContent) return;
-        
-        // Hide login screen
-        elements.loginScreen.style.display = 'none';
-        
-        // Show admin content with fade-in
-        elements.adminContent.style.display = 'block';
-        elements.adminContent.classList.add('fade-in');
-        
-        // Focus management for accessibility
-        const firstLink = elements.adminContent.querySelector('a');
-        if (firstLink) {
-            firstLink.focus();
-        }
+        // Redirect to dashboard after successful login
+        window.location.href = '/admin/dashboard.html';
     }
     
     /**
