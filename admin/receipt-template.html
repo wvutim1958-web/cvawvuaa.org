@@ -6,9 +6,94 @@
     <title>CVCWVUAA Payment Receipt</title>
     <style>
         @media print {
-            body { margin: 0; }
-            .no-print { display: none; }
-            .receipt { box-shadow: none; border: none; }
+            body { 
+                margin: 0.25in;
+                background: white;
+            }
+            .no-print { 
+                display: none; 
+            }
+            .receipt { 
+                box-shadow: none; 
+                border: none;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .header {
+                padding-bottom: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .org-name {
+                font-size: 1.3rem;
+            }
+            
+            .org-subtitle {
+                font-size: 0.75rem;
+                margin: 0.2rem 0;
+            }
+            
+            .receipt-title {
+                font-size: 1rem;
+                margin: 0.5rem 0;
+            }
+            
+            .receipt-info {
+                gap: 1rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .member-info, .receipt-details {
+                padding: 0.5rem;
+            }
+            
+            .section-title {
+                font-size: 0.9rem;
+                margin-bottom: 0.3rem;
+            }
+            
+            .info-row {
+                margin-bottom: 0.2rem;
+                padding: 0.1rem 0;
+                font-size: 0.85rem;
+            }
+            
+            .payment-details {
+                padding: 0.75rem;
+                margin: 0.5rem 0;
+            }
+            
+            .payment-amount {
+                font-size: 1.5rem;
+                margin: 0.5rem 0;
+            }
+            
+            .payment-breakdown {
+                gap: 0.5rem;
+                margin-top: 0.5rem;
+            }
+            
+            .breakdown-item {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+            
+            .footer {
+                margin-top: 0.75rem;
+                padding-top: 0.5rem;
+                font-size: 0.75rem;
+            }
+            
+            .tax-info {
+                padding: 0.5rem;
+                margin: 0.5rem 0;
+                font-size: 0.75rem;
+            }
+            
+            * {
+                line-height: 1.3 !important;
+            }
         }
         
         body {

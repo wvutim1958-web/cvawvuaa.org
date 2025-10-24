@@ -202,8 +202,19 @@
         }
         
         @media print {
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                margin: 0.25in;
+            }
+            
             .container {
                 max-width: 100%;
+                padding: 0;
+                margin: 0;
             }
             
             .page-header,
@@ -216,6 +227,55 @@
             .receipt-preview {
                 box-shadow: none;
                 padding: 0;
+                margin: 0;
+                max-width: 100%;
+            }
+            
+            .receipt-header {
+                margin-bottom: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+            
+            .receipt-header h1 {
+                font-size: 1.3rem;
+                margin: 0;
+            }
+            
+            .receipt-header p {
+                font-size: 0.75rem;
+                margin: 0.1rem 0;
+                line-height: 1.2;
+            }
+            
+            .receipt-content {
+                line-height: 1.3;
+                font-size: 0.85rem;
+            }
+            
+            .receipt-content p {
+                margin-bottom: 0.4rem;
+            }
+            
+            .receipt-details {
+                padding: 0.5rem;
+                margin: 0.5rem 0;
+            }
+            
+            .receipt-details td {
+                padding: 0.2rem;
+                font-size: 0.85rem;
+            }
+            
+            .tax-notice {
+                padding: 0.4rem;
+                margin: 0.5rem 0;
+                font-size: 0.75rem;
+            }
+            
+            .signature-line {
+                margin-top: 1rem;
+                padding-top: 0.5rem;
+                font-size: 0.85rem;
             }
         }
     </style>

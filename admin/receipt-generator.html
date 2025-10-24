@@ -155,6 +155,62 @@
             border-radius: 5px;
             margin: 20px 0;
         }
+        
+        @media print {
+            body {
+                margin: 0.25in;
+                background: white;
+            }
+            
+            .container {
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .member-search,
+            .actions,
+            .preview-notice,
+            .btn,
+            .form-section {
+                display: none !important;
+            }
+            
+            .header {
+                margin-bottom: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .payment-section {
+                padding: 0.5rem;
+                margin: 0.5rem 0;
+            }
+            
+            .payment-section h3 {
+                font-size: 1rem;
+                margin: 0 0 0.5rem 0;
+            }
+            
+            .payment-grid,
+            .form-group {
+                font-size: 0.85rem;
+                margin-bottom: 0.3rem;
+            }
+            
+            .total-display {
+                font-size: 1.2rem;
+                padding: 0.5rem;
+                margin: 0.5rem 0;
+            }
+            
+            * {
+                line-height: 1.3 !important;
+            }
+        }
     </style>
 </head>
 <body>

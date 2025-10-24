@@ -6,16 +6,57 @@
     <title>Payment Receipt - CVCWVUAA</title>
     <style>
         @media print {
+            * {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            body {
+                margin: 0.25in !important;
+                padding: 0 !important;
+                background: white;
+            }
+            
             .no-print {
                 display: none !important;
             }
-            body {
-                background: white;
-            }
+            
             .receipt-container {
                 box-shadow: none;
-                margin: 0;
-                padding: 0;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100%;
+            }
+            
+            .receipt-header {
+                margin-bottom: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            
+            .receipt-header h1 {
+                font-size: 1.3rem !important;
+            }
+            
+            .receipt-header p {
+                font-size: 0.75rem !important;
+                line-height: 1.2 !important;
+            }
+            
+            .receipt-info,
+            .payment-details,
+            .receipt-footer {
+                font-size: 0.85rem !important;
+                line-height: 1.3 !important;
+                margin: 0.5rem 0 !important;
+                padding: 0.5rem !important;
+            }
+            
+            table {
+                font-size: 0.85rem !important;
+            }
+            
+            td, th {
+                padding: 0.2rem !important;
             }
         }
 
