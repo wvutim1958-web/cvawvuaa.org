@@ -125,6 +125,11 @@ function generateReceipt() {
     // Show receipt
     document.getElementById('receiptPreview').classList.add('active');
     document.getElementById('receiptPreview').scrollIntoView({ behavior: 'smooth' });
+    
+    // Reset delivery status checkboxes for new receipt
+    document.getElementById('tax-status-print').checked = false;
+    document.getElementById('tax-status-email-link').checked = false;
+    document.getElementById('tax-status-email-html').checked = false;
 }
 
 // Hide receipt
@@ -283,6 +288,12 @@ async function emailReceipt() {
     
     window.location.href = mailtoLink;
     
+    // Auto-check the emailed link checkbox
+    if (document.getElementById('tax-status-email-link')) {
+        document.getElementById('tax-status-email-link').checked = true;
+        updateTaxDeliveryStatus();
+    }
+    
     alert('📧 Email client opened!\n\n⚠️ IMPORTANT: Please send this email from cvcwvuaa@gmail.com\n\nThe email includes:\n✓ Link to official receipt\n✓ Receipt summary\n✓ Tax information\n\nReview and click Send.');
 }
 
@@ -425,6 +436,12 @@ function copyHTMLCode() {
     try {
         document.execCommand('copy');
         alert('✅ HTML code copied to clipboard!\n\nYou can now paste it into your email client.');
+        
+        // Auto-check the emailed HTML checkbox
+        if (currentReceipt && document.getElementById('tax-status-email-html')) {
+            document.getElementById('tax-status-email-html').checked = true;
+            updateTaxDeliveryStatus();
+        }
     } catch (err) {
         alert('❌ Failed to copy. Please manually select and copy the code.');
     }
@@ -466,6 +483,58 @@ async function saveReceiptToFirebase() {
         alert('Warning: Receipt may not have been saved to database. The email link might not work. Error: ' + error.message);
     }
 }
+
+// Update delivery status in Firebase
+async function updateTaxDeliveryStatus() {
+    if (!currentReceipt) {
+        console.warn('No current receipt to update status for');
+        return;
+    }
+    
+    const printedMailed = document.getElementById('tax-status-print').checked;
+    const emailedLink = document.getElementById('tax-status-email-link').checked;
+    const emailedHTML = document.getElementById('tax-status-email-html').checked;
+    
+    const deliveryStatus = {
+        printedMailed,
+        emailedLink,
+        emailedHTML,
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    try {
+        await db.collection('taxReceipts').doc(currentReceipt.receiptNumber).update({
+            deliveryStatus
+        });
+        
+        console.log('✅ Delivery status updated:', deliveryStatus);
+        
+        // Show success message
+        const message = document.getElementById('taxStatusMessage');
+        message.style.display = 'block';
+        setTimeout(() => {
+            message.style.display = 'none';
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error updating delivery status:', error);
+        alert('Failed to save delivery status: ' + error.message);
+    }
+}
+
+// Auto-check delivery status when printing
+const originalPrint = window.print;
+window.print = function() {
+    originalPrint.call(window);
+    
+    // Auto-check the printed/mailed checkbox after printing
+    setTimeout(() => {
+        if (currentReceipt && document.getElementById('tax-status-print')) {
+            document.getElementById('tax-status-print').checked = true;
+            updateTaxDeliveryStatus();
+        }
+    }, 1000);
+};
 
 // Set default date to today
 document.getElementById('donationDate').valueAsDate = new Date();
