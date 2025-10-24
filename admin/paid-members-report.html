@@ -168,6 +168,42 @@
             font-weight: 600;
             color: #2e7d32;
         }
+        
+        .receipt-status {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .receipt-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .receipt-badge.sent {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .receipt-badge.not-sent {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .receipt-badge.none {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
@@ -227,12 +263,13 @@
             <table>
                 <thead>
                     <tr>
-                        <th data-sort="name" onclick="sortBy('name')" style="cursor: pointer; user-select: none;">Member Name</th>
+                        <th data-sort="name" onclick="sortBy('name')" style="cursor: pointer; user-select: none;">Member Name ▼</th>
                         <th data-sort="type" onclick="sortBy('type')" style="cursor: pointer; user-select: none;">Type</th>
                         <th data-sort="date" onclick="sortBy('date')" style="cursor: pointer; user-select: none;">Payment Date</th>
                         <th data-sort="amount" onclick="sortBy('amount')" style="cursor: pointer; user-select: none;">Amount Received</th>
                         <th data-sort="method" onclick="sortBy('method')" style="cursor: pointer; user-select: none;">Payment Method</th>
                         <th data-sort="email" onclick="sortBy('email')" style="cursor: pointer; user-select: none;">Email</th>
+                        <th>Receipt Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

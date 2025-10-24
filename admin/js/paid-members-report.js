@@ -138,7 +138,7 @@ async function loadPaidMembers() {
         document.getElementById('familyCount').textContent = familyCount;
         
         // Render table
-        renderTable();
+        await renderTable();
         updateSortIndicators();
         
         document.getElementById('loading').style.display = 'none';
@@ -206,7 +206,7 @@ function sortBy(column) {
     });
     
     // Re-render table
-    renderTable();
+    renderTable().catch(err => console.error('Error rendering table:', err));
     
     // Update sort indicators
     updateSortIndicators();
@@ -234,15 +234,36 @@ function updateSortIndicators() {
 /**
  * Render members table
  */
-function renderTable() {
+async function renderTable() {
     const tbody = document.getElementById('membersTableBody');
     
     if (paidMembers.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px; color: #666;">No members have paid current year dues yet.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color: #666;">No members have paid current year dues yet.</td></tr>';
         return;
     }
     
-    tbody.innerHTML = paidMembers.map(member => {
+    // Fetch all receipt statuses in parallel
+    const receiptStatusPromises = paidMembers.map(async member => {
+        try {
+            const receiptsSnapshot = await db.collection('receipts')
+                .where('memberId', '==', member.id)
+                .where('paymentTimestamp', '==', member.paymentTimestamp)
+                .get();
+            
+            if (!receiptsSnapshot.empty) {
+                const receiptData = receiptsSnapshot.docs[0].data();
+                return receiptData.deliveryStatus || null;
+            }
+            return null;
+        } catch (error) {
+            console.error('Error fetching receipt status:', error);
+            return null;
+        }
+    });
+    
+    const receiptStatuses = await Promise.all(receiptStatusPromises);
+    
+    tbody.innerHTML = paidMembers.map((member, index) => {
         const payment = member.payment;
         const paymentDate = payment.date && payment.date.toDate 
             ? payment.date.toDate() 
@@ -256,6 +277,27 @@ function renderTable() {
         const membershipTypeLabel = member.membershipType === 'family' ? 'Family' : 'Individual';
         const familyInfo = member.familyMemberName ? ` (${member.familyMemberName})` : '';
         
+        // Get receipt status for this member
+        const deliveryStatus = receiptStatuses[index];
+        let receiptStatusHtml = '';
+        
+        if (deliveryStatus) {
+            const sentMethods = [];
+            if (deliveryStatus.printedMailed) sentMethods.push('🖨️ Printed/Mailed');
+            if (deliveryStatus.emailedLink) sentMethods.push('📧 Email (Link)');
+            if (deliveryStatus.emailedHTML) sentMethods.push('📧 Email (HTML)');
+            
+            if (sentMethods.length > 0) {
+                receiptStatusHtml = `<div class="receipt-status">
+                    ${sentMethods.map(method => `<span class="receipt-badge sent">${method}</span>`).join('')}
+                </div>`;
+            } else {
+                receiptStatusHtml = '<span class="receipt-badge not-sent">⚠️ Not Sent</span>';
+            }
+        } else {
+            receiptStatusHtml = '<span class="receipt-badge none">❌ No Receipt</span>';
+        }
+        
         return `
             <tr>
                 <td>
@@ -267,6 +309,7 @@ function renderTable() {
                 <td class="amount">$${payment.actualReceived.toFixed(2)}</td>
                 <td>${escapeHtml(payment.paymentMethod)}</td>
                 <td>${member.email ? escapeHtml(member.email) : '<span style="color: #999;">No email</span>'}</td>
+                <td>${receiptStatusHtml}</td>
                 <td style="white-space: nowrap;">
                     <button class="btn btn-primary" onclick="viewReceipt('${member.id}', ${member.paymentTimestamp})" style="padding: 8px 12px; font-size: 13px; margin-right: 5px;">
                         📄 Receipt
