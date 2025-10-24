@@ -39,6 +39,60 @@ async function init() {
     // Update statistics
     updateStatistics();
     
+    // Check for URL parameters to auto-open member/payment
+    const urlParams = new URLSearchParams(window.location.search);
+    const memberId = urlParams.get('id');
+    const editPaymentTimestamp = urlParams.get('editPayment');
+    
+    if (memberId) {
+        console.log('Auto-opening member from URL:', memberId);
+        // Find the member in allMembers
+        const member = allMembers.find(m => m.id === memberId);
+        if (member) {
+            // Open the member detail view
+            viewMemberDetails(memberId);
+            
+            // If editPayment parameter exists, scroll to payments and highlight that payment
+            if (editPaymentTimestamp) {
+                setTimeout(() => {
+                    // Scroll to payments section
+                    const paymentsSection = document.getElementById('detailsPayments');
+                    if (paymentsSection) {
+                        paymentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        
+                        // Highlight the specific payment div
+                        const paymentDivs = document.querySelectorAll('#detailsPayments > div > div[style*="border-left"]');
+                        paymentDivs.forEach(div => {
+                            const emailBtn = div.querySelector('.email-receipt-btn');
+                            if (emailBtn && emailBtn.dataset.paymentTimestamp === editPaymentTimestamp) {
+                                div.style.backgroundColor = '#fff3cd';
+                                div.style.border = '3px solid #ffc107';
+                                div.style.boxShadow = '0 0 10px rgba(255, 193, 7, 0.5)';
+                                
+                                // Flash animation
+                                let flashCount = 0;
+                                const flashInterval = setInterval(() => {
+                                    div.style.backgroundColor = flashCount % 2 === 0 ? '#fff3cd' : '#ffeb3b';
+                                    flashCount++;
+                                    if (flashCount >= 6) {
+                                        clearInterval(flashInterval);
+                                        div.style.backgroundColor = '#fff3cd';
+                                    }
+                                }, 300);
+                            }
+                        });
+                    }
+                }, 800);
+            }
+        } else {
+            console.warn('Member not found:', memberId);
+            alert(`Member not found. They may have been deleted.`);
+        }
+        
+        // Clean up URL without reloading page
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
     console.log('Member Database initialized');
 }
 
