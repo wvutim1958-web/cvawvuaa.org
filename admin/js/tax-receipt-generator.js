@@ -80,6 +80,7 @@ function generateReceipt() {
         receiptNumber,
         donorId: donor.id,
         donorName: donor.name || 'Unknown Donor',
+        donorEmail: donor.email || '',
         donorAddress: formatAddress(donor),
         donationDate,
         donationType,
@@ -221,6 +222,51 @@ function formatCurrency(amount) {
         style: 'currency',
         currency: 'USD'
     }).format(amount);
+}
+
+// Email receipt
+function emailReceipt() {
+    if (!currentReceipt) {
+        alert('No receipt to email. Please generate a receipt first.');
+        return;
+    }
+    
+    const subject = `Tax-Deductible Donation Receipt - ${currentReceipt.receiptNumber}`;
+    const body = `Dear ${currentReceipt.donorName},
+
+Thank you for your generous donation to the Central Virginia Chapter of the WVU Alumni Association!
+
+OFFICIAL TAX RECEIPT
+Receipt Number: ${currentReceipt.receiptNumber}
+
+Donor Information:
+${currentReceipt.donorName}
+${currentReceipt.donorAddress}
+
+Donation Details:
+Date: ${formatDate(new Date(currentReceipt.donationDate))}
+Type: ${currentReceipt.donationType}
+Amount: $${currentReceipt.donationAmount.toFixed(2)}
+Payment Method: ${currentReceipt.paymentMethod}
+
+Tax Deduction Information:
+The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization. Your contribution is tax-deductible to the extent allowed by law.
+
+EIN: 54-1991299
+
+No goods or services were provided in exchange for this donation.
+
+${currentReceipt.notes ? `Notes: ${currentReceipt.notes}\n\n` : ''}Thank you for your generous support of the Central Virginia Chapter WVU Alumni Association!
+
+Best regards,
+CVCWVUAA Treasurer
+cvcwvuaa@gmail.com
+https://cvawvuaa.org`;
+    
+    const mailtoLink = `mailto:${currentReceipt.donorEmail || ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+    
+    alert('📧 Email client opened! Please review and send the receipt email.');
 }
 
 // Set default date to today
