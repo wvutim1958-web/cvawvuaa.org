@@ -92,10 +92,14 @@
         // Process each transaction and calculate running balance
         const transactionsWithBalance = allTransactions.map(t => {
             const amount = parseFloat(t.amount) || 0;
+            const isBeginningBalance = t.description && t.description.toLowerCase().includes('beginning balance');
             
             if (t.type === 'deposit') {
                 runningBalance += amount;
-                totalIncome += amount;
+                // Only count as income if it's not the beginning balance
+                if (!isBeginningBalance) {
+                    totalIncome += amount;
+                }
             } else if (t.type === 'expense') {
                 runningBalance -= amount;
                 totalExpenses += amount;
