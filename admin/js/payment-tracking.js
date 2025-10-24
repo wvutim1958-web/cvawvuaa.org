@@ -224,8 +224,12 @@ function renderPayments() {
                 <td>${escapeHtml(payment.notes)}</td>
                 <td style="text-align: center;">
                     <button onclick="window.open('/admin/receipt-viewer.html?memberId=${payment.memberId}&timestamp=${timestamp}', '_blank')" 
-                            style="background: #2e7d32; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 13px;">
+                            style="background: #4a90e2; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; margin-right: 5px;">
                         📄 Receipt
+                    </button>
+                    <button onclick="deletePayment('${payment.memberId}', ${timestamp})" 
+                            style="background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 13px;">
+                        🗑️ Delete
                     </button>
                 </td>
             </tr>
@@ -349,4 +353,57 @@ function csvEscape(value) {
         return `"${stringValue.replace(/"/g, '""')}"`;
     }
     return `"${stringValue}"`;
+}
+
+/**
+ * Delete a payment from a member's record
+ */
+async function deletePayment(memberId, timestamp) {
+    if (!confirm('Are you sure you want to delete this payment? This action cannot be undone.')) {
+        return;
+    }
+    
+    try {
+        console.log(`Deleting payment for member ${memberId} with timestamp ${timestamp}`);
+        
+        // Get the member document
+        const memberRef = paymentDb.collection('members').doc(memberId);
+        const memberDoc = await memberRef.get();
+        
+        if (!memberDoc.exists) {
+            alert('Error: Member not found');
+            return;
+        }
+        
+        const memberData = memberDoc.data();
+        const payments = memberData.payments || [];
+        
+        // Find and remove the payment with matching timestamp
+        const updatedPayments = payments.filter(payment => {
+            const paymentTimestamp = payment.recordedDate && payment.recordedDate.toMillis 
+                ? payment.recordedDate.toMillis() 
+                : Date.now();
+            return paymentTimestamp !== timestamp;
+        });
+        
+        if (updatedPayments.length === payments.length) {
+            alert('Error: Payment not found');
+            return;
+        }
+        
+        // Update the member document
+        await memberRef.update({
+            payments: updatedPayments
+        });
+        
+        console.log('Payment deleted successfully');
+        alert('✅ Payment deleted successfully!');
+        
+        // Reload all payments to refresh the display
+        await loadAllPayments();
+        
+    } catch (error) {
+        console.error('Error deleting payment:', error);
+        alert('Error deleting payment: ' + error.message);
+    }
 }

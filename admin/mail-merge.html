@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail Merge - CVCWVUAA Admin</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .mail-merge-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-section h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+        }
+
+        .header-section p {
+            margin: 0;
+            opacity: 0.95;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 968px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .panel h2 {
+            margin: 0 0 1rem 0;
+            color: #2c3e50;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        .merge-fields-help {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .merge-fields-help h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+
+        .merge-field-tag {
+            display: inline-block;
+            background: #4a90e2;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin: 0.25rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .merge-field-tag:hover {
+            background: #357abd;
+        }
+
+        .member-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .recipient-count {
+            background: #4a90e2;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .preview-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            margin-bottom: 1rem;
+        }
+
+        .preview-section h3 {
+            margin: 0 0 1rem 0;
+            color: #2c3e50;
+        }
+
+        .preview-email {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .preview-email .email-subject {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .preview-email .email-body {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: #495057;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .selected-members-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .member-item {
+            padding: 0.5rem;
+            background: white;
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .member-item .member-info {
+            flex: 1;
+        }
+
+        .member-item .member-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .member-item .member-email {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .campaign-history {
+            margin-top: 2rem;
+        }
+
+        .campaign-item {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #4a90e2;
+        }
+
+        .campaign-item .campaign-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .campaign-item .campaign-subject {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .campaign-item .campaign-date {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .campaign-item .campaign-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="mail-merge-container">
+        <div class="header-section">
+            <h1>📧 Mail Merge</h1>
+            <p>Create and send personalized bulk emails to members</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Left Column: Template Editor -->
+            <div>
+                <div class="panel">
+                    <h2>✉️ Email Template</h2>
+                    
+                    <div class="merge-fields-help">
+                        <h3>Available Merge Fields (click to insert):</h3>
+                        <span class="merge-field-tag" onclick="insertMergeField('{{NAME}}')">{{NAME}}</span>
+                        <span class="merge-field-tag" onclick="insertMergeField('{{EMAIL}}')">{{EMAIL}}</span>
+                        <span class="merge-field-tag" onclick="insertMergeField('{{PHONE}}')">{{PHONE}}</span>
+                        <span class="merge-field-tag" onclick="insertMergeField('{{ADDRESS}}')">{{ADDRESS}}</span>
+                        <span class="merge-field-tag" onclick="insertMergeField('{{CITY}}')">{{CITY}}</span>
+                        <span class="merge-field-tag" onclick="insertMergeField('{{STATE}}')">{{STATE}}</span>
+                        <span class="merge-field-tag" onclick="insertMergeField('{{ZIP}}')">{{ZIP}}</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailSubject">Subject Line:</label>
+                        <input type="text" id="emailSubject" placeholder="e.g., Hello {{NAME}}, Important Update from CVCWVUAA">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailBody">Email Body:</label>
+                        <textarea id="emailBody" placeholder="Dear {{NAME}},
+
+We wanted to reach out to you regarding...
+
+Best regards,
+CVCWVUAA"></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="previewEmail()">👁️ Preview</button>
+                        <button class="btn btn-secondary" onclick="saveTemplate()">💾 Save Template</button>
+                        <button class="btn btn-secondary" onclick="loadTemplate()">📂 Load Template</button>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin-top: 2rem;">
+                    <h2>👥 Select Recipients</h2>
+                    
+                    <div class="member-filters">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="filterPaid" checked>
+                            <label for="filterPaid">Paid Members</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="filterUnpaid" checked>
+                            <label for="filterUnpaid">Unpaid Members</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="filterActive" checked>
+                            <label for="filterActive">Active Members</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="memberSearch">Search Members:</label>
+                        <input type="text" id="memberSearch" placeholder="Search by name or email..." oninput="filterMembers()">
+                    </div>
+
+                    <div class="recipient-count" id="recipientCount">
+                        Loading members...
+                    </div>
+
+                    <div class="selected-members-list" id="selectedMembersList">
+                        <!-- Members will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Preview & Send -->
+            <div>
+                <div class="panel">
+                    <h2>👁️ Email Preview</h2>
+                    
+                    <div class="form-group">
+                        <label for="previewMember">Preview with member:</label>
+                        <select id="previewMember" onchange="updatePreview()">
+                            <option value="">Select a member...</option>
+                        </select>
+                    </div>
+
+                    <div class="preview-section" id="previewSection" style="display: none;">
+                        <h3>Preview:</h3>
+                        <div class="preview-email">
+                            <div class="email-subject" id="previewSubject"></div>
+                            <div class="email-body" id="previewBody"></div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group" style="margin-top: 1rem;">
+                        <button class="btn btn-success" onclick="sendEmails()" id="sendBtn" disabled>
+                            📧 Send to <span id="sendCount">0</span> Recipients
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportMailingList()">
+                            📥 Export Mailing List
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel campaign-history" id="campaignHistory">
+                    <h2>📊 Recent Campaigns</h2>
+                    <div id="campaignList">
+                        <p style="color: #6c757d; text-align: center;">No campaigns sent yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/mail-merge.js"></script>
+</body>
+</html>
