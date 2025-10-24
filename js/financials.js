@@ -85,6 +85,7 @@
             const isBeginningBalance = t.description && t.description.toLowerCase().includes('beginning balance');
             const description = (t.description || '').toLowerCase();
             const category = (t.category || '').toLowerCase();
+            const payee = (t.payee || '').toLowerCase();
             
             if (t.type === 'deposit') {
                 runningBalance += amount;
@@ -94,10 +95,13 @@
                 }
                 
                 // Check if this is a scholarship donation
+                // Look for: scholarship, blake, fought, 3S844 (fund code)
                 if (description.includes('scholarship') || 
                     description.includes('blake') || 
                     description.includes('fought') ||
-                    category.includes('scholarship')) {
+                    description.includes('3s844') ||
+                    category.includes('scholarship') ||
+                    payee.includes('scholarship')) {
                     scholarshipDonations += amount;
                 }
             } else if (t.type === 'expense') {
