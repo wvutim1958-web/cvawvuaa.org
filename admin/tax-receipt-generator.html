@@ -202,6 +202,12 @@
             border-top: 2px solid #ccc;
         }
         
+        .signature-image {
+            max-width: 200px;
+            height: auto;
+            margin: 1rem 0 0.5rem 0;
+        }
+        
         @media print {
             * {
                 margin: 0;
@@ -277,6 +283,10 @@
                 margin-top: 1rem;
                 padding-top: 0.5rem;
                 font-size: 0.85rem;
+            }
+            
+            .signature-image {
+                max-width: 150px;
             }
         }
     </style>
@@ -425,7 +435,7 @@
                 
                 <div class="signature-line">
                     <p><strong>Authorized Signature</strong></p>
-                    <p style="margin-top: 2rem; border-bottom: 1px solid #000; width: 300px;"></p>
+                    <img src="/assets/signatures/president-signature.png" alt="Signature" class="signature-image">
                     <p>Central Virginia Chapter WVUAA</p>
                     <p style="color: #666; font-size: 0.9rem;">Date: <span id="signatureDate"></span></p>
                 </div>
