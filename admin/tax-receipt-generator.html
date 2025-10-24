@@ -443,9 +443,44 @@
             
             <div style="text-align: center; margin-top: 2rem; page-break-after: avoid;" class="no-print">
                 <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
-                <button class="btn btn-primary" onclick="emailReceipt()">📧 Email Receipt</button>
+                <button class="btn btn-primary" onclick="emailReceipt()">📧 Email with Link</button>
+                <button class="btn btn-primary" onclick="showHTMLEmail()">📧 HTML Email Code</button>
                 <button class="btn btn-primary" onclick="saveReceipt()">💾 Save to Records</button>
                 <button class="btn btn-secondary" onclick="hideReceipt()">✖️ Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HTML Email Code Modal -->
+    <div id="htmlEmailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; overflow-y: auto;">
+        <div style="max-width: 900px; margin: 50px auto; background: white; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+            <div style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 1.5rem; border-radius: 12px 12px 0 0;">
+                <h2 style="margin: 0;">HTML Email Code</h2>
+                <p style="margin: 0.5rem 0 0; opacity: 0.9;">Copy this HTML code to paste into your email client</p>
+            </div>
+            
+            <div style="padding: 2rem;">
+                <div style="background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                    <p style="margin: 0 0 0.5rem; font-weight: 600; color: #003057;">Instructions:</p>
+                    <ol style="margin: 0; padding-left: 1.5rem; color: #666;">
+                        <li>Click the "Copy HTML Code" button below</li>
+                        <li>Open your email client (Gmail, Outlook, etc.)</li>
+                        <li>Compose a new email to the donor</li>
+                        <li>Switch to HTML mode (in Gmail: ⋮ menu → "Show original" or use an HTML editor)</li>
+                        <li>Paste the HTML code</li>
+                        <li>Send from cvcwvuaa@gmail.com</li>
+                    </ol>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #003057;">HTML Code:</label>
+                    <textarea id="htmlCodeTextarea" readonly style="width: 100%; height: 400px; font-family: 'Courier New', monospace; font-size: 12px; padding: 1rem; border: 2px solid #ddd; border-radius: 8px; resize: vertical;"></textarea>
+                </div>
+                
+                <div style="text-align: center; display: flex; gap: 1rem; justify-content: center;">
+                    <button class="btn btn-primary" onclick="copyHTMLCode()" style="padding: 0.75rem 2rem;">📋 Copy HTML Code</button>
+                    <button class="btn btn-secondary" onclick="closeHTMLModal()" style="padding: 0.75rem 2rem;">✖️ Close</button>
+                </div>
             </div>
         </div>
     </div>

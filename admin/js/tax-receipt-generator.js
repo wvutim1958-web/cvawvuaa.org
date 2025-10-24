@@ -286,6 +286,152 @@ function emailReceipt() {
     alert('📧 Email client opened!\n\n⚠️ IMPORTANT: Please send this email from cvcwvuaa@gmail.com\n\nThe email includes:\n✓ Link to official receipt\n✓ Receipt summary\n✓ Tax information\n\nReview and click Send.');
 }
 
+// Show HTML Email Code Modal
+function showHTMLEmail() {
+    if (!currentReceipt) {
+        alert('No receipt to generate HTML for. Please generate a receipt first.');
+        return;
+    }
+    
+    const receiptURL = `https://cvawvuaa.org/admin/tax-receipt-viewer.html?receipt=${currentReceipt.receiptNumber}`;
+    
+    const htmlCode = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax-Deductible Donation Receipt</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f5f5f5; padding: 20px;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #003057, #1e40af); color: white; padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
+                            <h1 style="margin: 0 0 10px; font-size: 24px;">Central Virginia Chapter</h1>
+                            <p style="margin: 0; font-size: 16px;">West Virginia University Alumni Association</p>
+                            <p style="margin: 5px 0 0; font-size: 14px; opacity: 0.9;">Official Tax-Deductible Donation Receipt</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 30px;">
+                            <p style="margin: 0 0 20px; font-size: 16px; color: #333;">Dear ${currentReceipt.donorName},</p>
+                            
+                            <p style="margin: 0 0 20px; font-size: 16px; color: #333;">Thank you for your generous donation to the Central Virginia Chapter of the WVU Alumni Association!</p>
+                            
+                            <!-- Receipt Number Box -->
+                            <div style="background: #f8f9fa; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                                <p style="margin: 0; font-size: 14px; color: #666; font-weight: 600;">RECEIPT NUMBER</p>
+                                <p style="margin: 5px 0 0; font-size: 18px; color: #003057; font-weight: bold;">${currentReceipt.receiptNumber}</p>
+                            </div>
+                            
+                            <!-- Donation Details Table -->
+                            <table width="100%" cellpadding="10" cellspacing="0" border="0" style="margin: 20px 0; border: 1px solid #e0e0e0; border-radius: 8px;">
+                                <tr style="background-color: #f8f9fa;">
+                                    <td colspan="2" style="padding: 15px; border-bottom: 2px solid #003057;">
+                                        <h3 style="margin: 0; color: #003057; font-size: 16px;">Donation Details</h3>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; font-weight: 600; color: #333; width: 40%;">Date:</td>
+                                    <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #666;">${formatDate(new Date(currentReceipt.donationDate))}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; font-weight: 600; color: #333;">Donation Type:</td>
+                                    <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #666;">${currentReceipt.donationType}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; font-weight: 600; color: #333;">Amount:</td>
+                                    <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #10b981; font-size: 20px; font-weight: bold;">$${currentReceipt.donationAmount.toFixed(2)}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; font-weight: 600; color: #333;">Payment Method:</td>
+                                    <td style="padding: 10px; color: #666;">${currentReceipt.paymentMethod}</td>
+                                </tr>
+                                ${currentReceipt.donationNotes ? `
+                                <tr>
+                                    <td style="padding: 10px; font-weight: 600; color: #333; vertical-align: top;">Notes:</td>
+                                    <td style="padding: 10px; color: #666;">${currentReceipt.donationNotes}</td>
+                                </tr>
+                                ` : ''}
+                            </table>
+                            
+                            <!-- Tax Information -->
+                            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                                <p style="margin: 0 0 10px; font-weight: 600; color: #856404; font-size: 14px;">IRS Tax Deduction Information</p>
+                                <p style="margin: 0 0 10px; font-size: 14px; color: #333; line-height: 1.6;">
+                                    The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization. 
+                                    Your contribution is tax-deductible to the extent allowed by law.
+                                </p>
+                                <p style="margin: 0 0 10px; font-size: 14px; color: #333;"><strong>EIN: 54-1991299</strong></p>
+                                <p style="margin: 0; font-size: 14px; color: #333;">No goods or services were provided in exchange for this donation.</p>
+                            </div>
+                            
+                            <!-- View Receipt Button -->
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a href="${receiptURL}" style="display: inline-block; background: #10b981; color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+                                    📄 View Official Receipt
+                                </a>
+                                <p style="margin: 10px 0 0; font-size: 12px; color: #666;">Click to view, print, or save your official tax receipt</p>
+                            </div>
+                            
+                            <p style="margin: 30px 0 10px; font-size: 16px; color: #333;">Thank you for your generous support! Your contribution helps us provide scholarships to deserving students and build a strong WVU community in Central Virginia.</p>
+                            
+                            <p style="margin: 20px 0 0; font-size: 16px; color: #003057; font-weight: bold;">Let's Go! Mountaineers!!!!</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f8f9fa; padding: 20px; border-radius: 0 0 12px 12px; text-align: center; border-top: 1px solid #e0e0e0;">
+                            <p style="margin: 0 0 5px; font-size: 14px; color: #666; font-weight: 600;">Central Virginia Chapter</p>
+                            <p style="margin: 0 0 5px; font-size: 14px; color: #666;">West Virginia University Alumni Association</p>
+                            <p style="margin: 0 0 10px; font-size: 14px; color: #666;">Richmond, Virginia</p>
+                            <p style="margin: 0; font-size: 14px; color: #10b981;">
+                                <a href="mailto:cvcwvuaa@gmail.com" style="color: #10b981; text-decoration: none;">cvcwvuaa@gmail.com</a> | 
+                                <a href="https://cvawvuaa.org" style="color: #10b981; text-decoration: none;">cvawvuaa.org</a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>`;
+    
+    // Save receipt to Firebase first
+    saveReceiptToFirebase();
+    
+    // Display in modal
+    document.getElementById('htmlCodeTextarea').value = htmlCode;
+    document.getElementById('htmlEmailModal').style.display = 'block';
+}
+
+// Copy HTML code to clipboard
+function copyHTMLCode() {
+    const textarea = document.getElementById('htmlCodeTextarea');
+    textarea.select();
+    textarea.setSelectionRange(0, 99999); // For mobile devices
+    
+    try {
+        document.execCommand('copy');
+        alert('✅ HTML code copied to clipboard!\n\nYou can now paste it into your email client.');
+    } catch (err) {
+        alert('❌ Failed to copy. Please manually select and copy the code.');
+    }
+}
+
+// Close HTML modal
+function closeHTMLModal() {
+    document.getElementById('htmlEmailModal').style.display = 'none';
+}
+
 // Save receipt to Firebase for URL-based viewing
 async function saveReceiptToFirebase() {
     if (!currentReceipt) return;
