@@ -295,27 +295,23 @@
             return;
         }
         
-        container.innerHTML = filteredTransactions.map(transaction => {
-            // Debug logging for first transaction
-            if (filteredTransactions.indexOf(transaction) === 0) {
-                console.log('First transaction splits:', transaction.splits);
-                console.log('Categories.income:', CATEGORIES.income);
-                console.log('Categories.expense:', CATEGORIES.expense);
-                transaction.splits.forEach(split => {
-                    console.log(`Split category: "${split.category}"`, {
-                        isIncome: CATEGORIES.income.includes(split.category),
-                        isExpense: CATEGORIES.expense.includes(split.category)
-                    });
-                });
-            }
+        container.innerHTML = filteredTransactions.map((transaction, idx) => {
+            // Debug logging for each transaction
+            console.log(`\n=== Transaction ${idx + 1}: ${transaction.description} ===`);
+            console.log('Splits:', transaction.splits);
             
             // Separate splits into income and expense (case-insensitive)
-            const incomeSplits = transaction.splits.filter(split => 
-                categoryMatches(split.category, CATEGORIES.income)
-            );
+            const incomeSplits = transaction.splits.filter(split => {
+                const isIncome = categoryMatches(split.category, CATEGORIES.income);
+                const isExpense = categoryMatches(split.category, CATEGORIES.expense);
+                console.log(`  "${split.category}" -> Income: ${isIncome}, Expense: ${isExpense}`);
+                return isIncome;
+            });
             const expenseSplits = transaction.splits.filter(split => 
                 categoryMatches(split.category, CATEGORIES.expense)
             );
+            
+            console.log(`Income splits: ${incomeSplits.length}, Expense splits: ${expenseSplits.length}`);
             
             // Calculate totals
             const incomeTotal = incomeSplits.reduce((sum, split) => sum + split.amount, 0);
