@@ -15,7 +15,15 @@
     try {
         const stored = localStorage.getItem('financial_categories');
         if (stored) {
-            CATEGORIES = JSON.parse(stored);
+            const parsedCategories = JSON.parse(stored);
+            // Ensure the parsed categories have the correct structure
+            if (parsedCategories && 
+                Array.isArray(parsedCategories.income) && 
+                Array.isArray(parsedCategories.expense)) {
+                CATEGORIES = parsedCategories;
+            } else {
+                console.warn('Invalid categories structure in localStorage, using defaults');
+            }
         }
     } catch (e) {
         console.warn('Error loading custom categories:', e);
