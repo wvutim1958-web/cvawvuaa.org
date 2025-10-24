@@ -12,22 +12,78 @@
         expense: ['Scholarship Fund', 'Event Costs', 'Operating Expenses', 'Marketing/Printing', 'Website Hosting', 'Mailchimp/Communications', 'Bank Fees', 'St & Fed Filing Fees', 'Donations Made', 'Other Expense']
     };
     
+    /**
+     * Check if categories are hierarchical (object) or flat (array)
+     */
+    function isHierarchical(categories) {
+        return categories && 
+               categories.income && 
+               typeof categories.income === 'object' && 
+               !Array.isArray(categories.income);
+    }
+    
+    /**
+     * Flatten hierarchical categories to simple arrays
+     */
+    function flattenCategories(hierarchical) {
+        const flat = {
+            income: [],
+            expense: []
+        };
+        
+        ['income', 'expense'].forEach(type => {
+            const categoryData = hierarchical[type];
+            Object.keys(categoryData).forEach(mainCat => {
+                // Add main category
+                flat[type].push(mainCat);
+                // Add subcategories with full path
+                const subcats = categoryData[mainCat];
+                if (Array.isArray(subcats)) {
+                    subcats.forEach(subcat => {
+                        flat[type].push(`${mainCat} - ${subcat}`);
+                    });
+                }
+            });
+        });
+        
+        return flat;
+    }
+    
     try {
         const stored = localStorage.getItem('financial_categories');
         if (stored) {
             const parsedCategories = JSON.parse(stored);
-            // Ensure the parsed categories have the correct structure
-            if (parsedCategories && 
-                Array.isArray(parsedCategories.income) && 
-                Array.isArray(parsedCategories.expense)) {
-                CATEGORIES = parsedCategories;
-            } else {
-                console.warn('Invalid categories structure in localStorage, using defaults');
+            console.log('Loaded categories from localStorage:', parsedCategories);
+            
+            // Handle different possible structures
+            if (parsedCategories) {
+                // Check if it's hierarchical structure (new format)
+                if (isHierarchical(parsedCategories)) {
+                    CATEGORIES = flattenCategories(parsedCategories);
+                    console.log('✅ Flattened hierarchical categories from localStorage');
+                }
+                // Check if it's the flat structure with income/expense arrays
+                else if (Array.isArray(parsedCategories.income) && 
+                         Array.isArray(parsedCategories.expense) &&
+                         parsedCategories.income.length > 0 &&
+                         parsedCategories.expense.length > 0) {
+                    CATEGORIES = parsedCategories;
+                    console.log('✅ Using flat categories from localStorage');
+                } 
+                // Unknown structure
+                else {
+                    console.warn('Invalid categories structure in localStorage:', parsedCategories);
+                    console.warn('Using default categories');
+                }
             }
+        } else {
+            console.log('No custom categories in localStorage, using defaults');
         }
     } catch (e) {
         console.warn('Error loading custom categories:', e);
     }
+    
+    console.log('Active categories:', CATEGORIES);
     
     let allTransactions = [];
     let filteredTransactions = [];
