@@ -188,6 +188,12 @@
     </style>
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <div class="receipt" id="receiptContent">
         <div class="header">
             <h1 class="org-name">CVCWVUAA</h1>
@@ -501,6 +507,12 @@ This receipt was generated on ${new Date().toLocaleString()}`;
     </style>
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <div class="receipt">
         <div class="header">
             <h1 class="org-name">CVCWVUAA</h1>
@@ -568,6 +580,11 @@ This receipt was generated on ${new Date().toLocaleString()}`;
             <p style="margin-top: 15px; font-size: 10px;">This receipt was generated on ${new Date().toLocaleString()}</p>
         </div>
     </div>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>`;
         }
@@ -750,5 +767,10 @@ Website: www.cvawvuaa.org
             populateReceipt(window.receiptData.member, window.receiptData.payment);
         };
     </script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

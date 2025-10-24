@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Split Transactions Report - CVCWVUAA Admin">
+    <title>Split Transactions Report - CVCWVUAA Admin</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    <link rel="stylesheet" href="/admin/css/print-compact.css">
+    
+    <style>
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .page-header h1 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .page-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #003057;
+        }
+        
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .filters h3 {
+            margin: 0 0 1rem;
+            color: #003057;
+        }
+        
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+        
+        .filter-group input,
+        .filter-group select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        
+        .btn-filter {
+            background: #003057;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        
+        .btn-filter:hover {
+            background: #004a7f;
+        }
+        
+        .report-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .report-section h2 {
+            margin: 0 0 1.5rem;
+            color: #003057;
+            font-size: 1.5rem;
+        }
+        
+        .split-transaction {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .split-header {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 1rem 1.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .split-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .split-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #003057;
+        }
+        
+        .split-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .split-meta {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .split-details {
+            padding: 0;
+        }
+        
+        .split-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .split-table thead {
+            background: #f8f9fa;
+        }
+        
+        .split-table th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #003057;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .split-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .split-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .split-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .amount-cell {
+            text-align: right;
+            font-weight: 600;
+            color: #28a745;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+            font-size: 1.1rem;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-export {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-export:hover {
+            background: #218838;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        @media print {
+            .filters,
+            .actions,
+            .btn {
+                display: none !important;
+            }
+            
+            .split-transaction {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>📊 Split Transactions Report</h1>
+            <p>Detailed breakdown of all split transactions with member and category distribution</p>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Split Transactions</div>
+                <div class="stat-value" id="stat-total">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Amount</div>
+                <div class="stat-value" id="stat-amount">$0.00</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Split Lines</div>
+                <div class="stat-value" id="stat-lines">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Date Range</div>
+                <div class="stat-value" id="stat-range" style="font-size: 1rem;">All Time</div>
+            </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="filters">
+            <h3>🔍 Filter Transactions</h3>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>From Date</label>
+                    <input type="date" id="date-from">
+                </div>
+                <div class="filter-group">
+                    <label>To Date</label>
+                    <input type="date" id="date-to">
+                </div>
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select id="filter-category">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn-filter" onclick="applyFilters()">Apply Filters</button>
+        </div>
+        
+        <!-- Report Section -->
+        <div class="report-section">
+            <h2>Split Transactions</h2>
+            <div id="report-content"></div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="actions">
+            <button class="btn btn-export" onclick="exportToCSV()">📥 Export to CSV</button>
+            <button class="btn btn-export" onclick="window.print()">🖨️ Print Report</button>
+            <button class="btn btn-secondary" onclick="window.location.href='financial-reports.html'">← Back to Reports</button>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script src="js/split-transactions-report.js"></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>

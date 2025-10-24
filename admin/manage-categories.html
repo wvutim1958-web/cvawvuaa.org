@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage Financial Categories - CVCWVUAA Admin">
+    <title>Manage Categories - CVCWVUAA Admin</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .page-header h1 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .page-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .category-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .category-section h2 {
+            margin: 0 0 1rem;
+            color: #003057;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .category-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem 0;
+        }
+        
+        .main-category-item {
+            margin-bottom: 1rem;
+            border: 2px solid #003057;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .main-category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #003057, #004a7f);
+            color: white;
+        }
+        
+        .main-category-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .main-category-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .main-category-actions .btn-icon {
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .main-category-actions .btn-icon:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .btn-add-sub {
+            background: rgba(40, 167, 69, 0.9) !important;
+            padding: 0.25rem 0.75rem !important;
+            border-radius: 5px !important;
+            font-size: 0.85rem !important;
+            font-weight: bold;
+        }
+        
+        .btn-add-sub:hover {
+            background: rgba(40, 167, 69, 1) !important;
+        }
+        
+        .subcategory-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background: #f9f9f9;
+        }
+        
+        .subcategory-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem 0.5rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .subcategory-item:last-child {
+            border-bottom: none;
+        }
+        
+        .subcategory-bullet {
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .subcategory-name {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        
+        .category-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background: #f9f9f9;
+        }
+        
+        .category-item input {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        
+        .category-item.editing input {
+            border-color: #003057;
+            background: white;
+        }
+        
+        .category-name {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .btn-icon {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        .btn-icon:hover {
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .btn-add {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+        
+        .btn-add:hover {
+            background: #218838;
+        }
+        
+        .btn-save {
+            background: #003057;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        
+        .btn-save:hover {
+            background: #004a7f;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            flex: 1;
+            transition: background 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 10000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .notification.success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .notification.error {
+            background: #dc3545;
+            color: white;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .warning-box h3 {
+            margin: 0 0 0.5rem;
+            color: #856404;
+            font-size: 1.1rem;
+        }
+        
+        .warning-box p {
+            margin: 0;
+            color: #856404;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>📁 Manage Financial Categories</h1>
+            <p>Add, edit, or remove income and expense categories for your financial ledger</p>
+        </div>
+        
+        <div class="warning-box">
+            <h3>⚠️ Important Notes:</h3>
+            <p>• Categories are stored in your browser's localStorage and sync to Firebase when you save<br>
+            • Removing a category won't delete existing transactions using that category<br>
+            • Category changes will apply to both the Financial Ledger and Reports pages</p>
+        </div>
+        
+        <div class="categories-grid">
+            <div class="category-section">
+                <h2>💰 Income Categories</h2>
+                <ul class="category-list" id="income-list"></ul>
+                <button class="btn-add" onclick="addCategory('income')">
+                    ➕ Add Main Category
+                </button>
+            </div>
+            
+            <div class="category-section">
+                <h2>💸 Expense Categories</h2>
+                <ul class="category-list" id="expense-list"></ul>
+                <button class="btn-add" onclick="addCategory('expense')">
+                    ➕ Add Main Category
+                </button>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn-secondary" onclick="window.location.href='financial-ledger.html'">
+                ← Back to Ledger
+            </button>
+            <button class="btn-save" onclick="saveCategories()">
+                💾 Save Categories
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script src="js/manage-categories.js"></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>

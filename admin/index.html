@@ -19,6 +19,12 @@
     <link rel="stylesheet" href="/admin/css/admin-hub.css">
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <!-- Login Screen -->
     <div id="loginScreen">
         <div class="login-box">
@@ -51,8 +57,8 @@
                     <div class="tool-subtitle">View, edit, add members • Record payments • Track dues</div>
                 </a>
 
-                <a href="payment-tracking.html" class="main-tool" aria-label="Payment Tracking" style="background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);">
-                    <span class="tool-icon" aria-hidden="true">💰</span>
+                <a href="payment-tracking.html" class="main-tool" aria-label="Payment Tracking" style="background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);">
+                    <span class="tool-icon" aria-hidden="true">�</span>
                     <div>Payment Tracking</div>
                     <div class="tool-subtitle">View all payments • Filter by type • Export reports</div>
                 </a>
@@ -63,50 +69,17 @@
                     <div class="tool-subtitle">See who hasn't paid • Generate invoices • Email lists</div>
                 </a>
 
+                <a href="paid-members-report.html" class="main-tool" aria-label="Paid Members" style="background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);">
+                    <span class="tool-icon" aria-hidden="true">✅</span>
+                    <div>Paid Members Report</div>
+                    <div class="tool-subtitle">See who has paid • Generate receipts • Email thank you</div>
+                </a>
+
                 <a href="financial-ledger.html" class="main-tool" aria-label="Financial Ledger" style="background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);">
                     <span class="tool-icon" aria-hidden="true">💵</span>
                     <div>Financial Ledger</div>
                     <div class="tool-subtitle">Track income & expenses • Bank reconciliation • Reports</div>
                 </a>
-            </section>
-
-            <!-- MEMBER MANAGEMENT TOOLS -->
-            <section class="content-section" style="margin-top: 40px;">
-                <h2 class="section-title">👥 Member Management & Communications</h2>
-                
-                <div class="content-grid">
-                    <article class="content-card">
-                        <h3>📧 Dues Reminders</h3>
-                        <p>Automated reminder system for unpaid members</p>
-                        <div class="tool-links">
-                            <a href="dues-reminders.html" class="btn-primary">📬 Reminder System</a>
-                        </div>
-                    </article>
-
-                    <article class="content-card">
-                        <h3>🎓 Tax Receipts</h3>
-                        <p>Generate official 501(c)(3) donation receipts</p>
-                        <div class="tool-links">
-                            <a href="tax-receipt-generator.html" class="btn-primary">📄 Generate Receipt</a>
-                        </div>
-                    </article>
-
-                    <article class="content-card">
-                        <h3>💰 Bulk Payments</h3>
-                        <p>Record multiple payments efficiently</p>
-                        <div class="tool-links">
-                            <a href="bulk-payment.html" class="btn-primary">💳 Record Payments</a>
-                        </div>
-                    </article>
-
-                    <article class="content-card">
-                        <h3>📋 Communication History</h3>
-                        <p>Track all member communications</p>
-                        <div class="tool-links">
-                            <a href="communication-history.html" class="btn-primary">📊 View History</a>
-                        </div>
-                    </article>
-                </div>
             </section>
 
             <!-- Quick Actions -->
@@ -125,28 +98,20 @@
                     </article>
 
                     <article class="content-card">
-                        <h3>🎉 Events</h3>
+                        <h3>� Events</h3>
                         <p>Manage events and RSVPs</p>
                         <div class="tool-links">
-                            <a href="events-manager.html" class="btn-primary">🎊 Events Manager</a>
-                            <a href="rsvp-manager.html" class="btn-primary">👥 RSVP Manager</a>
+                            <a href="event-manager.html" class="btn-primary">� Event Manager</a>
+                            <a href="rsvp-manager.html" class="btn-primary">� RSVP Manager</a>
                         </div>
                     </article>
 
                     <article class="content-card">
-                        <h3>📨 Email Campaigns</h3>
+                        <h3>� Email Campaigns</h3>
                         <p>Send emails via Mailchimp</p>
                         <div class="tool-links">
                             <a href="email-campaign.html" class="btn-success">✉️ Send Campaign</a>
-                            <a href="subscriber-lists.html" class="btn-primary">📋 Subscriber Lists</a>
-                        </div>
-                    </article>
-
-                    <article class="content-card" style="background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%); color: white;">
-                        <h3 style="color: white;">📧 Mail Merge</h3>
-                        <p style="color: rgba(255,255,255,0.95);">Send personalized bulk emails</p>
-                        <div class="tool-links">
-                            <a href="mail-merge.html" class="btn-primary" style="background: white; color: #4a90e2; border: 2px solid white;">📧 Mail Merge</a>
+                            <a href="subscriber-lists.html" class="btn-primary">� Subscriber Lists</a>
                         </div>
                     </article>
 
@@ -154,7 +119,7 @@
                         <h3>🖼️ Media</h3>
                         <p>Manage photos and videos</p>
                         <div class="tool-links">
-                            <a href="media-uploader.html" class="btn-primary">📸 Photo Gallery</a>
+                            <a href="media-uploader.html" class="btn-primary">� Photo Gallery</a>
                             <a href="video-library.html" class="btn-primary">🎥 Video Library</a>
                         </div>
                     </article>
@@ -213,11 +178,11 @@
                         <strong>📄 How to Generate Invoices & Receipts:</strong><br>
                         <strong style="color: #c62828;">Invoices (for unpaid members):</strong><br>
                         → Go to Outstanding Dues Report → Click "📄 Invoice" button next to member name<br><br>
-                        <strong style="color: #4a90e2;">Receipts (for paid members):</strong><br>
+                        <strong style="color: #2e7d32;">Receipts (for paid members):</strong><br>
                         → Go to Member Database → View member details → Click "📄 Receipt" button on any payment
                     </div>
                     
-                    <p style="margin-top: 20px; padding: 15px; background: white; border-left: 4px solid #4a90e2; border-radius: 5px;">
+                    <p style="margin-top: 20px; padding: 15px; background: white; border-left: 4px solid #2e7d32; border-radius: 5px;">
                         <strong>💡 Tip:</strong> All data is stored in Firebase. Click "Member Database" above to access your 134 members!
                     </p>
                 </div>
@@ -227,5 +192,10 @@
 
     <!-- Optimized JavaScript (Deferred for Better Performance) -->
     <script src="/admin/js/admin-hub.js" defer></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

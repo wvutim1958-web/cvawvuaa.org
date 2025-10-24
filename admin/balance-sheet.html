@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Account Balance Sheet - CVCWVUAA Admin">
+    <title>Balance Sheet - CVCWVUAA Admin</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    <link rel="stylesheet" href="/admin/css/print-compact.css">
+    
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .page-header h1 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .page-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .balance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .balance-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+        }
+        
+        .balance-card.current {
+            border-left-color: #28a745;
+        }
+        
+        .balance-card.income {
+            border-left-color: #007bff;
+        }
+        
+        .balance-card.expense {
+            border-left-color: #dc3545;
+        }
+        
+        .balance-card h3 {
+            margin: 0 0 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .balance-card .amount {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .balance-card.current .amount {
+            color: #28a745;
+        }
+        
+        .balance-card.income .amount {
+            color: #007bff;
+        }
+        
+        .balance-card.expense .amount {
+            color: #dc3545;
+        }
+        
+        .balance-card .subtitle {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.5rem;
+        }
+        
+        .date-range-info {
+            background: #f8f9fa;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #003057;
+        }
+        
+        .date-range-info p {
+            margin: 0;
+            color: #666;
+        }
+        
+        .date-range-info strong {
+            color: #003057;
+        }
+        
+        .transactions-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .transactions-section h2 {
+            margin: 0 0 1.5rem;
+            color: #003057;
+            font-size: 1.5rem;
+        }
+        
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .transactions-table th {
+            background: #003057;
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .transactions-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .transactions-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .amount-deposit {
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .amount-expense {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        
+        .running-balance {
+            font-weight: bold;
+            color: #003057;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: #003057;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #004a7f;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+            font-size: 1.1rem;
+        }
+        
+        @media print {
+            .actions {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>💰 Account Balance Sheet</h1>
+            <p>Current checking account balance and transaction history</p>
+        </div>
+        
+        <div class="date-range-info">
+            <p><strong>Report Generated:</strong> <span id="report-date"></span></p>
+            <p><strong>Total Transactions:</strong> <span id="transaction-count">0</span></p>
+        </div>
+        
+        <div class="balance-summary">
+            <div class="balance-card current">
+                <h3>Current Balance</h3>
+                <p class="amount" id="current-balance">$0.00</p>
+                <p class="subtitle">Available funds</p>
+            </div>
+            
+            <div class="balance-card income">
+                <h3>Total Income</h3>
+                <p class="amount" id="total-income">$0.00</p>
+                <p class="subtitle">All deposits</p>
+            </div>
+            
+            <div class="balance-card expense">
+                <h3>Total Expenses</h3>
+                <p class="amount" id="total-expenses">$0.00</p>
+                <p class="subtitle">All withdrawals</p>
+            </div>
+        </div>
+        
+        <div class="transactions-section">
+            <h2>Transaction History with Running Balance</h2>
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Deposit</th>
+                        <th>Expense</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-tbody">
+                    <tr>
+                        <td colspan="6" class="no-data">Loading transactions...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="actions">
+            <a href="financial-ledger.html" class="btn btn-secondary">← Back to Ledger</a>
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Print Balance Sheet</button>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script src="js/balance-sheet.js"></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>

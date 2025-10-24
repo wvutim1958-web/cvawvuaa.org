@@ -51,7 +51,7 @@
         }
 
         .btn-print {
-            background: #4a90e2;
+            background: #2e7d32;
             color: white;
         }
 
@@ -74,19 +74,19 @@
             background: white;
             padding: 60px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border: 3px solid #4a90e2;
+            border: 3px solid #2e7d32;
         }
 
         .receipt-header {
             text-align: center;
             margin-bottom: 40px;
             padding-bottom: 30px;
-            border-bottom: 3px solid #4a90e2;
+            border-bottom: 3px solid #2e7d32;
         }
 
         .receipt-stamp {
             display: inline-block;
-            background: #4a90e2;
+            background: #2e7d32;
             color: white;
             padding: 15px 40px;
             border-radius: 8px;
@@ -180,7 +180,7 @@
         }
 
         .total-paid {
-            background: #4a90e2;
+            background: #2e7d32;
             color: white;
             padding: 25px 30px;
             border-radius: 8px;
@@ -209,7 +209,7 @@
         }
 
         .thank-you h2 {
-            color: #4a90e2;
+            color: #2e7d32;
             font-size: 24px;
             margin-bottom: 10px;
         }
@@ -238,8 +238,15 @@
     </style>
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <div class="controls no-print">
         <button class="btn btn-print" onclick="window.print()">🖨️ Print Receipt</button>
+        <button class="btn btn-primary" onclick="emailReceipt()" style="background: #ea4335;">📧 Email Receipt</button>
         <button class="btn btn-back" onclick="window.close()">← Close</button>
     </div>
 
@@ -348,6 +355,78 @@
                 await loadReceipt();
             }, 500);
         });
+
+        /**
+         * Email receipt to member
+         */
+        function emailReceipt() {
+            if (!memberId) {
+                alert('Member ID not found');
+                return;
+            }
+
+            // Get current receipt URL
+            const receiptURL = window.location.href;
+            
+            // Get member info if available
+            receiptDb.collection('members').doc(memberId).get().then(doc => {
+                if (!doc.exists) {
+                    alert('Member not found');
+                    return;
+                }
+                
+                const member = doc.data();
+                const memberEmail = member.email || '';
+                const memberName = member.name || 'Member';
+                const firstName = memberName.split(' ')[0];
+                
+                // Create email content
+                const subject = encodeURIComponent('Your CVCWVUAA Payment Receipt');
+                const body = encodeURIComponent(`Dear ${firstName},
+
+Thank you for your payment to the Central Virginia Chapter of the WVU Alumni Association!
+
+Your payment receipt is available at the link below:
+${receiptURL}
+
+You can print or save this receipt for your records.
+
+If you have any questions about this payment, please don't hesitate to contact us.
+
+Let's Go! Mountaineers!!!!
+
+Central Virginia Chapter WVU Alumni Association
+cvcwvuaa@gmail.com
+https://cvawvuaa.org`);
+
+                // Create mailto link
+                const mailtoLink = `mailto:${memberEmail}?subject=${subject}&body=${body}`;
+                
+                // Log communication
+                receiptDb.collection('communications').add({
+                    memberId: memberId,
+                    type: 'receipt',
+                    details: `Receipt emailed to ${memberEmail}`,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    sentBy: 'Admin User',
+                    method: 'Email',
+                    metadata: {
+                        receiptUrl: receiptURL,
+                        recipientEmail: memberEmail
+                    }
+                }).then(() => {
+                    console.log('Logged receipt email communication');
+                }).catch(err => {
+                    console.error('Error logging communication:', err);
+                });
+                
+                // Open email client
+                window.location.href = mailtoLink;
+            }).catch(error => {
+                console.error('Error getting member info:', error);
+                alert('Error loading member information');
+            });
+        }
 
         async function loadReceipt() {
             try {
@@ -479,5 +558,10 @@
             }
         }
     </script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

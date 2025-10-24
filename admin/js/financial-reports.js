@@ -6,29 +6,75 @@
 (function() {
     'use strict';
     
-    // Categories configuration (matches ledger)
-    const CATEGORIES = {
-        income: [
-            'Member Dues',
-            'Chapter Donations',
-            'Scholarship Donations',
-            'Event Revenue',
-            'Merchandise Sales',
-            'Interest Income',
-            'Other Income'
-        ],
-        expense: [
-            'Scholarships Awarded',
-            'Event Costs',
-            'Operating Expenses',
-            'Marketing/Printing',
-            'Website Hosting',
-            'Mailchimp/Communications',
-            'Bank Fees',
-            'Donations Made',
-            'Other Expense'
-        ]
+    // Default categories (fallback) - hierarchical structure
+    const DEFAULT_CATEGORIES = {
+        income: {
+            'Members': ['Dues', 'Donations', 'Scholarship Donations'],
+            'Chapter': ['General Donations', 'Event Revenue', 'Merchandise Sales'],
+            'Other Income': ['Interest Income', 'Miscellaneous']
+        },
+        expense: {
+            'Scholarships': ['Scholarship Fund', 'Awards'],
+            'Operations': ['Event Costs', 'Operating Expenses'],
+            'Office': ['Marketing/Printing', 'Supplies'],
+            'Technology': ['Website Hosting', 'Mailchimp/Communications'],
+            'Compliance': ['Bank Fees', 'St & Fed Filing Fees'],
+            'Donations': ['Donations Made'],
+            'Other Expense': ['Miscellaneous']
+        }
     };
+    
+    // Load categories from localStorage or use defaults
+    let CATEGORIES = DEFAULT_CATEGORIES;
+    try {
+        const stored = localStorage.getItem('financial_categories');
+        if (stored) {
+            CATEGORIES = JSON.parse(stored);
+            console.log('Loaded custom categories from localStorage');
+        }
+    } catch (e) {
+        console.warn('Error loading custom categories, using defaults:', e);
+    }
+    
+    /**
+     * Check if categories are hierarchical (object) or flat (array)
+     */
+    function isHierarchical(categories) {
+        return categories && 
+               categories.income && 
+               typeof categories.income === 'object' && 
+               !Array.isArray(categories.income);
+    }
+    
+    /**
+     * Get all categories as flat array for filtering
+     */
+    function getAllCategoriesFlat() {
+        const allCategories = [];
+        
+        if (isHierarchical(CATEGORIES)) {
+            // Hierarchical structure
+            ['income', 'expense'].forEach(type => {
+                const categoryData = CATEGORIES[type];
+                Object.keys(categoryData).forEach(mainCat => {
+                    // Add main category
+                    allCategories.push(mainCat);
+                    // Add subcategories with full path
+                    const subcats = categoryData[mainCat];
+                    if (Array.isArray(subcats)) {
+                        subcats.forEach(subcat => {
+                            allCategories.push(`${mainCat} - ${subcat}`);
+                        });
+                    }
+                });
+            });
+        } else {
+            // Flat structure (backwards compatibility)
+            allCategories.push(...CATEGORIES.income, ...CATEGORIES.expense);
+        }
+        
+        return allCategories;
+    }
     
     // Current state
     let allTransactions = [];
@@ -73,7 +119,7 @@
         // Populate category filter
         const categorySelect = document.getElementById('filter-category');
         if (categorySelect) {
-            const allCategories = [...CATEGORIES.income, ...CATEGORIES.expense];
+            const allCategories = getAllCategoriesFlat();
             allCategories.forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat;
@@ -214,6 +260,11 @@
         let expenseCount = 0;
         
         filteredTransactions.forEach(t => {
+            // Skip transactions with no category (like beginning balance)
+            if (!t.category || t.category.trim() === '') {
+                return;
+            }
+            
             if (t.type === 'deposit') {
                 totalIncome += t.amount;
                 incomeCount++;
@@ -260,6 +311,50 @@
     /**
      * Update category reports
      */
+    /**
+     * Check if a category belongs to income
+     */
+    function isIncomeCategory(category) {
+        if (isHierarchical(CATEGORIES)) {
+            const incomeData = CATEGORIES.income;
+            // Check if it's a main category
+            if (incomeData.hasOwnProperty(category)) return true;
+            // Check if it's a full category path "Main - Sub"
+            for (const mainCat in incomeData) {
+                if (Array.isArray(incomeData[mainCat])) {
+                    for (const subcat of incomeData[mainCat]) {
+                        if (category === `${mainCat} - ${subcat}`) return true;
+                    }
+                }
+            }
+            return false;
+        } else {
+            return CATEGORIES.income.includes(category);
+        }
+    }
+    
+    /**
+     * Check if a category belongs to expense
+     */
+    function isExpenseCategory(category) {
+        if (isHierarchical(CATEGORIES)) {
+            const expenseData = CATEGORIES.expense;
+            // Check if it's a main category
+            if (expenseData.hasOwnProperty(category)) return true;
+            // Check if it's a full category path "Main - Sub"
+            for (const mainCat in expenseData) {
+                if (Array.isArray(expenseData[mainCat])) {
+                    for (const subcat of expenseData[mainCat]) {
+                        if (category === `${mainCat} - ${subcat}`) return true;
+                    }
+                }
+            }
+            return false;
+        } else {
+            return CATEGORIES.expense.includes(category);
+        }
+    }
+    
     function updateCategoryReports() {
         // Calculate category totals
         const incomeByCategory = {};
@@ -267,15 +362,20 @@
         
         // Process all transactions including splits
         filteredTransactions.forEach(t => {
+            // Skip transactions with no category (like beginning balance)
+            if (!t.category || t.category.trim() === '') {
+                return;
+            }
+            
             if (t.splits && t.splits.length > 0) {
                 // Process split transaction
                 t.splits.forEach(split => {
                     const category = split.category;
                     const amount = split.amount;
                     
-                    if (CATEGORIES.income.includes(category)) {
+                    if (isIncomeCategory(category)) {
                         incomeByCategory[category] = (incomeByCategory[category] || 0) + amount;
-                    } else if (CATEGORIES.expense.includes(category)) {
+                    } else if (isExpenseCategory(category)) {
                         expenseByCategory[category] = (expenseByCategory[category] || 0) + amount;
                     }
                 });

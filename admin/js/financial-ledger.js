@@ -6,29 +6,43 @@
 (function() {
     'use strict';
     
-    // Categories configuration
-    const CATEGORIES = {
-        income: [
-            'Member Dues',
-            'Chapter Donations',
-            'Scholarship Donations',
-            'Event Revenue',
-            'Merchandise Sales',
-            'Interest Income',
-            'Other Income'
-        ],
-        expense: [
-            'Scholarships Awarded',
-            'Event Costs',
-            'Operating Expenses',
-            'Marketing/Printing',
-            'Website Hosting',
-            'Mailchimp/Communications',
-            'Bank Fees',
-            'Donations Made',
-            'Other Expense'
-        ]
+    // Default categories with hierarchical structure
+    const DEFAULT_CATEGORIES = {
+        income: {
+            'Members': ['Dues', 'Donations', 'Scholarship Donations'],
+            'Chapter': ['General Donations', 'Event Revenue'],
+            'Other Income': ['Merchandise Sales', 'Interest Income', 'Other']
+        },
+        expense: {
+            'Scholarships': ['Fund Contributions', 'Awards Paid'],
+            'Operations': ['Event Costs', 'Operating Expenses'],
+            'Office': ['Marketing/Printing', 'Supplies'],
+            'Technology': ['Website Hosting', 'Mailchimp/Communications'],
+            'Compliance': ['Bank Fees', 'St & Fed Filing Fees'],
+            'Donations': ['Donations Made'],
+            'Other Expense': ['Miscellaneous']
+        }
     };
+    
+    // Load categories from localStorage or use defaults
+    let CATEGORIES = DEFAULT_CATEGORIES;
+    try {
+        const stored = localStorage.getItem('financial_categories');
+        if (stored) {
+            CATEGORIES = JSON.parse(stored);
+            console.log('Loaded custom categories from localStorage');
+        }
+    } catch (e) {
+        console.warn('Error loading custom categories, using defaults:', e);
+    }
+    
+    /**
+     * Check if using hierarchical categories
+     */
+    function isHierarchical(categories) {
+        if (!categories || !categories.income) return false;
+        return typeof categories.income === 'object' && !Array.isArray(categories.income);
+    }
     
     // Current state
     let currentBalance = 0;
@@ -268,6 +282,11 @@
             const hasSplits = transaction.splits && transaction.splits.length > 0;
             const splitIndicator = hasSplits ? `<div class="split-indicator">📊 ${transaction.splits.length} splits</div>` : '';
             
+            // Display category or special label for uncategorized transactions
+            const categoryDisplay = transaction.category ? 
+                escapeHtml(transaction.category) : 
+                '<em style="color: #999;">No category</em>';
+            
             return `
                 <tr class="transaction-row" data-id="${transaction.id}">
                     <td>${formattedDate}</td>
@@ -276,7 +295,7 @@
                     <td>
                         <div class="transaction-description">
                             <strong>${escapeHtml(transaction.description)}</strong>
-                            <div class="transaction-category">${escapeHtml(transaction.category)}</div>
+                            <div class="transaction-category">${categoryDisplay}</div>
                             ${splitIndicator}
                         </div>
                     </td>
@@ -363,11 +382,34 @@
         const select = document.getElementById('transaction-category');
         if (!select) return;
         
-        const categories = type === 'deposit' ? CATEGORIES.income : CATEGORIES.expense;
+        const categoryData = type === 'deposit' ? CATEGORIES.income : CATEGORIES.expense;
         
-        select.innerHTML = categories.map(cat => 
-            `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`
-        ).join('');
+        // Add blank option for non-categorized transactions (like beginning balance)
+        let optionsHTML = '<option value="">(No Category - Not counted in reports)</option>';
+        
+        // Check if hierarchical or flat structure
+        if (isHierarchical(CATEGORIES)) {
+            // Hierarchical: use optgroups
+            Object.keys(categoryData).forEach(mainCat => {
+                const subcats = categoryData[mainCat];
+                optionsHTML += `<optgroup label="${escapeHtml(mainCat)}">`;
+                // Add option for just the main category
+                optionsHTML += `<option value="${escapeHtml(mainCat)}">${escapeHtml(mainCat)} (General)</option>`;
+                // Add subcategory options
+                subcats.forEach(subcat => {
+                    const fullCategory = `${mainCat} - ${subcat}`;
+                    optionsHTML += `<option value="${escapeHtml(fullCategory)}">${escapeHtml(fullCategory)}</option>`;
+                });
+                optionsHTML += '</optgroup>';
+            });
+        } else {
+            // Flat: simple list (backwards compatibility)
+            categoryData.forEach(cat => {
+                optionsHTML += `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`;
+            });
+        }
+        
+        select.innerHTML = optionsHTML;
     }
     
     /**
@@ -397,7 +439,28 @@
         if (!tbody) return;
         
         const type = document.getElementById('transaction-type').value;
-        const categories = type === 'deposit' ? CATEGORIES.income : CATEGORIES.expense;
+        const categoryData = type === 'deposit' ? CATEGORIES.income : CATEGORIES.expense;
+        
+        // Build category options based on structure
+        let categoryOptions = '';
+        if (isHierarchical(CATEGORIES)) {
+            Object.keys(categoryData).forEach(mainCat => {
+                const subcats = categoryData[mainCat];
+                categoryOptions += `<optgroup label="${escapeHtml(mainCat)}">`;
+                // Add option for just the main category
+                categoryOptions += `<option value="${escapeHtml(mainCat)}">${escapeHtml(mainCat)} (General)</option>`;
+                // Add subcategory options
+                subcats.forEach(subcat => {
+                    const fullCategory = `${mainCat} - ${subcat}`;
+                    categoryOptions += `<option value="${escapeHtml(fullCategory)}">${escapeHtml(fullCategory)}</option>`;
+                });
+                categoryOptions += '</optgroup>';
+            });
+        } else {
+            categoryData.forEach(cat => {
+                categoryOptions += `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`;
+            });
+        }
         
         const row = document.createElement('tr');
         row.className = 'split-row';
@@ -405,7 +468,7 @@
             <td><input type="text" class="split-member" placeholder="Member name"></td>
             <td>
                 <select class="split-category">
-                    ${categories.map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('')}
+                    ${categoryOptions}
                 </select>
             </td>
             <td><input type="number" class="split-amount" placeholder="0.00" step="0.01" min="0"></td>
@@ -680,7 +743,7 @@
         document.getElementById('transaction-payee').value = transaction.payee || '';
         document.getElementById('transaction-check-number').value = transaction.checkNumber || '';
         document.getElementById('transaction-description').value = transaction.description;
-        document.getElementById('transaction-category').value = transaction.category;
+        document.getElementById('transaction-category').value = transaction.category || '';
         
         // Handle splits if present
         const splitToggle = document.getElementById('split-transaction-toggle');
@@ -835,7 +898,70 @@
         viewSplits,
         editTransaction,
         deleteTransaction,
-        updateSplitTotal
+        updateSplitTotal,
+        
+        // Utility function to convert initial deposit to beginning balance
+        async convertToBeginningBalance() {
+            if (!db) {
+                alert('Database not initialized');
+                return;
+            }
+            
+            try {
+                console.log('Finding oldest transaction...');
+                
+                // Get the oldest transaction
+                const snapshot = await db.collection('transactions')
+                    .orderBy('date', 'asc')
+                    .limit(1)
+                    .get();
+                
+                if (snapshot.empty) {
+                    console.log('No transactions found');
+                    alert('No transactions found in ledger');
+                    return;
+                }
+                
+                const doc = snapshot.docs[0];
+                const data = doc.data();
+                
+                console.log('Current transaction:', data);
+                
+                const confirmed = confirm(
+                    `Convert this transaction to Beginning Balance?\n\n` +
+                    `Current Description: ${data.description}\n` +
+                    `Current Category: ${data.category || '(none)'}\n` +
+                    `Amount: $${data.amount.toFixed(2)}\n\n` +
+                    `It will become:\n` +
+                    `Description: Beginning Balance\n` +
+                    `Category: (none)\n` +
+                    `Amount: $${data.amount.toFixed(2)}`
+                );
+                
+                if (!confirmed) {
+                    console.log('Cancelled by user');
+                    return;
+                }
+                
+                // Update the transaction
+                await db.collection('transactions').doc(doc.id).update({
+                    description: 'Beginning Balance',
+                    category: '',
+                    payee: '',
+                    type: 'deposit'
+                });
+                
+                console.log('✅ Updated successfully!');
+                alert('✅ Beginning balance updated! Refreshing page...');
+                
+                // Reload to show changes
+                window.location.reload();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error updating transaction: ' + error.message);
+            }
+        }
     };
     
 })();

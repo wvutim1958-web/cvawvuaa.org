@@ -29,11 +29,13 @@
         .page-header h1 {
             margin: 0 0 0.5rem;
             font-size: 2rem;
+            color: #ffffff;
         }
         
         .page-header p {
             margin: 0;
             opacity: 0.9;
+            color: #ffffff;
         }
         
         .dashboard-grid {
@@ -58,7 +60,7 @@
         }
         
         .stat-card.balance {
-            border-left-color: #28a745;
+            border-left-color: #4a90e2;
         }
         
         .stat-card.outstanding {
@@ -66,7 +68,7 @@
         }
         
         .stat-card.paid {
-            border-left-color: #007bff;
+            border-left-color: #4a90e2;
         }
         
         .stat-card.total-members {
@@ -76,9 +78,10 @@
         .stat-card h3 {
             margin: 0 0 0.5rem;
             font-size: 0.9rem;
-            color: #666;
+            color: #333;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-weight: 600;
         }
         
         .stat-card .value {
@@ -88,7 +91,7 @@
         }
         
         .stat-card.balance .value {
-            color: #28a745;
+            color: #4a90e2;
         }
         
         .stat-card.outstanding .value {
@@ -105,7 +108,7 @@
         
         .stat-card .subtitle {
             font-size: 0.85rem;
-            color: #999;
+            color: #666;
         }
         
         .stat-card .action-link {
@@ -179,7 +182,7 @@
         .payment-amount {
             font-size: 1.25rem;
             font-weight: bold;
-            color: #28a745;
+            color: #4a90e2;
         }
         
         .quick-actions {
@@ -214,12 +217,14 @@
         .action-card .content h3 {
             margin: 0 0 0.25rem;
             font-size: 1rem;
+            color: #ffffff;
         }
         
         .action-card .content p {
             margin: 0;
             font-size: 0.85rem;
             opacity: 0.9;
+            color: #ffffff;
         }
         
         .loading {
@@ -247,6 +252,12 @@
     </style>
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <div class="dashboard-container">
         <div class="page-header">
             <h1>📊 Admin Dashboard</h1>
@@ -295,6 +306,14 @@
         <div class="section">
             <h2>⚡ Quick Actions</h2>
             <div class="quick-actions">
+                <a href="bulk-payment.html" class="action-card" style="background: linear-gradient(135deg, #28a745, #20c997); color: white;">
+                    <div class="icon">💳</div>
+                    <div class="content">
+                        <h3>Bulk Payment Recording</h3>
+                        <p>Record multiple payments at once</p>
+                    </div>
+                </a>
+                
                 <a href="member-database.html" class="action-card">
                     <div class="icon">👥</div>
                     <div class="content">
@@ -311,19 +330,35 @@
                     </div>
                 </a>
                 
+                <a href="dues-reminders.html" class="action-card">
+                    <div class="icon">⏰</div>
+                    <div class="content">
+                        <h3>Automated Reminders</h3>
+                        <p>Schedule dues reminder emails</p>
+                    </div>
+                </a>
+                
                 <a href="outstanding-dues-report.html" class="action-card">
                     <div class="icon">📧</div>
                     <div class="content">
-                        <h3>Send Dues Reminders</h3>
-                        <p>Email members who owe dues</p>
+                        <h3>Outstanding Dues Report</h3>
+                        <p>View and export dues list</p>
                     </div>
                 </a>
                 
                 <a href="payment-tracking.html" class="action-card">
-                    <div class="icon">💳</div>
+                    <div class="icon">📝</div>
                     <div class="content">
                         <h3>Payment Tracking</h3>
                         <p>View all member payments</p>
+                    </div>
+                </a>
+                
+                <a href="communication-history.html" class="action-card">
+                    <div class="icon">📧</div>
+                    <div class="content">
+                        <h3>Communication History</h3>
+                        <p>Track all member interactions</p>
                     </div>
                 </a>
                 
@@ -332,6 +367,22 @@
                     <div class="content">
                         <h3>Financial Reports</h3>
                         <p>Income and expense analysis</p>
+                    </div>
+                </a>
+                
+                <a href="events-manager.html" class="action-card">
+                    <div class="icon">🎉</div>
+                    <div class="content">
+                        <h3>Event Manager</h3>
+                        <p>Create events and track RSVPs</p>
+                    </div>
+                </a>
+                
+                <a href="tax-receipt-generator.html" class="action-card">
+                    <div class="icon">🎓</div>
+                    <div class="content">
+                        <h3>Tax Receipts</h3>
+                        <p>Generate 501(c)(3) receipts</p>
                     </div>
                 </a>
                 
@@ -346,6 +397,9 @@
         </div>
     </div>
 
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
     <!-- Firebase Configuration -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
@@ -353,5 +407,8 @@
     <script src="js/firebase-config.js"></script>
     
     <script src="js/dashboard.js"></script>
+    
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Beginning Balance - CVCWVUAA</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #003057;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .status.info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+        .status.success {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+        .status.error {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+        .transaction-info {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        button {
+            background: #003057;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover {
+            background: #004a7f;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <div class="container">
+        <h1>Update Beginning Balance</h1>
+        <div class="subtitle">Convert initial deposit to beginning balance with no category</div>
+
+        <div id="status-container"></div>
+
+        <div id="transaction-info" style="display: none;"></div>
+
+        <div id="button-container">
+            <button id="btn-load" onclick="loadInitialTransaction()">🔍 Find Initial Transaction</button>
+            <button id="btn-update" onclick="updateTransaction()" style="display: none;">✅ Update to Beginning Balance</button>
+            <button class="btn-secondary" onclick="window.location.href='financial-ledger.html'">← Back to Ledger</button>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script>
+        let db = null;
+        let initialTransactionId = null;
+        let initialTransactionData = null;
+
+        // Initialize Firebase
+        function init() {
+            if (typeof initializeFirebase === 'function') {
+                const initialized = initializeFirebase();
+                if (initialized && typeof firebase !== 'undefined') {
+                    db = firebase.firestore();
+                    showStatus('Firebase connected successfully', 'success');
+                } else {
+                    showStatus('Failed to initialize Firebase', 'error');
+                }
+            } else {
+                showStatus('Firebase configuration not found', 'error');
+            }
+        }
+
+        function showStatus(message, type = 'info') {
+            const container = document.getElementById('status-container');
+            container.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        async function loadInitialTransaction() {
+            if (!db) {
+                showStatus('Firebase not initialized', 'error');
+                return;
+            }
+
+            try {
+                showStatus('Searching for initial transaction...', 'info');
+
+                // Get the oldest transaction
+                const snapshot = await db.collection('transactions')
+                    .orderBy('date', 'asc')
+                    .limit(1)
+                    .get();
+
+                if (snapshot.empty) {
+                    showStatus('No transactions found in the ledger', 'error');
+                    return;
+                }
+
+                const doc = snapshot.docs[0];
+                initialTransactionId = doc.id;
+                initialTransactionData = doc.data();
+
+                // Display transaction info
+                const infoDiv = document.getElementById('transaction-info');
+                infoDiv.style.display = 'block';
+                infoDiv.innerHTML = `
+                    <strong>Current Transaction Details:</strong><br>
+                    ID: ${initialTransactionId}<br>
+                    Description: ${initialTransactionData.description || 'N/A'}<br>
+                    Category: ${initialTransactionData.category || '(none)'}<br>
+                    Payee: ${initialTransactionData.payee || '(none)'}<br>
+                    Amount: $${initialTransactionData.amount ? initialTransactionData.amount.toFixed(2) : '0.00'}<br>
+                    Type: ${initialTransactionData.type || 'N/A'}<br>
+                    Date: ${initialTransactionData.date ? new Date(initialTransactionData.date.toDate()).toLocaleDateString() : 'N/A'}
+                `;
+
+                document.getElementById('btn-update').style.display = 'inline-block';
+                showStatus('✅ Found initial transaction! Review the details above, then click "Update to Beginning Balance"', 'success');
+
+            } catch (error) {
+                console.error('Error loading transaction:', error);
+                showStatus(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function updateTransaction() {
+            if (!db || !initialTransactionId) {
+                showStatus('No transaction selected', 'error');
+                return;
+            }
+
+            try {
+                showStatus('Updating transaction...', 'info');
+
+                // Update the transaction
+                await db.collection('transactions').doc(initialTransactionId).update({
+                    description: 'Beginning Balance',
+                    category: '',  // Empty category for beginning balance
+                    payee: '',     // Empty payee for beginning balance
+                    type: 'deposit' // Keep as deposit (adds to balance)
+                });
+
+                showStatus('✅ Successfully updated! The initial transaction is now "Beginning Balance" with no category.', 'success');
+                
+                // Update the display
+                const infoDiv = document.getElementById('transaction-info');
+                infoDiv.innerHTML = `
+                    <strong>✅ Updated Transaction:</strong><br>
+                    ID: ${initialTransactionId}<br>
+                    Description: Beginning Balance<br>
+                    Category: (none)<br>
+                    Payee: (none)<br>
+                    Amount: $${initialTransactionData.amount ? initialTransactionData.amount.toFixed(2) : '0.00'}<br>
+                    Type: deposit<br>
+                    Date: ${initialTransactionData.date ? new Date(initialTransactionData.date.toDate()).toLocaleDateString() : 'N/A'}
+                `;
+
+                document.getElementById('btn-update').style.display = 'none';
+                document.getElementById('btn-load').disabled = true;
+
+            } catch (error) {
+                console.error('Error updating transaction:', error);
+                showStatus(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>

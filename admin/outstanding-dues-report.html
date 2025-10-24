@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Outstanding Dues Report - CVCWVUAA Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/admin/css/print-compact.css">
     <style>
         * {
             margin: 0;
@@ -93,7 +94,7 @@
         }
 
         .btn-export {
-            background: #4a90e2;
+            background: #2e7d32;
             color: white;
         }
 
@@ -244,12 +245,18 @@
 
         .payment-note {
             font-size: 12px;
-            color: #4a90e2;
+            color: #2e7d32;
             font-style: italic;
         }
     </style>
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <div class="container">
         <a href="/admin/admin-fresh.html" class="back-link">← Back to Admin Dashboard</a>
 
@@ -281,6 +288,7 @@
         <!-- Controls -->
         <div class="controls">
             <button class="btn btn-export" onclick="exportToCSV()">📥 Export CSV</button>
+            <button class="btn btn-export" onclick="exportMailMerge()" style="background: #ea4335; color: white; font-weight: bold;">✉️ Gmail Mail Merge</button>
             <button class="btn btn-export" onclick="exportEmailList()">📧 Export Email List</button>
             <button class="btn btn-export" onclick="exportMailingList()">📮 Export Mailing List</button>
             <button class="btn btn-invoice" onclick="generateAllInvoices()">📄 Generate All Invoices</button>
@@ -320,5 +328,10 @@
     <!-- Application Scripts -->
     <script src="/admin/js/firebase-config.js?v=20251020-1538"></script>
     <script src="/admin/js/outstanding-dues.js?v=20251021004000"></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

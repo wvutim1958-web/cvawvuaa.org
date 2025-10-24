@@ -1,192 +1,157 @@
-// Events Manager - Create and manage chapter events with RSVP tracking
+// Firebase is already initialized in firebase-config.js
+// db is already available globally
 
-let currentEventId = null;
 let allEvents = [];
 
-// Load events on page load
-document.addEventListener('DOMContentLoaded', async () => {
-    await loadEvents();
-    displayEvents();
-});
-
-// Load all events from Firestore
+// Load all events
 async function loadEvents() {
     try {
-        const eventsSnapshot = await db.collection('events')
-            .orderBy('date', 'asc')
-            .get();
+        const snapshot = await db.collection('events').orderBy('date', 'desc').get();
         
-        allEvents = [];
-        eventsSnapshot.forEach(doc => {
-            const event = doc.data();
-            allEvents.push({
+        allEvents = await Promise.all(snapshot.docs.map(async doc => {
+            const event = {
                 id: doc.id,
-                ...event,
-                date: event.date.toDate() // Convert Firestore timestamp to JS Date
-            });
-        });
+                ...doc.data()
+            };
+            
+            // Load RSVP counts
+            const rsvpSnapshot = await db.collection('events').doc(doc.id).collection('rsvps').get();
+            const rsvps = rsvpSnapshot.docs.map(rsvpDoc => rsvpDoc.data());
+            
+            event.rsvpCounts = {
+                yes: rsvps.filter(r => r.status === 'yes').length,
+                no: rsvps.filter(r => r.status === 'no').length,
+                maybe: rsvps.filter(r => r.status === 'maybe').length,
+                total: rsvps.length
+            };
+            
+            return event;
+        }));
+        
+        console.log(`Loaded ${allEvents.length} events`);
+        renderEvents();
+        
     } catch (error) {
         console.error('Error loading events:', error);
-        alert('Error loading events');
+        document.getElementById('eventsContainer').innerHTML = 
+            '<div class="no-data">Error loading events. Please refresh the page.</div>';
     }
 }
 
-// Display all events
-function displayEvents() {
-    const container = document.getElementById('eventsList');
+// Render events
+function renderEvents() {
+    const container = document.getElementById('eventsContainer');
     
     if (allEvents.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">📅</div>
-                <p>No events yet. Create your first event!</p>
-            </div>
-        `;
+        container.innerHTML = '<div class="no-data">No events yet. Create your first event to get started!</div>';
         return;
     }
     
     const now = new Date();
-    const upcoming = allEvents.filter(e => e.date >= now);
-    const past = allEvents.filter(e => e.date < now);
     
-    container.innerHTML = '';
-    
-    // Display upcoming events
-    if (upcoming.length > 0) {
-        const upcomingHeader = document.createElement('h3');
-        upcomingHeader.textContent = '🔜 Upcoming Events';
-        upcomingHeader.style.marginBottom = '1rem';
-        container.appendChild(upcomingHeader);
+    container.innerHTML = '<div class="events-grid">' + allEvents.map(event => {
+        const eventDate = event.date.toDate ? event.date.toDate() : new Date(event.date);
+        const isPast = eventDate < now;
+        const dateStr = formatEventDate(eventDate);
         
-        upcoming.forEach(event => {
-            container.appendChild(createEventCard(event, false));
-        });
-    }
-    
-    // Display past events
-    if (past.length > 0) {
-        const pastHeader = document.createElement('h3');
-        pastHeader.textContent = '📚 Past Events';
-        pastHeader.style.marginTop = '2rem';
-        pastHeader.style.marginBottom = '1rem';
-        container.appendChild(pastHeader);
-        
-        past.slice(0, 10).forEach(event => { // Show only last 10 past events
-            container.appendChild(createEventCard(event, true));
-        });
-    }
-}
-
-// Create event card element
-function createEventCard(event, isPast) {
-    const card = document.createElement('div');
-    card.className = `event-card ${isPast ? 'past' : ''}`;
-    
-    const rsvpCount = event.rsvps ? event.rsvps.length : 0;
-    const capacityText = event.capacity ? ` / ${event.capacity}` : '';
-    
-    card.innerHTML = `
-        <div class="event-header">
-            <div>
-                <div class="event-title">${event.title}</div>
-                <span class="event-status ${isPast ? 'status-past' : 'status-upcoming'}">
-                    ${isPast ? 'Past' : 'Upcoming'}
-                </span>
-            </div>
-        </div>
-        <div class="event-details">
-            <p>📅 ${formatEventDate(event.date)} at ${formatEventTime(event.date)}</p>
-            <p>📍 ${event.location}</p>
-            ${event.description ? `<p>📝 ${event.description}</p>` : ''}
-        </div>
-        <div class="rsvp-section">
-            <div class="rsvp-count">👥 ${rsvpCount} RSVP${rsvpCount !== 1 ? 's' : ''}${capacityText}</div>
-            ${rsvpCount > 0 ? `
-                <div class="rsvp-list">
-                    ${event.rsvps.map(rsvp => `<span class="rsvp-badge">${rsvp.name}</span>`).join('')}
+        return `
+            <div class="event-card ${isPast ? 'past' : 'upcoming'}">
+                <div class="event-header">
+                    <div>
+                        <h3 class="event-title">${escapeHtml(event.name)}</h3>
+                        <div class="event-date">📅 ${dateStr}</div>
+                        <div class="event-location">📍 ${escapeHtml(event.location)}</div>
+                    </div>
+                    <span style="font-size: 0.85rem; color: ${isPast ? '#6b7280' : '#10b981'}; font-weight: 600;">
+                        ${isPast ? 'PAST EVENT' : 'UPCOMING'}
+                    </span>
                 </div>
-            ` : ''}
-        </div>
-        <div class="event-actions">
-            <button class="btn btn-primary btn-small" onclick="editEvent('${event.id}')">✏️ Edit</button>
-            <button class="btn btn-success btn-small" onclick="manageRSVPs('${event.id}')">👥 Manage RSVPs</button>
-            <button class="btn btn-danger btn-small" onclick="deleteEvent('${event.id}')">🗑️ Delete</button>
-        </div>
-    `;
-    
-    return card;
+                
+                <div class="event-description">${escapeHtml(event.description)}</div>
+                
+                ${event.capacity ? `<div style="color: #666; font-size: 0.9rem;">Capacity: ${event.capacity}</div>` : ''}
+                
+                <div class="event-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Yes</div>
+                        <div class="stat-value yes">${event.rsvpCounts.yes}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Maybe</div>
+                        <div class="stat-value maybe">${event.rsvpCounts.maybe}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">No</div>
+                        <div class="stat-value no">${event.rsvpCounts.no}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Total RSVPs</div>
+                        <div class="stat-value">${event.rsvpCounts.total}</div>
+                    </div>
+                </div>
+                
+                <div class="event-actions">
+                    <button class="btn-small btn-view" onclick="viewRSVPs('${event.id}')">👥 View RSVPs</button>
+                    <button class="btn-small btn-reminders" onclick="sendReminders('${event.id}')">📧 Send Reminders</button>
+                    <button class="btn-small btn-edit" onclick="editEvent('${event.id}')">✏️ Edit</button>
+                    <button class="btn-small btn-delete" onclick="deleteEvent('${event.id}')">🗑️ Delete</button>
+                </div>
+            </div>
+        `;
+    }).join('') + '</div>';
 }
 
-// Save event (create or update)
-async function saveEvent() {
-    // Validate form
-    const title = document.getElementById('eventTitle').value.trim();
-    const date = document.getElementById('eventDate').value;
-    const time = document.getElementById('eventTime').value;
-    const location = document.getElementById('eventLocation').value.trim();
-    const description = document.getElementById('eventDescription').value.trim();
+// Open create modal
+function openCreateModal() {
+    document.getElementById('modalTitle').textContent = 'Create Event';
+    document.getElementById('eventForm').reset();
+    document.getElementById('eventId').value = '';
+    document.getElementById('eventModal').classList.add('active');
+}
+
+// Close modal
+function closeModal() {
+    document.getElementById('eventModal').classList.remove('active');
+}
+
+// Save event
+async function saveEvent(e) {
+    e.preventDefault();
+    
+    const eventId = document.getElementById('eventId').value;
+    const name = document.getElementById('eventName').value;
+    const dateStr = document.getElementById('eventDate').value;
+    const location = document.getElementById('eventLocation').value;
+    const description = document.getElementById('eventDescription').value;
     const capacity = document.getElementById('eventCapacity').value;
     
-    if (!title) {
-        alert('Please enter event title');
-        document.getElementById('eventTitle').focus();
-        return;
-    }
-    
-    if (!date) {
-        alert('Please select event date');
-        document.getElementById('eventDate').focus();
-        return;
-    }
-    
-    if (!time) {
-        alert('Please select event time');
-        document.getElementById('eventTime').focus();
-        return;
-    }
-    
-    if (!location) {
-        alert('Please enter event location');
-        document.getElementById('eventLocation').focus();
-        return;
-    }
-    
-    // Combine date and time
-    const eventDateTime = new Date(`${date}T${time}`);
-    
-    // Prepare event data
     const eventData = {
-        title: title,
-        date: firebase.firestore.Timestamp.fromDate(eventDateTime),
-        location: location,
-        description: description,
+        name,
+        date: firebase.firestore.Timestamp.fromDate(new Date(dateStr)),
+        location,
+        description,
         capacity: capacity ? parseInt(capacity) : null,
-        rsvps: currentEventId ? undefined : [], // Keep existing RSVPs on edit
-        createdDate: currentEventId ? undefined : firebase.firestore.Timestamp.now()
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
     
-    // Remove undefined fields
-    Object.keys(eventData).forEach(key => eventData[key] === undefined && delete eventData[key]);
-    
     try {
-        if (currentEventId) {
+        if (eventId) {
             // Update existing event
-            await db.collection('events').doc(currentEventId).update(eventData);
+            await db.collection('events').doc(eventId).update(eventData);
             alert('Event updated successfully!');
         } else {
             // Create new event
+            eventData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
             await db.collection('events').add(eventData);
             alert('Event created successfully!');
         }
         
-        // Reload and reset
-        await loadEvents();
-        displayEvents();
-        cancelEdit();
+        closeModal();
+        loadEvents();
         
     } catch (error) {
         console.error('Error saving event:', error);
-        alert('Error saving event: ' + error.message);
+        alert('Error saving event. Please try again.');
     }
 }
 
@@ -195,31 +160,19 @@ async function editEvent(eventId) {
     const event = allEvents.find(e => e.id === eventId);
     if (!event) return;
     
-    currentEventId = eventId;
+    document.getElementById('modalTitle').textContent = 'Edit Event';
+    document.getElementById('eventId').value = eventId;
+    document.getElementById('eventName').value = event.name;
     
-    // Populate form
-    document.getElementById('formTitle').textContent = '✏️ Edit Event';
-    document.getElementById('eventTitle').value = event.title;
-    document.getElementById('eventDate').value = event.date.toISOString().split('T')[0];
-    document.getElementById('eventTime').value = event.date.toTimeString().slice(0, 5);
+    const eventDate = event.date.toDate ? event.date.toDate() : new Date(event.date);
+    const dateStr = eventDate.toISOString().slice(0, 16);
+    document.getElementById('eventDate').value = dateStr;
+    
     document.getElementById('eventLocation').value = event.location;
-    document.getElementById('eventDescription').value = event.description || '';
+    document.getElementById('eventDescription').value = event.description;
     document.getElementById('eventCapacity').value = event.capacity || '';
     
-    // Scroll to form
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Cancel edit
-function cancelEdit() {
-    currentEventId = null;
-    document.getElementById('formTitle').textContent = '📅 Create New Event';
-    document.getElementById('eventTitle').value = '';
-    document.getElementById('eventDate').value = '';
-    document.getElementById('eventTime').value = '';
-    document.getElementById('eventLocation').value = '';
-    document.getElementById('eventDescription').value = '';
-    document.getElementById('eventCapacity').value = '';
+    document.getElementById('eventModal').classList.add('active');
 }
 
 // Delete event
@@ -227,74 +180,133 @@ async function deleteEvent(eventId) {
     const event = allEvents.find(e => e.id === eventId);
     if (!event) return;
     
-    if (!confirm(`Delete "${event.title}"? This cannot be undone.`)) {
-        return;
-    }
+    const confirmed = confirm(`Are you sure you want to delete "${event.name}"?\n\nThis will also delete all RSVPs for this event.`);
+    if (!confirmed) return;
     
     try {
+        // Delete all RSVPs first
+        const rsvpSnapshot = await db.collection('events').doc(eventId).collection('rsvps').get();
+        const batch = db.batch();
+        rsvpSnapshot.docs.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+        await batch.commit();
+        
+        // Delete event
         await db.collection('events').doc(eventId).delete();
-        alert('Event deleted successfully');
         
-        await loadEvents();
-        displayEvents();
+        alert('Event deleted successfully!');
+        loadEvents();
         
-        if (currentEventId === eventId) {
-            cancelEdit();
-        }
     } catch (error) {
         console.error('Error deleting event:', error);
-        alert('Error deleting event: ' + error.message);
+        alert('Error deleting event. Please try again.');
     }
 }
 
-// Manage RSVPs
-async function manageRSVPs(eventId) {
+// View RSVPs
+function viewRSVPs(eventId) {
+    window.location.href = `event-rsvps.html?eventId=${eventId}`;
+}
+
+// Send reminders
+async function sendReminders(eventId) {
     const event = allEvents.find(e => e.id === eventId);
     if (!event) return;
     
-    const currentRSVPs = event.rsvps || [];
-    const rsvpNames = currentRSVPs.map(r => r.name).join('\n');
-    
-    const newRSVPs = prompt(
-        `Manage RSVPs for "${event.title}"\n\n` +
-        `Current RSVPs (${currentRSVPs.length}):\n` +
-        `${rsvpNames || 'None yet'}\n\n` +
-        `Enter member names (one per line) to update RSVP list:`,
-        rsvpNames
-    );
-    
-    if (newRSVPs === null) return; // Cancelled
-    
-    // Parse names
-    const names = newRSVPs.split('\n')
-        .map(n => n.trim())
-        .filter(n => n.length > 0);
-    
-    // Create RSVP objects
-    const rsvps = names.map(name => ({
-        name: name,
-        timestamp: firebase.firestore.Timestamp.now()
-    }));
-    
     try {
-        await db.collection('events').doc(eventId).update({ rsvps: rsvps });
-        alert(`RSVPs updated! Total: ${rsvps.length}`);
+        // Get all members who said "yes" or "maybe"
+        const rsvpSnapshot = await db.collection('events').doc(eventId).collection('rsvps').get();
+        const confirmedRsvps = rsvpSnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .filter(rsvp => rsvp.status === 'yes' || rsvp.status === 'maybe');
         
-        await loadEvents();
-        displayEvents();
+        if (confirmedRsvps.length === 0) {
+            alert('No confirmed RSVPs to send reminders to.');
+            return;
+        }
+        
+        // Get member details
+        const memberIds = confirmedRsvps.map(rsvp => rsvp.memberId);
+        const membersSnapshot = await db.collection('members').where(firebase.firestore.FieldPath.documentId(), 'in', memberIds).get();
+        const members = membersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        const emails = members.filter(m => m.email).map(m => m.email);
+        
+        if (emails.length === 0) {
+            alert('No members have email addresses on file.');
+            return;
+        }
+        
+        const eventDate = event.date.toDate ? event.date.toDate() : new Date(event.date);
+        const dateStr = formatEventDate(eventDate);
+        
+        const subject = encodeURIComponent(`Reminder: ${event.name}`);
+        const body = encodeURIComponent(
+            `Dear Member,\n\n` +
+            `This is a friendly reminder about the upcoming event:\n\n` +
+            `Event: ${event.name}\n` +
+            `Date: ${dateStr}\n` +
+            `Location: ${event.location}\n\n` +
+            `${event.description}\n\n` +
+            `We look forward to seeing you there!\n\n` +
+            `Let's Go! Mountaineers!!!!\n\n` +
+            `Central Virginia Chapter\n` +
+            `West Virginia University Alumni Association`
+        );
+        
+        const mailtoLink = `mailto:${emails.join(',')}?subject=${subject}&body=${body}`;
+        window.location.href = mailtoLink;
+        
+        // Log communications
+        for (const member of members.filter(m => m.email)) {
+            await db.collection('communications').add({
+                memberId: member.id,
+                type: 'reminder',
+                details: `Event reminder sent: ${event.name}`,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                sentBy: 'Admin User',
+                method: 'Email',
+                metadata: {
+                    eventId: eventId,
+                    eventName: event.name,
+                    eventDate: event.date
+                }
+            });
+        }
+        
+        console.log(`Logged ${members.filter(m => m.email).length} event reminder communications`);
+        
     } catch (error) {
-        console.error('Error updating RSVPs:', error);
-        alert('Error updating RSVPs: ' + error.message);
+        console.error('Error sending reminders:', error);
+        alert('Error sending reminders. Please try again.');
     }
 }
 
-// Format helpers
+// Helper functions
 function formatEventDate(date) {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 }
 
-function formatEventTime(date) {
-    const options = { hour: 'numeric', minute: '2-digit' };
-    return date.toLocaleTimeString('en-US', options);
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
+
+// Load events on page load
+loadEvents();
+
+// Close modal when clicking outside
+document.getElementById('eventModal').addEventListener('click', (e) => {
+    if (e.target.id === 'eventModal') {
+        closeModal();
+    }
+});

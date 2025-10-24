@@ -3,31 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Member Communication History - CVCWVUAA Admin">
     <title>Communication History - CVCWVUAA Admin</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
+    
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f7fa;
-            padding: 20px;
-        }
-        
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 2rem;
         }
         
         .page-header {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
             padding: 2rem;
             border-radius: 15px;
@@ -37,18 +27,49 @@
         
         .page-header h1 {
             margin: 0 0 0.5rem;
-            font-size: 2rem;
         }
         
-        .page-header p {
-            margin: 0;
-            opacity: 0.9;
+        .controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
         }
         
-        .stats-row {
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #003057;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            gap: 1rem;
             margin-bottom: 2rem;
         }
         
@@ -57,69 +78,148 @@
             padding: 1.5rem;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
         }
         
-        .stat-card h3 {
-            color: #666;
+        .stat-card .label {
             font-size: 0.9rem;
+            color: #666;
             margin-bottom: 0.5rem;
         }
         
-        .stat-card .stat-value {
+        .stat-card .value {
             font-size: 2rem;
             font-weight: bold;
-            color: #8b5cf6;
+            color: #003057;
         }
         
-        .filters-panel {
+        .timeline-container {
             background: white;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e0e0e0;
+        }
+        
+        .timeline-item {
+            position: relative;
             margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #6366f1;
         }
         
-        .filters-panel h2 {
-            margin: 0 0 1rem;
-            color: #333;
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 1.5rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #6366f1;
+            z-index: 1;
         }
         
-        .filters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+        .timeline-item.invoice::before {
+            border-color: #f59e0b;
+        }
+        
+        .timeline-item.receipt::before {
+            border-color: #10b981;
+        }
+        
+        .timeline-item.reminder::before {
+            border-color: #ef4444;
+        }
+        
+        .timeline-item.email::before {
+            border-color: #3b82f6;
+        }
+        
+        .timeline-item.other::before {
+            border-color: #6b7280;
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
             margin-bottom: 1rem;
         }
         
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .filter-group label {
+        .timeline-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
             font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .timeline-type.invoice {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .timeline-type.receipt {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .timeline-type.reminder {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .timeline-type.email {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .timeline-type.other {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .timeline-date {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .timeline-member {
+            font-weight: 600;
+            color: #003057;
             margin-bottom: 0.5rem;
-            color: #333;
         }
         
-        .filter-group input,
-        .filter-group select {
-            padding: 0.75rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
+        .timeline-details {
+            color: #666;
+            line-height: 1.6;
         }
         
-        .filter-group input:focus,
-        .filter-group select:focus {
-            outline: none;
-            border-color: #8b5cf6;
-        }
-        
-        .filter-actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+        .timeline-meta {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.85rem;
+            color: #999;
         }
         
         .btn {
@@ -132,12 +232,12 @@
         }
         
         .btn-primary {
-            background: #8b5cf6;
+            background: #6366f1;
             color: white;
         }
         
         .btn-primary:hover {
-            background: #7c3aed;
+            background: #4f46e5;
         }
         
         .btn-secondary {
@@ -149,217 +249,124 @@
             background: #5a6268;
         }
         
-        .btn-success {
-            background: #10b981;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #059669;
-        }
-        
-        .timeline-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .timeline-container h2 {
-            margin: 0 0 1.5rem;
-            color: #333;
-        }
-        
-        .timeline {
-            position: relative;
-            padding-left: 2rem;
-        }
-        
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(to bottom, #8b5cf6, #7c3aed);
-        }
-        
-        .timeline-item {
-            position: relative;
-            margin-bottom: 2rem;
-            padding-left: 1.5rem;
-        }
-        
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -2.4rem;
-            top: 0;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: white;
-            border: 3px solid #8b5cf6;
-        }
-        
-        .timeline-date {
-            font-weight: 600;
-            color: #8b5cf6;
-            margin-bottom: 0.5rem;
-        }
-        
-        .timeline-content {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 3px solid #8b5cf6;
-        }
-        
-        .timeline-type {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .type-email {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        
-        .type-reminder {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        
-        .type-receipt {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        .type-event {
-            background: #e9d5ff;
-            color: #6b21a8;
-        }
-        
-        .timeline-subject {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-        
-        .timeline-message {
+        .loading {
+            text-align: center;
+            padding: 3rem;
             color: #666;
-            margin-bottom: 0.5rem;
         }
         
-        .timeline-member {
-            font-size: 0.9rem;
-            color: #8b5cf6;
-        }
-        
-        .empty-state {
+        .no-data {
             text-align: center;
             padding: 3rem;
             color: #999;
+            font-style: italic;
         }
         
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-        
-        @media (max-width: 768px) {
-            .timeline {
-                padding-left: 1rem;
-            }
-            
-            .timeline-item {
-                padding-left: 1rem;
-            }
-            
-            .timeline-item::before {
-                left: -1.7rem;
-            }
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
         }
     </style>
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <div class="container">
         <div class="page-header">
-            <h1>📧 Communication History</h1>
-            <p>View and track all member communications and receipts</p>
+            <h1>📧 Member Communication History</h1>
+            <p>Track all interactions with members: invoices, receipts, reminders, and more</p>
         </div>
-
-        <div class="stats-row">
+        
+        <!-- Statistics -->
+        <div class="stats-grid" id="statsContainer">
             <div class="stat-card">
-                <h3>Total Communications</h3>
-                <div class="stat-value" id="totalComms">0</div>
+                <div class="label">Total Communications</div>
+                <div class="value" id="totalComms">0</div>
             </div>
             <div class="stat-card">
-                <h3>This Month</h3>
-                <div class="stat-value" id="monthComms">0</div>
+                <div class="label">Last 30 Days</div>
+                <div class="value" id="recentComms">0</div>
             </div>
             <div class="stat-card">
-                <h3>Unique Members</h3>
-                <div class="stat-value" id="uniqueMembers">0</div>
+                <div class="label">Members Contacted</div>
+                <div class="value" id="membersContacted">0</div>
             </div>
             <div class="stat-card">
-                <h3>Last 7 Days</h3>
-                <div class="stat-value" id="weekComms">0</div>
+                <div class="label">Pending Follow-ups</div>
+                <div class="value" id="pendingFollowups">0</div>
             </div>
         </div>
-
-        <div class="filters-panel">
-            <h2>🔍 Filters</h2>
-            <div class="filters-grid">
-                <div class="filter-group">
-                    <label>Member</label>
-                    <select id="filterMember">
+        
+        <!-- Filters -->
+        <div class="controls">
+            <h2 style="margin: 0 0 1.5rem; color: #003057;">🔍 Filters</h2>
+            <div class="filter-grid">
+                <div class="form-group">
+                    <label for="memberFilter">Member</label>
+                    <select id="memberFilter">
                         <option value="">All Members</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label>Communication Type</label>
-                    <select id="filterType">
+                
+                <div class="form-group">
+                    <label for="typeFilter">Communication Type</label>
+                    <select id="typeFilter">
                         <option value="">All Types</option>
-                        <option value="Email">Email</option>
-                        <option value="Dues Reminder">Dues Reminder</option>
-                        <option value="Tax Receipt">Tax Receipt</option>
-                        <option value="Event">Event</option>
+                        <option value="invoice">Invoice</option>
+                        <option value="receipt">Receipt</option>
+                        <option value="reminder">Reminder</option>
+                        <option value="email">Email</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label>From Date</label>
-                    <input type="date" id="filterFromDate">
+                
+                <div class="form-group">
+                    <label for="dateFrom">From Date</label>
+                    <input type="date" id="dateFrom">
                 </div>
-                <div class="filter-group">
-                    <label>To Date</label>
-                    <input type="date" id="filterToDate">
+                
+                <div class="form-group">
+                    <label for="dateTo">To Date</label>
+                    <input type="date" id="dateTo">
                 </div>
             </div>
-            <div class="filter-actions">
-                <button class="btn btn-primary" onclick="applyFilters()">🔍 Apply Filters</button>
-                <button class="btn btn-secondary" onclick="clearFilters()">🔄 Clear Filters</button>
-                <button class="btn btn-success" onclick="exportCSV()">📊 Export CSV</button>
-                <a href="index.html" class="btn btn-secondary">← Back to Dashboard</a>
+            
+            <div class="export-buttons">
+                <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+                <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
+                <button class="btn btn-secondary" onclick="exportToCSV()">📥 Export CSV</button>
             </div>
         </div>
-
+        
+        <!-- Timeline -->
         <div class="timeline-container">
-            <h2>📅 Communication Timeline</h2>
-            <div class="timeline" id="timeline">
-                <div class="empty-state">
-                    <div class="empty-state-icon">📭</div>
-                    <p>Loading communications...</p>
-                </div>
+            <h2 style="margin: 0 0 2rem; color: #003057;">📅 Communication Timeline</h2>
+            <div id="timelineContent">
+                <div class="loading">Loading communication history...</div>
             </div>
+        </div>
+        
+        <div style="margin-top: 2rem; text-align: center;">
+            <a href="dashboard.html" class="btn btn-secondary">← Back to Dashboard</a>
         </div>
     </div>
 
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
     <script src="js/communication-history.js"></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

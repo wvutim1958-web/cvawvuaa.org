@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Opening Balance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #002855; }
+        .info { 
+            background: #d1ecf1; 
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .success { 
+            background: #d4edda; 
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: none;
+        }
+        .error { 
+            background: #f8d7da; 
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: none;
+        }
+        button {
+            background: #002855;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #004080;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <div class="box">
+        <h1>💰 Add Opening Balance</h1>
+        
+        <div class="info">
+            <strong>Opening Balance Details:</strong><br>
+            Date: May 1, 2025<br>
+            Amount: $15,062.90<br>
+            Description: Opening Balance - Beginning of Fiscal Year
+        </div>
+
+        <button id="addBalance" onclick="addOpeningBalance()">
+            Add Opening Balance to Ledger
+        </button>
+
+        <div id="status"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDIMIbLTc2OgTTu6qFYdGgzO8CYU-rGmec",
+            authDomain: "cvcwvuaa-904e2.firebaseapp.com",
+            projectId: "cvcwvuaa-904e2",
+            storageBucket: "cvcwvuaa-904e2.firebasestorage.app",
+            messagingSenderId: "182842873773",
+            appId: "1:182842873773:web:cbee30eeff8fee4c2ff324",
+            measurementId: "G-5ZYMGSZBJ3"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function addOpeningBalance() {
+            const button = document.getElementById('addBalance');
+            const status = document.getElementById('status');
+            
+            button.disabled = true;
+            button.textContent = 'Adding...';
+            
+            try {
+                // Create opening balance transaction
+                const openingBalance = {
+                    date: firebase.firestore.Timestamp.fromDate(new Date('2025-05-01T12:00:00')),
+                    type: 'deposit',
+                    amount: 15062.90,
+                    description: 'Opening Balance - Beginning of Fiscal Year',
+                    category: 'Other Income',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                await db.collection('transactions').add(openingBalance);
+                
+                status.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Success!</h3>
+                        <p><strong>Opening balance added successfully!</strong></p>
+                        <p>Date: May 1, 2025<br>
+                        Amount: $15,062.90<br>
+                        Category: Other Income</p>
+                        <p><a href="financial-ledger.html" style="color: #155724; font-weight: bold;">
+                            → Go to Financial Ledger
+                        </a></p>
+                    </div>
+                `;
+                
+                button.textContent = '✅ Added!';
+                
+            } catch (error) {
+                status.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+                
+                button.disabled = false;
+                button.textContent = 'Try Again';
+            }
+        }
+    </script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    <link rel="stylesheet" href="/admin/css/print-compact.css">
     
     <style>
         .ledger-container {
@@ -393,6 +394,12 @@
     </style>
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <div class="ledger-container">
         <!-- Header -->
         <header class="ledger-header">
@@ -419,8 +426,14 @@
             <button id="btn-add-expense" class="btn btn-secondary">
                 📤 Add Expense
             </button>
-            <button class="btn btn-info" onclick="alert('Reports feature coming soon!')">
+            <button onclick="window.location.href='balance-sheet.html'" class="btn" style="background: #28a745; color: white;">
+                💰 Balance Sheet
+            </button>
+            <button onclick="window.location.href='financial-reports.html'" class="btn" style="background: #17a2b8; color: white;">
                 📊 View Reports
+            </button>
+            <button onclick="window.location.href='manage-categories.html'" class="btn" style="background: #ffc107; color: #003057;">
+                📁 Manage Categories
             </button>
             <a href="index.html" class="btn" style="background: #6c757d; color: white;">
                 ← Back to Admin Hub
@@ -433,6 +446,8 @@
                 <thead>
                     <tr>
                         <th>Date</th>
+                        <th>Payee</th>
+                        <th>Check #</th>
                         <th>Description</th>
                         <th>Amount</th>
                         <th>Balance</th>
@@ -475,8 +490,22 @@
                     </div>
                     
                     <div class="form-group">
+                        <label for="transaction-payee">Payee / Payor *</label>
+                        <input type="text" id="transaction-payee" placeholder="e.g., John Doe, Acme Corp, Multiple Members" required>
+                        <small style="color: #666; font-size: 0.85rem;">Who paid (for deposits) or who was paid (for expenses)</small>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transaction-check-number">Check Number</label>
+                            <input type="text" id="transaction-check-number" placeholder="Optional (e.g., 1234)">
+                            <small style="color: #666; font-size: 0.85rem;">Leave blank for cash, card, or electronic payments</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
                         <label for="transaction-description">Description</label>
-                        <input type="text" id="transaction-description" placeholder="e.g., Bank Deposit - 4 membership checks" required>
+                        <input type="text" id="transaction-description" placeholder="e.g., Membership dues payment" required>
                     </div>
                     
                     <div class="form-group">
@@ -539,7 +568,12 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
     <!-- Application Scripts -->
-    <script src="/admin/js/firebase-config.js"></script>
-    <script src="/admin/js/financial-ledger.js"></script>
+    <script src="/admin/js/firebase-config.js?v=20251020-1538"></script>
+    <script src="/admin/js/financial-ledger.js?v=20251020180000"></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

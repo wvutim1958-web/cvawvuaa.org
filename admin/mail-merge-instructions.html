@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail Mail Merge Instructions - CVCWVUAA</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #003057;
+            border-bottom: 3px solid #eaaa00;
+            padding-bottom: 1rem;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #003057;
+            border-radius: 4px;
+        }
+        
+        .step h2 {
+            color: #003057;
+            margin-top: 0;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #003057;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .email-template {
+            background: white;
+            border: 2px solid #003057;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        
+        .merge-tag {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #003057;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 0.5rem 0;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background: #004a7f;
+        }
+        
+        .btn-gmail {
+            background: #ea4335;
+        }
+        
+        .btn-gmail:hover {
+            background: #c5381f;
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <div class="container">
+        <h1>✉️ Gmail Mail Merge Instructions</h1>
+        <p style="font-size: 1.1rem;">Send personalized dues reminder emails to all members who owe dues for 2025-26.</p>
+        
+        <div class="success">
+            <strong>✅ What You'll Accomplish:</strong><br>
+            Send ONE email campaign where each member receives a personalized message with their name, membership type, amount owed, and a link to their invoice!
+        </div>
+        
+        <div class="step">
+            <h2><span class="step-number">1</span>Install "Yet Another Mail Merge"</h2>
+            <p>This is a FREE Gmail add-on that lets you send personalized mass emails.</p>
+            <ol>
+                <li>Go to <a href="https://workspace.google.com/marketplace/app/yet_another_mail_merge/470238360904" target="_blank">Google Workspace Marketplace</a></li>
+                <li>Search for "Yet Another Mail Merge" (YAMM)</li>
+                <li>Click <strong>Install</strong></li>
+                <li>Authorize it with <strong>cvcwvuaa@gmail.com</strong></li>
+                <li>Grant the requested permissions</li>
+            </ol>
+            <a href="https://workspace.google.com/marketplace/app/yet_another_mail_merge/470238360904" target="_blank" class="btn btn-gmail">Install YAMM</a>
+        </div>
+        
+        <div class="step">
+            <h2><span class="step-number">2</span>Export the Mail Merge CSV</h2>
+            <p>From the Outstanding Dues Report, click the red <strong>"✉️ Gmail Mail Merge"</strong> button.</p>
+            <p>This downloads a CSV file with columns:</p>
+            <ul>
+                <li><code>Email</code> - Member's email address</li>
+                <li><code>FirstName</code> - First name only</li>
+                <li><code>LastName</code> - Last name</li>
+                <li><code>FullName</code> - Complete name</li>
+                <li><code>MembershipType</code> - Individual or Family</li>
+                <li><code>AmountDue</code> - Dollar amount owed</li>
+                <li><code>InvoiceURL</code> - Direct link to their invoice</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h2><span class="step-number">3</span>Import to Google Sheets</h2>
+            <ol>
+                <li>Open <a href="https://sheets.google.com" target="_blank">Google Sheets</a></li>
+                <li>Create a <strong>new blank spreadsheet</strong></li>
+                <li>Click <strong>File → Import</strong></li>
+                <li>Click <strong>Upload</strong> tab</li>
+                <li>Select the mail merge CSV you just downloaded</li>
+                <li>Choose <strong>"Replace spreadsheet"</strong></li>
+                <li>Click <strong>Import data</strong></li>
+            </ol>
+            <a href="https://sheets.google.com/create" target="_blank" class="btn">Create New Sheet</a>
+        </div>
+        
+        <div class="step">
+            <h2><span class="step-number">4</span>Create Your Email Template</h2>
+            <ol>
+                <li>In Google Sheets, click <strong>Extensions → Yet Another Mail Merge → Start Mail Merge</strong></li>
+                <li>Click <strong>"Create email template"</strong></li>
+                <li>Gmail will open - compose your email</li>
+                <li>Use merge tags like <span class="merge-tag">{{FirstName}}</span> <span class="merge-tag">{{AmountDue}}</span></li>
+            </ol>
+            
+            <h3>Sample Email Template:</h3>
+            <div class="email-template">Subject: CVCWVUAA 2025-26 Membership Dues Reminder
+
+Dear <span class="merge-tag">{{FirstName}}</span> <span class="merge-tag">{{LastName}}</span>,
+
+Greetings from the Central Virginia Chapter of the West Virginia University Alumni Association!
+
+Our records indicate that we have not yet received your membership dues for the 2025-26 membership year (July 1, 2025 - June 30, 2026).
+
+<strong>Membership Type:</strong> <span class="merge-tag">{{MembershipType}}</span>
+<strong>Amount Due:</strong> <span class="merge-tag">{{AmountDue}}</span>
+
+<strong>📄 View Your Invoice:</strong> <span class="merge-tag">{{InvoiceURL}}</span>
+
+<strong>Payment Options:</strong>
+
+💳 <strong>Pay Online:</strong> https://cvawvuaa.org/pay.html
+   • Single Membership ($25): https://www.paypal.com/ncp/payment/TGLF2Y5Z2HGYC
+   • Family Member ($15): https://www.paypal.com/ncp/payment/KJZDT5972M93U
+
+✉️ <strong>Pay by Mail:</strong>
+   Make check payable to <strong>CVCWVUAA</strong>
+   Mail to: CVCWVUAA
+            4701 Stoney Creek Parkway
+            Chester, VA 23831
+
+Your continued support helps us fund scholarships for local students pursuing higher education at WVU. We appreciate your commitment to our mission and community.
+
+If you have already sent payment, please disregard this reminder and accept our thanks!
+
+Let's Go! Mountaineers!!!!
+
+Central Virginia Chapter WVU Alumni Association
+cvcwvuaa@gmail.com
+https://cvawvuaa.org</div>
+        </div>
+        
+        <div class="step">
+            <h2><span class="step-number">5</span>Send the Mail Merge</h2>
+            <ol>
+                <li>Back in Google Sheets, click <strong>Extensions → Yet Another Mail Merge → Start Mail Merge</strong></li>
+                <li>Select your email template from the dropdown</li>
+                <li>Review the preview to ensure merge tags are working</li>
+                <li>Click <strong>"Send emails"</strong></li>
+                <li>Confirm the number of recipients</li>
+                <li>Wait for confirmation - each person gets their personalized email!</li>
+            </ol>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ Important Notes:</strong>
+            <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;">
+                <li>Gmail free accounts can send 500 emails/day</li>
+                <li>YAMM free version allows 50 emails/day - upgrade if needed</li>
+                <li>Test with your own email first before sending to all members</li>
+                <li>Emails are sent from cvcwvuaa@gmail.com</li>
+                <li>Recipients see their own personalized message - they don't see other recipients</li>
+            </ul>
+        </div>
+        
+        <div class="success">
+            <strong>💡 Pro Tip:</strong> After sending, YAMM tracks opens and clicks! You can see who opened the email in the Google Sheet (it adds columns showing status).
+        </div>
+        
+        <p style="margin-top: 2rem;">
+            <a href="outstanding-dues-report.html" class="btn">← Back to Outstanding Dues Report</a>
+        </p>
+    </div>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>

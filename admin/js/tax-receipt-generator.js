@@ -1,233 +1,185 @@
-// Tax Receipt Generator - Generate official 501(c)(3) tax-deductible donation receipts
+// Firebase is already initialized in firebase-config.js
+// db is already available globally
 
+let allMembers = [];
 let currentReceipt = null;
 
-// Load members on page load
-document.addEventListener('DOMContentLoaded', async () => {
-    await loadMembers();
-    setDefaultDate();
-});
-
-// Set default date to today
-function setDefaultDate() {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('donationDate').value = today;
-}
-
-// Load all members into dropdown
+// Load members
 async function loadMembers() {
     try {
-        const membersSnapshot = await db.collection('members')
-            .orderBy('name')
-            .get();
+        const snapshot = await db.collection('members').get();
+        allMembers = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        })).sort((a, b) => {
+            const nameA = (a.name || '').toLowerCase();
+            const nameB = (b.name || '').toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
         
+        // Populate donor dropdown
         const select = document.getElementById('donorSelect');
         select.innerHTML = '<option value="">-- Select Member --</option>';
-        
-        membersSnapshot.forEach(doc => {
-            const member = doc.data();
+        allMembers.forEach(member => {
             const option = document.createElement('option');
-            option.value = doc.id;
-            option.textContent = member.name;
-            option.dataset.email = member.email || '';
-            option.dataset.address = member.address || '';
-            option.dataset.city = member.city || '';
-            option.dataset.state = member.state || '';
-            option.dataset.zip = member.zip || '';
+            option.value = member.id;
+            option.textContent = member.name || 'Unnamed Member';
             select.appendChild(option);
         });
+        
+        console.log(`Loaded ${allMembers.length} members`);
+        
     } catch (error) {
         console.error('Error loading members:', error);
-        alert('Error loading member list');
+        alert('Error loading members. Please refresh the page.');
     }
 }
 
-// Generate receipt number (format: TAX-YYYY-NNNNNN)
-async function generateReceiptNumber() {
-    const year = new Date().getFullYear();
-    
-    try {
-        // Get all receipts for this year
-        const receiptsSnapshot = await db.collection('taxReceipts')
-            .where('receiptNumber', '>=', `TAX-${year}-`)
-            .where('receiptNumber', '<', `TAX-${year + 1}-`)
-            .orderBy('receiptNumber', 'desc')
-            .limit(1)
-            .get();
-        
-        let nextNumber = 1;
-        
-        if (!receiptsSnapshot.empty) {
-            const lastReceipt = receiptsSnapshot.docs[0].data();
-            const lastNumber = parseInt(lastReceipt.receiptNumber.split('-')[2]);
-            nextNumber = lastNumber + 1;
-        }
-        
-        return `TAX-${year}-${String(nextNumber).padStart(6, '0')}`;
-    } catch (error) {
-        console.error('Error generating receipt number:', error);
-        // Fallback to timestamp-based number
-        return `TAX-${year}-${Date.now().toString().slice(-6)}`;
-    }
-}
-
-// Generate receipt preview
-async function generateReceipt() {
+// Generate receipt
+function generateReceipt() {
     // Validate form
-    const donorSelect = document.getElementById('donorSelect');
-    const donationDate = document.getElementById('donationDate');
-    const donationType = document.getElementById('donationType');
-    const donationAmount = document.getElementById('donationAmount');
-    const donationMethod = document.getElementById('donationMethod');
-    const donationNotes = document.getElementById('donationNotes');
+    const donorId = document.getElementById('donorSelect').value;
+    const donationDate = document.getElementById('donationDate').value;
+    const donationType = document.getElementById('donationType').value;
+    const donationAmount = parseFloat(document.getElementById('donationAmount').value);
+    const donationMethod = document.getElementById('donationMethod').value;
+    const donationNotes = document.getElementById('donationNotes').value;
     
-    if (!donorSelect.value) {
-        alert('Please select a donor');
-        donorSelect.focus();
+    if (!donorId) {
+        alert('Please select a donor.');
         return;
     }
     
-    if (!donationDate.value) {
-        alert('Please enter donation date');
-        donationDate.focus();
+    if (!donationDate) {
+        alert('Please enter a donation date.');
         return;
     }
     
-    if (!donationType.value) {
-        alert('Please select donation type');
-        donationType.focus();
+    if (!donationType) {
+        alert('Please select a donation type.');
         return;
     }
     
-    const amount = parseFloat(donationAmount.value);
-    if (!amount || amount <= 0) {
-        alert('Please enter a valid donation amount');
-        donationAmount.focus();
+    if (!donationAmount || donationAmount <= 0) {
+        alert('Please enter a valid donation amount.');
         return;
     }
     
     // Get donor info
-    const selectedOption = donorSelect.options[donorSelect.selectedIndex];
-    const donorName = selectedOption.textContent;
-    const donorEmail = selectedOption.dataset.email;
-    const donorAddress = selectedOption.dataset.address;
-    const donorCity = selectedOption.dataset.city;
-    const donorState = selectedOption.dataset.state;
-    const donorZip = selectedOption.dataset.zip;
+    const donor = allMembers.find(m => m.id === donorId);
+    if (!donor) {
+        alert('Donor not found.');
+        return;
+    }
     
     // Generate receipt number
-    const receiptNumber = await generateReceiptNumber();
+    const receiptNumber = `TAX-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`;
     
-    // Format address
-    let fullAddress = donorAddress;
-    if (donorCity || donorState || donorZip) {
-        fullAddress += `\n${donorCity}, ${donorState} ${donorZip}`;
-    }
-    if (!fullAddress.trim()) {
-        fullAddress = 'Address not on file';
-    }
-    
-    // Store current receipt data
+    // Create receipt data
     currentReceipt = {
-        receiptNumber: receiptNumber,
-        memberId: donorSelect.value,
-        memberName: donorName,
-        memberEmail: donorEmail,
-        memberAddress: fullAddress,
-        donationType: donationType.value,
-        donationAmount: amount,
-        donationDate: donationDate.value,
-        paymentMethod: donationMethod.value,
-        notes: donationNotes.value,
-        createdDate: new Date().toISOString()
+        receiptNumber,
+        donorId: donor.id,
+        donorName: donor.name || 'Unknown Donor',
+        donorAddress: formatAddress(donor),
+        donationDate,
+        donationType,
+        donationAmount,
+        donationMethod,
+        donationNotes,
+        generatedDate: new Date().toISOString(),
+        generatedBy: 'Admin User'
     };
     
-    // Update receipt preview
+    // Populate receipt
     document.getElementById('receiptNumber').textContent = receiptNumber;
-    document.getElementById('receiptDate').textContent = formatDate(new Date());
-    document.getElementById('receiptDonor').textContent = donorName;
-    document.getElementById('receiptAddress').textContent = fullAddress.replace('\n', ', ');
-    document.getElementById('receiptType').textContent = donationType.value;
-    document.getElementById('receiptAmount').textContent = `$${amount.toFixed(2)}`;
-    document.getElementById('receiptMethod').textContent = donationMethod.value;
+    document.getElementById('receiptDate').textContent = formatDate(new Date(donationDate));
+    document.getElementById('receiptDonor').textContent = currentReceipt.donorName;
+    document.getElementById('receiptAddress').textContent = currentReceipt.donorAddress;
+    document.getElementById('receiptType').textContent = donationType;
+    document.getElementById('receiptAmount').textContent = formatCurrency(donationAmount);
+    document.getElementById('receiptMethod').textContent = donationMethod;
     document.getElementById('signatureDate').textContent = formatDate(new Date());
     
-    // Show notes if any
     const notesElement = document.getElementById('receiptNotes');
-    if (donationNotes.value.trim()) {
-        notesElement.textContent = `Notes: ${donationNotes.value}`;
+    if (donationNotes) {
+        notesElement.textContent = `Note: ${donationNotes}`;
         notesElement.style.display = 'block';
     } else {
         notesElement.style.display = 'none';
     }
     
-    // Show receipt preview
+    // Show receipt
     document.getElementById('receiptPreview').classList.add('active');
     document.getElementById('receiptPreview').scrollIntoView({ behavior: 'smooth' });
 }
 
-// Hide receipt preview
+// Hide receipt
 function hideReceipt() {
     document.getElementById('receiptPreview').classList.remove('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    currentReceipt = null;
 }
 
-// Save receipt to Firestore
+// Save receipt to records
 async function saveReceipt() {
     if (!currentReceipt) {
-        alert('No receipt to save');
-        return;
-    }
-    
-    if (!confirm('Save this receipt to permanent records?')) {
+        alert('No receipt to save.');
         return;
     }
     
     try {
-        // Save to taxReceipts collection
-        await db.collection('taxReceipts').add(currentReceipt);
-        
-        // Add to member's payments array with proper structure
-        const memberRef = db.collection('members').doc(currentReceipt.memberId);
-        const memberDoc = await memberRef.get();
-        const currentPayments = memberDoc.data().payments || [];
-        
-        currentPayments.push({
-            type: 'Donation',
-            expectedAmount: currentReceipt.donationAmount,
-            actualReceived: currentReceipt.donationAmount,
-            paymentMethod: currentReceipt.paymentMethod,
-            date: firebase.firestore.Timestamp.fromDate(new Date(currentReceipt.donationDate)),
-            recordedDate: firebase.firestore.Timestamp.now(),
-            notes: `Tax Receipt ${currentReceipt.receiptNumber} - ${currentReceipt.donationType}`,
-            receiptSent: false,
-            receiptSentDate: null,
-            taxReceiptNumber: currentReceipt.receiptNumber
+        // Save to tax receipts collection
+        await db.collection('taxReceipts').add({
+            ...currentReceipt,
+            savedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        await memberRef.update({
-            payments: currentPayments
-        });
+        // Add to member's payment history
+        const donor = allMembers.find(m => m.id === currentReceipt.donorId);
+        if (donor) {
+            const payments = donor.payments || [];
+            payments.push({
+                date: currentReceipt.donationDate,
+                expectedAmount: currentReceipt.donationAmount,
+                actualReceived: currentReceipt.donationAmount,
+                type: currentReceipt.donationType,
+                paymentMethod: currentReceipt.donationMethod,
+                recordedDate: firebase.firestore.Timestamp.now(),
+                notes: `Tax receipt ${currentReceipt.receiptNumber}. ${currentReceipt.donationNotes || ''}`,
+                taxReceipt: true,
+                receiptNumber: currentReceipt.receiptNumber
+            });
+            
+            await db.collection('members').doc(currentReceipt.donorId).update({
+                payments: payments,
+                lastModified: new Date()
+            });
+        }
         
-        // Log to communications
+        // Log communication
         await db.collection('communications').add({
-            memberId: currentReceipt.memberId,
-            memberName: currentReceipt.memberName,
-            memberEmail: currentReceipt.memberEmail || '',
-            type: 'tax_receipt',
-            subject: `Tax Receipt ${currentReceipt.receiptNumber}`,
-            details: `Tax-deductible donation receipt issued for $${currentReceipt.donationAmount.toFixed(2)} (${currentReceipt.donationType})`,
-            timestamp: firebase.firestore.Timestamp.now(),
-            sentBy: 'Admin',
-            method: 'generated',
-            taxDeductible: true,
-            receiptNumber: currentReceipt.receiptNumber
+            memberId: currentReceipt.donorId,
+            type: 'receipt',
+            details: `Tax receipt ${currentReceipt.receiptNumber} generated for ${currentReceipt.donationType} donation of $${currentReceipt.donationAmount.toFixed(2)}`,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            sentBy: 'Admin User',
+            method: 'Tax Receipt',
+            amount: currentReceipt.donationAmount,
+            metadata: {
+                receiptNumber: currentReceipt.receiptNumber,
+                donationType: currentReceipt.donationType,
+                taxDeductible: true
+            }
         });
         
-        alert(`✅ Receipt ${currentReceipt.receiptNumber} saved successfully!\n\nPayment has been added to member's record and will appear in Payment Tracking.`);
+        alert('✅ Receipt saved to records successfully!');
         
         // Reset form
-        resetForm();
+        document.getElementById('donorSelect').value = '';
+        document.getElementById('donationDate').value = '';
+        document.getElementById('donationType').value = '';
+        document.getElementById('donationAmount').value = '';
+        document.getElementById('donationNotes').value = '';
+        
         hideReceipt();
         
     } catch (error) {
@@ -236,62 +188,43 @@ async function saveReceipt() {
     }
 }
 
-// Email receipt
-function emailReceipt() {
-    if (!currentReceipt) {
-        alert('No receipt to email');
-        return;
+// Format address
+function formatAddress(member) {
+    const parts = [];
+    
+    if (member.address) {
+        parts.push(member.address);
     }
     
-    const subject = `Tax-Deductible Donation Receipt - ${currentReceipt.receiptNumber}`;
-    const body = `Dear ${currentReceipt.memberName},
-
-Thank you for your generous donation to the Central Virginia Chapter of the WVU Alumni Association!
-
-OFFICIAL TAX RECEIPT
-Receipt Number: ${currentReceipt.receiptNumber}
-
-Donor Information:
-${currentReceipt.memberName}
-${currentReceipt.memberAddress}
-
-Donation Details:
-Date: ${formatDate(new Date(currentReceipt.donationDate))}
-Type: ${currentReceipt.donationType}
-Amount: $${currentReceipt.donationAmount.toFixed(2)}
-Payment Method: ${currentReceipt.paymentMethod}
-
-Tax Deduction Information:
-The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization. Your contribution is tax-deductible to the extent allowed by law.
-
-EIN: 54-1991299
-
-No goods or services were provided in exchange for this donation.
-
-Thank you for your generous support of the Central Virginia Chapter WVU Alumni Association!
-
-Best regards,
-CVCWVUAA Treasurer`;
+    if (member.city || member.zip) {
+        const cityState = [member.city, 'VA', member.zip].filter(Boolean).join(', ');
+        if (cityState) {
+            parts.push(cityState);
+        }
+    }
     
-    const mailtoLink = `mailto:${currentReceipt.memberEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
-    
-    alert('📧 Email client opened! Please send the receipt email.');
+    return parts.join(', ') || 'Address not on file';
 }
 
-// Reset form
-function resetForm() {
-    document.getElementById('donorSelect').value = '';
-    document.getElementById('donationType').value = '';
-    document.getElementById('donationAmount').value = '';
-    document.getElementById('donationMethod').value = 'Check';
-    document.getElementById('donationNotes').value = '';
-    setDefaultDate();
-    currentReceipt = null;
-}
-
-// Format date helper
+// Format date
 function formatDate(date) {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
+
+// Format currency
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(amount);
+}
+
+// Set default date to today
+document.getElementById('donationDate').valueAsDate = new Date();
+
+// Load members on page load
+loadMembers();

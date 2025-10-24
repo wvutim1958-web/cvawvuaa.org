@@ -3,31 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bulk Payment Recording - CVCWVUAA Admin">
     <title>Bulk Payment Recording - CVCWVUAA Admin</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
+    
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f7fa;
-            padding: 20px;
-        }
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 2rem;
         }
         
         .page-header {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #002855, #1e40af);
             color: white;
             padding: 2rem;
             border-radius: 15px;
@@ -37,28 +27,17 @@
         
         .page-header h1 {
             margin: 0 0 0.5rem;
-            font-size: 2rem;
-        }
-        
-        .page-header p {
-            margin: 0;
-            opacity: 0.9;
         }
         
         .info-box {
-            background: #dbeafe;
-            border-left: 4px solid #3b82f6;
-            padding: 1rem;
-            border-radius: 8px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 1rem 1.5rem;
             margin-bottom: 2rem;
+            border-radius: 4px;
         }
         
-        .info-box p {
-            margin: 0;
-            color: #1e3a8a;
-        }
-        
-        .form-panel {
+        .deposit-info {
             background: white;
             padding: 2rem;
             border-radius: 12px;
@@ -66,39 +45,27 @@
             margin-bottom: 2rem;
         }
         
-        .form-panel h2 {
+        .deposit-info h2 {
             margin: 0 0 1.5rem;
-            color: #333;
-        }
-        
-        .payment-row {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border-left: 4px solid #3b82f6;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr auto;
-            gap: 1rem;
-            align-items: center;
+            color: #003057;
         }
         
         .form-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 1.5rem;
         }
         
         .form-group label {
+            display: block;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: #333;
-            font-size: 0.9rem;
+            color: #003057;
         }
         
         .form-group input,
         .form-group select {
+            width: 100%;
             padding: 0.75rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
         }
@@ -106,34 +73,126 @@
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #3b82f6;
+            border-color: #003057;
+        }
+        
+        .payments-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .payments-section h2 {
+            margin: 0 0 1.5rem;
+            color: #003057;
+        }
+        
+        .payment-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .payment-row input,
+        .payment-row select {
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .payment-row input:focus,
+        .payment-row select:focus {
+            outline: none;
+            border-color: #003057;
+        }
+        
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .btn-remove:hover {
+            background: #c82333;
+        }
+        
+        .btn-add {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
+        .btn-add:hover {
+            background: #218838;
+        }
+        
+        .summary {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .summary-item {
+            text-align: center;
+        }
+        
+        .summary-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #003057;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
         }
         
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 1rem 2rem;
             border: none;
             border-radius: 8px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
         }
         
         .btn-primary {
-            background: #3b82f6;
+            background: #003057;
             color: white;
         }
         
         .btn-primary:hover {
-            background: #2563eb;
-        }
-        
-        .btn-success {
-            background: #10b981;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #059669;
+            background: #004a7f;
         }
         
         .btn-secondary {
@@ -145,111 +204,135 @@
             background: #5a6268;
         }
         
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-            padding: 0.5rem 1rem;
+        .member-select {
+            position: relative;
         }
         
-        .btn-danger:hover {
-            background: #c82333;
+        .member-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #003057;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
         }
         
-        .btn-small {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
+        .member-suggestions.active {
+            display: block;
         }
         
-        .actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
+        .suggestion-item {
+            padding: 0.75rem;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
         }
         
-        .summary-panel {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
+        .suggestion-item:hover {
+            background: #f8f9fa;
         }
         
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .summary-item {
-            text-align: center;
-        }
-        
-        .summary-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        .summary-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-top: 0.25rem;
-        }
-        
-        @media (max-width: 1024px) {
-            .payment-row {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
+        .suggestion-item:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <div class="container">
         <div class="page-header">
-            <h1>💰 Bulk Payment Recording</h1>
-            <p>Efficiently record multiple membership payments at once</p>
+            <h1>💳 Bulk Payment Recording</h1>
+            <p>Quickly record multiple member payments from a single PayPal deposit</p>
         </div>
-
+        
         <div class="info-box">
-            <p><strong>Tip:</strong> Use this tool after receiving multiple checks or payments at an event. Add all payments, review, then save all at once.</p>
+            <strong>💡 How it works:</strong> Enter your PayPal deposit details, then add each member payment. 
+            The system will automatically calculate fees and record all payments at once.
         </div>
-
-        <div class="summary-panel">
-            <h3 style="margin: 0 0 1rem;">📊 Current Batch Summary</h3>
+        
+        <!-- Deposit Information -->
+        <div class="deposit-info">
+            <h2>Deposit Information</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div class="form-group">
+                    <label for="depositDate">Deposit Date</label>
+                    <input type="date" id="depositDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="totalDeposit">Total PayPal Deposit</label>
+                    <input type="number" id="totalDeposit" step="0.01" placeholder="0.00" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method</label>
+                    <select id="paymentMethod">
+                        <option value="PayPal">PayPal</option>
+                        <option value="Venmo">Venmo</option>
+                        <option value="Check">Check</option>
+                        <option value="Cash">Cash</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Member Payments -->
+        <div class="payments-section">
+            <h2>Member Payments</h2>
+            <div id="paymentsContainer"></div>
+            <button class="btn-add" onclick="addPaymentRow()">➕ Add Member Payment</button>
+        </div>
+        
+        <!-- Summary -->
+        <div class="summary">
             <div class="summary-grid">
                 <div class="summary-item">
-                    <div class="summary-label">Payments</div>
-                    <div class="summary-value" id="paymentCount">0</div>
+                    <div class="summary-label">Total Expected</div>
+                    <div class="summary-value" id="totalExpected">$0.00</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Total Amount</div>
-                    <div class="summary-value" id="totalAmount">$0.00</div>
+                    <div class="summary-label">Total Fees</div>
+                    <div class="summary-value" id="totalFees" style="color: #dc3545;">$0.00</div>
                 </div>
                 <div class="summary-item">
-                    <div class="summary-label">Processing Fees</div>
-                    <div class="summary-value" id="totalFees">$0.00</div>
+                    <div class="summary-label">Total Received</div>
+                    <div class="summary-value" id="totalReceived" style="color: #28a745;">$0.00</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Payments Count</div>
+                    <div class="summary-value" id="paymentsCount">0</div>
                 </div>
             </div>
         </div>
-
-        <div class="form-panel">
-            <h2>💳 Payment List</h2>
-            
-            <div id="paymentsList">
-                <!-- Payment rows will be added here -->
-            </div>
-            
-            <button class="btn btn-primary btn-small" onclick="addPaymentRow()">➕ Add Payment</button>
-            
-            <div class="actions">
-                <button class="btn btn-success" onclick="saveAllPayments()">💾 Save All Payments</button>
-                <button class="btn btn-secondary" onclick="clearAll()">🔄 Clear All</button>
-                <a href="index.html" class="btn btn-secondary">← Back to Dashboard</a>
-            </div>
+        
+        <!-- Actions -->
+        <div class="actions">
+            <button class="btn btn-primary" onclick="saveAllPayments()">💾 Save All Payments</button>
+            <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">← Back to Dashboard</button>
         </div>
     </div>
 
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
     <script src="js/bulk-payment.js"></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

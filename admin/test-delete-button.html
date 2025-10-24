@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Button Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .btn-icon {
+            font-size: 24px;
+            background: transparent;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+        }
+        #console {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-entry {
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <h1>🔧 Delete Button Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Check if window.ledger exists</h2>
+        <button onclick="testWindowLedger()">Test window.ledger</button>
+        <div id="test1-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Check if deleteTransaction exists</h2>
+        <button onclick="testDeleteFunction()">Test deleteTransaction</button>
+        <div id="test2-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Call deleteTransaction with test ID</h2>
+        <button onclick="testDeleteCall()">Call deleteTransaction('test-123')</button>
+        <div id="test3-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: Simulate button click from HTML</h2>
+        <button class="btn-icon" onclick="window.ledger.deleteTransaction('html-test-456')" title="Delete">🗑️</button>
+        <p>Click the trash icon above ☝️</p>
+        <div id="test4-result"></div>
+    </div>
+    
+    <h2>Console Output:</h2>
+    <div id="console"></div>
+    
+    <script>
+        // Capture console.log
+        const consoleDiv = document.getElementById('console');
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        function addToConsole(type, ...args) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.style.color = type === 'error' ? '#f00' : '#0f0';
+            entry.textContent = `[${type.toUpperCase()}] ${args.join(' ')}`;
+            consoleDiv.appendChild(entry);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToConsole('log', ...args);
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToConsole('error', ...args);
+        };
+        
+        function testWindowLedger() {
+            const result = document.getElementById('test1-result');
+            if (typeof window.ledger !== 'undefined') {
+                result.innerHTML = '<p style="color: green;">✅ window.ledger exists!</p>';
+                console.log('window.ledger:', window.ledger);
+                console.log('window.ledger keys:', Object.keys(window.ledger));
+            } else {
+                result.innerHTML = '<p style="color: red;">❌ window.ledger is undefined!</p>';
+                console.error('window.ledger is not defined');
+            }
+        }
+        
+        function testDeleteFunction() {
+            const result = document.getElementById('test2-result');
+            if (typeof window.ledger !== 'undefined' && typeof window.ledger.deleteTransaction === 'function') {
+                result.innerHTML = '<p style="color: green;">✅ deleteTransaction function exists!</p>';
+                console.log('deleteTransaction type:', typeof window.ledger.deleteTransaction);
+            } else {
+                result.innerHTML = '<p style="color: red;">❌ deleteTransaction not found!</p>';
+                console.error('deleteTransaction is not a function');
+            }
+        }
+        
+        function testDeleteCall() {
+            const result = document.getElementById('test3-result');
+            try {
+                console.log('Calling window.ledger.deleteTransaction("test-123")...');
+                window.ledger.deleteTransaction('test-123');
+                result.innerHTML = '<p style="color: green;">✅ Function called! Check console for details.</p>';
+            } catch (error) {
+                result.innerHTML = '<p style="color: red;">❌ Error: ' + error.message + '</p>';
+                console.error('Error calling deleteTransaction:', error);
+            }
+        }
+        
+        // Log when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('=== Page Loaded ===');
+            console.log('Checking for window.ledger...');
+            setTimeout(() => {
+                if (typeof window.ledger !== 'undefined') {
+                    console.log('✅ window.ledger found:', window.ledger);
+                } else {
+                    console.error('❌ window.ledger NOT found');
+                }
+            }, 1000);
+        });
+    </script>
+    
+    <!-- Load the actual financial ledger JavaScript -->
+    <script src="js/firebase-config.js?v=20251020-1538"></script>
+    <script src="js/financial-ledger.js?v=20251020-1650"></script>
+    
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>

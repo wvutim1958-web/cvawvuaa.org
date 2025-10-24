@@ -222,6 +222,82 @@ function exportEmailList() {
 }
 
 /**
+ * Export for Gmail Mail Merge
+ */
+function exportMailMerge() {
+    const withEmail = membersOwingDues.filter(m => m.hasEmail);
+    
+    if (withEmail.length === 0) {
+        alert('No members with email addresses');
+        return;
+    }
+    
+    // Split name into first and last
+    const headers = ['Email', 'FirstName', 'LastName', 'FullName', 'MembershipType', 'AmountDue', 'InvoiceURL'];
+    const rows = withEmail.map(member => {
+        const nameParts = member.name.split(' ');
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+        const invoiceURL = `https://cvawvuaa.org/admin/invoice-generator.html?memberId=${member.id}`;
+        
+        return [
+            member.email,
+            firstName,
+            lastName,
+            member.name,
+            member.membershipType === 'family' ? 'Family' : 'Individual',
+            `$${member.amountDue.toFixed(2)}`,
+            invoiceURL
+        ].map(csvEscape).join(',');
+    });
+    
+    const csv = [headers.map(csvEscape).join(','), ...rows].join('\n');
+    downloadCSV(csv, `mail-merge-outstanding-dues-${currentMembershipYear}.csv`);
+    
+    // Log communication for each member
+    logMailMergeReminders(withEmail);
+    
+    // Open instructions in new tab
+    setTimeout(() => {
+        window.open('mail-merge-instructions.html', '_blank');
+    }, 500);
+}
+
+/**
+ * Log mail merge reminders to communication history
+ */
+async function logMailMergeReminders(members) {
+    try {
+        const batch = [];
+        
+        for (const member of members) {
+            batch.push(
+                db.collection('communications').add({
+                    memberId: member.id,
+                    type: 'reminder',
+                    details: `Dues reminder sent via mail merge - Amount due: $${member.amountDue.toFixed(2)}`,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    sentBy: 'Admin User',
+                    method: 'Email',
+                    amount: member.amountDue,
+                    metadata: {
+                        membershipYear: currentMembershipYear,
+                        membershipType: member.membershipType,
+                        exportType: 'mail-merge'
+                    }
+                })
+            );
+        }
+        
+        await Promise.all(batch);
+        console.log(`Logged ${members.length} mail merge reminders`);
+        
+    } catch (error) {
+        console.error('Error logging mail merge reminders:', error);
+    }
+}
+
+/**
  * Export mailing list
  */
 function exportMailingList() {

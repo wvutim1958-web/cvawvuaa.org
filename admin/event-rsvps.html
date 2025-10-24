@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Event RSVPs - CVCWVUAA Admin">
+    <title>Event RSVPs - CVCWVUAA Admin</title>
+    
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    
+    <style>
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .page-header h1 {
+            margin: 0 0 0.5rem;
+        }
+        
+        .event-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .event-info h2 {
+            margin: 0 0 1rem;
+            color: #003057;
+        }
+        
+        .event-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .detail-item {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .detail-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: #003057;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-card {
+            flex: 1;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card.yes {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        }
+        
+        .stat-card.maybe {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+        }
+        
+        .stat-card.no {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #003057;
+        }
+        
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn.active {
+            background: #003057;
+            color: white;
+            border-color: #003057;
+        }
+        
+        .filter-btn:hover {
+            border-color: #003057;
+        }
+        
+        .rsvp-list {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .rsvp-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .rsvp-table th,
+        .rsvp-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .rsvp-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #003057;
+            position: sticky;
+            top: 0;
+        }
+        
+        .rsvp-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-badge.yes {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-badge.maybe {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-badge.no {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #003057;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #004a7f;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>👥 Event RSVPs</h1>
+            <p id="eventTitle">Loading event details...</p>
+        </div>
+        
+        <!-- Event Info -->
+        <div class="event-info" id="eventInfo">
+            <div class="loading">Loading event details...</div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all" onclick="filterRSVPs('all')">All (<span id="countAll">0</span>)</button>
+            <button class="filter-btn" data-filter="yes" onclick="filterRSVPs('yes')">Yes (<span id="countYes">0</span>)</button>
+            <button class="filter-btn" data-filter="maybe" onclick="filterRSVPs('maybe')">Maybe (<span id="countMaybe">0</span>)</button>
+            <button class="filter-btn" data-filter="no" onclick="filterRSVPs('no')">No (<span id="countNo">0</span>)</button>
+        </div>
+        
+        <!-- Actions -->
+        <div class="actions">
+            <button class="btn btn-primary" onclick="exportRSVPs()">📥 Export CSV</button>
+            <a href="events-manager.html" class="btn btn-secondary">← Back to Events</a>
+        </div>
+        
+        <!-- RSVP List -->
+        <div class="rsvp-list">
+            <h2 style="margin: 0 0 1.5rem; color: #003057;">RSVP List</h2>
+            <div id="rsvpTableContainer">
+                <div class="loading">Loading RSVPs...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script src="js/event-rsvps.js"></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>

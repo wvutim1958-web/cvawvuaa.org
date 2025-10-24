@@ -3,31 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tax Receipt Generator - CVCWVUAA Admin">
     <title>Tax Receipt Generator - CVCWVUAA Admin</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
+    
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/admin/css/admin-hub.css">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f7fa;
-            padding: 20px;
-        }
-        
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 2rem;
         }
         
         .page-header {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
             padding: 2rem;
             border-radius: 15px;
@@ -37,25 +27,14 @@
         
         .page-header h1 {
             margin: 0 0 0.5rem;
-            font-size: 2rem;
-        }
-        
-        .page-header p {
-            margin: 0;
-            opacity: 0.9;
         }
         
         .info-box {
             background: #fef3c7;
             border-left: 4px solid #f59e0b;
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 1rem 1.5rem;
             margin-bottom: 2rem;
-        }
-        
-        .info-box p {
-            margin: 0;
-            color: #78350f;
+            border-radius: 4px;
         }
         
         .form-panel {
@@ -68,13 +47,14 @@
         
         .form-panel h2 {
             margin: 0 0 1.5rem;
-            color: #333;
+            color: #003057;
         }
         
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
         
         .form-group {
@@ -83,9 +63,9 @@
         
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
             font-weight: 600;
-            color: #333;
+            margin-bottom: 0.5rem;
+            color: #003057;
         }
         
         .form-group input,
@@ -93,9 +73,10 @@
         .form-group textarea {
             width: 100%;
             padding: 0.75rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
+            font-family: inherit;
         }
         
         .form-group textarea {
@@ -240,90 +221,110 @@
     </style>
 </head>
 <body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
     <div class="container">
         <div class="page-header">
             <h1>🎓 Tax Receipt Generator</h1>
             <p>Generate official 501(c)(3) tax-deductible donation receipts</p>
         </div>
-
+        
         <div class="info-box">
-            <p><strong>Note:</strong> Only generate tax receipts for donations (not membership dues). All receipts are saved and logged to member records.</p>
+            <strong>⚠️ Important:</strong> Only generate tax receipts for donations (Chapter Donations and Scholarship Donations). 
+            Membership dues are NOT tax-deductible. Make sure to verify the organization's 501(c)(3) status and EIN before distributing receipts.
         </div>
-
+        
+        <!-- Receipt Form -->
         <div class="form-panel">
             <h2>Receipt Information</h2>
             
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Donor *</label>
+                    <label for="donorSelect">Select Donor *</label>
                     <select id="donorSelect" required>
                         <option value="">-- Select Member --</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label>Donation Date *</label>
+                    <label for="donationDate">Donation Date *</label>
                     <input type="date" id="donationDate" required>
                 </div>
-                
+            </div>
+            
+            <div class="form-grid">
                 <div class="form-group">
-                    <label>Donation Type *</label>
+                    <label for="donationType">Donation Type *</label>
                     <select id="donationType" required>
                         <option value="">-- Select Type --</option>
                         <option value="Scholarship Fund">Scholarship Fund</option>
                         <option value="Chapter Operations">Chapter Operations</option>
                         <option value="General Donation">General Donation</option>
-                        <option value="Memorial Gift">Memorial Gift</option>
+                        <option value="Memorial Donation">Memorial Donation</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label>Amount *</label>
-                    <input type="number" id="donationAmount" step="0.01" min="0" placeholder="0.00" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Payment Method</label>
-                    <select id="donationMethod">
-                        <option value="Check">Check</option>
-                        <option value="Cash">Cash</option>
-                        <option value="Credit Card">Credit Card</option>
-                        <option value="PayPal">PayPal</option>
-                        <option value="Venmo">Venmo</option>
-                    </select>
+                    <label for="donationAmount">Donation Amount ($) *</label>
+                    <input type="number" id="donationAmount" step="0.01" min="0.01" required>
                 </div>
             </div>
             
             <div class="form-group">
-                <label>Notes (Optional)</label>
-                <textarea id="donationNotes" placeholder="Additional details about the donation..."></textarea>
+                <label for="donationMethod">Payment Method</label>
+                <select id="donationMethod">
+                    <option value="Check">Check</option>
+                    <option value="Cash">Cash</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="donationNotes">Notes (Optional)</label>
+                <textarea id="donationNotes" placeholder="In memory of, special designation, etc."></textarea>
             </div>
             
             <div class="actions">
                 <button class="btn btn-primary" onclick="generateReceipt()">📄 Generate Receipt</button>
-                <a href="index.html" class="btn btn-secondary">← Back to Dashboard</a>
+                <a href="dashboard.html" class="btn btn-secondary">← Back to Dashboard</a>
             </div>
         </div>
-
+        
+        <!-- Receipt Preview -->
         <div class="receipt-preview" id="receiptPreview">
             <div class="receipt-header">
-                <h1>Central Virginia Chapter<br>WVU Alumni Association</h1>
-                <p>Richmond, Virginia Metropolitan Area</p>
-                <p>Tax-Deductible Donation Receipt</p>
+                <h1>Central Virginia Chapter</h1>
+                <p><strong>West Virginia University Alumni Association</strong></p>
+                <p>4701 Stoney Creek Parkway, Chester, VA 23831</p>
+                <p>Email: cvcwvuaa@gmail.com | Web: cvawvuaa.org</p>
             </div>
             
             <div class="receipt-content">
-                <p><strong>Receipt Number:</strong> <span id="receiptNumber"></span></p>
-                <p><strong>Date Issued:</strong> <span id="receiptDate"></span></p>
+                <h2 style="text-align: center; color: #003057; margin-bottom: 1.5rem;">TAX DEDUCTIBLE DONATION RECEIPT</h2>
                 
                 <div class="receipt-details">
                     <table>
+                        <tr>
+                            <td>Receipt Number:</td>
+                            <td id="receiptNumber"></td>
+                        </tr>
+                        <tr>
+                            <td>Date of Donation:</td>
+                            <td id="receiptDate"></td>
+                        </tr>
                         <tr>
                             <td>Donor Name:</td>
                             <td id="receiptDonor"></td>
                         </tr>
                         <tr>
-                            <td>Address:</td>
+                            <td>Donor Address:</td>
                             <td id="receiptAddress"></td>
                         </tr>
                         <tr>
@@ -331,8 +332,8 @@
                             <td id="receiptType"></td>
                         </tr>
                         <tr>
-                            <td>Donation Amount:</td>
-                            <td id="receiptAmount"></td>
+                            <td>Amount:</td>
+                            <td id="receiptAmount" style="font-size: 1.2rem; font-weight: bold; color: #10b981;"></td>
                         </tr>
                         <tr>
                             <td>Payment Method:</td>
@@ -342,30 +343,52 @@
                 </div>
                 
                 <div class="tax-notice">
-                    <p><strong>Tax Deduction Information:</strong></p>
-                    <p>The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization. Your contribution is tax-deductible to the extent allowed by law.</p>
-                    <p><strong>EIN:</strong> 54-1991299</p>
-                    <p>No goods or services were provided in exchange for this donation.</p>
+                    <p style="margin: 0; font-weight: 600;">IRS Tax Deduction Information:</p>
+                    <p style="margin: 0.5rem 0 0;">
+                        The Central Virginia Chapter of the West Virginia University Alumni Association is recognized as a 501(c)(3) 
+                        tax-exempt organization. Your donation is tax-deductible to the extent allowed by law.
+                    </p>
+                    <p style="margin: 0.5rem 0 0;">
+                        <strong>EIN:</strong> [To be provided by organization]
+                    </p>
                 </div>
                 
-                <p id="receiptNotes" style="display: none; font-style: italic; color: #666;"></p>
+                <p><strong>No goods or services were provided in exchange for this donation.</strong></p>
+                
+                <p id="receiptNotes" style="font-style: italic; color: #666;"></p>
+                
+                <p>Thank you for your generous support! Your contribution helps us provide scholarships to deserving students 
+                and build a strong WVU community in Central Virginia.</p>
+                
+                <p style="margin-top: 2rem;">Let's Go! Mountaineers!!!!</p>
                 
                 <div class="signature-line">
-                    <p><strong>Issued by:</strong> CVCWVUAA Treasurer</p>
-                    <p><strong>Date:</strong> <span id="signatureDate"></span></p>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">Thank you for your generous support of the Central Virginia Chapter WVU Alumni Association!</p>
+                    <p><strong>Authorized Signature</strong></p>
+                    <p style="margin-top: 2rem; border-bottom: 1px solid #000; width: 300px;"></p>
+                    <p>Central Virginia Chapter WVUAA</p>
+                    <p style="color: #666; font-size: 0.9rem;">Date: <span id="signatureDate"></span></p>
                 </div>
             </div>
             
-            <div class="actions" style="margin-top: 2rem;">
+            <div style="text-align: center; margin-top: 2rem; page-break-after: avoid;" class="no-print">
                 <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
                 <button class="btn btn-primary" onclick="saveReceipt()">💾 Save to Records</button>
-                <button class="btn btn-success" onclick="emailReceipt()" style="background: #48bb78;">📧 Email Receipt</button>
-                <button class="btn btn-secondary" onclick="hideReceipt()">← Back to Form</button>
+                <button class="btn btn-secondary" onclick="hideReceipt()">✖️ Close</button>
             </div>
         </div>
     </div>
 
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
     <script src="js/tax-receipt-generator.js"></script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>
