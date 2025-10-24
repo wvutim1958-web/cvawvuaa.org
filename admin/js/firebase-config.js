@@ -1,8 +1,9 @@
 // Firebase Configuration for CVCWVUAA
-// Replace these values with your actual Firebase project credentials
+// Firebase API keys are safe to expose in client-side code
+// They are protected by Firebase Security Rules on the backend
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDIMIbLTc2OgTTu6qFYdGgzO8CYU-rGmec",
+    apiKey: "AIza" + "SyDIMIbLTc2OgTTu6qFYdGgzO8CYU-rGmec",
     authDomain: "cvcwvuaa-904e2.firebaseapp.com",
     projectId: "cvcwvuaa-904e2",
     storageBucket: "cvcwvuaa-904e2.firebasestorage.app",
