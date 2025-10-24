@@ -43,7 +43,20 @@ function generateReceipt() {
     const donationType = document.getElementById('donationType').value;
     const donationAmount = parseFloat(document.getElementById('donationAmount').value);
     const donationMethod = document.getElementById('donationMethod').value;
-    const donationNotes = document.getElementById('donationNotes').value;
+    let donationNotes = document.getElementById('donationNotes').value;
+    
+    // Automatically add scholarship note if donation type is Scholarship Fund
+    if (donationType === 'Scholarship Fund') {
+        const scholarshipNote = 'Blake E. Fought Memorial Scholarship/3S844';
+        if (donationNotes) {
+            // Add scholarship note if not already present
+            if (!donationNotes.includes(scholarshipNote)) {
+                donationNotes = scholarshipNote + ' - ' + donationNotes;
+            }
+        } else {
+            donationNotes = scholarshipNote;
+        }
+    }
     
     if (!donorId) {
         alert('Please select a donor.');
@@ -256,7 +269,7 @@ EIN: 54-1991299
 
 No goods or services were provided in exchange for this donation.
 
-${currentReceipt.notes ? `Notes: ${currentReceipt.notes}\n\n` : ''}Thank you for your generous support of the Central Virginia Chapter WVU Alumni Association!
+${currentReceipt.donationNotes ? `Notes: ${currentReceipt.donationNotes}\n\n` : ''}Thank you for your generous support of the Central Virginia Chapter WVU Alumni Association!
 
 Best regards,
 CVCWVUAA Treasurer
@@ -266,7 +279,7 @@ https://cvawvuaa.org`;
     const mailtoLink = `mailto:${currentReceipt.donorEmail || ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoLink;
     
-    alert('📧 Email client opened! Please review and send the receipt email.');
+    alert('📧 Email client opened!\n\n⚠️ IMPORTANT: Please send this email from cvcwvuaa@gmail.com\n\nReview the receipt details and click Send.');
 }
 
 // Set default date to today
