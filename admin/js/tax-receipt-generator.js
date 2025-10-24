@@ -29,6 +29,7 @@ async function loadMembers() {
             const option = document.createElement('option');
             option.value = doc.id;
             option.textContent = member.name;
+            option.dataset.email = member.email || '';
             option.dataset.address = member.address || '';
             option.dataset.city = member.city || '';
             option.dataset.state = member.state || '';
@@ -108,6 +109,7 @@ async function generateReceipt() {
     // Get donor info
     const selectedOption = donorSelect.options[donorSelect.selectedIndex];
     const donorName = selectedOption.textContent;
+    const donorEmail = selectedOption.dataset.email;
     const donorAddress = selectedOption.dataset.address;
     const donorCity = selectedOption.dataset.city;
     const donorState = selectedOption.dataset.state;
@@ -130,6 +132,7 @@ async function generateReceipt() {
         receiptNumber: receiptNumber,
         memberId: donorSelect.value,
         memberName: donorName,
+        memberEmail: donorEmail,
         memberAddress: fullAddress,
         donationType: donationType.value,
         donationAmount: amount,
@@ -184,31 +187,44 @@ async function saveReceipt() {
         // Save to taxReceipts collection
         await db.collection('taxReceipts').add(currentReceipt);
         
-        // Add to member's donations array
+        // Add to member's payments array with proper structure
         const memberRef = db.collection('members').doc(currentReceipt.memberId);
+        const memberDoc = await memberRef.get();
+        const currentPayments = memberDoc.data().payments || [];
+        
+        currentPayments.push({
+            type: 'Donation',
+            expectedAmount: currentReceipt.donationAmount,
+            actualReceived: currentReceipt.donationAmount,
+            paymentMethod: currentReceipt.paymentMethod,
+            date: firebase.firestore.Timestamp.fromDate(new Date(currentReceipt.donationDate)),
+            recordedDate: firebase.firestore.Timestamp.now(),
+            notes: `Tax Receipt ${currentReceipt.receiptNumber} - ${currentReceipt.donationType}`,
+            receiptSent: false,
+            receiptSentDate: null,
+            taxReceiptNumber: currentReceipt.receiptNumber
+        });
+        
         await memberRef.update({
-            donations: firebase.firestore.FieldValue.arrayUnion({
-                receiptNumber: currentReceipt.receiptNumber,
-                amount: currentReceipt.donationAmount,
-                type: currentReceipt.donationType,
-                date: currentReceipt.donationDate,
-                method: currentReceipt.paymentMethod,
-                recordedDate: firebase.firestore.Timestamp.now()
-            })
+            payments: currentPayments
         });
         
         // Log to communications
         await db.collection('communications').add({
             memberId: currentReceipt.memberId,
             memberName: currentReceipt.memberName,
-            type: 'Tax Receipt',
+            memberEmail: currentReceipt.memberEmail || '',
+            type: 'tax_receipt',
             subject: `Tax Receipt ${currentReceipt.receiptNumber}`,
-            message: `Tax-deductible donation receipt issued for $${currentReceipt.donationAmount.toFixed(2)} (${currentReceipt.donationType})`,
-            date: firebase.firestore.Timestamp.now(),
-            sentBy: 'Admin'
+            details: `Tax-deductible donation receipt issued for $${currentReceipt.donationAmount.toFixed(2)} (${currentReceipt.donationType})`,
+            timestamp: firebase.firestore.Timestamp.now(),
+            sentBy: 'Admin',
+            method: 'generated',
+            taxDeductible: true,
+            receiptNumber: currentReceipt.receiptNumber
         });
         
-        alert(`Receipt ${currentReceipt.receiptNumber} saved successfully!`);
+        alert(`✅ Receipt ${currentReceipt.receiptNumber} saved successfully!\n\nPayment has been added to member's record and will appear in Payment Tracking.`);
         
         // Reset form
         resetForm();
@@ -218,6 +234,49 @@ async function saveReceipt() {
         console.error('Error saving receipt:', error);
         alert('Error saving receipt: ' + error.message);
     }
+}
+
+// Email receipt
+function emailReceipt() {
+    if (!currentReceipt) {
+        alert('No receipt to email');
+        return;
+    }
+    
+    const subject = `Tax-Deductible Donation Receipt - ${currentReceipt.receiptNumber}`;
+    const body = `Dear ${currentReceipt.memberName},
+
+Thank you for your generous donation to the Central Virginia Chapter of the WVU Alumni Association!
+
+OFFICIAL TAX RECEIPT
+Receipt Number: ${currentReceipt.receiptNumber}
+
+Donor Information:
+${currentReceipt.memberName}
+${currentReceipt.memberAddress}
+
+Donation Details:
+Date: ${formatDate(new Date(currentReceipt.donationDate))}
+Type: ${currentReceipt.donationType}
+Amount: $${currentReceipt.donationAmount.toFixed(2)}
+Payment Method: ${currentReceipt.paymentMethod}
+
+Tax Deduction Information:
+The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization. Your contribution is tax-deductible to the extent allowed by law.
+
+EIN: 54-1991299
+
+No goods or services were provided in exchange for this donation.
+
+Thank you for your generous support of the Central Virginia Chapter WVU Alumni Association!
+
+Best regards,
+CVCWVUAA Treasurer`;
+    
+    const mailtoLink = `mailto:${currentReceipt.memberEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+    
+    alert('📧 Email client opened! Please send the receipt email.');
 }
 
 // Reset form
