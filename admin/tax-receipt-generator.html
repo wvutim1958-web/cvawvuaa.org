@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Receipt Generator - CVCWVUAA Admin</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        
+        .page-header h1 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .page-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .info-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: #78350f;
+        }
+        
+        .form-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .form-panel h2 {
+            margin: 0 0 1.5rem;
+            color: #333;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #059669;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .receipt-preview {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-family: 'Times New Roman', serif;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            display: none;
+        }
+        
+        .receipt-preview.active {
+            display: block;
+        }
+        
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #003057;
+        }
+        
+        .receipt-header h1 {
+            color: #003057;
+            margin: 0 0 0.25rem;
+            font-size: 1.75rem;
+        }
+        
+        .receipt-header p {
+            margin: 0.15rem 0;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .receipt-content {
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .receipt-content p {
+            margin-bottom: 0.75rem;
+        }
+        
+        .receipt-details {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .receipt-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .receipt-details td {
+            padding: 0.4rem;
+        }
+        
+        .receipt-details td:first-child {
+            font-weight: 600;
+            width: 40%;
+        }
+        
+        .tax-notice {
+            background: #fef3c7;
+            padding: 0.75rem;
+            border-left: 4px solid #f59e0b;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .signature-line {
+            margin-top: 2rem;
+            padding-top: 0.75rem;
+            border-top: 2px solid #ccc;
+        }
+        
+        @media print {
+            .container {
+                max-width: 100%;
+            }
+            
+            .page-header,
+            .info-box,
+            .form-panel,
+            .actions {
+                display: none;
+            }
+            
+            .receipt-preview {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>🎓 Tax Receipt Generator</h1>
+            <p>Generate official 501(c)(3) tax-deductible donation receipts</p>
+        </div>
+
+        <div class="info-box">
+            <p><strong>Note:</strong> Only generate tax receipts for donations (not membership dues). All receipts are saved and logged to member records.</p>
+        </div>
+
+        <div class="form-panel">
+            <h2>Receipt Information</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Donor *</label>
+                    <select id="donorSelect" required>
+                        <option value="">-- Select Member --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Donation Date *</label>
+                    <input type="date" id="donationDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Donation Type *</label>
+                    <select id="donationType" required>
+                        <option value="">-- Select Type --</option>
+                        <option value="Scholarship Fund">Scholarship Fund</option>
+                        <option value="Chapter Operations">Chapter Operations</option>
+                        <option value="General Donation">General Donation</option>
+                        <option value="Memorial Gift">Memorial Gift</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Amount *</label>
+                    <input type="number" id="donationAmount" step="0.01" min="0" placeholder="0.00" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select id="donationMethod">
+                        <option value="Check">Check</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="PayPal">PayPal</option>
+                        <option value="Venmo">Venmo</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Notes (Optional)</label>
+                <textarea id="donationNotes" placeholder="Additional details about the donation..."></textarea>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-primary" onclick="generateReceipt()">📄 Generate Receipt</button>
+                <a href="index.html" class="btn btn-secondary">← Back to Dashboard</a>
+            </div>
+        </div>
+
+        <div class="receipt-preview" id="receiptPreview">
+            <div class="receipt-header">
+                <h1>Central Virginia Chapter<br>WVU Alumni Association</h1>
+                <p>Richmond, Virginia Metropolitan Area</p>
+                <p>Tax-Deductible Donation Receipt</p>
+            </div>
+            
+            <div class="receipt-content">
+                <p><strong>Receipt Number:</strong> <span id="receiptNumber"></span></p>
+                <p><strong>Date Issued:</strong> <span id="receiptDate"></span></p>
+                
+                <div class="receipt-details">
+                    <table>
+                        <tr>
+                            <td>Donor Name:</td>
+                            <td id="receiptDonor"></td>
+                        </tr>
+                        <tr>
+                            <td>Address:</td>
+                            <td id="receiptAddress"></td>
+                        </tr>
+                        <tr>
+                            <td>Donation Type:</td>
+                            <td id="receiptType"></td>
+                        </tr>
+                        <tr>
+                            <td>Donation Amount:</td>
+                            <td id="receiptAmount"></td>
+                        </tr>
+                        <tr>
+                            <td>Payment Method:</td>
+                            <td id="receiptMethod"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="tax-notice">
+                    <p><strong>Tax Deduction Information:</strong></p>
+                    <p>The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization. Your contribution is tax-deductible to the extent allowed by law.</p>
+                    <p><strong>EIN:</strong> [Your EIN Here]</p>
+                    <p>No goods or services were provided in exchange for this donation.</p>
+                </div>
+                
+                <p id="receiptNotes" style="display: none; font-style: italic; color: #666;"></p>
+                
+                <div class="signature-line">
+                    <p><strong>Issued by:</strong> CVCWVUAA Treasurer</p>
+                    <p><strong>Date:</strong> <span id="signatureDate"></span></p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">Thank you for your generous support of the Central Virginia Chapter WVU Alumni Association!</p>
+                </div>
+            </div>
+            
+            <div class="actions" style="margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
+                <button class="btn btn-primary" onclick="saveReceipt()">💾 Save to Records</button>
+                <button class="btn btn-secondary" onclick="hideReceipt()">← Back to Form</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/tax-receipt-generator.js"></script>
+</body>
+</html>
