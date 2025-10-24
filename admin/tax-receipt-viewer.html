@@ -273,43 +273,72 @@
         let db = null;
         let receiptData = null;
         
-        // Initialize
-        document.addEventListener('DOMContentLoaded', async function() {
-            // Initialize Firebase
-            if (typeof initializeFirebase === 'function') {
-                const initialized = initializeFirebase();
-                if (initialized && typeof firebase !== 'undefined') {
-                    db = firebase.firestore();
+        // Wait for Firebase to initialize
+        async function initializeApp() {
+            try {
+                // Wait for Firebase config to load
+                let attempts = 0;
+                while (!window.firebase && attempts < 50) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    attempts++;
                 }
+                
+                if (!window.firebase) {
+                    throw new Error('Firebase failed to load. Please refresh the page.');
+                }
+                
+                // Initialize Firebase if not already initialized
+                if (typeof initializeFirebase === 'function') {
+                    initializeFirebase();
+                }
+                
+                // Get Firestore instance
+                db = firebase.firestore();
+                console.log('✅ Firebase initialized successfully');
+                
+                // Get receipt number from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const receiptNumber = urlParams.get('receipt');
+                
+                if (!receiptNumber) {
+                    showError('No receipt number specified in URL. Please check the link and try again.');
+                    return;
+                }
+                
+                console.log('Loading receipt:', receiptNumber);
+                await loadReceipt(receiptNumber);
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showError('Failed to initialize: ' + error.message + '. Please refresh the page.');
             }
-            
-            // Get receipt number from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const receiptNumber = urlParams.get('receipt');
-            
-            if (!receiptNumber) {
-                showError('No receipt specified in URL.');
-                return;
-            }
-            
-            await loadReceipt(receiptNumber);
-        });
+        }
+        
+        // Initialize when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
         
         async function loadReceipt(receiptNumber) {
             try {
+                console.log('Fetching receipt from Firebase:', receiptNumber);
                 const doc = await db.collection('taxReceipts').doc(receiptNumber).get();
                 
                 if (!doc.exists) {
-                    showError('Receipt not found. It may have been deleted or the link is invalid.');
+                    showError('Receipt not found. The receipt may not have been saved yet, or the link is invalid. Please try generating the receipt again or contact support.');
+                    console.error('Receipt not found in Firebase:', receiptNumber);
                     return;
                 }
                 
                 receiptData = doc.data();
+                console.log('✅ Receipt loaded successfully:', receiptData);
                 displayReceipt(receiptData);
                 
             } catch (error) {
                 console.error('Error loading receipt:', error);
-                showError('Failed to load receipt: ' + error.message);
+                showError('Failed to load receipt: ' + error.message + '. Please try refreshing the page or contact support if the problem persists.');
             }
         }
         
@@ -361,7 +390,7 @@
                             </tr>
                             <tr>
                                 <td>Payment Method:</td>
-                                <td>${receipt.paymentMethod}</td>
+                                <td>${receipt.donationMethod || receipt.paymentMethod || 'N/A'}</td>
                             </tr>
                             ${receipt.donationNotes ? `
                             <tr>

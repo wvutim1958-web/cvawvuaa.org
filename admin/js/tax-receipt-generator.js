@@ -238,13 +238,16 @@ function formatCurrency(amount) {
 }
 
 // Email receipt
-function emailReceipt() {
+async function emailReceipt() {
     if (!currentReceipt) {
         alert('No receipt to email. Please generate a receipt first.');
         return;
     }
     
-    // Create receipt URL (we'll save to Firebase and create a viewer)
+    // Save receipt to Firebase FIRST before opening email
+    await saveReceiptToFirebase();
+    
+    // Create receipt URL
     const receiptURL = `https://cvawvuaa.org/admin/tax-receipt-viewer.html?receipt=${currentReceipt.receiptNumber}`;
     
     const subject = encodeURIComponent(`Tax-Deductible Donation Receipt - ${currentReceipt.receiptNumber}`);
@@ -260,7 +263,7 @@ function emailReceipt() {
         `Date: ${formatDate(new Date(currentReceipt.donationDate))}\n` +
         `Donation Type: ${currentReceipt.donationType}\n` +
         `Amount: $${currentReceipt.donationAmount.toFixed(2)}\n` +
-        `Payment Method: ${currentReceipt.paymentMethod}\n\n` +
+        `Payment Method: ${currentReceipt.donationMethod}\n\n` +
         `TAX INFORMATION\n` +
         `The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization.\n` +
         `EIN: 54-1991299\n` +
@@ -278,20 +281,20 @@ function emailReceipt() {
     
     const mailtoLink = `mailto:${currentReceipt.donorEmail || ''}?subject=${subject}&body=${emailBody}`;
     
-    // Save receipt to Firebase for URL access
-    saveReceiptToFirebase();
-    
     window.location.href = mailtoLink;
     
     alert('📧 Email client opened!\n\n⚠️ IMPORTANT: Please send this email from cvcwvuaa@gmail.com\n\nThe email includes:\n✓ Link to official receipt\n✓ Receipt summary\n✓ Tax information\n\nReview and click Send.');
 }
 
 // Show HTML Email Code Modal
-function showHTMLEmail() {
+async function showHTMLEmail() {
     if (!currentReceipt) {
         alert('No receipt to generate HTML for. Please generate a receipt first.');
         return;
     }
+    
+    // Save receipt to Firebase FIRST
+    await saveReceiptToFirebase();
     
     const receiptURL = `https://cvawvuaa.org/admin/tax-receipt-viewer.html?receipt=${currentReceipt.receiptNumber}`;
     
@@ -351,7 +354,7 @@ function showHTMLEmail() {
                                 </tr>
                                 <tr>
                                     <td style="padding: 10px; font-weight: 600; color: #333;">Payment Method:</td>
-                                    <td style="padding: 10px; color: #666;">${currentReceipt.paymentMethod}</td>
+                                    <td style="padding: 10px; color: #666;">${currentReceipt.donationMethod}</td>
                                 </tr>
                                 ${currentReceipt.donationNotes ? `
                                 <tr>
@@ -434,17 +437,33 @@ function closeHTMLModal() {
 
 // Save receipt to Firebase for URL-based viewing
 async function saveReceiptToFirebase() {
-    if (!currentReceipt) return;
+    if (!currentReceipt) {
+        console.warn('No current receipt to save');
+        return;
+    }
     
     try {
+        console.log('Saving receipt to Firebase:', currentReceipt.receiptNumber);
+        console.log('Receipt data:', currentReceipt);
+        
         await db.collection('taxReceipts').doc(currentReceipt.receiptNumber).set({
             ...currentReceipt,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             createdBy: 'Admin'
         });
-        console.log('Receipt saved to Firebase:', currentReceipt.receiptNumber);
+        
+        console.log('✅ Receipt saved successfully to Firebase:', currentReceipt.receiptNumber);
+        
+        // Verify it was saved
+        const doc = await db.collection('taxReceipts').doc(currentReceipt.receiptNumber).get();
+        if (doc.exists) {
+            console.log('✅ Verified receipt exists in Firebase');
+        } else {
+            console.error('❌ Receipt save verification failed - document not found');
+        }
     } catch (error) {
-        console.error('Error saving receipt to Firebase:', error);
+        console.error('❌ Error saving receipt to Firebase:', error);
+        alert('Warning: Receipt may not have been saved to database. The email link might not work. Error: ' + error.message);
     }
 }
 
