@@ -796,10 +796,13 @@ Phone: (804) 566-8058`;
          */
         async function loadDeliveryStatus() {
             try {
+                // Convert paymentTimestamp to number for consistent querying
+                const timestampNum = parseInt(paymentTimestamp);
+                
                 // Try to find receipt in receipts collection by memberId and timestamp
                 const receiptsSnapshot = await receiptDb.collection('receipts')
                     .where('memberId', '==', memberId)
-                    .where('paymentTimestamp', '==', paymentTimestamp)
+                    .where('paymentTimestamp', '==', timestampNum)
                     .get();
                 
                 if (!receiptsSnapshot.empty) {
@@ -838,10 +841,13 @@ Phone: (804) 566-8058`;
             };
             
             try {
+                // Convert paymentTimestamp to number for consistent querying
+                const timestampNum = parseInt(paymentTimestamp);
+                
                 // Find or create receipt document
                 const receiptsSnapshot = await receiptDb.collection('receipts')
                     .where('memberId', '==', memberId)
-                    .where('paymentTimestamp', '==', paymentTimestamp)
+                    .where('paymentTimestamp', '==', timestampNum)
                     .get();
                 
                 if (!receiptsSnapshot.empty) {
@@ -852,7 +858,7 @@ Phone: (804) 566-8058`;
                     // Create new receipt entry (this shouldn't normally happen, but handle it)
                     await receiptDb.collection('receipts').add({
                         memberId,
-                        paymentTimestamp,
+                        paymentTimestamp: timestampNum,
                         deliveryStatus,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
