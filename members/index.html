@@ -372,22 +372,22 @@
             <div id="financialContent" style="display: none;">
                 <!-- Balance Summary -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
-                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #2196f3;">
-                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Checking Account</h3>
-                        <div id="checkingBalance" style="font-size: 2.5rem; font-weight: 700; color: #003057; margin: 0;">$0.00</div>
-                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Primary Operating Account</div>
+                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #28a745;">
+                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Current Balance</h3>
+                        <div id="currentBalance" style="font-size: 2.5rem; font-weight: 700; color: #28a745; margin: 0;">$0.00</div>
+                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Operating Account</div>
                     </div>
                     
-                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #4caf50;">
-                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Savings Account</h3>
-                        <div id="savingsBalance" style="font-size: 2.5rem; font-weight: 700; color: #003057; margin: 0;">$0.00</div>
-                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Reserve Fund</div>
+                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #007bff;">
+                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Total Income</h3>
+                        <div id="totalIncome" style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin: 0;">$0.00</div>
+                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Year to Date</div>
                     </div>
                     
-                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #ff9800;">
-                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Total Assets</h3>
-                        <div id="totalBalance" style="font-size: 2.5rem; font-weight: 700; color: #003057; margin: 0;">$0.00</div>
-                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Combined Balance</div>
+                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #dc3545;">
+                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Total Expenses</h3>
+                        <div id="totalExpenses" style="font-size: 2.5rem; font-weight: 700; color: #dc3545; margin: 0;">$0.00</div>
+                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Year to Date</div>
                     </div>
                 </div>
 
@@ -761,8 +761,7 @@
                     .orderBy('date', 'desc')
                     .get();
                 
-                let checkingBalance = 0;
-                let savingsBalance = 0;
+                let currentBalance = 0;
                 let totalIncome = 0;
                 let totalExpenses = 0;
                 
@@ -771,21 +770,17 @@
                 snapshot.forEach(doc => {
                     const txn = doc.data();
                     const amount = parseFloat(txn.amount) || 0;
+                    const isBeginningBalance = txn.description && txn.description.toLowerCase().includes('beginning balance');
                     
-                    // Calculate running balances
+                    // Calculate running balance and totals
                     if (txn.type === 'deposit') {
-                        if (txn.account === 'savings') {
-                            savingsBalance += amount;
-                        } else {
-                            checkingBalance += amount;
+                        currentBalance += amount;
+                        // Don't count beginning balance as income
+                        if (!isBeginningBalance) {
+                            totalIncome += amount;
                         }
-                        totalIncome += amount;
                     } else if (txn.type === 'expense') {
-                        if (txn.account === 'savings') {
-                            savingsBalance -= amount;
-                        } else {
-                            checkingBalance -= amount;
-                        }
+                        currentBalance -= amount;
                         totalExpenses += amount;
                     }
                     
@@ -797,12 +792,12 @@
                 });
                 
                 // Update balance cards
-                document.getElementById('checkingBalance').textContent = 
-                    '$' + checkingBalance.toFixed(2);
-                document.getElementById('savingsBalance').textContent = 
-                    '$' + savingsBalance.toFixed(2);
-                document.getElementById('totalBalance').textContent = 
-                    '$' + (checkingBalance + savingsBalance).toFixed(2);
+                document.getElementById('currentBalance').textContent = 
+                    '$' + currentBalance.toFixed(2);
+                document.getElementById('totalIncome').textContent = 
+                    '$' + totalIncome.toFixed(2);
+                document.getElementById('totalExpenses').textContent = 
+                    '$' + totalExpenses.toFixed(2);
 
                 // Show recent 20 transactions
                 const transactionsList = document.getElementById('transactionsList');
