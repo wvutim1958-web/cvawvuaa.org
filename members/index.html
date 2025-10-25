@@ -310,9 +310,18 @@
                     <input 
                         type="text" 
                         id="loginInput" 
-                        placeholder="lastname + street number (e.g., casten4701)"
+                        placeholder="username OR lastname+streetnumber (e.g., casten4701)"
                         required
                         autocomplete="off">
+                </div>
+                
+                <div class="form-group" id="passwordGroup" style="display: none;">
+                    <label for="loginPassword">Password</label>
+                    <input 
+                        type="password" 
+                        id="loginPassword" 
+                        placeholder="Enter your password"
+                        autocomplete="current-password">
                 </div>
 
                 <button type="submit" class="login-button">
@@ -322,8 +331,8 @@
 
             <div class="login-help">
                 <h4>📋 How to Login:</h4>
-                <p><strong>Format:</strong> Your last name + street address number (no spaces)</p>
-                <p><strong>Example:</strong> If your name is Tim Casten at 4701 Stoney Creek Parkway, enter: <code>casten4701</code></p>
+                <p><strong>With Username:</strong> Enter your username and password</p>
+                <p><strong>Without Username:</strong> Enter your last name + street address number (e.g., casten4701)</p>
                 <p><strong>Note:</strong> All lowercase, no spaces or special characters</p>
             </div>
         </div>
@@ -426,6 +435,63 @@
         </div>
     </div>
 
+    <!-- SETUP CREDENTIALS MODAL -->
+    <div id="setupModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 2.5rem; border-radius: 15px; max-width: 500px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+            <h2 style="color: #002855; margin: 0 0 1rem;">🔐 Setup Your Login Credentials</h2>
+            <p style="color: #666; margin-bottom: 2rem;">Create a username and password for easier access next time. You won't need to enter your street number again!</p>
+            
+            <div id="setupError" style="display: none; background: #fee; color: #c00; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;"></div>
+            
+            <form id="setupForm" onsubmit="handleSetupCredentials(event)">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #333;">Username</label>
+                    <input 
+                        type="text" 
+                        id="setupUsername" 
+                        placeholder="Choose a username"
+                        required
+                        minlength="4"
+                        pattern="[a-zA-Z0-9_]+"
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1rem; box-sizing: border-box;">
+                    <small style="color: #666; font-size: 0.85rem;">4+ characters, letters, numbers, and underscores only</small>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #333;">Password</label>
+                    <input 
+                        type="password" 
+                        id="setupPassword" 
+                        placeholder="Choose a password"
+                        required
+                        minlength="6"
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1rem; box-sizing: border-box;">
+                    <small style="color: #666; font-size: 0.85rem;">Minimum 6 characters</small>
+                </div>
+                
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #333;">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="setupPasswordConfirm" 
+                        placeholder="Re-enter password"
+                        required
+                        minlength="6"
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1rem; box-sizing: border-box;">
+                </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" style="flex: 1; padding: 0.75rem; background: #002855; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem;">
+                        Create Credentials
+                    </button>
+                    <button type="button" onclick="skipSetup()" style="flex: 1; padding: 0.75rem; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem;">
+                        Skip for Now
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -433,103 +499,258 @@
     <script src="/admin/js/firebase-config.js"></script>
 
     <script>
-        let db = null;
+        // Global variables
+        const db = firebase.firestore();
+        let currentMemberId = null;
+        let pendingMemberData = null; // Store member data while showing setup modal
         
-        // Initialize Firebase
+        // Initialize Firebase and check session
         window.addEventListener('load', () => {
-            if (typeof firebase !== 'undefined' && firebase.firestore) {
-                db = firebase.firestore();
-                console.log('Firebase connected for member portal');
-            } else {
-                console.error('Firebase not available');
-            }
+            console.log('Firebase connected for member portal');
             
             // Check if already logged in
             if (sessionStorage.getItem('memberAuth')) {
+                currentMemberId = sessionStorage.getItem('memberId');
                 showMemberPortal();
             }
         });
 
+        // Handle login form submission
         async function handleLogin(event) {
             event.preventDefault();
             
-            if (!db) {
-                alert('System not ready. Please refresh the page.');
-                return;
-            }
-            
-            const input = document.getElementById('loginInput');
-            const loginValue = input.value.toLowerCase().trim();
+            const loginInput = document.getElementById('loginInput').value.trim().toLowerCase();
+            const loginPassword = document.getElementById('loginPassword').value;
             const errorMsg = document.getElementById('errorMessage');
             const loginBtn = event.target.querySelector('button');
             
             // Disable button during check
             loginBtn.disabled = true;
             loginBtn.textContent = 'Verifying...';
-            
+            errorMsg.style.display = 'none';
+
             try {
-                // Parse input - expect format like "casten4701" (lastname + streetnumber)
-                // Extract potential last name and street number
-                const match = loginValue.match(/^([a-z]+)(\d+)$/);
+                // Check if input looks like a username (has underscore or no numbers at end)
+                const isUsername = loginInput.includes('_') || !/\d+$/.test(loginInput);
                 
-                if (!match) {
-                    throw new Error('Please enter in format: LastNameStreetNumber (e.g., smith123)');
-                }
+                let memberData;
                 
-                const [, lastName, streetNumber] = match;
-                
-                // Query Firebase for member
-                const snapshot = await db.collection('members')
-                    .get();
-                
-                let foundMember = null;
-                
-                snapshot.docs.forEach(doc => {
-                    const member = doc.data();
-                    const memberLastName = (member.name || '').split(' ').pop().toLowerCase();
-                    const memberStreetNum = (member.address || '').match(/^\d+/)?.[0] || '';
-                    
-                    if (memberLastName === lastName && memberStreetNum === streetNumber) {
-                        foundMember = {
-                            id: doc.id,
-                            ...member
-                        };
+                if (isUsername) {
+                    // Username/password login
+                    if (!loginPassword) {
+                        throw new Error('Password is required for username login');
                     }
-                });
-                
-                if (!foundMember) {
-                    throw new Error('Member not found. Please check your last name and street number.');
+                    memberData = await verifyCredentials(loginInput, loginPassword);
+                } else {
+                    // Traditional lastname+number login
+                    memberData = await verifyTraditionalLogin(loginInput);
                 }
-                
-                // Check if member is active
-                if (foundMember.status !== 'active') {
-                    throw new Error('Your membership is not currently active. Please renew your membership to access the members area.');
-                }
-                
-                // Successful login - store in session
+
+                // Store session
                 sessionStorage.setItem('memberAuth', 'true');
-                sessionStorage.setItem('memberId', foundMember.id);
-                sessionStorage.setItem('memberName', foundMember.name);
-                sessionStorage.setItem('memberEmail', foundMember.email || '');
-                
-                showMemberPortal();
-                
+                sessionStorage.setItem('memberId', memberData.id);
+                sessionStorage.setItem('memberName', memberData.name);
+                sessionStorage.setItem('memberEmail', memberData.email || '');
+                currentMemberId = memberData.id;
+
+                // Check if this is first-time login (no username set)
+                if (!memberData.username) {
+                    // Store member data and show setup modal
+                    pendingMemberData = memberData;
+                    document.getElementById('loginScreen').style.display = 'none';
+                    showSetupModal();
+                } else {
+                    // Go directly to portal
+                    showMemberPortal();
+                }
+
             } catch (error) {
                 console.error('Login error:', error);
                 errorMsg.textContent = error.message || 'Invalid credentials. Please try again.';
                 errorMsg.style.display = 'block';
-                input.value = '';
-                input.classList.add('shake');
-                
-                setTimeout(() => {
-                    input.classList.remove('shake');
-                    errorMsg.style.display = 'none';
-                }, 4000);
+                document.getElementById('loginInput').value = '';
+                document.getElementById('loginPassword').value = '';
             } finally {
                 loginBtn.disabled = false;
-                loginBtn.textContent = 'Access Member Portal';
+                loginBtn.textContent = '🔓 Access Member Portal';
             }
         }
+
+        // Verify username/password credentials
+        async function verifyCredentials(username, password) {
+            const snapshot = await db.collection('members')
+                .where('username', '==', username)
+                .limit(1)
+                .get();
+
+            if (snapshot.empty) {
+                throw new Error('Invalid username or password');
+            }
+
+            const memberDoc = snapshot.docs[0];
+            const memberData = memberDoc.data();
+
+            // Check if member is active
+            if (memberData.status !== 'active') {
+                throw new Error('Your membership is not active. Please renew to access the portal.');
+            }
+
+            // Verify password (NOTE: In production, use hashed passwords)
+            if (memberData.password !== password) {
+                throw new Error('Invalid username or password');
+            }
+
+            return {
+                id: memberDoc.id,
+                name: memberData.name,
+                email: memberData.email,
+                username: memberData.username
+            };
+        }
+
+        // Verify traditional lastname+number login
+        async function verifyTraditionalLogin(loginInput) {
+            // Parse input - expect format like "casten4701"
+            const match = loginInput.match(/^([a-z]+)(\d+)$/);
+            
+            if (!match) {
+                throw new Error('Invalid format. Use lastname+number (e.g., casten4701) or your username');
+            }
+            
+            const [, lastName, streetNumber] = match;
+            
+            // Query Firebase for member
+            const snapshot = await db.collection('members').get();
+            
+            let foundMember = null;
+            
+            snapshot.docs.forEach(doc => {
+                const member = doc.data();
+                const memberLastName = (member.name || '').split(' ').pop().toLowerCase();
+                const memberStreetNum = (member.address || '').match(/^\d+/)?.[0] || '';
+                
+                if (memberLastName === lastName && memberStreetNum === streetNumber) {
+                    foundMember = {
+                        id: doc.id,
+                        ...member
+                    };
+                }
+            });
+            
+            if (!foundMember) {
+                throw new Error('Member not found. Please check your last name and street number.');
+            }
+            
+            // Check if member is active
+            if (foundMember.status !== 'active') {
+                throw new Error('Your membership is not currently active. Please renew to access the portal.');
+            }
+            
+            return {
+                id: foundMember.id,
+                name: foundMember.name,
+                email: foundMember.email,
+                username: foundMember.username // May be undefined
+            };
+        }
+
+        // Show credential setup modal
+        function showSetupModal() {
+            document.getElementById('setupModal').style.display = 'flex';
+            document.getElementById('setupUsername').focus();
+        }
+
+        // Handle credential setup
+        async function handleSetupCredentials(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('setupUsername').value.trim().toLowerCase();
+            const password = document.getElementById('setupPassword').value;
+            const confirmPassword = document.getElementById('setupPasswordConfirm').value;
+            const errorDiv = document.getElementById('setupError');
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            
+            errorDiv.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating...';
+
+            try {
+                // Validate passwords match
+                if (password !== confirmPassword) {
+                    throw new Error('Passwords do not match');
+                }
+
+                // Validate username format
+                if (!/^[a-zA-Z0-9_]{4,}$/.test(username)) {
+                    throw new Error('Username must be at least 4 characters (letters, numbers, underscore only)');
+                }
+
+                // Validate password length
+                if (password.length < 6) {
+                    throw new Error('Password must be at least 6 characters');
+                }
+
+                // Check if username is already taken
+                const usernameCheck = await db.collection('members')
+                    .where('username', '==', username)
+                    .get();
+
+                if (!usernameCheck.empty) {
+                    throw new Error('Username already taken. Please choose a different username.');
+                }
+
+                // Update member document with credentials
+                await db.collection('members').doc(currentMemberId).update({
+                    username: username,
+                    password: password, // NOTE: In production, hash this
+                    credentialsCreated: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Close modal and show portal
+                document.getElementById('setupModal').style.display = 'none';
+                showMemberPortal();
+
+                // Show success message
+                setTimeout(() => {
+                    alert(`✅ Credentials created!\n\nYou can now login with:\nUsername: ${username}\nPassword: (the one you just created)`);
+                }, 500);
+
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+                console.error('Setup error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Credentials';
+            }
+        }
+
+        // Skip credential setup
+        function skipSetup() {
+            if (confirm('Skip for now? You\'ll need to use lastname+streetnumber to login next time.')) {
+                document.getElementById('setupModal').style.display = 'none';
+                showMemberPortal();
+            }
+        }
+
+        // Show password field dynamically based on input
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginInput = document.getElementById('loginInput');
+            const passwordGroup = document.getElementById('passwordGroup');
+            
+            loginInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                
+                // Show password field if input looks like a username
+                const isUsername = value.includes('_') || (value.length > 0 && !/\d+$/.test(value));
+                passwordGroup.style.display = isUsername ? 'block' : 'none';
+                
+                // Clear password if switching to traditional login
+                if (!isUsername) {
+                    document.getElementById('loginPassword').value = '';
+                }
+            });
+        });
 
         function showMemberPortal() {
             const memberName = sessionStorage.getItem('memberName');
@@ -548,6 +769,7 @@
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('memberContent').style.display = 'none';
             document.getElementById('loginInput').value = '';
+            document.getElementById('loginPassword').value = '';
         }
     </script>
 
