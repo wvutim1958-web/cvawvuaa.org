@@ -361,81 +361,40 @@
 
         <div class="portal-container">
             <div class="welcome-banner">
-                <h2>💙 Welcome to Your Member Portal! 💛</h2>
-                <p>Access exclusive member resources, photo galleries, and chapter information</p>
+                <h2>� Financial Transparency Dashboard</h2>
+                <p>View chapter balance sheet and recent transactions</p>
             </div>
 
-            <div class="portal-grid">
-                <!-- Photo Gallery -->
-                <div class="portal-card">
-                    <div class="card-icon">📸</div>
-                    <h3 class="card-title">Photo Gallery</h3>
-                    <p class="card-description">Browse 812+ photos from chapter events dating back to 2005. Relive memories from game watches, gatherings, and special occasions.</p>
-                    <a href="/gallery/" class="card-link">View Photo Gallery →</a>
+            <div id="loadingFinancials" style="text-align: center; padding: 3rem; color: #666;">
+                <p>Loading financial data...</p>
+            </div>
+
+            <div id="financialContent" style="display: none;">
+                <!-- Balance Summary -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #2196f3;">
+                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Checking Account</h3>
+                        <div id="checkingBalance" style="font-size: 2.5rem; font-weight: 700; color: #003057; margin: 0;">$0.00</div>
+                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Primary Operating Account</div>
+                    </div>
+                    
+                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #4caf50;">
+                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Savings Account</h3>
+                        <div id="savingsBalance" style="font-size: 2.5rem; font-weight: 700; color: #003057; margin: 0;">$0.00</div>
+                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Reserve Fund</div>
+                    </div>
+                    
+                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #ff9800;">
+                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Total Assets</h3>
+                        <div id="totalBalance" style="font-size: 2.5rem; font-weight: 700; color: #003057; margin: 0;">$0.00</div>
+                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Combined Balance</div>
+                    </div>
                 </div>
 
-                <!-- Chapter Documents -->
-                <div class="portal-card">
-                    <div class="card-icon">📄</div>
-                    <h3 class="card-title">Chapter Documents</h3>
-                    <p class="card-description">Access bylaws, meeting minutes, financial reports, and important chapter documents.</p>
-                    <a href="/bylaws.html" class="card-link">View Documents →</a>
-                </div>
-
-                <!-- Member Directory -->
-                <div class="portal-card">
-                    <div class="card-icon">👥</div>
-                    <h3 class="card-title">Member Directory</h3>
-                    <p class="card-description">Connect with fellow alumni. View member contact information and stay in touch with your Mountaineer family.</p>
-                    <a href="/member-database.html" class="card-link">View Directory →</a>
-                </div>
-
-                <!-- Event Calendar -->
-                <div class="portal-card">
-                    <div class="card-icon">📅</div>
-                    <h3 class="card-title">Events & RSVPs</h3>
-                    <p class="card-description">View upcoming chapter events, game watches, and social gatherings. RSVP to let us know you're coming!</p>
-                    <a href="/events.html" class="card-link">View Events →</a>
-                </div>
-
-                <!-- Scholarship Info -->
-                <div class="portal-card">
-                    <div class="card-icon">🎓</div>
-                    <h3 class="card-title">Scholarship Program</h3>
-                    <p class="card-description">Learn about the Blake E. Fought Scholarship and how your membership supports local students attending WVU.</p>
-                    <a href="/scholarship.html" class="card-link">Learn More →</a>
-                </div>
-
-                <!-- Member Benefits -->
-                <div class="portal-card">
-                    <div class="card-icon">⭐</div>
-                    <h3 class="card-title">Member Benefits</h3>
-                    <p class="card-description">Discover exclusive member perks, discounts, and benefits available to Central Virginia chapter members.</p>
-                    <a href="/membership.html" class="card-link">View Benefits →</a>
-                </div>
-
-                <!-- Newsletters -->
-                <div class="portal-card">
-                    <div class="card-icon">📰</div>
-                    <h3 class="card-title">Newsletter Archive</h3>
-                    <p class="card-description">Read past newsletters and stay informed about chapter news, updates, and Mountaineer happenings.</p>
-                    <a href="/newsletters/" class="card-link">Read Newsletters →</a>
-                </div>
-
-                <!-- Contact Board -->
-                <div class="portal-card">
-                    <div class="card-icon">📧</div>
-                    <h3 class="card-title">Contact Leadership</h3>
-                    <p class="card-description">Get in touch with the chapter board members. Share ideas, feedback, or volunteer opportunities.</p>
-                    <a href="/contact.html" class="card-link">Contact Us →</a>
-                </div>
-
-                <!-- Merchandise -->
-                <div class="portal-card">
-                    <div class="card-icon">🛍️</div>
-                    <h3 class="card-title">WVU Gear</h3>
-                    <p class="card-description">Shop official WVU merchandise and show your Mountaineer pride at chapter events and game watches.</p>
-                    <a href="https://shop.wvu.edu" target="_blank" class="card-link">Shop Now →</a>
+                <!-- Recent Transactions -->
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <h2 style="margin: 0 0 1.5rem; color: #003057;">📊 Recent Transactions</h2>
+                    <div id="transactionsList"></div>
                 </div>
             </div>
         </div>
@@ -790,6 +749,77 @@
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('memberContent').style.display = 'block';
             document.getElementById('memberName').textContent = memberName;
+            
+            // Load financial data
+            loadFinancialData();
+        }
+
+        async function loadFinancialData() {
+            try {
+                // Get balance sheet
+                const balanceDoc = await db.collection('financial').doc('balance').get();
+                
+                if (balanceDoc.exists) {
+                    const balance = balanceDoc.data();
+                    
+                    // Update balance cards
+                    document.getElementById('checkingBalance').textContent = 
+                        '$' + (balance.checking || 0).toFixed(2);
+                    document.getElementById('savingsBalance').textContent = 
+                        '$' + (balance.savings || 0).toFixed(2);
+                    document.getElementById('totalBalance').textContent = 
+                        '$' + ((balance.checking || 0) + (balance.savings || 0)).toFixed(2);
+                }
+
+                // Get recent transactions (last 20)
+                const transactionsSnapshot = await db.collection('financial')
+                    .doc('transactions')
+                    .collection('entries')
+                    .orderBy('date', 'desc')
+                    .limit(20)
+                    .get();
+
+                const transactionsList = document.getElementById('transactionsList');
+                transactionsList.innerHTML = '';
+
+                if (transactionsSnapshot.empty) {
+                    transactionsList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">No transactions found.</p>';
+                } else {
+                    transactionsSnapshot.forEach(doc => {
+                        const txn = doc.data();
+                        const date = txn.date.toDate();
+                        const isIncome = txn.type === 'income';
+                        
+                        const html = `
+                            <div style="padding: 1.5rem; border-bottom: 1px solid #e0e0e0; display: grid; grid-template-columns: 60px 1fr auto auto; gap: 1rem; align-items: center;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #003057; line-height: 1;">${date.getDate()}</div>
+                                    <div style="font-size: 0.75rem; color: #666; text-transform: uppercase;">${date.toLocaleString('en', { month: 'short' })}</div>
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0 0 0.25rem; color: #333;">${txn.description || 'Transaction'}</h4>
+                                    <p style="margin: 0; color: #666; font-size: 0.9rem;">${txn.category || 'General'} • ${txn.account || 'Checking'}</p>
+                                </div>
+                                <span style="padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: ${isIncome ? '#e8f5e9' : '#ffebee'}; color: ${isIncome ? '#2e7d32' : '#c62828'};">
+                                    ${txn.type}
+                                </span>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: ${isIncome ? '#2e7d32' : '#c62828'};">
+                                    ${isIncome ? '+' : '-'}$${Math.abs(txn.amount || 0).toFixed(2)}
+                                </div>
+                            </div>
+                        `;
+                        transactionsList.innerHTML += html;
+                    });
+                }
+
+                document.getElementById('loadingFinancials').style.display = 'none';
+                document.getElementById('financialContent').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error loading financial data:', error);
+                document.getElementById('loadingFinancials').innerHTML = 
+                    '<p style="color: #c62828;">❌ Error loading financial data. Please try again.</p>';
+            }
         }
 
         function logout() {
