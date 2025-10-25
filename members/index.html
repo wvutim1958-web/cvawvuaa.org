@@ -866,13 +866,19 @@
 
                 // In production, you would send an email here
                 // For now, we'll show the reset info in the success message
+                const resetLink = `${window.location.origin}/members/reset-password.html?token=${resetToken}`;
+                
                 successDiv.innerHTML = `
-                    <strong>Password reset instructions sent!</strong><br>
+                    <strong>✅ Password reset code generated!</strong><br>
                     <br>
                     Your username: <strong>${memberData.username || 'Not set yet'}</strong><br>
                     Reset code: <strong>${resetToken}</strong><br>
                     <br>
-                    <small>This code expires in 30 minutes. In production, this would be emailed to you.</small>
+                    <a href="${resetLink}" style="display: inline-block; margin-top: 0.5rem; padding: 0.5rem 1rem; background: #002855; color: white; text-decoration: none; border-radius: 5px; font-weight: 600;">
+                        Reset Password Now →
+                    </a>
+                    <br><br>
+                    <small>Code expires in 30 minutes. In production, this would be emailed to you at ${email}.</small>
                 `;
                 successDiv.style.display = 'block';
 
@@ -880,7 +886,7 @@
                 // The email should contain:
                 // - Username: ${memberData.username}
                 // - Reset link: https://cvawvuaa.org/members/reset-password.html?token=${resetToken}
-                // - Or just the 6-digit code: ${resetToken}
+                // - Reset code: ${resetToken} (for manual entry)
 
             } catch (error) {
                 errorDiv.textContent = error.message;
