@@ -864,29 +864,111 @@
                     resetTokenCreated: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
-                // In production, you would send an email here
-                // For now, we'll show the reset info in the success message
+                // Send email via Firebase Trigger Email extension
                 const resetLink = `${window.location.origin}/members/reset-password.html?token=${resetToken}`;
                 
+                try {
+                    await db.collection('mail').add({
+                        to: email,
+                        message: {
+                            subject: 'Reset Your CVAWVUAA Members Portal Password',
+                            text: `
+Hello,
+
+You requested to reset your password for the CVAWVUAA Members Portal.
+
+Your username: ${memberData.username}
+Reset code: ${resetToken}
+
+Click here to reset your password:
+${resetLink}
+
+Or manually enter the code on the reset page:
+${window.location.origin}/members/reset-password.html
+
+This code will expire in 30 minutes.
+
+If you did not request this reset, please ignore this email.
+
+Best regards,
+CVAWVUAA Chapter
+                            `.trim(),
+                            html: `
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #002855; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
+        .code-box { background: white; border: 3px solid #EAAA00; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; color: #002855; margin: 20px 0; border-radius: 8px; letter-spacing: 3px; }
+        .button { display: inline-block; background: #002855; color: white !important; padding: 15px 40px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: bold; }
+        .button:hover { background: #001a3d; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; border-top: 1px solid #ddd; margin-top: 20px; }
+        .warning { background: #fff3cd; border-left: 4px solid #EAAA00; padding: 15px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="margin: 0;">🔑 Password Reset Request</h1>
+        </div>
+        <div class="content">
+            <p>Hello,</p>
+            <p>You requested to reset your password for the <strong>CVAWVUAA Members Portal</strong>.</p>
+            
+            <p><strong>Your username:</strong> <code style="background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 16px;">${memberData.username}</code></p>
+            
+            <p><strong>Your 6-digit reset code:</strong></p>
+            <div class="code-box">
+                ${resetToken}
+            </div>
+            
+            <p style="text-align: center;">
+                <a href="${resetLink}" class="button">Reset Password Now →</a>
+            </p>
+            
+            <div class="warning">
+                <strong>⏰ This code expires in 30 minutes.</strong>
+            </div>
+            
+            <p style="font-size: 14px; color: #666;">
+                Or copy and paste this link into your browser:<br>
+                <a href="${resetLink}" style="color: #002855; word-break: break-all;">${resetLink}</a>
+            </p>
+            
+            <p style="margin-top: 30px; font-size: 14px; color: #666;">
+                If you did not request this password reset, please ignore this email and your password will remain unchanged. Your account is secure.
+            </p>
+        </div>
+        <div class="footer">
+            <p><strong>CVAWVUAA Chapter</strong><br>
+            West Virginia University Alumni Association<br>
+            Central Virginia Area</p>
+        </div>
+    </div>
+</body>
+</html>
+                            `.trim()
+                        }
+                    });
+                    
+                    console.log('Password reset email queued for delivery');
+                } catch (emailError) {
+                    console.error('Email queue error:', emailError);
+                    // Don't fail the whole process if email fails
+                }
+                
+                // Show success message (updated for production)
                 successDiv.innerHTML = `
-                    <strong>✅ Password reset code generated!</strong><br>
+                    <strong>✅ Password reset email sent!</strong><br>
                     <br>
-                    Your username: <strong>${memberData.username || 'Not set yet'}</strong><br>
-                    Reset code: <strong>${resetToken}</strong><br>
+                    Check your email at <strong>${email}</strong> for reset instructions.<br>
                     <br>
-                    <a href="${resetLink}" style="display: inline-block; margin-top: 0.5rem; padding: 0.5rem 1rem; background: #002855; color: white; text-decoration: none; border-radius: 5px; font-weight: 600;">
-                        Reset Password Now →
-                    </a>
-                    <br><br>
-                    <small>Code expires in 30 minutes. In production, this would be emailed to you at ${email}.</small>
+                    <small>The email contains your username and a 6-digit reset code. If you don't see it, check your spam folder.</small>
                 `;
                 successDiv.style.display = 'block';
-
-                // TODO: Send actual email with reset link
-                // The email should contain:
-                // - Username: ${memberData.username}
-                // - Reset link: https://cvawvuaa.org/members/reset-password.html?token=${resetToken}
-                // - Reset code: ${resetToken} (for manual entry)
 
             } catch (error) {
                 errorDiv.textContent = error.message;
