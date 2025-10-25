@@ -310,7 +310,7 @@
                     <input 
                         type="text" 
                         id="loginInput" 
-                        placeholder="username OR lastname+streetnumber (e.g., casten4701)"
+                        placeholder="username OR lastname+streetnumber (e.g., darby1212)"
                         required
                         autocomplete="off">
                 </div>
@@ -331,8 +331,8 @@
 
             <div class="login-help">
                 <h4>📋 How to Login:</h4>
-                <p><strong>With Username:</strong> Enter your username and password</p>
-                <p><strong>Without Username:</strong> Enter your last name + street address number (e.g., casten4701)</p>
+                <p><strong>First Time:</strong> Enter your last name + street number (e.g., darby1212). You will be asked to create a username and password.</p>
+                <p><strong>Returning:</strong> Use your username and password, or last name + street number.</p>
                 <p><strong>Note:</strong> All lowercase, no spaces or special characters</p>
             </div>
         </div>
@@ -499,8 +499,7 @@
     <script src="/admin/js/firebase-config.js"></script>
 
     <script>
-        // Global variables
-        const db = firebase.firestore();
+        // Global variables (db is already declared in firebase-config.js)
         let currentMemberId = null;
         let pendingMemberData = null; // Store member data while showing setup modal
         
