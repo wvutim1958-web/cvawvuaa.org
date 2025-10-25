@@ -327,12 +327,18 @@
                 <button type="submit" class="login-button">
                     🔓 Access Member Portal
                 </button>
+                
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="#" onclick="showForgotPassword(); return false;" style="color: #EAAA00; text-decoration: none; font-size: 0.9rem;">
+                        Forgot Username or Password?
+                    </a>
+                </div>
             </form>
 
             <div class="login-help">
                 <h4>📋 How to Login:</h4>
                 <p><strong>First Time:</strong> Enter your last name + street number (e.g., darby1212). You will be asked to create a username and password.</p>
-                <p><strong>Returning:</strong> Use your username and password, or last name + street number.</p>
+                <p><strong>Returning:</strong> Use your username and password.</p>
                 <p><strong>Note:</strong> All lowercase, no spaces or special characters</p>
             </div>
         </div>
@@ -439,7 +445,7 @@
     <div id="setupModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center;">
         <div style="background: white; padding: 2.5rem; border-radius: 15px; max-width: 500px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
             <h2 style="color: #002855; margin: 0 0 1rem;">🔐 Setup Your Login Credentials</h2>
-            <p style="color: #666; margin-bottom: 2rem;">Create a username and password for easier access next time. You won't need to enter your street number again!</p>
+            <p style="color: #666; margin-bottom: 2rem;"><strong>Required:</strong> Create a username and password to access the members portal. This is a one-time setup for security.</p>
             
             <div id="setupError" style="display: none; background: #fee; color: #c00; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;"></div>
             
@@ -482,10 +488,40 @@
                 
                 <div style="display: flex; gap: 1rem;">
                     <button type="submit" style="flex: 1; padding: 0.75rem; background: #002855; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem;">
-                        Create Credentials
+                        ✓ Create Credentials
                     </button>
-                    <button type="button" onclick="skipSetup()" style="flex: 1; padding: 0.75rem; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem;">
-                        Skip for Now
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div id="forgotPasswordModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 2.5rem; border-radius: 15px; max-width: 500px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+            <h2 style="color: #002855; margin: 0 0 1rem;">🔑 Forgot Your Login?</h2>
+            <p style="color: #666; margin-bottom: 2rem;">Enter your email address and we'll send you a password reset link.</p>
+            
+            <div id="forgotError" style="display: none; background: #fee; color: #c00; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;"></div>
+            <div id="forgotSuccess" style="display: none; background: #d4edda; color: #155724; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;"></div>
+            
+            <form id="forgotForm" onsubmit="handleForgotPassword(event)">
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #333;">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="forgotEmail" 
+                        placeholder="Your email on file"
+                        required
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #dee2e6; border-radius: 8px; font-size: 1rem; box-sizing: border-box;">
+                    <small style="color: #666; font-size: 0.85rem;">We'll send your username and a password reset link</small>
+                </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" style="flex: 1; padding: 0.75rem; background: #002855; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem;">
+                        Send Reset Link
+                    </button>
+                    <button type="button" onclick="closeForgotPassword()" style="flex: 1; padding: 0.75rem; background: #6c757d; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem;">
+                        Cancel
                     </button>
                 </div>
             </form>
@@ -607,13 +643,13 @@
             };
         }
 
-        // Verify traditional lastname+number login
+        // Verify traditional lastname+number login (ONLY for first-time setup)
         async function verifyTraditionalLogin(loginInput) {
-            // Parse input - expect format like "casten4701"
+            // Parse input - expect format like "darby1212"
             const match = loginInput.match(/^([a-z]+)(\d+)$/);
             
             if (!match) {
-                throw new Error('Invalid format. Use lastname+number (e.g., casten4701) or your username');
+                throw new Error('Invalid format. Use lastname+number (e.g., darby1212) or your username');
             }
             
             const [, lastName, streetNumber] = match;
@@ -640,6 +676,11 @@
                 throw new Error('Member not found. Please check your last name and street number.');
             }
             
+            // Check if member already has credentials - they must use username/password
+            if (foundMember.username) {
+                throw new Error('You have already created a username and password. Please use your username to login, or click "Forgot Password" below.');
+            }
+            
             // Check if member is active
             if (foundMember.status !== 'active') {
                 throw new Error('Your membership is not currently active. Please renew to access the portal.');
@@ -649,7 +690,7 @@
                 id: foundMember.id,
                 name: foundMember.name,
                 email: foundMember.email,
-                username: foundMember.username // May be undefined
+                username: foundMember.username // Will be undefined for first-time
             };
         }
 
@@ -724,14 +765,6 @@
             }
         }
 
-        // Skip credential setup
-        function skipSetup() {
-            if (confirm('Skip for now? You\'ll need to use lastname+streetnumber to login next time.')) {
-                document.getElementById('setupModal').style.display = 'none';
-                showMemberPortal();
-            }
-        }
-
         // Show password field dynamically based on input
         document.addEventListener('DOMContentLoaded', function() {
             const loginInput = document.getElementById('loginInput');
@@ -769,6 +802,94 @@
             document.getElementById('memberContent').style.display = 'none';
             document.getElementById('loginInput').value = '';
             document.getElementById('loginPassword').value = '';
+        }
+
+        // Show forgot password modal
+        function showForgotPassword() {
+            document.getElementById('forgotPasswordModal').style.display = 'flex';
+            document.getElementById('forgotEmail').focus();
+            document.getElementById('forgotError').style.display = 'none';
+            document.getElementById('forgotSuccess').style.display = 'none';
+        }
+
+        // Close forgot password modal
+        function closeForgotPassword() {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+            document.getElementById('forgotEmail').value = '';
+            document.getElementById('forgotError').style.display = 'none';
+            document.getElementById('forgotSuccess').style.display = 'none';
+        }
+
+        // Handle forgot password submission
+        async function handleForgotPassword(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+            const errorDiv = document.getElementById('forgotError');
+            const successDiv = document.getElementById('forgotSuccess');
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            try {
+                // Find member by email
+                const snapshot = await db.collection('members')
+                    .where('email', '==', email)
+                    .limit(1)
+                    .get();
+
+                if (snapshot.empty) {
+                    throw new Error('No member found with that email address.');
+                }
+
+                const memberDoc = snapshot.docs[0];
+                const memberData = memberDoc.data();
+
+                // Check if member is active
+                if (memberData.status !== 'active') {
+                    throw new Error('Your membership is not active. Please contact the administrator.');
+                }
+
+                // Generate a temporary reset token (6-digit code)
+                const resetToken = Math.floor(100000 + Math.random() * 900000).toString();
+                const resetExpires = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
+
+                // Save reset token to member document
+                await db.collection('members').doc(memberDoc.id).update({
+                    resetToken: resetToken,
+                    resetExpires: resetExpires,
+                    resetTokenCreated: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // In production, you would send an email here
+                // For now, we'll show the reset info in the success message
+                successDiv.innerHTML = `
+                    <strong>Password reset instructions sent!</strong><br>
+                    <br>
+                    Your username: <strong>${memberData.username || 'Not set yet'}</strong><br>
+                    Reset code: <strong>${resetToken}</strong><br>
+                    <br>
+                    <small>This code expires in 30 minutes. In production, this would be emailed to you.</small>
+                `;
+                successDiv.style.display = 'block';
+
+                // TODO: Send actual email with reset link
+                // The email should contain:
+                // - Username: ${memberData.username}
+                // - Reset link: https://cvawvuaa.org/members/reset-password.html?token=${resetToken}
+                // - Or just the 6-digit code: ${resetToken}
+
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+                console.error('Forgot password error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Reset Link';
+            }
         }
     </script>
 
