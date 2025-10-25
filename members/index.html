@@ -426,36 +426,97 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/admin/js/firebase-config.js"></script>
+
     <script>
-        // Member database (lastname + street number format)
-        const memberCredentials = {
-            'casten4701': { name: 'Tim Casten', email: 'cvcwvuaa@gmail.com' },
-            'scrimizzi': { name: 'Nancy Scrimizzi', email: '' },
-            'fletcher': { name: 'Melvin Fletcher', email: '' },
-            // Add more members here in format: 'lastnamestreeetnumber': { name: 'Full Name', email: 'email@example.com' }
-        };
+        let db = null;
+        
+        // Initialize Firebase
+        window.addEventListener('load', () => {
+            if (typeof firebase !== 'undefined' && firebase.firestore) {
+                db = firebase.firestore();
+                console.log('Firebase connected for member portal');
+            } else {
+                console.error('Firebase not available');
+            }
+            
+            // Check if already logged in
+            if (sessionStorage.getItem('memberAuth')) {
+                showMemberPortal();
+            }
+        });
 
-        // Check if already logged in
-        if (sessionStorage.getItem('memberAuth')) {
-            showMemberPortal();
-        }
-
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
+            
+            if (!db) {
+                alert('System not ready. Please refresh the page.');
+                return;
+            }
             
             const input = document.getElementById('loginInput');
             const loginValue = input.value.toLowerCase().trim();
             const errorMsg = document.getElementById('errorMessage');
+            const loginBtn = event.target.querySelector('button');
             
-            // Check if credentials match
-            if (memberCredentials[loginValue]) {
-                // Successful login
+            // Disable button during check
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Verifying...';
+            
+            try {
+                // Parse input - expect format like "casten4701" (lastname + streetnumber)
+                // Extract potential last name and street number
+                const match = loginValue.match(/^([a-z]+)(\d+)$/);
+                
+                if (!match) {
+                    throw new Error('Please enter in format: LastNameStreetNumber (e.g., smith123)');
+                }
+                
+                const [, lastName, streetNumber] = match;
+                
+                // Query Firebase for member
+                const snapshot = await db.collection('members')
+                    .get();
+                
+                let foundMember = null;
+                
+                snapshot.docs.forEach(doc => {
+                    const member = doc.data();
+                    const memberLastName = (member.name || '').split(' ').pop().toLowerCase();
+                    const memberStreetNum = (member.address || '').match(/^\d+/)?.[0] || '';
+                    
+                    if (memberLastName === lastName && memberStreetNum === streetNumber) {
+                        foundMember = {
+                            id: doc.id,
+                            ...member
+                        };
+                    }
+                });
+                
+                if (!foundMember) {
+                    throw new Error('Member not found. Please check your last name and street number.');
+                }
+                
+                // Check if member is active
+                if (foundMember.status !== 'active') {
+                    throw new Error('Your membership is not currently active. Please renew your membership to access the members area.');
+                }
+                
+                // Successful login - store in session
                 sessionStorage.setItem('memberAuth', 'true');
-                sessionStorage.setItem('memberLogin', loginValue);
-                sessionStorage.setItem('memberName', memberCredentials[loginValue].name);
+                sessionStorage.setItem('memberId', foundMember.id);
+                sessionStorage.setItem('memberName', foundMember.name);
+                sessionStorage.setItem('memberEmail', foundMember.email || '');
+                
                 showMemberPortal();
-            } else {
-                // Failed login
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMsg.textContent = error.message || 'Invalid credentials. Please try again.';
                 errorMsg.style.display = 'block';
                 input.value = '';
                 input.classList.add('shake');
@@ -463,7 +524,10 @@
                 setTimeout(() => {
                     input.classList.remove('shake');
                     errorMsg.style.display = 'none';
-                }, 3000);
+                }, 4000);
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Access Member Portal';
             }
         }
 
@@ -477,8 +541,9 @@
 
         function logout() {
             sessionStorage.removeItem('memberAuth');
-            sessionStorage.removeItem('memberLogin');
+            sessionStorage.removeItem('memberId');
             sessionStorage.removeItem('memberName');
+            sessionStorage.removeItem('memberEmail');
             
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('memberContent').style.display = 'none';
