@@ -396,8 +396,7 @@
     <div class="action-buttons no-print">
         <button class="btn" onclick="printReceipt()">🖨️ Print Receipt</button>
         <button class="btn btn-secondary" onclick="saveAsPDF()">📄 Save as PDF</button>
-        <button class="btn btn-secondary" onclick="emailReceipt()">📧 Email Receipt</button>
-        <button class="btn btn-secondary" onclick="showHTMLEmail()">📧 HTML Email Code</button>
+        <button class="btn btn-secondary" onclick="emailReceipt()">📧 Email Receipt (HTML)</button>
         <button class="btn" onclick="newReceipt()">📝 New Receipt</button>
     </div>
     
@@ -553,6 +552,10 @@
                 return;
             }
             
+            if (!confirm(`Send receipt to ${memberEmail}?`)) {
+                return;
+            }
+            
             // Save receipt to Firebase first
             await saveReceiptToFirebase();
             
@@ -574,8 +577,11 @@
             // Create receipt viewer URL
             const receiptViewerURL = `${window.location.origin}/admin/receipt-viewer.html?receipt=${receiptNumber}`;
             
-            // Create email body with link to view online
-            const emailBody = `Dear ${memberName},
+            // Create HTML email
+            const htmlEmail = createHTMLEmailReceipt();
+            
+            // Create plain text version
+            const textEmail = `Dear ${memberName},
 
 Thank you for your payment to the Central Virginia Chapter of the West Virginia University Alumni Association.
 
@@ -613,16 +619,27 @@ Website: www.cvawvuaa.org
 
 This receipt was generated on ${new Date().toLocaleString()}`;
             
-            // Open email client
-            const mailtoLink = `mailto:${memberEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-            window.location.href = mailtoLink;
-            
-            // Show option for HTML email
-            setTimeout(() => {
-                if (confirm('Email client opened with receipt link. Would you like to also get the HTML email code for a more professional look?')) {
-                    showHTMLEmail();
-                }
-            }, 1000);
+            try {
+                // Send email via Firebase Trigger Email extension
+                await db.collection('mail').add({
+                    to: memberEmail,
+                    bcc: 'cvcwvuaa@gmail.com', // BCC to admin for tracking
+                    message: {
+                        subject: emailSubject,
+                        text: textEmail,
+                        html: htmlEmail
+                    }
+                });
+                
+                // Update delivery status
+                await updateDeliveryStatus('emailedHTML', true);
+                
+                alert('✅ Receipt email sent successfully!\n\nA copy has been sent to your Gmail for tracking.');
+                
+            } catch (error) {
+                console.error('Error sending email:', error);
+                alert('❌ Error sending email. Please try again or use the Email Link option.');
+            }
         }
         
         function showHTMLEmailDialog(emailAddress, subject) {

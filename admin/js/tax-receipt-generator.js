@@ -249,67 +249,88 @@ async function emailReceipt() {
         return;
     }
     
-    // Save receipt to Firebase FIRST before opening email
+    if (!currentReceipt.donorEmail || currentReceipt.donorEmail.trim() === '') {
+        alert('No email address available for this donor. Please add an email address first.');
+        return;
+    }
+    
+    if (!confirm(`Send tax receipt to ${currentReceipt.donorEmail}?`)) {
+        return;
+    }
+    
+    // Save receipt to Firebase FIRST before sending
     await saveReceiptToFirebase();
     
     // Create receipt URL
     const receiptURL = `https://cvawvuaa.org/admin/tax-receipt-viewer.html?receipt=${currentReceipt.receiptNumber}`;
     
-    const subject = encodeURIComponent(`Tax-Deductible Donation Receipt - ${currentReceipt.receiptNumber}`);
+    // Create HTML email
+    const htmlEmail = generateTaxReceiptHTML();
     
-    // Create both plain text and HTML-friendly email
-    const emailBody = encodeURIComponent(
-        `Dear ${currentReceipt.donorName},\n\n` +
-        `Thank you for your generous donation to the Central Virginia Chapter of the WVU Alumni Association!\n\n` +
-        `Your official tax-deductible receipt is available at:\n` +
-        `${receiptURL}\n\n` +
-        `RECEIPT SUMMARY\n` +
-        `Receipt Number: ${currentReceipt.receiptNumber}\n` +
-        `Date: ${formatDate(new Date(currentReceipt.donationDate))}\n` +
-        `Donation Type: ${currentReceipt.donationType}\n` +
-        `Amount: $${currentReceipt.donationAmount.toFixed(2)}\n` +
-        `Payment Method: ${currentReceipt.donationMethod}\n\n` +
-        `TAX INFORMATION\n` +
-        `The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization.\n` +
-        `EIN: 54-1991299\n` +
-        `Your contribution is tax-deductible to the extent allowed by law.\n` +
-        `No goods or services were provided in exchange for this donation.\n\n` +
-        `${currentReceipt.donationNotes ? `Notes: ${currentReceipt.donationNotes}\n\n` : ''}` +
-        `You can view, print, or save your official receipt using the link above.\n\n` +
-        `Thank you for your generous support!\n\n` +
-        `Let's Go! Mountaineers!!!!\n\n` +
-        `Central Virginia Chapter\n` +
-        `West Virginia University Alumni Association\n` +
-        `cvcwvuaa@gmail.com\n` +
-        `https://cvawvuaa.org`
-    );
+    // Create plain text version
+    const textEmail = `Dear ${currentReceipt.donorName},
+
+Thank you for your generous donation to the Central Virginia Chapter of the WVU Alumni Association!
+
+Your official tax-deductible receipt is available at:
+${receiptURL}
+
+RECEIPT SUMMARY
+Receipt Number: ${currentReceipt.receiptNumber}
+Date: ${formatDate(new Date(currentReceipt.donationDate))}
+Donation Type: ${currentReceipt.donationType}
+Amount: $${currentReceipt.donationAmount.toFixed(2)}
+Payment Method: ${currentReceipt.donationMethod}
+
+TAX INFORMATION
+The Central Virginia Chapter of the WVU Alumni Association is recognized as a 501(c)(3) tax-exempt organization.
+EIN: 54-1991299
+Your contribution is tax-deductible to the extent allowed by law.
+No goods or services were provided in exchange for this donation.
+
+${currentReceipt.donationNotes ? `Notes: ${currentReceipt.donationNotes}\n\n` : ''}You can view, print, or save your official receipt using the link above.
+
+Thank you for your generous support!
+
+Let's Go! Mountaineers!!!!
+
+Central Virginia Chapter
+West Virginia University Alumni Association
+Email: cvcwvuaa@gmail.com
+Website: https://cvawvuaa.org
+Phone: (804) 566-8058`;
     
-    const mailtoLink = `mailto:${currentReceipt.donorEmail || ''}?subject=${subject}&body=${emailBody}`;
-    
-    window.location.href = mailtoLink;
-    
-    // Auto-check the emailed link checkbox
-    if (document.getElementById('tax-status-email-link')) {
-        document.getElementById('tax-status-email-link').checked = true;
-        updateTaxDeliveryStatus();
+    try {
+        // Send email via Firebase
+        await db.collection('mail').add({
+            to: currentReceipt.donorEmail,
+            bcc: 'cvcwvuaa@gmail.com', // BCC to admin for tracking
+            message: {
+                subject: `Tax-Deductible Donation Receipt - ${currentReceipt.receiptNumber}`,
+                text: textEmail,
+                html: htmlEmail
+            }
+        });
+        
+        // Auto-check the emailed HTML checkbox
+        if (document.getElementById('tax-status-email-html')) {
+            document.getElementById('tax-status-email-html').checked = true;
+            updateTaxDeliveryStatus();
+        }
+        
+        alert('✅ Tax receipt email sent successfully!\n\nA copy has been sent to your Gmail for tracking.');
+        
+    } catch (error) {
+        console.error('Error sending email:', error);
+        alert('❌ Error sending email. Please try again.');
     }
-    
-    alert('📧 Email client opened!\n\n⚠️ IMPORTANT: Please send this email from cvcwvuaa@gmail.com\n\nThe email includes:\n✓ Link to official receipt\n✓ Receipt summary\n✓ Tax information\n\nReview and click Send.');
 }
 
-// Show HTML Email Code Modal
-async function showHTMLEmail() {
-    if (!currentReceipt) {
-        alert('No receipt to generate HTML for. Please generate a receipt first.');
-        return;
-    }
-    
-    // Save receipt to Firebase FIRST
-    await saveReceiptToFirebase();
-    
+// Generate HTML email for tax receipt
+function generateTaxReceiptHTML() {
     const receiptURL = `https://cvawvuaa.org/admin/tax-receipt-viewer.html?receipt=${currentReceipt.receiptNumber}`;
     
-    const htmlCode = `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -418,9 +439,19 @@ async function showHTMLEmail() {
     </table>
 </body>
 </html>`;
+}
+
+// Show HTML Email Code Modal (keeping for manual copy if needed)
+async function showHTMLEmail() {
+    if (!currentReceipt) {
+        alert('No receipt to generate HTML for. Please generate a receipt first.');
+        return;
+    }
     
-    // Save receipt to Firebase first
-    saveReceiptToFirebase();
+    // Save receipt to Firebase FIRST
+    await saveReceiptToFirebase();
+    
+    const htmlCode = generateTaxReceiptHTML();
     
     // Display in modal
     document.getElementById('htmlCodeTextarea').value = htmlCode;

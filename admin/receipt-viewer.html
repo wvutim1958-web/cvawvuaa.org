@@ -468,34 +468,59 @@
         /**
          * Email receipt to member
          */
-        function emailReceipt() {
+        async function emailReceipt() {
             if (!memberId) {
                 alert('Member ID not found');
                 return;
             }
 
-            // Get current receipt URL
-            const receiptURL = window.location.href;
-            
-            // Get member info if available
-            receiptDb.collection('members').doc(memberId).get().then(doc => {
-                if (!doc.exists) {
+            try {
+                // Get member info
+                const memberDoc = await receiptDb.collection('members').doc(memberId).get();
+                
+                if (!memberDoc.exists) {
                     alert('Member not found');
                     return;
                 }
                 
-                const member = doc.data();
+                const member = memberDoc.data();
                 const memberEmail = member.email || '';
                 const memberName = member.name || 'Member';
+                
+                if (!memberEmail || memberEmail.trim() === '') {
+                    alert('No email address available for this member. Please add an email address first.');
+                    return;
+                }
+                
+                if (!confirm(`Send receipt to ${memberEmail}?`)) {
+                    return;
+                }
+                
+                // Get current receipt URL
+                const receiptURL = window.location.href;
                 const firstName = memberName.split(' ')[0];
                 
-                // Create email content
-                const subject = encodeURIComponent('Your CVCWVUAA Payment Receipt');
-                const body = encodeURIComponent(`Dear ${firstName},
+                // Get receipt details from page
+                const receiptNumber = document.getElementById('receiptNumber')?.textContent || 'N/A';
+                const totalAmount = document.getElementById('totalAmount')?.textContent || '$0.00';
+                const paymentDate = document.getElementById('paymentDate')?.textContent || 'N/A';
+                const paymentMethod = document.getElementById('paymentMethod')?.textContent || 'N/A';
+                
+                // Create HTML email
+                const htmlEmail = createHTMLEmailReceipt();
+                
+                // Create plain text version
+                const textEmail = `Dear ${firstName},
 
 Thank you for your payment to the Central Virginia Chapter of the WVU Alumni Association!
 
-Your payment receipt is available at the link below:
+RECEIPT DETAILS:
+Receipt Number: ${receiptNumber}
+Payment Date: ${paymentDate}
+Total Amount: ${totalAmount}
+Payment Method: ${paymentMethod}
+
+VIEW RECEIPT ONLINE:
 ${receiptURL}
 
 You can print or save this receipt for your records.
@@ -505,44 +530,48 @@ If you have any questions about this payment, please don't hesitate to contact u
 Let's Go! Mountaineers!!!!
 
 Central Virginia Chapter WVU Alumni Association
-cvcwvuaa@gmail.com
-https://cvawvuaa.org`);
+Email: cvcwvuaa@gmail.com
+Website: https://cvawvuaa.org
+Phone: (804) 566-8058`;
 
-                // Create mailto link
-                const mailtoLink = `mailto:${memberEmail}?subject=${subject}&body=${body}`;
+                // Send email via Firebase
+                await receiptDb.collection('mail').add({
+                    to: memberEmail,
+                    bcc: 'cvcwvuaa@gmail.com', // BCC to admin for tracking
+                    message: {
+                        subject: `Your CVCWVUAA Payment Receipt - ${receiptNumber}`,
+                        text: textEmail,
+                        html: htmlEmail
+                    }
+                });
                 
                 // Log communication
-                receiptDb.collection('communications').add({
+                await receiptDb.collection('communications').add({
                     memberId: memberId,
                     type: 'receipt',
                     details: `Receipt emailed to ${memberEmail}`,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     sentBy: 'Admin User',
-                    method: 'Email',
+                    method: 'Email (HTML)',
                     metadata: {
                         receiptUrl: receiptURL,
-                        recipientEmail: memberEmail
+                        recipientEmail: memberEmail,
+                        receiptNumber: receiptNumber
                     }
-                }).then(() => {
-                    console.log('Logged receipt email communication');
-                }).catch(err => {
-                    console.error('Error logging communication:', err);
                 });
                 
-                // Open email client
-                window.location.href = mailtoLink;
+                // Auto-check the emailed HTML checkbox
+                if (document.getElementById('status-email-html')) {
+                    document.getElementById('status-email-html').checked = true;
+                    updateDeliveryStatus();
+                }
                 
-                // Auto-check the emailed link checkbox
-                setTimeout(() => {
-                    if (document.getElementById('status-email-link')) {
-                        document.getElementById('status-email-link').checked = true;
-                        updateDeliveryStatus();
-                    }
-                }, 500);
-            }).catch(error => {
-                console.error('Error getting member info:', error);
-                alert('Error loading member information');
-            });
+                alert('✅ Receipt email sent successfully!\n\nA copy has been sent to your Gmail for tracking.');
+                
+            } catch (error) {
+                console.error('Error sending email:', error);
+                alert('❌ Error sending email. Please try again.');
+            }
         }
 
         async function loadReceipt() {
