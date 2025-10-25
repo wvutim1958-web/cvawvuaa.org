@@ -3,223 +3,514 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Portal - Coming Soon | CVAWVUAA</title>
-    <link rel="stylesheet" href="/css/styles.min.css">
+    <title>Member Portal - Financial Dashboard | CVAWVUAA</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/wvu-components.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <style>
-        .coming-soon-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 60px 40px;
-            text-align: center;
+        body {
+            background: #f5f7fa;
+        }
+
+        .login-container {
+            max-width: 450px;
+            margin: 100px auto;
+            padding: 40px;
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .coming-soon-icon {
-            font-size: 80px;
-            color: #0066cc;
+        .login-header {
+            text-align: center;
             margin-bottom: 30px;
         }
 
-        .coming-soon-title {
-            font-size: 48px;
-            color: #333;
+        .login-header h1 {
+            color: #003057;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
             margin-bottom: 20px;
-            font-weight: 300;
         }
 
-        .coming-soon-subtitle {
-            font-size: 24px;
-            color: #e74c3c;
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
             font-weight: 600;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
-        .coming-soon-description {
-            font-size: 18px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
         }
 
-        .back-home {
-            display: inline-block;
-            padding: 15px 30px;
-            background: #0066cc;
+        .form-group input:focus {
+            outline: none;
+            border-color: #003057;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #003057;
             color: white;
-            text-decoration: none;
-            border-radius: 25px;
+            border: none;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
+            cursor: pointer;
             transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #0062a3;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .forgot-password {
+            text-align: center;
             margin-top: 20px;
         }
 
-        .back-home:hover {
-            background: #0052a3;
+        .forgot-password a {
+            color: #003057;
+            text-decoration: none;
         }
 
-        @media (max-width: 768px) {
-            .coming-soon-container {
-                margin: 20px;
-                padding: 40px 20px;
-            }
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
 
-            .coming-soon-title {
-                font-size: 36px;
-            }
+        /* Portal Content */
+        .portal-container {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-            .coming-soon-subtitle {
-                font-size: 20px;
-            }
+        .portal-header {
+            background: linear-gradient(135deg, #003057, #0062a3);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .portal-header h1 {
+            margin: 0;
+            color: white;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: white;
+            color: #003057;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .balance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .balance-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+        }
+
+        .balance-card.checking {
+            border-left-color: #2196f3;
+        }
+
+        .balance-card.savings {
+            border-left-color: #4caf50;
+        }
+
+        .balance-card.total {
+            border-left-color: #ff9800;
+        }
+
+        .balance-card h3 {
+            margin: 0 0 1rem;
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #003057;
+            margin: 0;
+        }
+
+        .balance-label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.5rem;
+        }
+
+        .transactions-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .transactions-section h2 {
+            margin: 0 0 1.5rem;
+            color: #003057;
+        }
+
+        .transaction {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: grid;
+            grid-template-columns: 60px 1fr auto auto;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .transaction:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-date {
+            text-align: center;
+        }
+
+        .transaction-date .day {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #003057;
+            line-height: 1;
+        }
+
+        .transaction-date .month {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .transaction-details h4 {
+            margin: 0 0 0.25rem;
+            color: #333;
+        }
+
+        .transaction-details p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .transaction-category {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .category-income {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .category-expense {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .transaction-amount {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .transaction-amount.positive {
+            color: #2e7d32;
+        }
+
+        .transaction-amount.negative {
+            color: #c62828;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-brand">
-            <a href="/">CVAWVUAA</a>
-        </div>
-        <ul class="nav-menu">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about.html">About</a></li>
-            <li><a href="/events.html">Events</a></li>
-            <li><a href="/membership.html">Membership</a></li>
-            <li><a href="/contact.html">Contact</a></li>
-        </ul>
-    </nav>
+    <!-- WVU Header Component -->
+    <div id="wvu-header"></div>
 
-    <main>
-        <div class="coming-soon-container" id="portal-container">
-            <h1 class="coming-soon-title">Member Portal</h1>
-            <div id="login-section">
-                <div class="coming-soon-subtitle">Members Login</div>
-                <div class="coming-soon-description">
-                    Please log in using your username (lastname + address numbers).<br>
-                    <input type="text" id="username" placeholder="Username" style="margin-top:10px;">
-                    <button onclick="loginMember()" style="margin-left:10px;">Login</button>
-                    <div id="login-error" style="color:#e74c3c;margin-top:10px;"></div>
-                </div>
-            </div>
-            <div id="forum-section" style="display:none;">
-                <div class="coming-soon-subtitle">Member Forum & Discussions</div>
-                <div class="coming-soon-description">
-                    Welcome to the members-only forum! Start a new topic or join the discussion below.
-                </div>
-                <div id="forum-topics"></div>
-                <div style="margin-top:30px;text-align:left;">
-                    <h3>Start a New Topic</h3>
-                    <input type="text" id="topic-title" placeholder="Topic Title" style="width:60%;">
-                    <br>
-                    <textarea id="topic-message" placeholder="Your message" style="width:60%;height:60px;margin-top:10px;"></textarea>
-                    <br>
-                    <button onclick="postTopic()" style="margin-top:10px;">Post Topic</button>
-                    <div id="topic-error" style="color:#e74c3c;margin-top:10px;"></div>
-                </div>
-            </div>
-            <a href="/" class="back-home"> Back to Home</a>
+    <!-- Login Section -->
+    <div class="login-container" id="loginSection">
+        <div class="login-header">
+            <h1>🏦 Member Portal</h1>
+            <p style="color: #666;">Financial Dashboard Access</p>
         </div>
-        <script>
-        // Simple member login (username: lastname + address numbers)
-        function loginMember() {
-            var username = document.getElementById('username').value.trim();
-            if (username.length < 4) {
-                document.getElementById('login-error').innerText = 'Invalid username.';
-                return;
-            }
-            // For demo, accept any non-empty username
-            localStorage.setItem('memberUsername', username);
-            document.getElementById('login-section').style.display = 'none';
-            document.getElementById('forum-section').style.display = 'block';
-            loadForum();
+        
+        <div class="error-message" id="errorMessage"></div>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="your@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+            
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        
+        <div class="forgot-password">
+            <a href="#" onclick="resetPassword(); return false;">Forgot Password?</a>
+        </div>
+    </div>
+
+    <!-- Portal Content (Hidden Until Logged In) -->
+    <div class="portal-container" id="portalContent">
+        <div class="portal-header">
+            <div>
+                <h1>💰 Financial Dashboard</h1>
+                <p style="margin: 0; opacity: 0.9;">Chapter Financial Transparency</p>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <p>Loading financial data...</p>
+        </div>
+
+        <div id="financialData" style="display: none;">
+            <!-- Balance Summary -->
+            <div class="balance-summary">
+                <div class="balance-card checking">
+                    <h3>Checking Account</h3>
+                    <div class="balance-amount" id="checkingBalance">$0.00</div>
+                    <div class="balance-label">Primary Operating Account</div>
+                </div>
+                
+                <div class="balance-card savings">
+                    <h3>Savings Account</h3>
+                    <div class="balance-amount" id="savingsBalance">$0.00</div>
+                    <div class="balance-label">Reserve Fund</div>
+                </div>
+                
+                <div class="balance-card total">
+                    <h3>Total Assets</h3>
+                    <div class="balance-amount" id="totalBalance">$0.00</div>
+                    <div class="balance-label">Combined Balance</div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="transactions-section">
+                <h2>📊 Recent Transactions</h2>
+                <div id="transactionsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+    
+    <script src="/admin/js/firebase-config.js"></script>
+    <script>
+        let auth, db;
+
+        // Initialize Firebase
+        window.addEventListener('load', () => {
+            auth = firebase.auth();
+            db = firebase.firestore();
+
+            // Check if already logged in
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    showPortal();
+                    loadFinancialData();
+                } else {
+                    showLogin();
+                }
+            });
+        });
+
+        /**
+         * Handle login form submission
+         */
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            
+            errorDiv.style.display = 'none';
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    showPortal();
+                    loadFinancialData();
+                })
+                .catch(error => {
+                    errorDiv.textContent = 'Invalid email or password. Please try again.';
+                    errorDiv.style.display = 'block';
+                });
         }
 
-        // If already logged in, show forum
-        window.onload = function() {
-            if (localStorage.getItem('memberUsername')) {
-                document.getElementById('login-section').style.display = 'none';
-                document.getElementById('forum-section').style.display = 'block';
-                loadForum();
-            }
-        };
-
-        // Forum logic
-        function loadForum() {
-            var topics = JSON.parse(localStorage.getItem('forumTopics') || '[]');
-            var forumDiv = document.getElementById('forum-topics');
-            forumDiv.innerHTML = '';
-            if (topics.length === 0) {
-                forumDiv.innerHTML = '<p>No topics yet. Be the first to post!</p>';
-                return;
-            }
-            topics.forEach(function(topic, idx) {
-                var topicHtml = '<div style="border:1px solid #ccc;padding:15px;margin-bottom:15px;border-radius:8px;">';
-                var authorDisplay = topic.author.split(/\d+/)[0];
-                topicHtml += '<strong>' + topic.title + '</strong> <span style="color:#888;font-size:13px;">by ' + authorDisplay + '</span>';
-                topicHtml += '<p>' + topic.message + '</p>';
-                topicHtml += '<div style="margin-left:20px;">';
-                if (topic.replies && topic.replies.length > 0) {
-                    topic.replies.forEach(function(reply) {
-                        topicHtml += '<div style="border-left:2px solid #0066cc;padding-left:10px;margin-bottom:8px;">';
-                        var replyAuthorDisplay = reply.author.split(/\d+/)[0];
-                        topicHtml += '<span style="color:#0066cc;font-weight:600;">' + replyAuthorDisplay + ':</span> ' + reply.message;
-                        topicHtml += '</div>';
-                    });
-                }
-                topicHtml += '</div>';
-                topicHtml += '<textarea id="reply-' + idx + '" placeholder="Reply..." style="width:80%;height:40px;margin-top:10px;"></textarea>';
-                topicHtml += '<br><button onclick="postReply(' + idx + ')" style="margin-top:5px;">Reply</button>';
-                topicHtml += '<div id="reply-error-' + idx + '" style="color:#e74c3c;margin-top:5px;"></div>';
-                topicHtml += '</div>';
-                forumDiv.innerHTML += topicHtml;
+        /**
+         * Handle logout
+         */
+        function handleLogout() {
+            auth.signOut().then(() => {
+                showLogin();
             });
         }
 
-        function postTopic() {
-            var title = document.getElementById('topic-title').value.trim();
-            var message = document.getElementById('topic-message').value.trim();
-            var author = localStorage.getItem('memberUsername') || 'Member';
-            if (!title || !message) {
-                document.getElementById('topic-error').innerText = 'Please enter both a title and message.';
-                return;
+        /**
+         * Reset password
+         */
+        function resetPassword() {
+            const email = prompt('Enter your email address:');
+            if (email) {
+                auth.sendPasswordResetEmail(email)
+                    .then(() => {
+                        alert('✅ Password reset email sent! Check your inbox.');
+                    })
+                    .catch(error => {
+                        alert('❌ Error: ' + error.message);
+                    });
             }
-            var topics = JSON.parse(localStorage.getItem('forumTopics') || '[]');
-            topics.unshift({ title: title, message: message, author: author, replies: [] });
-            localStorage.setItem('forumTopics', JSON.stringify(topics));
-            document.getElementById('topic-title').value = '';
-            document.getElementById('topic-message').value = '';
-            document.getElementById('topic-error').innerText = '';
-            loadForum();
         }
 
-        function postReply(idx) {
-            var replyMsg = document.getElementById('reply-' + idx).value.trim();
-            var author = localStorage.getItem('memberUsername') || 'Member';
-            if (!replyMsg) {
-                document.getElementById('reply-error-' + idx).innerText = 'Reply cannot be empty.';
-                return;
-            }
-            var topics = JSON.parse(localStorage.getItem('forumTopics') || '[]');
-            if (!topics[idx].replies) topics[idx].replies = [];
-            topics[idx].replies.push({ author: author, message: replyMsg });
-            localStorage.setItem('forumTopics', JSON.stringify(topics));
-            document.getElementById('reply-' + idx).value = '';
-            document.getElementById('reply-error-' + idx).innerText = '';
-            loadForum();
+        /**
+         * Show login screen
+         */
+        function showLogin() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('portalContent').style.display = 'none';
         }
-        </script>
-    </main>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2025 Central Virginia Chapter of WVU Alumni Association. All rights reserved.</p>
-        </div>
-    </footer>
+        /**
+         * Show portal content
+         */
+        function showPortal() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('portalContent').style.display = 'block';
+        }
+
+        /**
+         * Load financial data from Firestore
+         */
+        async function loadFinancialData() {
+            try {
+                // Get balance sheet
+                const balanceDoc = await db.collection('financial').doc('balance').get();
+                
+                if (balanceDoc.exists) {
+                    const balance = balanceDoc.data();
+                    
+                    // Update balance cards
+                    document.getElementById('checkingBalance').textContent = 
+                        '$' + (balance.checking || 0).toFixed(2);
+                    document.getElementById('savingsBalance').textContent = 
+                        '$' + (balance.savings || 0).toFixed(2);
+                    document.getElementById('totalBalance').textContent = 
+                        '$' + ((balance.checking || 0) + (balance.savings || 0)).toFixed(2);
+                }
+
+                // Get recent transactions (last 20)
+                const transactionsSnapshot = await db.collection('financial')
+                    .doc('transactions')
+                    .collection('entries')
+                    .orderBy('date', 'desc')
+                    .limit(20)
+                    .get();
+
+                const transactionsList = document.getElementById('transactionsList');
+                transactionsList.innerHTML = '';
+
+                if (transactionsSnapshot.empty) {
+                    transactionsList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">No transactions found.</p>';
+                } else {
+                    transactionsSnapshot.forEach(doc => {
+                        const txn = doc.data();
+                        const date = txn.date.toDate();
+                        const isIncome = txn.type === 'income';
+                        
+                        const html = `
+                            <div class="transaction">
+                                <div class="transaction-date">
+                                    <div class="day">${date.getDate()}</div>
+                                    <div class="month">${date.toLocaleString('en', { month: 'short' })}</div>
+                                </div>
+                                <div class="transaction-details">
+                                    <h4>${txn.description || 'Transaction'}</h4>
+                                    <p>${txn.category || 'General'} • ${txn.account || 'Checking'}</p>
+                                </div>
+                                <span class="transaction-category category-${isIncome ? 'income' : 'expense'}">
+                                    ${txn.type}
+                                </span>
+                                <div class="transaction-amount ${isIncome ? 'positive' : 'negative'}">
+                                    ${isIncome ? '+' : '-'}$${Math.abs(txn.amount || 0).toFixed(2)}
+                                </div>
+                            </div>
+                        `;
+                        transactionsList.innerHTML += html;
+                    });
+                }
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('financialData').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error loading financial data:', error);
+                document.getElementById('loading').innerHTML = 
+                    '<p style="color: #c62828;">❌ Error loading financial data. Please try again.</p>';
+            }
+        }
+    </script>
 </body>
 </html>
