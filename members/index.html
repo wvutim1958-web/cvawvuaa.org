@@ -296,12 +296,12 @@
     <div id="loginScreen">
         <div class="login-container">
             <div class="login-logo">
-                <h1>🏔️ Members Portal</h1>
+                <h1>Members Portal</h1>
                 <p>Central Virginia WVU Alumni Chapter</p>
             </div>
 
             <div class="error-message" id="errorMessage">
-                ❌ Invalid login credentials. Please try again.
+                Invalid login credentials. Please try again.
             </div>
 
             <form class="login-form" onsubmit="handleLogin(event)">
@@ -349,7 +349,7 @@
         <div class="portal-header">
             <div class="portal-header-content">
                 <div class="portal-title">
-                    <h1>🏔️ Member Portal</h1>
+                    <h1>Member Portal</h1>
                     <p>Central Virginia WVU Alumni Chapter</p>
                 </div>
                 <div class="portal-user">
@@ -756,39 +756,64 @@
 
         async function loadFinancialData() {
             try {
-                // Get balance sheet
-                const balanceDoc = await db.collection('financial').doc('balance').get();
-                
-                if (balanceDoc.exists) {
-                    const balance = balanceDoc.data();
-                    
-                    // Update balance cards
-                    document.getElementById('checkingBalance').textContent = 
-                        '$' + (balance.checking || 0).toFixed(2);
-                    document.getElementById('savingsBalance').textContent = 
-                        '$' + (balance.savings || 0).toFixed(2);
-                    document.getElementById('totalBalance').textContent = 
-                        '$' + ((balance.checking || 0) + (balance.savings || 0)).toFixed(2);
-                }
-
-                // Get recent transactions (last 20)
-                const transactionsSnapshot = await db.collection('financial')
-                    .doc('transactions')
-                    .collection('entries')
+                // Load all transactions to calculate balance
+                const snapshot = await db.collection('transactions')
                     .orderBy('date', 'desc')
-                    .limit(20)
                     .get();
+                
+                let checkingBalance = 0;
+                let savingsBalance = 0;
+                let totalIncome = 0;
+                let totalExpenses = 0;
+                
+                const transactions = [];
+                
+                snapshot.forEach(doc => {
+                    const txn = doc.data();
+                    const amount = parseFloat(txn.amount) || 0;
+                    
+                    // Calculate running balances
+                    if (txn.type === 'deposit') {
+                        if (txn.account === 'savings') {
+                            savingsBalance += amount;
+                        } else {
+                            checkingBalance += amount;
+                        }
+                        totalIncome += amount;
+                    } else if (txn.type === 'expense') {
+                        if (txn.account === 'savings') {
+                            savingsBalance -= amount;
+                        } else {
+                            checkingBalance -= amount;
+                        }
+                        totalExpenses += amount;
+                    }
+                    
+                    transactions.push({
+                        ...txn,
+                        id: doc.id,
+                        date: txn.date.toDate()
+                    });
+                });
+                
+                // Update balance cards
+                document.getElementById('checkingBalance').textContent = 
+                    '$' + checkingBalance.toFixed(2);
+                document.getElementById('savingsBalance').textContent = 
+                    '$' + savingsBalance.toFixed(2);
+                document.getElementById('totalBalance').textContent = 
+                    '$' + (checkingBalance + savingsBalance).toFixed(2);
 
+                // Show recent 20 transactions
                 const transactionsList = document.getElementById('transactionsList');
                 transactionsList.innerHTML = '';
 
-                if (transactionsSnapshot.empty) {
+                if (transactions.length === 0) {
                     transactionsList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">No transactions found.</p>';
                 } else {
-                    transactionsSnapshot.forEach(doc => {
-                        const txn = doc.data();
-                        const date = txn.date.toDate();
-                        const isIncome = txn.type === 'income';
+                    transactions.slice(0, 20).forEach(txn => {
+                        const date = txn.date;
+                        const isDeposit = txn.type === 'deposit';
                         
                         const html = `
                             <div style="padding: 1.5rem; border-bottom: 1px solid #e0e0e0; display: grid; grid-template-columns: 60px 1fr auto auto; gap: 1rem; align-items: center;">
@@ -798,13 +823,13 @@
                                 </div>
                                 <div>
                                     <h4 style="margin: 0 0 0.25rem; color: #333;">${txn.description || 'Transaction'}</h4>
-                                    <p style="margin: 0; color: #666; font-size: 0.9rem;">${txn.category || 'General'} • ${txn.account || 'Checking'}</p>
+                                    <p style="margin: 0; color: #666; font-size: 0.9rem;">${txn.category || 'General'} • ${txn.payee || 'N/A'}</p>
                                 </div>
-                                <span style="padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: ${isIncome ? '#e8f5e9' : '#ffebee'}; color: ${isIncome ? '#2e7d32' : '#c62828'};">
+                                <span style="padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: ${isDeposit ? '#e8f5e9' : '#ffebee'}; color: ${isDeposit ? '#2e7d32' : '#c62828'};">
                                     ${txn.type}
                                 </span>
-                                <div style="font-size: 1.25rem; font-weight: 700; color: ${isIncome ? '#2e7d32' : '#c62828'};">
-                                    ${isIncome ? '+' : '-'}$${Math.abs(txn.amount || 0).toFixed(2)}
+                                <div style="font-size: 1.25rem; font-weight: 700; color: ${isDeposit ? '#2e7d32' : '#c62828'};">
+                                    ${isDeposit ? '+' : '-'}$${Math.abs(txn.amount || 0).toFixed(2)}
                                 </div>
                             </div>
                         `;
@@ -818,7 +843,7 @@
             } catch (error) {
                 console.error('Error loading financial data:', error);
                 document.getElementById('loadingFinancials').innerHTML = 
-                    '<p style="color: #c62828;">❌ Error loading financial data. Please try again.</p>';
+                    '<p style="color: #c62828;">❌ Error loading financial data: ' + error.message + '</p>';
             }
         }
 
