@@ -245,7 +245,7 @@ async function renderTable() {
     // Fetch all receipt statuses in parallel
     const receiptStatusPromises = paidMembers.map(async member => {
         try {
-            const receiptsSnapshot = await db.collection('receipts')
+            const receiptsSnapshot = await reportDb.collection('receipts')
                 .where('memberId', '==', member.id)
                 .where('paymentTimestamp', '==', member.paymentTimestamp)
                 .get();
@@ -432,7 +432,7 @@ async function deletePayment(memberId, timestamp) {
         console.log(`Deleting payment for member ${memberId} with timestamp ${timestamp}`);
         
         // Get the member document
-        const memberRef = db.collection('members').doc(memberId);
+        const memberRef = reportDb.collection('members').doc(memberId);
         const memberDoc = await memberRef.get();
         
         if (!memberDoc.exists) {
