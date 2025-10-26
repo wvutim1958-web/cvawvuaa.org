@@ -22,24 +22,77 @@
         </a>
     </div>
 
-    <div style="max-width: 800px; margin: 2rem auto; padding: 2rem;">
+    <div style="max-width: 1200px; margin: 2rem auto; padding: 2rem;">
         <a href="index.html">← Back to Admin Hub</a>
         <div style="background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin: 2rem 0;">
             <h1>📝 RSVP Manager</h1>
-            <p>Manage event RSVPs and attendance</p>
+            <p>View and manage event RSVPs</p>
         </div>
+        
         <div style="background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 2rem;">
-            <h3>🚧 Under Development</h3>
-            <p>This tool is being built. It will allow you to:</p>
-            <ul>
-                <li>Track event RSVPs</li>
-                <li>Send RSVP reminders</li>
-                <li>Manage waiting lists</li>
-                <li>Export attendee lists</li>
-            </ul>
-            <a href="event-manager.html" style="display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px;">📅 Event Manager</a>
+            <h3>Select an Event</h3>
+            <p>Choose an event to view its RSVPs:</p>
+            <div id="eventsList" style="margin-top: 1.5rem;">
+                <p style="color: #666;">Loading events...</p>
+            </div>
         </div>
     </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        async function loadEvents() {
+            try {
+                const eventsSnapshot = await db.collection('events')
+                    .orderBy('date', 'desc')
+                    .limit(50)
+                    .get();
+                
+                const eventsList = document.getElementById('eventsList');
+                
+                if (eventsSnapshot.empty) {
+                    eventsList.innerHTML = '<p style="color: #666;">No events found. <a href="event-manager.html">Create an event</a></p>';
+                    return;
+                }
+                
+                let html = '<div style="display: grid; gap: 1rem;">';
+                
+                eventsSnapshot.docs.forEach(doc => {
+                    const event = doc.data();
+                    const eventDate = event.date ? new Date(event.date.seconds * 1000).toLocaleDateString() : 'Date TBD';
+                    
+                    html += `
+                        <div style="border: 1px solid #e9ecef; border-radius: 8px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: #002855;">${event.title || 'Untitled Event'}</h4>
+                                <p style="margin: 0; color: #666; font-size: 0.9rem;">📅 ${eventDate}</p>
+                                ${event.location ? `<p style="margin: 0.25rem 0 0 0; color: #666; font-size: 0.9rem;">📍 ${event.location}</p>` : ''}
+                            </div>
+                            <a href="event-rsvps.html?eventId=${doc.id}" 
+                               style="background: #10b981; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 8px; font-weight: 600; white-space: nowrap;">
+                                View RSVPs
+                            </a>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                eventsList.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading events:', error);
+                document.getElementById('eventsList').innerHTML = '<p style="color: #c62828;">Error loading events. Please try again.</p>';
+            }
+        }
+        
+        // Load events when page loads
+        window.addEventListener('load', () => {
+            setTimeout(loadEvents, 500);
+        });
+    </script>
     <!-- WVU Footer Component -->
     <div id="wvu-footer"></div>
 
