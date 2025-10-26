@@ -263,6 +263,10 @@
 
     <div class="controls no-print">
         <button class="btn btn-print" onclick="window.print()">🖨️ Print Invoice</button>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 10px 0;">
+            <input type="email" id="emailOverride" placeholder="Email address (required for sending)" style="padding: 10px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; min-width: 300px;">
+            <button class="btn" onclick="emailInvoice()" style="background: #10b981; color: white;">📧 Email Invoice</button>
+        </div>
         <button class="btn btn-back" onclick="window.close()">← Close</button>
     </div>
 
@@ -461,6 +465,171 @@
                 console.error('Error loading invoice:', error);
                 document.getElementById('loading').innerHTML = 
                     `<p style="color: #c62828;">❌ Error: ${error.message}</p>`;
+            }
+        }
+
+        async function emailInvoice() {
+            const emailInput = document.getElementById('emailOverride');
+            const emailAddress = emailInput ? emailInput.value.trim() : '';
+            
+            if (!emailAddress) {
+                alert('Please enter an email address');
+                emailInput?.focus();
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailAddress)) {
+                alert('Please enter a valid email address');
+                emailInput?.focus();
+                return;
+            }
+
+            if (!confirm(`Send invoice to ${emailAddress}?`)) {
+                return;
+            }
+
+            try {
+                // Get invoice details
+                const invoiceNumber = document.getElementById('invoiceNumber')?.textContent || 'N/A';
+                const memberName = document.querySelector('#memberInfo strong')?.textContent || 'Member';
+                const firstName = memberName.split(' ')[0];
+                const totalAmount = document.getElementById('totalAmount')?.textContent || '$0.00';
+                const dueDate = document.getElementById('dueDate')?.textContent || 'N/A';
+                const membershipPeriod = document.getElementById('membershipPeriod')?.textContent || 'N/A';
+
+                // Get the full invoice HTML
+                const invoiceContainer = document.querySelector('.invoice-container');
+                const invoiceHTML = invoiceContainer ? invoiceContainer.outerHTML : '';
+
+                // Create email-friendly HTML
+                const htmlEmail = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice from CVCWVUAA</title>
+</head>
+<body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+    <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div style="background: linear-gradient(135deg, #002855, #EAAA00); padding: 30px; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">📄 Invoice from CVCWVUAA</h1>
+        </div>
+        
+        <div style="padding: 30px;">
+            <p style="font-size: 16px; color: #333; margin-bottom: 20px;">Dear ${firstName},</p>
+            
+            <p style="font-size: 15px; color: #666; line-height: 1.6; margin-bottom: 20px;">
+                This is your membership invoice from the Central Virginia Chapter of the WVU Alumni Association.
+            </p>
+
+            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 8px 0; color: #666;">Invoice Number:</td>
+                        <td style="padding: 8px 0; color: #002855; font-weight: bold; text-align: right;">${invoiceNumber}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #666;">Membership Period:</td>
+                        <td style="padding: 8px 0; color: #333; text-align: right;">${membershipPeriod}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #666;">Amount Due:</td>
+                        <td style="padding: 8px 0; color: #c62828; font-weight: bold; font-size: 18px; text-align: right;">${totalAmount}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #666;">Due Date:</td>
+                        <td style="padding: 8px 0; color: #333; text-align: right;">${dueDate}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 20px; margin-bottom: 25px; border-radius: 4px;">
+                <h3 style="color: #2e7d32; margin: 0 0 15px 0; font-size: 16px;">💳 Payment Options</h3>
+                
+                <div style="margin-bottom: 15px;">
+                    <strong style="color: #1b5e20;">Option 1: Pay Online (Preferred)</strong>
+                    <p style="margin: 5px 0; color: #333;">
+                        Visit: <a href="https://cvawvuaa.org/pay.html" style="color: #2e7d32; text-decoration: none; font-weight: bold;">www.cvawvuaa.org/pay.html</a><br>
+                        Pay securely with PayPal or Credit Card
+                    </p>
+                </div>
+
+                <div>
+                    <strong style="color: #1b5e20;">Option 2: Mail Check</strong>
+                    <p style="margin: 5px 0; color: #333;">
+                        Make checks payable to: <strong>CVCWVUAA</strong><br>
+                        Mail to: 4701 Stoney Creek Pkwy, Chester, VA 23831<br>
+                        Include invoice number in memo: ${invoiceNumber}
+                    </p>
+                </div>
+            </div>
+
+            <p style="font-size: 14px; color: #666; text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                Thank you for your continued support!<br>
+                Questions? Contact us at <a href="mailto:info@cvawvuaa.org" style="color: #002855;">info@cvawvuaa.org</a>
+            </p>
+        </div>
+
+        <div style="background: #002855; padding: 20px; text-align: center;">
+            <p style="color: white; margin: 0; font-size: 12px;">
+                Central Virginia Chapter - WVU Alumni Association<br>
+                <a href="https://cvawvuaa.org" style="color: #EAAA00; text-decoration: none;">www.cvawvuaa.org</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>`;
+
+                // Create plain text version
+                const textEmail = `Dear ${firstName},
+
+This is your membership invoice from the Central Virginia Chapter of the WVU Alumni Association.
+
+INVOICE DETAILS:
+Invoice Number: ${invoiceNumber}
+Membership Period: ${membershipPeriod}
+Amount Due: ${totalAmount}
+Due Date: ${dueDate}
+
+PAYMENT OPTIONS:
+
+Option 1: Pay Online (Preferred)
+Visit: www.cvawvuaa.org/pay.html
+Pay securely with PayPal or Credit Card
+
+Option 2: Mail Check
+Make checks payable to: CVCWVUAA
+Mail to: 4701 Stoney Creek Pkwy, Chester, VA 23831
+Include invoice number in memo: ${invoiceNumber}
+
+Thank you for your continued support!
+
+Questions? Contact us at info@cvawvuaa.org
+
+---
+Central Virginia Chapter - WVU Alumni Association
+www.cvawvuaa.org`;
+
+                // Send via Firebase mail collection
+                await invoiceDb.collection('mail').add({
+                    to: emailAddress,
+                    bcc: 'cvcwvuaa@gmail.com',
+                    message: {
+                        subject: `Invoice ${invoiceNumber} - CVCWVUAA Membership`,
+                        text: textEmail,
+                        html: htmlEmail
+                    },
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert(`✅ Invoice sent successfully to ${emailAddress}!\n\nA copy was also sent to cvcwvuaa@gmail.com for your records.`);
+                
+            } catch (error) {
+                console.error('Error sending invoice:', error);
+                alert(`❌ Error sending invoice: ${error.message}`);
             }
         }
     </script>
