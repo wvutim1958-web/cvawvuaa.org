@@ -296,7 +296,10 @@
 
     <div class="controls no-print">
         <button class="btn btn-print" onclick="window.print()">🖨️ Print Receipt</button>
-        <button class="btn btn-primary" onclick="emailReceipt()" style="background: #10b981;">📧 Email Receipt (HTML)</button>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <input type="email" id="emailOverride" placeholder="Override email address (optional)" style="padding: 10px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; min-width: 300px;">
+            <button class="btn btn-primary" onclick="emailReceipt()" style="background: #10b981;">📧 Email Receipt (HTML)</button>
+        </div>
         <button class="btn btn-back" onclick="window.close()">← Close</button>
     </div>
     
@@ -558,6 +561,10 @@
             }
 
             try {
+                // Check for email override
+                const emailOverrideInput = document.getElementById('emailOverride');
+                const emailOverride = emailOverrideInput ? emailOverrideInput.value.trim() : '';
+                
                 // Get member info
                 const memberDoc = await receiptDb.collection('members').doc(memberId).get();
                 
@@ -567,15 +574,16 @@
                 }
                 
                 const member = memberDoc.data();
-                const memberEmail = member.email || '';
+                const memberEmail = emailOverride || member.email || '';
                 const memberName = member.name || 'Member';
                 
                 if (!memberEmail || memberEmail.trim() === '') {
-                    alert('No email address available for this member. Please add an email address first.');
+                    alert('No email address available. Please enter an email address in the override field.');
                     return;
                 }
                 
-                if (!confirm(`Send receipt to ${memberEmail}?`)) {
+                const emailSource = emailOverride ? '(override address)' : '(member\'s email)';
+                if (!confirm(`Send receipt to ${memberEmail} ${emailSource}?`)) {
                     return;
                 }
                 
