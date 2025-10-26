@@ -1,5 +1,5 @@
-// Initialize Firebase
-const db = firebase.firestore();
+// Firebase is initialized by firebase-config.js
+// db is already declared there
 
 // Get event ID from URL
 const urlParams = new URLSearchParams(window.location.search);
