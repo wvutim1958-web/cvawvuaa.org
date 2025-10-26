@@ -73,22 +73,7 @@
             <div class="tool-card">
                 <h3>📋 Upcoming Events</h3>
                 <div id="eventList">
-                    <div class="event-item">
-                        <h5>🏈 WVU vs. Virginia Tech Watch Party</h5>
-                        <p><strong>Date:</strong> November 15, 2025 7:00 PM<br>
-                        <strong>Location:</strong> Bellhop Restaurant<br>
-                        <strong>RSVPs:</strong> 12 attending</p>
-                        <button class="btn btn-warning">Edit</button>
-                        <button class="btn">Manage RSVPs</button>
-                    </div>
-                    <div class="event-item">
-                        <h5>🎄 Holiday Social</h5>
-                        <p><strong>Date:</strong> December 14, 2025 6:00 PM<br>
-                        <strong>Location:</strong> Private Venue<br>
-                        <strong>RSVPs:</strong> 5 attending</p>
-                        <button class="btn btn-warning">Edit</button>
-                        <button class="btn">Manage RSVPs</button>
-                    </div>
+                    <p style="color: #666;">Loading events...</p>
                 </div>
             </div>
 
@@ -104,8 +89,13 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
     <script>
-        function saveEvent() {
+        async function saveEvent() {
             const title = document.getElementById('event-title').value;
             const datetime = document.getElementById('event-datetime').value;
             const location = document.getElementById('event-location').value;
@@ -116,8 +106,112 @@
                 return;
             }
             
-            alert('Event created successfully!');
-            document.getElementById('eventForm').reset();
+            try {
+                const eventDate = new Date(datetime);
+                
+                await db.collection('events').add({
+                    title: title,
+                    date: firebase.firestore.Timestamp.fromDate(eventDate),
+                    location: location,
+                    description: description,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'active'
+                });
+                
+                alert('✅ Event created successfully!');
+                document.getElementById('eventForm').reset();
+                loadEvents();
+                
+            } catch (error) {
+                console.error('Error creating event:', error);
+                alert('❌ Error creating event: ' + error.message);
+            }
+        }
+        
+        async function loadEvents() {
+            try {
+                const now = new Date();
+                const eventsSnapshot = await db.collection('events')
+                    .orderBy('date', 'asc')
+                    .get();
+                
+                const eventList = document.getElementById('eventList');
+                
+                if (eventsSnapshot.empty) {
+                    eventList.innerHTML = '<p style="color: #666;">No events found. Create one above!</p>';
+                    return;
+                }
+                
+                let html = '';
+                let upcomingCount = 0;
+                
+                eventsSnapshot.docs.forEach(doc => {
+                    const event = doc.data();
+                    const eventDate = event.date ? new Date(event.date.seconds * 1000) : null;
+                    
+                    // Only show upcoming events (or recent past events within 1 week)
+                    if (eventDate && eventDate >= new Date(now - 7 * 24 * 60 * 60 * 1000)) {
+                        upcomingCount++;
+                        const dateStr = eventDate.toLocaleString('en-US', { 
+                            month: 'long', 
+                            day: 'numeric', 
+                            year: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit'
+                        });
+                        
+                        html += `
+                            <div class="event-item">
+                                <h5>${event.title || 'Untitled Event'}</h5>
+                                <p><strong>Date:</strong> ${dateStr}<br>
+                                <strong>Location:</strong> ${event.location || 'TBD'}<br>
+                                ${event.description ? `<strong>Description:</strong> ${event.description}<br>` : ''}
+                                <strong>Status:</strong> ${event.status || 'active'}</p>
+                                <button class="btn btn-warning" onclick="editEvent('${doc.id}')">✏️ Edit</button>
+                                <button class="btn" onclick="viewRSVPs('${doc.id}')">👥 RSVPs</button>
+                                <button class="btn" style="background: #dc3545;" onclick="deleteEvent('${doc.id}', '${event.title}')">�️ Delete</button>
+                            </div>
+                        `;
+                    }
+                });
+                
+                if (upcomingCount === 0) {
+                    eventList.innerHTML = '<p style="color: #666;">No upcoming events. Create one above!</p>';
+                } else {
+                    eventList.innerHTML = html;
+                }
+                
+            } catch (error) {
+                console.error('Error loading events:', error);
+                document.getElementById('eventList').innerHTML = '<p style="color: #c62828;">Error loading events. Please refresh the page.</p>';
+            }
+        }
+        
+        async function deleteEvent(eventId, eventTitle) {
+            if (!confirm(`Are you sure you want to delete "${eventTitle}"?\n\nThis will also delete all RSVPs for this event.`)) {
+                return;
+            }
+            
+            try {
+                // Delete the event
+                await db.collection('events').doc(eventId).delete();
+                
+                alert('✅ Event deleted successfully!');
+                loadEvents();
+                
+            } catch (error) {
+                console.error('Error deleting event:', error);
+                alert('❌ Error deleting event: ' + error.message);
+            }
+        }
+        
+        function editEvent(eventId) {
+            // For now, just redirect to a future edit page or show alert
+            alert('Edit functionality coming soon. For now, delete and recreate the event.');
+        }
+        
+        function viewRSVPs(eventId) {
+            window.location.href = `event-rsvps.html?eventId=${eventId}`;
         }
         
         function useTemplate(type) {
@@ -150,6 +244,11 @@
                 document.getElementById('event-description').value = template.description;
             }
         }
+        
+        // Load events when page loads
+        window.addEventListener('load', () => {
+            setTimeout(loadEvents, 500);
+        });
     </script>
     <!-- WVU Footer Component -->
     <div id="wvu-footer"></div>
