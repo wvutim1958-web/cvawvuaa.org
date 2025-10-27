@@ -39,10 +39,37 @@
     <button type="submit">Send ZIP</button>
   </form>
 
+  <!-- Alumni Spotlight Form Template -->
+  <form name="alumni-spotlight" netlify netlify-honeypot="bot-field" action="/thanks.html" hidden>
+    <input type="hidden" name="form-name" value="alumni-spotlight">
+    <input name="bot-field">
+    <input type="text" name="submitterName" required>
+    <input type="email" name="submitterEmail" required>
+    <input type="text" name="alumniName" required>
+    <input type="text" name="graduationYear" required>
+    <input type="text" name="location">
+    <select name="category" required>
+      <option value="">-- Select One --</option>
+      <option value="Community Leadership">Community Leadership</option>
+      <option value="Professional Achievement">Professional Achievement</option>
+      <option value="Service & Volunteering">Service & Volunteering</option>
+      <option value="Chapter Involvement">Chapter Involvement</option>
+      <option value="Entrepreneurship">Entrepreneurship</option>
+      <option value="Education & Mentorship">Education & Mentorship</option>
+      <option value="Other">Other</option>
+    </select>
+    <textarea name="story" maxlength="500" required></textarea>
+    <input type="text" name="contact">
+    <input type="url" name="photoUrl">
+    <textarea name="additionalNotes"></textarea>
+    <button type="submit">Submit Alumni Spotlight</button>
+  </form>
+
   <p>Forms are configured on:</p>
   <ul>
     <li><a href="/contact.html">Contact Form</a></li>
     <li><a href="/media.html">Media Upload Form</a></li>
+    <li><a href="/alumni-spotlight-submit.html">Alumni Spotlight Nomination Form</a></li>
   </ul>
 </body>
 </html>

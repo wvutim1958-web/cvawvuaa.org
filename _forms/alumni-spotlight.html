@@ -1,0 +1,27 @@
+<!-- 
+  This is a static form template for Netlify Forms detection.
+  The actual form is in alumni-spotlight-submit.html - this just ensures Netlify detects it.
+-->
+<form name="alumni-spotlight" netlify netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="alumni-spotlight">
+  <input name="bot-field">
+  <input type="text" name="submitterName">
+  <input type="email" name="submitterEmail">
+  <input type="text" name="alumniName">
+  <input type="text" name="graduationYear">
+  <input type="text" name="location">
+  <select name="category">
+    <option value="">-- Select One --</option>
+    <option value="Community Leadership">Community Leadership</option>
+    <option value="Professional Achievement">Professional Achievement</option>
+    <option value="Service & Volunteering">Service & Volunteering</option>
+    <option value="Chapter Involvement">Chapter Involvement</option>
+    <option value="Entrepreneurship">Entrepreneurship</option>
+    <option value="Education & Mentorship">Education & Mentorship</option>
+    <option value="Other">Other</option>
+  </select>
+  <textarea name="story" maxlength="500"></textarea>
+  <input type="text" name="contact">
+  <input type="url" name="photoUrl">
+  <textarea name="additionalNotes"></textarea>
+</form>
