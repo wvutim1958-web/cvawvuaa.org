@@ -1,6 +1,9 @@
 // Sentry Error Tracking Configuration
 // Sign up at https://sentry.io to get your DSN
 
+// Sentry DSN for CVCWVUAA
+window.SENTRY_DSN = 'https://3923d642f81fc711f235c2e9da732f7f@o4510259021414400.ingest.us.sentry.io/4510259158253568';
+
 // Only initialize Sentry if DSN is configured
 if (window.SENTRY_DSN) {
   Sentry.init({
