@@ -5,14 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#EEAA00">
   <title>Submit Alumni Spotlight • CVCWVUAA</title>
-    <!-- WVU Official Fonts -->
-  <link rel="preconnect" href="https://cdn.fonts.net">
-  <link href="https://cdn.fonts.net/kit/b339d500-35c3-11ed-aaf7-06b70d83f6b0/b339d500-35c3-11ed-aaf7-06b70d83f6b0.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/styles.min.css" />
-  <link rel="stylesheet" href="/css/wvu-components.min.css">
-  <link rel="stylesheet" href="/css/wvu-cta.min.css">
-  <link rel="stylesheet" href="/css/wvu-breadcrumbs.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/wvu-components.css">
   <style>
     .form-container {
       max-width: 700px;
@@ -90,25 +87,17 @@
     <div id="wvu-masthead"></div>
     <div id="wvu-navigation"></div>
 
-    <!-- Breadcrumb Navigation -->
-    <div id="wvu-breadcrumbs"></div>
-
     <main id="main-content">
     <div class="wrapper">
       <div class="form-container">
-        <h1>🌟 Submit an Alumni Spotlight</h1>
+        <h2>🌟 Submit an Alumni Spotlight</h2>
         <p>Help us celebrate outstanding Mountaineers in Central Virginia! Nominate yourself or a fellow alumnus who exemplifies West Virginia University spirit through community leadership, professional achievement, or service.</p>
 
         <div id="successMessage" class="success-message">
           <strong>✅ Thank you!</strong> Your alumni spotlight submission has been received. Our team will review it and reach out if we have any questions.
         </div>
 
-        <form id="spotlightForm" name="alumni-spotlight" method="POST" netlify netlify-honeypot="bot-field" action="/thanks.html">
-          <input type="hidden" name="form-name" value="alumni-spotlight">
-          <!-- Honeypot for spam protection -->
-          <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true">
-            <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-          </div>
+        <form id="spotlightForm" action="https://formspree.io/f/xjkaarwb" method="POST">
           
           <div class="form-group">
             <label for="submitterName">Your Name *</label>
@@ -268,7 +257,6 @@
     }
   </script>
   <script src="/js/dropdown.js"></script>
-    <script src="/includes/component-loader.min.js"></script>
-    <script src="/js/wvu-breadcrumbs.min.js"></script>
+    <script src="/includes/component-loader.js"></script>
 </body>
 </html>
