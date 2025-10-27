@@ -3,7 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Join or renew your CVCWVUAA membership. Annual dues: $25 per member, $15 per family member. Support the Central Virginia Chapter of the WVU Alumni Association.">
+  <meta name="theme-color" content="#0b2545">
   <title>CVCWVUAA • Join / Renew</title>
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://www.google-analytics.com">
+  <link rel="preconnect" href="https://cdn.fonts.net">
+  <link rel="preconnect" href="https://www.gstatic.com">
   
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
@@ -15,7 +23,6 @@
   </script>
   
   <!-- WVU Official Fonts -->
-  <link rel="preconnect" href="https://cdn.fonts.net">
   <link href="https://cdn.fonts.net/kit/e691d6b8-16c1-4a77-83c8-72cc198cb2dd/e691d6b8-16c1-4a77-83c8-72cc198cb2dd.css" rel="stylesheet">
   
   <link rel="stylesheet" href="/css/styles.min.css">
@@ -34,7 +41,7 @@
   <div id="wvu-breadcrumbs"></div>
 
 <main id="main-content"><div class="wrapper">
-  <img class="natural" src="/assets/photos/550539255_10163868473745295_3650245405852649566_n.jpg" loading="lazy" alt="Membership Banner">
+  <img class="natural" src="/assets/photos/550539255_10163868473745295_3650245405852649566_n.jpg" loading="lazy" alt="Membership Banner" width="1200" height="675">
   <h1>Membership 2025–2026</h1>
   <p class="small">Annual dues: <strong>$25 per member</strong> and <strong>$15 per family member</strong>. After submitting, an invoice will be generated and you can pay online immediately.</p>
 
@@ -42,23 +49,23 @@
     <fieldset class="card" style="border:none">
       <legend><strong>Type of Membership</strong></legend>
       <div class="row">
-        <label><input type="radio" name="Membership Type" value="Member $25" required> Member — $25 / year</label>
+        <label><input type="radio" name="Membership Type" value="Member $25" required aria-required="true"> Member — $25 / year</label>
         <label><input type="radio" name="Membership Type" value="Family Member $15"> Family Member — $15 / year</label>
       </div>
-      <label>Additional Donation $<input type="number" name="Additional Donation" step="1" min="0"></label>
+      <label for="additional-donation">Additional Donation $<input id="additional-donation" type="number" name="Additional Donation" step="1" min="0" aria-label="Additional donation amount in dollars"></label>
     </fieldset>
 
     <fieldset class="card" style="border:none">
       <legend><strong>Contact</strong></legend>
       <div class="row">
-        <label>First Name<input name="First Name" required></label>
-        <label>Last Name<input name="Last Name" required></label>
+        <label for="first-name">First Name<input id="first-name" name="First Name" required aria-required="true"></label>
+        <label for="last-name">Last Name<input id="last-name" name="Last Name" required aria-required="true"></label>
       </div>
       <div class="row">
-        <label>Email<input type="email" name="Email" required></label>
-        <label>Phone<input name="Phone"></label>
+        <label for="email">Email<input id="email" type="email" name="Email" required aria-required="true"></label>
+        <label for="phone">Phone<input id="phone" type="tel" name="Phone" aria-label="Phone number"></label>
       </div>
-      <label>Address<textarea name="Address" rows="2"></textarea></label>
+      <label for="address">Address<textarea id="address" name="Address" rows="2" aria-label="Mailing address"></textarea></label>
     </fieldset>
 
     <fieldset class="card" style="border:none">
@@ -69,13 +76,13 @@
         <label><input type="checkbox" name="Volunteer" value="Networking"> Networking Events</label>
         <label><input type="checkbox" name="Volunteer" value="Social Events"> Social Events</label>
         <label><input type="checkbox" name="Volunteer" value="Membership"> Membership</label>
-        <label>Other <input name="Other"></label>
+        <label for="volunteer-other">Other <input id="volunteer-other" name="Other" aria-label="Other volunteer interests"></label>
       </div>
     </fieldset>
 
     <fieldset class="card" style="border:none">
       <legend><strong>Family Membership</strong> (list additional names)</legend>
-      <textarea name="Family Members" rows="3"></textarea>
+      <textarea id="family-members" name="Family Members" rows="3" aria-label="Family member names"></textarea>
     </fieldset>
 
     <div class="row">
@@ -90,12 +97,12 @@
 </div></main>
 
 <!-- Invoice Modal -->
-<div id="invoice-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
-  <div style="background:#fff; border-radius:12px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
-    <h2 style="margin:0 0 16px 0; color:#0b2545;">Invoice Created!</h2>
+<div id="invoice-modal" role="dialog" aria-modal="true" aria-labelledby="invoice-modal-title" aria-hidden="true" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
+  <div role="document" style="background:#fff; border-radius:12px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+    <h2 id="invoice-modal-title" style="margin:0 0 16px 0; color:#0b2545;">Invoice Created!</h2>
     <div id="invoice-content"></div>
     <div style="margin-top:20px; display:flex; gap:12px; justify-content:flex-end;">
-      <button onclick="closeInvoiceModal()" class="wvu-cta wvu-cta--secondary">Close</button>
+      <button onclick="closeInvoiceModal()" class="wvu-cta wvu-cta--secondary" aria-label="Close invoice modal">Close</button>
       <a id="pay-now-btn" href="/pay.html" class="wvu-cta wvu-cta--primary">Pay Now</a>
     </div>
   </div>
@@ -232,10 +239,16 @@ function showInvoiceModal(invoice) {
   payBtn.href = `/pay.html?invoice=${invoice.invoiceNumber}&amount=${invoice.totalAmount}&email=${encodeURIComponent(invoice.email)}&name=${encodeURIComponent(invoice.memberName)}`;
   
   modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
+  
+  // Focus on modal title for accessibility
+  document.getElementById('invoice-modal-title').focus();
 }
 
 function closeInvoiceModal() {
-  document.getElementById('invoice-modal').style.display = 'none';
+  const modal = document.getElementById('invoice-modal');
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
 }
 </script>
 
