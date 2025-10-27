@@ -146,8 +146,9 @@ function renderReminders() {
     
     container.innerHTML = allReminders.map(reminder => {
         const member = allMembers.find(m => m.id === reminder.memberId);
-        const memberName = member ? `${member.firstName} ${member.lastName}` : 'Unknown Member';
-        const memberEmail = member?.email || 'No email';
+        const memberName = reminder.memberName || 
+                          (member ? (member.name || `${member.firstName || ''} ${member.lastName || ''}`.trim()) : 'Unknown Member');
+        const memberEmail = reminder.memberEmail || member?.email || 'No email';
         
         const scheduledDate = reminder.scheduledDate.toDate ? reminder.scheduledDate.toDate() : new Date(reminder.scheduledDate);
         const isPast = scheduledDate < new Date();
