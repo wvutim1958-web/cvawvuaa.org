@@ -188,7 +188,9 @@
                     // Only include payments with valid amounts
                     if (amount && amount > 0) {
                         allPayments.push({
+                            memberId: memberId,
                             memberName: memberName,
+                            paymentIndex: index,
                             date: paymentDate,
                             type: payment.type || 'dues',
                             amount: amount,
@@ -214,7 +216,7 @@
             if (loadingEl) loadingEl.style.display = 'none';
             if (listEl) {
                 listEl.style.display = 'block';
-                listEl.innerHTML = recentPayments.map(payment => {
+                listEl.innerHTML = recentPayments.map((payment, idx) => {
                     const typeLabel = payment.type === 'dues' ? 'Dues' :
                                      payment.type === 'scholarship' ? 'Scholarship Donation' :
                                      payment.type === 'chapter' ? 'Chapter Donation' : 'Payment';
@@ -231,7 +233,13 @@
                                 <div class="payment-name">${escapeHtml(payment.memberName)}</div>
                                 <div class="payment-details">${typeLabel} • ${payment.paymentMethod} • ${dateStr}</div>
                             </div>
-                            <div class="payment-amount">${formatCurrency(payment.amount)}</div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div class="payment-amount">${formatCurrency(payment.amount)}</div>
+                                <button onclick="deletePayment('${payment.memberId}', ${payment.paymentIndex})" 
+                                        style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                    Delete
+                                </button>
+                            </div>
                         </li>
                     `;
                 }).join('');
@@ -269,6 +277,41 @@
         div.textContent = text;
         return div.innerHTML;
     }
+    
+    /**
+     * Delete a payment
+     */
+    window.deletePayment = async function(memberId, paymentIndex) {
+        if (!confirm('Delete this payment?')) {
+            return;
+        }
+        
+        try {
+            const memberRef = db.collection('members').doc(memberId);
+            const memberDoc = await memberRef.get();
+            
+            if (!memberDoc.exists) {
+                alert('Member not found');
+                return;
+            }
+            
+            const memberData = memberDoc.data();
+            const payments = memberData.payments || [];
+            
+            // Remove the payment
+            payments.splice(paymentIndex, 1);
+            
+            // Update the member
+            await memberRef.update({ payments: payments });
+            
+            // Reload the payments
+            await loadRecentPayments();
+            
+        } catch (error) {
+            console.error('Error deleting payment:', error);
+            alert('Error deleting payment');
+        }
+    };
     
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
