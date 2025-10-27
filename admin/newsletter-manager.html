@@ -147,20 +147,19 @@
 
             <!-- Distribution Tools -->
             <div class="tool-card">
-                <h3>📤 Distribution & Analytics</h3>
+                <h3>📤 Send Newsletter</h3>
                 <div style="display: grid; gap: 1rem;">
-                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 6px;">
-                        <h5>📊 Last Newsletter Stats</h5>
-                        <p class="small">October 2025 Newsletter</p>
-                        <p>📧 Sent: 134 members<br>
-                        📖 Opened: 89 (66.4%)<br>
-                        🔗 Clicked: 23 (17.2%)</p>
+                    <div style="background: #fff3cd; padding: 1rem; border-radius: 6px; border-left: 4px solid #ffc107;">
+                        <p style="margin: 0; font-size: 14px;"><strong>⚠️ Important:</strong> Newsletters will be sent using Firebase Trigger Email extension to all members with email addresses.</p>
                     </div>
                     
-                    <button class="btn btn-success" onclick="sendTestEmail()">📧 Send Test Email</button>
-                    <button class="btn" onclick="viewSubscribers()">👥 View Subscribers (134)</button>
-                    <a href="mailchimp-config.html" class="btn">🔧 Mailchimp Settings</a>
-                    <button class="btn" onclick="exportNewsletters()">📤 Export All Newsletters</button>
+                    <div id="memberCount" style="background: #e3f2fd; padding: 1rem; border-radius: 6px;">
+                        <p style="margin: 0;"><strong>📧 Recipients:</strong> <span id="totalMembers">Loading...</span> members</p>
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="sendTestEmail()">📧 Send Test to Yourself</button>
+                    <button class="btn btn-warning" onclick="sendToAllMembers()">� Send to All Members</button>
+                    <a href="advanced-member-manager.html" class="btn">� View Member List</a>
                 </div>
             </div>
         </div>
@@ -181,7 +180,31 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
     <script>
+        let currentNewsletter = null;
+        
+        // Load member count
+        async function loadMemberCount() {
+            try {
+                const snapshot = await db.collection('members').get();
+                const membersWithEmail = snapshot.docs.filter(doc => {
+                    const member = doc.data();
+                    return member.email && member.email.trim() !== '';
+                }).length;
+                
+                document.getElementById('totalMembers').textContent = `${membersWithEmail} (with email addresses)`;
+            } catch (error) {
+                console.error('Error loading member count:', error);
+                document.getElementById('totalMembers').textContent = 'Error loading';
+            }
+        }
+        
         function saveNewsletter() {
             const title = document.getElementById('newsletter-title').value;
             const type = document.getElementById('newsletter-type').value;
@@ -193,8 +216,7 @@
                 return;
             }
             
-            const newsletter = {
-                id: Date.now(),
+            currentNewsletter = {
                 title: title,
                 type: type,
                 content: content,
@@ -203,13 +225,7 @@
                 status: 'draft'
             };
             
-            const newsletters = JSON.parse(localStorage.getItem('cvcwvuaa_newsletters') || '[]');
-            newsletters.unshift(newsletter);
-            localStorage.setItem('cvcwvuaa_newsletters', JSON.stringify(newsletters));
-            
-            alert('Newsletter saved as draft!');
-            document.getElementById('newsletterForm').reset();
-            loadAllNewsletters();
+            alert('✅ Newsletter saved! You can now preview or send it.');
         }
         
         function previewNewsletter() {
@@ -221,27 +237,147 @@
                 return;
             }
             
-            const previewHTML = `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <h1 style="color: #002855; text-align: center;">${title}</h1>
-                    <p style="text-align: center; color: #666; margin-bottom: 2rem;">Central Virginia Chapter WVU Alumni Association</p>
-                    <div>${content.replace(/\n/g, '<br>')}</div>
-                </div>
-            `;
+            const previewHTML = generateNewsletterHTML(title, content);
             
             document.getElementById('previewContent').innerHTML = previewHTML;
             document.getElementById('previewModal').style.display = 'block';
+        }
+        
+        function generateNewsletterHTML(title, content) {
+            return `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: white;">
+                    <div style="background: linear-gradient(135deg, #002855, #EAAA00); padding: 30px; text-align: center;">
+                        <h1 style="color: white; margin: 0; font-size: 28px;">${title}</h1>
+                        <p style="color: white; margin: 10px 0 0 0; opacity: 0.9;">Central Virginia Chapter WVU Alumni Association</p>
+                    </div>
+                    
+                    <div style="padding: 30px; line-height: 1.6; color: #333;">
+                        ${content.replace(/\n/g, '<br>')}
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 3px solid #EAAA00;">
+                        <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">
+                            Central Virginia Chapter - WVU Alumni Association<br>
+                            <a href="https://cvawvuaa.org" style="color: #002855; text-decoration: none;">www.cvawvuaa.org</a>
+                        </p>
+                        <p style="margin: 0; color: #999; font-size: 12px;">
+                            You're receiving this because you're a member of the Central Virginia Chapter
+                        </p>
+                    </div>
+                </div>
+            `;
         }
         
         function closePreview() {
             document.getElementById('previewModal').style.display = 'none';
         }
         
+        async function sendTestEmail() {
+            const title = document.getElementById('newsletter-title').value;
+            const content = document.getElementById('newsletter-content').value;
+            
+            if (!title || !content) {
+                alert('Please fill in title and content first');
+                return;
+            }
+            
+            const testEmail = prompt('Enter your email address for the test:');
+            if (!testEmail) return;
+            
+            try {
+                const htmlEmail = generateNewsletterHTML(title, content);
+                const textEmail = `${title}\n\nCentral Virginia Chapter WVU Alumni Association\n\n${content}`;
+                
+                await db.collection('mail').add({
+                    to: testEmail,
+                    message: {
+                        subject: title,
+                        text: textEmail,
+                        html: htmlEmail
+                    },
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                alert(`✅ Test email queued for ${testEmail}!\n\nIt should arrive within a few minutes.`);
+                
+            } catch (error) {
+                console.error('Error sending test email:', error);
+                alert('❌ Error sending test email: ' + error.message);
+            }
+        }
+        
+        async function sendToAllMembers() {
+            const title = document.getElementById('newsletter-title').value;
+            const content = document.getElementById('newsletter-content').value;
+            
+            if (!title || !content) {
+                alert('Please fill in title and content first');
+                return;
+            }
+            
+            if (!confirm(`⚠️ WARNING: This will send "${title}" to ALL members with email addresses.\n\nAre you absolutely sure you want to proceed?`)) {
+                return;
+            }
+            
+            if (!confirm('This is your FINAL confirmation. Send newsletter to all members now?')) {
+                return;
+            }
+            
+            try {
+                // Get all members with email addresses
+                const membersSnapshot = await db.collection('members').get();
+                const membersWithEmail = [];
+                
+                membersSnapshot.docs.forEach(doc => {
+                    const member = doc.data();
+                    if (member.email && member.email.trim() !== '') {
+                        membersWithEmail.push(member.email);
+                    }
+                });
+                
+                if (membersWithEmail.length === 0) {
+                    alert('No members with email addresses found!');
+                    return;
+                }
+                
+                const htmlEmail = generateNewsletterHTML(title, content);
+                const textEmail = `${title}\n\nCentral Virginia Chapter WVU Alumni Association\n\n${content}`;
+                
+                // Send to all members (BCC for privacy)
+                const batchSize = 50; // Send in batches to avoid overwhelming the system
+                for (let i = 0; i < membersWithEmail.length; i += batchSize) {
+                    const batch = membersWithEmail.slice(i, i + batchSize);
+                    
+                    await db.collection('mail').add({
+                        bcc: batch,
+                        message: {
+                            subject: title,
+                            text: textEmail,
+                            html: htmlEmail
+                        },
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                
+                alert(`✅ Newsletter queued for ${membersWithEmail.length} members!\n\nEmails will be sent over the next several minutes.`);
+                
+                // Clear form
+                document.getElementById('newsletterForm').reset();
+                currentNewsletter = null;
+                
+            } catch (error) {
+                console.error('Error sending newsletter:', error);
+                alert('❌ Error sending newsletter: ' + error.message);
+            }
+        }
+        
         function useTemplate(templateType) {
             let template = '';
+            let title = '';
             
             switch(templateType) {
                 case 'monthly':
+                    title = `Monthly Newsletter - ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
                     template = `<h2>President's Message</h2>
 <p>Dear Alumni and Friends,</p>
 <p>[Your monthly message here...]</p>
@@ -262,6 +398,7 @@
 <p>[WVU sports news and schedules...]</p>`;
                     break;
                 case 'event':
+                    title = 'Event Announcement';
                     template = `<h2>You're Invited!</h2>
 <p>[Event name and description...]</p>
 
@@ -274,9 +411,10 @@
 </ul>
 
 <h2>RSVP Information</h2>
-<p>[RSVP instructions...]</p>`;
+<p>RSVP at: https://cvawvuaa.org</p>`;
                     break;
                 case 'recruiting':
+                    title = 'Board Recruitment';
                     template = `<h2>We Need You!</h2>
 <p>The Central Virginia Chapter is seeking dedicated alumni to join our Board of Directors.</p>
 
@@ -295,9 +433,10 @@
 </ul>
 
 <h2>Contact Information</h2>
-<p>Interested? Contact us at [email] or [phone]</p>`;
+<p>Interested? Contact us at info@cvawvuaa.org</p>`;
                     break;
                 case 'financial':
+                    title = 'Financial Transparency Update';
                     template = `<h2>Financial Transparency Update</h2>
 <p>As part of our commitment to transparency, here's our current financial status:</p>
 
@@ -319,6 +458,7 @@
 </ul>`;
                     break;
                 case 'alumni':
+                    title = 'Alumni Spotlight';
                     template = `<h2>Alumni Spotlight</h2>
 <p><strong>Featured Alumnus/Alumna:</strong> [Name]</p>
 <p><strong>Graduation Year:</strong> [Year]</p>
@@ -338,50 +478,43 @@
                     break;
             }
             
+            document.getElementById('newsletter-title').value = title;
             document.getElementById('newsletter-content').value = template;
-            document.getElementById('newsletter-title').value = `[Template] ${templateType.charAt(0).toUpperCase() + templateType.slice(1)} Newsletter`;
         }
         
         function loadAllNewsletters() {
-            // This would load from database in real implementation
-            console.log('Loading all newsletters...');
+            alert('📋 Newsletter archive feature coming soon. For now, newsletters are sent directly without archiving.');
         }
         
         function editNewsletter(id) {
-            alert('Edit newsletter functionality would be implemented here for: ' + id);
+            alert('Edit functionality coming soon');
         }
         
         function publishNewsletter(id) {
-            alert('Publish newsletter functionality would be implemented here for: ' + id);
-        }
-        
-        function sendTestEmail() {
-            alert('Test email functionality would be implemented here');
-        }
-        
-        function viewSubscribers() {
-            alert('Subscriber management would open here');
-        }
-        
-        function exportNewsletters() {
-            alert('Export functionality would be implemented here');
+            alert('Publish functionality coming soon');
         }
         
         function duplicateLastNewsletter() {
-            alert('Duplicate last newsletter functionality would be implemented here');
+            alert('Duplicate functionality coming soon');
         }
         
         function importNewsletter() {
-            alert('Import newsletter functionality would be implemented here');
+            alert('Import functionality coming soon');
         }
         
         function publishFromPreview() {
-            alert('Publish from preview would be implemented here');
+            closePreview();
+            sendToAllMembers();
         }
         
         function scheduleNewsletter() {
-            alert('Schedule newsletter functionality would be implemented here');
+            alert('⚠️ Schedule feature not yet implemented. Use "Send to All Members" to send immediately.');
         }
+        
+        // Load member count on page load
+        window.addEventListener('load', () => {
+            setTimeout(loadMemberCount, 500);
+        });
     </script>
     <!-- WVU Footer Component -->
     <div id="wvu-footer"></div>
