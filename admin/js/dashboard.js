@@ -166,6 +166,12 @@
                 const member = doc.data();
                 const payments = member.payments || [];
                 
+                // Get member name from various possible fields
+                const memberName = member.name || 
+                                  (member.firstName && member.lastName ? `${member.firstName} ${member.lastName}` : null) ||
+                                  member.email ||
+                                  'Unknown Member';
+                
                 payments.forEach(payment => {
                     let paymentDate;
                     if (payment.date && payment.date.toDate) {
@@ -182,7 +188,7 @@
                     // Only include payments with valid amounts
                     if (amount && amount > 0) {
                         allPayments.push({
-                            memberName: member.name || 'Unknown Member',
+                            memberName: memberName,
                             date: paymentDate,
                             type: payment.type || 'dues',
                             amount: amount,
