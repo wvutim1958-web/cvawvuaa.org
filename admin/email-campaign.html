@@ -3,23 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Campaign Manager - CVCWVUAA</title>
+    <title>Quick Campaigns | Admin Panel</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/wvu-components.min.css">
     <style>
         .manager-container { max-width: 1200px; margin: 2rem auto; padding: 2rem; }
         .manager-header { background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; }
-        .tool-card { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .btn { display: inline-block; background: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px; margin: 5px; font-weight: 600; border: none; cursor: pointer; }
-        .btn:hover { background: #0056b3; color: white; }
-        .btn-success { background: #28a745; }
-        .btn-warning { background: #ffc107; color: #212529; }
-        .form-group { margin-bottom: 1rem; }
-        .form-control { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; }
-        textarea.form-control { min-height: 150px; }
+        .campaign-builder { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-weight: 600; color: #002855; margin-bottom: 8px; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; }
+        textarea.form-control { min-height: 250px; font-family: monospace; }
+        .template-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        .template-btn { padding: 8px 16px; background: #EAAA00; color: #002855; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; }
+        .template-btn:hover { background: #d49a00; }
+        .action-buttons { display: flex; gap: 15px; margin-top: 20px; }
+        .btn { padding: 12px 30px; background: #002855; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 600; }
+        .btn:hover { background: #1e40af; }
+        .btn-send { background: #28a745; }
+        .btn-send:hover { background: #218838; }
+        .btn-test { background: #EAAA00; color: #002855; }
+        .btn-test:hover { background: #d49a00; }
+        .stats-box { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        .stat-item { margin: 10px 0; padding: 10px; background: white; border-radius: 4px; }
+        .recipient-count { font-size: 13px; color: #666; font-weight: normal; }
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 25px; }
+        .quick-action-btn { padding: 20px; background: white; border: 2px solid #002855; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.3s; }
+        .quick-action-btn:hover { background: #002855; color: white; }
+        .loading { display: none; text-align: center; padding: 20px; color: #666; }
+        .loading.active { display: block; }
         .back-link { display: inline-block; margin-bottom: 2rem; color: #007bff; text-decoration: none; }
-        .stats-box { background: #e3f2fd; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
@@ -41,120 +54,160 @@
         <a href="index.html" class="back-link">← Back to Admin Hub</a>
         
         <div class="manager-header">
-            <h1>📧 Email Campaign Manager</h1>
-            <p>Send targeted communications to chapter members</p>
+            <h1>📧 Quick Campaigns</h1>
+            <p>Send targeted emails to specific member groups</p>
         </div>
 
-        <div class="tools-grid">
-            <!-- Create Campaign -->
-            <div class="tool-card">
-                <h3>✉️ Create Email Campaign</h3>
-                <form id="campaignForm">
-                    <div class="form-group">
-                        <label>Campaign Name</label>
-                        <input type="text" id="campaign-name" class="form-control" placeholder="October Dues Reminder">
-                    </div>
-                    <div class="form-group">
-                        <label>Subject Line</label>
-                        <input type="text" id="campaign-subject" class="form-control" placeholder="2025 Membership Dues - Payment Due">
-                    </div>
-                    <div class="form-group">
-                        <label>Recipients</label>
-                        <select id="campaign-recipients" class="form-control">
-                            <option value="all">All Members (134)</option>
-                            <option value="current">Current Members (89)</option>
-                            <option value="unpaid">Unpaid 2025 Dues (45)</option>
-                            <option value="board">Board Members Only</option>
-                            <option value="custom">Custom List</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Email Content</label>
-                        <textarea id="campaign-content" class="form-control" placeholder="Dear Fellow Mountaineers..."></textarea>
-                    </div>
-                    <button type="button" class="btn btn-success" onclick="sendCampaign()">📤 Send Campaign</button>
-                    <button type="button" class="btn btn-warning" onclick="saveDraft()">💾 Save Draft</button>
-                    <button type="button" class="btn" onclick="previewEmail()">👁️ Preview</button>
-                </form>
+        <!-- Member Stats -->
+        <div class="stats-box">
+            <h3>Current Membership Stats</h3>
+            <div class="stat-item">
+                <strong>Total Members:</strong> <span id="stat-total">Loading...</span>
             </div>
+            <div class="stat-item">
+                <strong>Current 2025 Members:</strong> <span id="stat-current">Loading...</span>
+            </div>
+            <div class="stat-item">
+                <strong>Unpaid 2025 Dues:</strong> <span id="stat-unpaid">Loading...</span>
+            </div>
+            <div class="stat-item">
+                <strong>Board Members:</strong> <span id="stat-board">Loading...</span>
+            </div>
+        </div>
 
-            <!-- Campaign Templates -->
-            <div class="tool-card">
-                <h3>📄 Email Templates</h3>
-                <div style="display: grid; gap: 0.5rem;">
-                    <button class="btn" onclick="useTemplate('dues')">💳 Dues Reminder</button>
-                    <button class="btn" onclick="useTemplate('event')">🎉 Event Invitation</button>
-                    <button class="btn" onclick="useTemplate('newsletter')">📧 Newsletter</button>
-                    <button class="btn" onclick="useTemplate('welcome')">👋 Welcome New Member</button>
-                    <button class="btn" onclick="useTemplate('board')">🏛️ Board Recruitment</button>
-                    <button class="btn" onclick="useTemplate('survey')">📊 Member Survey</button>
+        <!-- Campaign Builder -->
+        <div class="campaign-builder">
+            <h2>Create Campaign</h2>
+            
+            <div class="form-group">
+                <label>Quick Templates:</label>
+                <div class="template-buttons">
+                    <button class="template-btn" onclick="useTemplate('dues')">Dues Reminder</button>
+                    <button class="template-btn" onclick="useTemplate('event')">Event Invitation</button>
+                    <button class="template-btn" onclick="useTemplate('newsletter')">Newsletter</button>
+                    <button class="template-btn" onclick="useTemplate('welcome')">Welcome Email</button>
+                    <button class="template-btn" onclick="useTemplate('board')">Board Recruitment</button>
                 </div>
             </div>
 
-            <!-- Campaign Stats -->
-            <div class="tool-card">
-                <h3>📊 Campaign Performance</h3>
-                <div class="stats-box">
-                    <h5>Last Campaign: October Newsletter</h5>
-                    <p><strong>Sent:</strong> October 6, 2025<br>
-                    <strong>Recipients:</strong> 134 members<br>
-                    <strong>Open Rate:</strong> 66.4% (89 opens)<br>
-                    <strong>Click Rate:</strong> 17.2% (23 clicks)</p>
-                </div>
-                <button class="btn" onclick="viewDetailedStats()">📈 Detailed Analytics</button>
-                <button class="btn" onclick="exportCampaigns()">📤 Export Data</button>
+            <div class="form-group">
+                <label for="campaign-subject">Subject Line:</label>
+                <input type="text" id="campaign-subject" class="form-control" placeholder="Enter email subject">
             </div>
 
-            <!-- Quick Actions -->
-            <div class="tool-card">
-                <h3>⚡ Quick Actions</h3>
-                <div style="display: grid; gap: 0.5rem;">
-                    <button class="btn btn-warning" onclick="duesReminder()">💰 Send Dues Reminder (45 members)</button>
-                    <button class="btn" onclick="eventReminder()">📅 Event Reminder</button>
-                    <button class="btn" onclick="boardRecruitment()">🏛️ Board Recruitment Email</button>
-                    <a href="subscriber-lists.html" class="btn">👥 Manage Subscribers</a>
-                    <a href="mailchimp-config.html" class="btn">🔧 Mailchimp Settings</a>
-                </div>
+            <div class="form-group">
+                <label for="campaign-recipients">Send To: <span class="recipient-count" id="recipient-count"></span></label>
+                <select id="campaign-recipients" class="form-control" onchange="updateRecipientCount()">
+                    <option value="">-- Select Recipient Group --</option>
+                    <option value="all">All Members</option>
+                    <option value="current">Current 2025 Members Only</option>
+                    <option value="unpaid">Unpaid 2025 Dues Only</option>
+                    <option value="board">Board Members Only</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="campaign-content">Email Content (Plain Text):</label>
+                <textarea id="campaign-content" class="form-control" placeholder="Enter email message"></textarea>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-test" onclick="sendTestEmail()">Send Test to Admin</button>
+                <button class="btn btn-send" onclick="sendCampaign()">Send Campaign</button>
+            </div>
+
+            <div class="loading" id="loading">
+                Sending emails... Please wait.
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="quick-action-btn" onclick="quickDuesReminder()">
+                <h4>📋 Dues Reminder</h4>
+                <p>Send to unpaid members</p>
+            </div>
+            <div class="quick-action-btn" onclick="window.location.href='newsletter-manager.html'">
+                <h4>📰 Newsletter Manager</h4>
+                <p>Full newsletter builder</p>
+            </div>
+            <div class="quick-action-btn" onclick="window.location.href='member-manager.html'">
+                <h4>👥 Member Manager</h4>
+                <p>View all members</p>
+            </div>
+            <div class="quick-action-btn" onclick="window.location.href='email-config.html'">
+                <h4>⚙️ Email Settings</h4>
+                <p>Configure email system</p>
             </div>
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="/admin/firebase-config.js"></script>
+
     <script>
-        function sendCampaign() {
-            const name = document.getElementById('campaign-name').value;
-            const subject = document.getElementById('campaign-subject').value;
-            const recipients = document.getElementById('campaign-recipients').value;
-            const content = document.getElementById('campaign-content').value;
+        let memberStats = {
+            total: 0,
+            current: 0,
+            unpaid: 0,
+            board: 0
+        };
+
+        // Load member statistics
+        function loadStats() {
+            db.collection('members').get().then(snapshot => {
+                const members = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+                
+                memberStats.total = members.length;
+                
+                // Count current members (paid 2025)
+                memberStats.current = members.filter(m => 
+                    m.payments && m.payments.some(p => 
+                        p.year === '2025' && p.amount >= 25
+                    )
+                ).length;
+                
+                // Count unpaid (all members minus current)
+                memberStats.unpaid = memberStats.total - memberStats.current;
+                
+                // Count board members (you can adjust this logic)
+                memberStats.board = members.filter(m => m.role === 'board' || m.isBoard === true).length;
+                
+                // Update UI
+                document.getElementById('stat-total').textContent = memberStats.total;
+                document.getElementById('stat-current').textContent = memberStats.current;
+                document.getElementById('stat-unpaid').textContent = memberStats.unpaid;
+                document.getElementById('stat-board').textContent = memberStats.board;
+            }).catch(error => {
+                console.error('Error loading stats:', error);
+                alert('Error loading member stats. Please refresh.');
+            });
+        }
+
+        // Update recipient count when selection changes
+        function updateRecipientCount() {
+            const type = document.getElementById('campaign-recipients').value;
+            const countSpan = document.getElementById('recipient-count');
             
-            if (!name || !subject || !content) {
-                alert('Please fill in campaign name, subject, and content');
+            if (!type) {
+                countSpan.textContent = '';
                 return;
             }
             
-            const recipientCount = getRecipientCount(recipients);
-            const confirmed = confirm(`Send "${subject}" to ${recipientCount} recipients?`);
+            const count = type === 'all' ? memberStats.total :
+                         type === 'current' ? memberStats.current :
+                         type === 'unpaid' ? memberStats.unpaid :
+                         type === 'board' ? memberStats.board : 0;
             
-            if (confirmed) {
-                alert('Email campaign sent successfully!');
-                document.getElementById('campaignForm').reset();
-            }
+            countSpan.textContent = `(${count} recipients)`;
         }
-        
-        function getRecipientCount(type) {
-            const counts = {
-                'all': 134,
-                'current': 89,
-                'unpaid': 45,
-                'board': 2,
-                'custom': 0
-            };
-            return counts[type] || 0;
-        }
-        
+
+        // Load email templates
         function useTemplate(type) {
             const templates = {
                 dues: {
-                    name: '2025 Dues Reminder',
                     subject: '2025 Chapter Membership Dues - Payment Due',
                     content: `Dear Fellow Mountaineer,
 
@@ -165,8 +218,8 @@ Your continued support helps us:
 • Support local WVU students
 • Maintain our strong alumni network
 
-Pay online at: [payment link]
-Or mail check to: [address]
+Pay online at: https://cvawvuaa.org/pay.html
+Or mail check to: CVCWVUAA, P.O. Box 5628, Midlothian, VA 23112
 
 Thank you for your continued support!
 
@@ -174,7 +227,6 @@ Go Mountaineers!
 Timothy Casten, President`
                 },
                 event: {
-                    name: 'Event Invitation',
                     subject: 'You\'re Invited: [Event Name]',
                     content: `Dear Chapter Members,
 
@@ -182,17 +234,53 @@ You're invited to our upcoming event:
 
 [Event Details]
 Date: [Date]
-Time: [Time] 
+Time: [Time]
 Location: [Location]
 
 Join fellow Mountaineers for an evening of fun and fellowship!
 
-RSVP by [Date]: [RSVP Link]
+RSVP at: https://cvawvuaa.org/events.html
 
-Hope to see you there!`
+Hope to see you there!
+
+Go Mountaineers!`
+                },
+                newsletter: {
+                    subject: 'CVCWVUAA Monthly Newsletter',
+                    content: `Dear Fellow Mountaineers,
+
+[Newsletter Content Here]
+
+Upcoming Events:
+[List events]
+
+Chapter News:
+[Chapter updates]
+
+Go Mountaineers!
+
+--
+For a full HTML newsletter, use the Newsletter Manager.`
+                },
+                welcome: {
+                    subject: 'Welcome to the Central Virginia WVU Alumni Chapter!',
+                    content: `Dear New Member,
+
+Welcome to the Central Virginia Chapter of the WVU Alumni Association!
+
+We're excited to have you join our community of proud Mountaineers in the Richmond area.
+
+What's Next:
+• Visit our website: https://cvawvuaa.org
+• Check out upcoming events: https://cvawvuaa.org/events.html
+• Follow us on social media
+
+Questions? Email us at cvcwvuaa@gmail.com
+
+Go Mountaineers!
+Timothy Casten, President`
                 },
                 board: {
-                    name: 'Board Recruitment',
                     subject: 'Help Lead Your Chapter - Board Positions Available',
                     content: `Dear Fellow Mountaineers,
 
@@ -210,7 +298,7 @@ Why join the board?
 
 Time commitment: ~2-3 hours per month
 
-Interested? Reply to this email or contact us at [contact].
+Interested? Reply to this email or contact us at cvcwvuaa@gmail.com
 
 Go Mountaineers!`
                 }
@@ -218,44 +306,128 @@ Go Mountaineers!`
             
             const template = templates[type];
             if (template) {
-                document.getElementById('campaign-name').value = template.name;
                 document.getElementById('campaign-subject').value = template.subject;
                 document.getElementById('campaign-content').value = template.content;
             }
         }
-        
-        function saveDraft() {
-            alert('Campaign saved as draft');
+
+        // Get recipients based on selection
+        async function getRecipients(type) {
+            const snapshot = await db.collection('members').get();
+            const members = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+            
+            if (type === 'all') {
+                return members;
+            } else if (type === 'current') {
+                return members.filter(m => 
+                    m.payments && m.payments.some(p => p.year === '2025' && p.amount >= 25)
+                );
+            } else if (type === 'unpaid') {
+                return members.filter(m => 
+                    !m.payments || !m.payments.some(p => p.year === '2025' && p.amount >= 25)
+                );
+            } else if (type === 'board') {
+                return members.filter(m => m.role === 'board' || m.isBoard === true);
+            }
+            return [];
         }
-        
-        function previewEmail() {
-            alert('Email preview would open here');
-        }
-        
-        function duesReminder() {
-            const confirmed = confirm('Send dues reminder to 45 members with unpaid 2025 dues?');
-            if (confirmed) {
-                alert('Dues reminder sent to 45 unpaid members');
+
+        // Send test email to admin
+        async function sendTestEmail() {
+            const subject = document.getElementById('campaign-subject').value;
+            const content = document.getElementById('campaign-content').value;
+            
+            if (!subject || !content) {
+                alert('Please fill in subject and content first.');
+                return;
+            }
+            
+            try {
+                await db.collection('mail').add({
+                    to: 'cvcwvuaa@gmail.com',
+                    message: {
+                        subject: '[TEST] ' + subject,
+                        text: content
+                    }
+                });
+                
+                alert('Test email sent to cvcwvuaa@gmail.com');
+            } catch (error) {
+                console.error('Error sending test:', error);
+                alert('Error sending test email: ' + error.message);
             }
         }
-        
-        function eventReminder() {
-            alert('Event reminder interface would open here');
+
+        // Send campaign
+        async function sendCampaign() {
+            const subject = document.getElementById('campaign-subject').value;
+            const content = document.getElementById('campaign-content').value;
+            const recipientType = document.getElementById('campaign-recipients').value;
+            
+            if (!subject || !content || !recipientType) {
+                alert('Please fill in all fields and select recipient group.');
+                return;
+            }
+            
+            const recipients = await getRecipients(recipientType);
+            
+            if (recipients.length === 0) {
+                alert('No recipients found for selected group.');
+                return;
+            }
+            
+            const confirmed = confirm(`Send email to ${recipients.length} recipients?\n\nSubject: ${subject}\n\nThis cannot be undone.`);
+            if (!confirmed) return;
+            
+            document.getElementById('loading').classList.add('active');
+            
+            try {
+                // Send in batches of 50 via BCC
+                const batchSize = 50;
+                for (let i = 0; i < recipients.length; i += batchSize) {
+                    const batch = recipients.slice(i, i + batchSize);
+                    const bccList = batch.map(m => m.email).filter(e => e);
+                    
+                    if (bccList.length > 0) {
+                        await db.collection('mail').add({
+                            to: 'cvcwvuaa@gmail.com',
+                            bcc: bccList,
+                            message: {
+                                subject: subject,
+                                text: content
+                            }
+                        });
+                    }
+                }
+                
+                document.getElementById('loading').classList.remove('active');
+                alert(`Campaign sent successfully to ${recipients.length} recipients!`);
+                
+                // Clear form
+                document.getElementById('campaign-subject').value = '';
+                document.getElementById('campaign-content').value = '';
+                document.getElementById('campaign-recipients').value = '';
+                updateRecipientCount();
+                
+            } catch (error) {
+                document.getElementById('loading').classList.remove('active');
+                console.error('Error sending campaign:', error);
+                alert('Error sending campaign: ' + error.message);
+            }
         }
-        
-        function boardRecruitment() {
-            useTemplate('board');
-            document.getElementById('campaign-recipients').value = 'all';
+
+        // Quick action: Dues reminder
+        function quickDuesReminder() {
+            document.getElementById('campaign-recipients').value = 'unpaid';
+            updateRecipientCount();
+            useTemplate('dues');
+            window.scrollTo(0, 0);
         }
-        
-        function viewDetailedStats() {
-            alert('Detailed analytics dashboard would open here');
-        }
-        
-        function exportCampaigns() {
-            alert('Campaign data export would begin here');
-        }
+
+        // Initialize
+        loadStats();
     </script>
+
     <!-- WVU Footer Component -->
     <div id="wvu-footer"></div>
 

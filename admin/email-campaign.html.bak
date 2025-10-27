@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Campaign Manager - CVCWVUAA</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/wvu-components.min.css">
+    <style>
+        .manager-container { max-width: 1200px; margin: 2rem auto; padding: 2rem; }
+        .manager-header { background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; }
+        .tool-card { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn { display: inline-block; background: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px; margin: 5px; font-weight: 600; border: none; cursor: pointer; }
+        .btn:hover { background: #0056b3; color: white; }
+        .btn-success { background: #28a745; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .form-group { margin-bottom: 1rem; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; }
+        textarea.form-control { min-height: 150px; }
+        .back-link { display: inline-block; margin-bottom: 2rem; color: #007bff; text-decoration: none; }
+        .stats-box { background: #e3f2fd; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <!-- Back to Dashboard Button -->
+    <div class="back-to-dashboard" style="max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+        <a href="/admin/dashboard.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #002855, #1e40af); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <span style="font-size: 1.2rem;">←</span>
+            <span>Back to Dashboard</span>
+        </a>
+    </div>
+
+    <div class="manager-container">
+        <a href="index.html" class="back-link">← Back to Admin Hub</a>
+        
+        <div class="manager-header">
+            <h1>📧 Email Campaign Manager</h1>
+            <p>Send targeted communications to chapter members</p>
+        </div>
+
+        <div class="tools-grid">
+            <!-- Create Campaign -->
+            <div class="tool-card">
+                <h3>✉️ Create Email Campaign</h3>
+                <form id="campaignForm">
+                    <div class="form-group">
+                        <label>Campaign Name</label>
+                        <input type="text" id="campaign-name" class="form-control" placeholder="October Dues Reminder">
+                    </div>
+                    <div class="form-group">
+                        <label>Subject Line</label>
+                        <input type="text" id="campaign-subject" class="form-control" placeholder="2025 Membership Dues - Payment Due">
+                    </div>
+                    <div class="form-group">
+                        <label>Recipients</label>
+                        <select id="campaign-recipients" class="form-control">
+                            <option value="all">All Members (134)</option>
+                            <option value="current">Current Members (89)</option>
+                            <option value="unpaid">Unpaid 2025 Dues (45)</option>
+                            <option value="board">Board Members Only</option>
+                            <option value="custom">Custom List</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Content</label>
+                        <textarea id="campaign-content" class="form-control" placeholder="Dear Fellow Mountaineers..."></textarea>
+                    </div>
+                    <button type="button" class="btn btn-success" onclick="sendCampaign()">📤 Send Campaign</button>
+                    <button type="button" class="btn btn-warning" onclick="saveDraft()">💾 Save Draft</button>
+                    <button type="button" class="btn" onclick="previewEmail()">👁️ Preview</button>
+                </form>
+            </div>
+
+            <!-- Campaign Templates -->
+            <div class="tool-card">
+                <h3>📄 Email Templates</h3>
+                <div style="display: grid; gap: 0.5rem;">
+                    <button class="btn" onclick="useTemplate('dues')">💳 Dues Reminder</button>
+                    <button class="btn" onclick="useTemplate('event')">🎉 Event Invitation</button>
+                    <button class="btn" onclick="useTemplate('newsletter')">📧 Newsletter</button>
+                    <button class="btn" onclick="useTemplate('welcome')">👋 Welcome New Member</button>
+                    <button class="btn" onclick="useTemplate('board')">🏛️ Board Recruitment</button>
+                    <button class="btn" onclick="useTemplate('survey')">📊 Member Survey</button>
+                </div>
+            </div>
+
+            <!-- Campaign Stats -->
+            <div class="tool-card">
+                <h3>📊 Campaign Performance</h3>
+                <div class="stats-box">
+                    <h5>Last Campaign: October Newsletter</h5>
+                    <p><strong>Sent:</strong> October 6, 2025<br>
+                    <strong>Recipients:</strong> 134 members<br>
+                    <strong>Open Rate:</strong> 66.4% (89 opens)<br>
+                    <strong>Click Rate:</strong> 17.2% (23 clicks)</p>
+                </div>
+                <button class="btn" onclick="viewDetailedStats()">📈 Detailed Analytics</button>
+                <button class="btn" onclick="exportCampaigns()">📤 Export Data</button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="tool-card">
+                <h3>⚡ Quick Actions</h3>
+                <div style="display: grid; gap: 0.5rem;">
+                    <button class="btn btn-warning" onclick="duesReminder()">💰 Send Dues Reminder (45 members)</button>
+                    <button class="btn" onclick="eventReminder()">📅 Event Reminder</button>
+                    <button class="btn" onclick="boardRecruitment()">🏛️ Board Recruitment Email</button>
+                    <a href="subscriber-lists.html" class="btn">👥 Manage Subscribers</a>
+                    <a href="mailchimp-config.html" class="btn">🔧 Mailchimp Settings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendCampaign() {
+            const name = document.getElementById('campaign-name').value;
+            const subject = document.getElementById('campaign-subject').value;
+            const recipients = document.getElementById('campaign-recipients').value;
+            const content = document.getElementById('campaign-content').value;
+            
+            if (!name || !subject || !content) {
+                alert('Please fill in campaign name, subject, and content');
+                return;
+            }
+            
+            const recipientCount = getRecipientCount(recipients);
+            const confirmed = confirm(`Send "${subject}" to ${recipientCount} recipients?`);
+            
+            if (confirmed) {
+                alert('Email campaign sent successfully!');
+                document.getElementById('campaignForm').reset();
+            }
+        }
+        
+        function getRecipientCount(type) {
+            const counts = {
+                'all': 134,
+                'current': 89,
+                'unpaid': 45,
+                'board': 2,
+                'custom': 0
+            };
+            return counts[type] || 0;
+        }
+        
+        function useTemplate(type) {
+            const templates = {
+                dues: {
+                    name: '2025 Dues Reminder',
+                    subject: '2025 Chapter Membership Dues - Payment Due',
+                    content: `Dear Fellow Mountaineer,
+
+Your 2025 Central Virginia Chapter membership dues of $25 are now due.
+
+Your continued support helps us:
+• Host exciting chapter events
+• Support local WVU students
+• Maintain our strong alumni network
+
+Pay online at: [payment link]
+Or mail check to: [address]
+
+Thank you for your continued support!
+
+Go Mountaineers!
+Timothy Casten, President`
+                },
+                event: {
+                    name: 'Event Invitation',
+                    subject: 'You\'re Invited: [Event Name]',
+                    content: `Dear Chapter Members,
+
+You're invited to our upcoming event:
+
+[Event Details]
+Date: [Date]
+Time: [Time] 
+Location: [Location]
+
+Join fellow Mountaineers for an evening of fun and fellowship!
+
+RSVP by [Date]: [RSVP Link]
+
+Hope to see you there!`
+                },
+                board: {
+                    name: 'Board Recruitment',
+                    subject: 'Help Lead Your Chapter - Board Positions Available',
+                    content: `Dear Fellow Mountaineers,
+
+Our chapter needs YOU! We have several board positions available and are looking for dedicated alumni to help lead our chapter.
+
+Available Positions:
+• Vice President
+• Secretary
+• Board Members at Large
+
+Why join the board?
+• Make a real difference in your local WVU community
+• Network with fellow alumni leaders
+• Help shape chapter activities and direction
+
+Time commitment: ~2-3 hours per month
+
+Interested? Reply to this email or contact us at [contact].
+
+Go Mountaineers!`
+                }
+            };
+            
+            const template = templates[type];
+            if (template) {
+                document.getElementById('campaign-name').value = template.name;
+                document.getElementById('campaign-subject').value = template.subject;
+                document.getElementById('campaign-content').value = template.content;
+            }
+        }
+        
+        function saveDraft() {
+            alert('Campaign saved as draft');
+        }
+        
+        function previewEmail() {
+            alert('Email preview would open here');
+        }
+        
+        function duesReminder() {
+            const confirmed = confirm('Send dues reminder to 45 members with unpaid 2025 dues?');
+            if (confirmed) {
+                alert('Dues reminder sent to 45 unpaid members');
+            }
+        }
+        
+        function eventReminder() {
+            alert('Event reminder interface would open here');
+        }
+        
+        function boardRecruitment() {
+            useTemplate('board');
+            document.getElementById('campaign-recipients').value = 'all';
+        }
+        
+        function viewDetailedStats() {
+            alert('Detailed analytics dashboard would open here');
+        }
+        
+        function exportCampaigns() {
+            alert('Campaign data export would begin here');
+        }
+    </script>
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>
