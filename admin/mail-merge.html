@@ -364,6 +364,12 @@ CVCWVUAA"></textarea>
                 <div class="panel" style="margin-top: 2rem;">
                     <h2>👥 Select Recipients</h2>
                     
+                    <div class="form-group">
+                        <label for="emailList">Paste Email Addresses (one per line or comma-separated):</label>
+                        <textarea id="emailList" placeholder="Paste email addresses here...&#10;example1@email.com&#10;example2@email.com&#10;Or paste comma-separated list" style="min-height: 100px;" oninput="filterByEmailList()"></textarea>
+                        <small style="color: #6c757d;">Leave blank to use filters below</small>
+                    </div>
+
                     <div class="member-filters">
                         <div class="checkbox-group">
                             <input type="checkbox" id="filterPaid" checked>

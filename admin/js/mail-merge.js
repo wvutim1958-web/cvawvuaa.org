@@ -82,6 +82,31 @@ function filterMembers() {
     updateRecipientCount();
 }
 
+// Filter members by email list
+function filterByEmailList() {
+    const emailListText = document.getElementById('emailList').value.trim();
+    
+    if (!emailListText) {
+        // If empty, use regular filters
+        filterMembers();
+        return;
+    }
+    
+    // Parse emails (support both newline and comma-separated)
+    const emailList = emailListText
+        .split(/[\n,]+/)
+        .map(e => e.trim().toLowerCase())
+        .filter(e => e.includes('@'));
+    
+    // Filter to only members with emails in the list
+    filteredMembers = allMembers.filter(member => {
+        return member.email && emailList.includes(member.email.toLowerCase());
+    });
+    
+    displaySelectedMembers();
+    updateRecipientCount();
+}
+
 // Display filtered members
 function displaySelectedMembers() {
     const container = document.getElementById('selectedMembersList');
