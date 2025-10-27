@@ -17,18 +17,19 @@
   skip_processing = false
   
 [build.processing.css]
-  bundle = false
-  minify = false
+  bundle = true
+  minify = true
 
 [build.processing.js]
-  bundle = false
-  minify = false
+  bundle = true
+  minify = true
 
 [build.processing.html]
-  pretty_urls = false
+  pretty_urls = true
+  minify = true
 
 [build.processing.images]
-  compress = false
+  compress = true
 
 # Headers for all pages
 [[headers]]
