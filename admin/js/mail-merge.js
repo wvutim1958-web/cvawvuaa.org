@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listeners for filters
     document.getElementById('filterPaid').addEventListener('change', filterMembers);
     document.getElementById('filterUnpaid').addEventListener('change', filterMembers);
-    document.getElementById('filterActive').addEventListener('change', filterMembers);
 });
 
 // Load all members from Firestore
@@ -50,7 +49,6 @@ function filterMembers() {
     const searchTerm = document.getElementById('memberSearch').value.toLowerCase();
     const includePaid = document.getElementById('filterPaid').checked;
     const includeUnpaid = document.getElementById('filterUnpaid').checked;
-    const includeActive = document.getElementById('filterActive').checked;
     
     filteredMembers = allMembers.filter(member => {
         // Check payment status
@@ -63,9 +61,6 @@ function filterMembers() {
         
         if (hasPaidCurrentYear && !includePaid) return false;
         if (!hasPaidCurrentYear && !includeUnpaid) return false;
-        
-        // Check active status
-        if (includeActive && member.status === 'inactive') return false;
         
         // Check search term
         if (searchTerm) {
