@@ -19,10 +19,20 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadMembers() {
     try {
         const snapshot = await db.collection('members').get();
-        allMembers = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
+        
+        // Test emails to exclude
+        const testEmails = [
+            'tcasten@mac.com',
+            'pcctim@aol.com',
+            'tcasten@natca.net'
+        ];
+        
+        allMembers = snapshot.docs
+            .map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }))
+            .filter(member => !testEmails.includes(member.email?.toLowerCase()));
         
         // Sort by name
         allMembers.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
