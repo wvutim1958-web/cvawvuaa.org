@@ -164,6 +164,7 @@
             
             snapshot.forEach(doc => {
                 const member = doc.data();
+                const memberId = doc.id;
                 const payments = member.payments || [];
                 
                 // Get member name from various possible fields
@@ -172,7 +173,7 @@
                                   member.email ||
                                   'Unknown Member';
                 
-                payments.forEach(payment => {
+                payments.forEach((payment, index) => {
                     let paymentDate;
                     if (payment.date && payment.date.toDate) {
                         paymentDate = payment.date.toDate();
