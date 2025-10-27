@@ -85,20 +85,9 @@
             <div class="tool-card">
                 <h3>📋 Recent Articles</h3>
                 <div id="articleList">
-                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 1rem;">
-                        <h5>October 2025 Newsletter</h5>
-                        <p class="small">Published: October 6, 2025</p>
-                        <a href="../CVCWVUAA-October-Newsletter-FINAL.html" class="btn" target="_blank">View</a>
-                        <button class="btn btn-warning" onclick="editArticle('newsletter-oct-2025')">Edit</button>
-                    </div>
-                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 1rem;">
-                        <h5>Board Recruitment Drive</h5>
-                        <p class="small">Draft - Not Published</p>
-                        <button class="btn btn-warning" onclick="editArticle('board-recruitment')">Edit</button>
-                        <button class="btn btn-success" onclick="publishArticle('board-recruitment')">Publish</button>
-                    </div>
+                    <p style="color: #666;">Loading articles...</p>
                 </div>
-                <button class="btn" onclick="loadAllArticles()">📄 Load All Articles</button>
+                <button class="btn" onclick="loadAllArticles()">� Refresh List</button>
             </div>
 
             <!-- Quick Actions -->
@@ -106,9 +95,7 @@
                 <h3>⚡ Quick Actions</h3>
                 <div style="display: grid; gap: 1rem;">
                     <a href="../news.html" class="btn" target="_blank">📖 View Live News Page</a>
-                    <button class="btn btn-warning" onclick="uploadImage()">🖼️ Upload Images</button>
-                    <button class="btn" onclick="manageCategories()">🏷️ Manage Categories</button>
-                    <button class="btn" onclick="exportArticles()">📤 Export Articles</button>
+                    <button class="btn" onclick="exportArticles()">📤 Export Articles (JSON)</button>
                     <a href="newsletter-manager.html" class="btn">📧 Newsletter Manager</a>
                 </div>
             </div>
@@ -126,8 +113,13 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
     <script>
-        function saveArticle() {
+        async function saveArticle() {
             const title = document.getElementById('title').value;
             const category = document.getElementById('category').value;
             const content = document.getElementById('content').value;
@@ -138,25 +130,25 @@
                 return;
             }
             
-            // In a real implementation, this would save to a database or CMS
-            const article = {
-                id: Date.now(),
-                title: title,
-                category: category,
-                content: content,
-                author: author,
-                date: new Date().toLocaleDateString(),
-                published: false
-            };
-            
-            // Store in localStorage for demo
-            const articles = JSON.parse(localStorage.getItem('cvcwvuaa_articles') || '[]');
-            articles.unshift(article);
-            localStorage.setItem('cvcwvuaa_articles', JSON.stringify(articles));
-            
-            alert('Article saved successfully!');
-            document.getElementById('articleForm').reset();
-            loadAllArticles();
+            try {
+                await db.collection('news').add({
+                    title: title,
+                    category: category,
+                    content: content,
+                    author: author || 'CVCWVUAA Admin',
+                    date: firebase.firestore.FieldValue.serverTimestamp(),
+                    published: true,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                alert('✅ Article saved and published successfully!');
+                document.getElementById('articleForm').reset();
+                loadAllArticles();
+                
+            } catch (error) {
+                console.error('Error saving article:', error);
+                alert('❌ Error saving article: ' + error.message);
+            }
         }
         
         function previewArticle() {
@@ -170,10 +162,10 @@
             }
             
             const previewHTML = `
-                <article>
-                    <h1>${title}</h1>
-                    <p class="meta">By ${author} • ${new Date().toLocaleDateString()}</p>
-                    <div>${content.replace(/\n/g, '<br>')}</div>
+                <article style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
+                    <h1 style="color: #002855; margin-bottom: 0.5rem;">${title}</h1>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 2rem;">By ${author || 'CVCWVUAA Admin'} • ${new Date().toLocaleDateString()}</p>
+                    <div style="line-height: 1.8; color: #333;">${content.replace(/\n/g, '<br>')}</div>
                 </article>
             `;
             
@@ -185,55 +177,111 @@
             document.getElementById('previewModal').style.display = 'none';
         }
         
-        function loadAllArticles() {
-            const articles = JSON.parse(localStorage.getItem('cvcwvuaa_articles') || '[]');
-            const listElement = document.getElementById('articleList');
-            
-            if (articles.length === 0) {
-                listElement.innerHTML = '<p>No articles found. Create your first article above!</p>';
+        async function loadAllArticles() {
+            try {
+                const articlesSnapshot = await db.collection('news')
+                    .orderBy('date', 'desc')
+                    .limit(20)
+                    .get();
+                
+                const listElement = document.getElementById('articleList');
+                
+                if (articlesSnapshot.empty) {
+                    listElement.innerHTML = '<p style="color: #666;">No articles found. Create your first article above!</p>';
+                    return;
+                }
+                
+                let html = '';
+                articlesSnapshot.docs.forEach(doc => {
+                    const article = doc.data();
+                    const dateStr = article.date ? new Date(article.date.seconds * 1000).toLocaleDateString() : 'No date';
+                    
+                    html += `
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 1rem; border-left: 4px solid #007bff;">
+                            <h5 style="margin: 0 0 0.5rem 0; color: #002855;">${article.title}</h5>
+                            <p style="margin: 0 0 0.5rem 0; color: #666; font-size: 13px;">
+                                <strong>Category:</strong> ${article.category || 'news'} • 
+                                <strong>Author:</strong> ${article.author || 'Unknown'} • 
+                                <strong>Date:</strong> ${dateStr}
+                            </p>
+                            <p style="margin: 0 0 0.75rem 0; color: #666; font-size: 14px;">${article.content.substring(0, 100)}${article.content.length > 100 ? '...' : ''}</p>
+                            <button class="btn btn-warning" onclick="editArticle('${doc.id}')">✏️ Edit</button>
+                            <button class="btn" style="background: #dc3545;" onclick="deleteArticle('${doc.id}', '${article.title.replace(/'/g, "\\'")}')">🗑️ Delete</button>
+                        </div>
+                    `;
+                });
+                
+                listElement.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                document.getElementById('articleList').innerHTML = '<p style="color: #c62828;">Error loading articles. Please refresh the page.</p>';
+            }
+        }
+        
+        async function deleteArticle(id, title) {
+            if (!confirm(`Are you sure you want to delete "${title}"?`)) {
                 return;
             }
             
-            listElement.innerHTML = articles.map(article => `
-                <div style="padding: 1rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 1rem;">
-                    <h5>${article.title}</h5>
-                    <p class="small">${article.category} • ${article.date} • ${article.published ? 'Published' : 'Draft'}</p>
-                    <button class="btn btn-warning" onclick="editArticle('${article.id}')">Edit</button>
-                    ${!article.published ? '<button class="btn btn-success" onclick="publishArticle(\'' + article.id + '\')">Publish</button>' : ''}
-                </div>
-            `).join('');
+            try {
+                await db.collection('news').doc(id).delete();
+                alert('✅ Article deleted successfully!');
+                loadAllArticles();
+                
+            } catch (error) {
+                console.error('Error deleting article:', error);
+                alert('❌ Error deleting article: ' + error.message);
+            }
         }
         
         function editArticle(id) {
-            // In a real implementation, this would load the article for editing
-            alert('Edit functionality would be implemented here for article: ' + id);
+            alert('📝 Edit functionality coming soon.\n\nFor now, you can delete and recreate the article, or edit it directly in Firebase Console.');
         }
         
-        function publishArticle(id) {
-            alert('Publish functionality would be implemented here for article: ' + id);
-        }
-        
-        function uploadImage() {
-            alert('Image upload functionality would be implemented here');
-        }
-        
-        function manageCategories() {
-            alert('Category management would be implemented here');
-        }
-        
-        function exportArticles() {
-            const articles = JSON.parse(localStorage.getItem('cvcwvuaa_articles') || '[]');
-            const dataStr = JSON.stringify(articles, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'cvcwvuaa_articles.json';
-            link.click();
+        async function exportArticles() {
+            try {
+                const articlesSnapshot = await db.collection('news').orderBy('date', 'desc').get();
+                
+                if (articlesSnapshot.empty) {
+                    alert('No articles to export.');
+                    return;
+                }
+                
+                const articles = [];
+                articlesSnapshot.docs.forEach(doc => {
+                    const data = doc.data();
+                    articles.push({
+                        id: doc.id,
+                        title: data.title,
+                        category: data.category,
+                        content: data.content,
+                        author: data.author,
+                        date: data.date ? new Date(data.date.seconds * 1000).toISOString() : null,
+                        published: data.published
+                    });
+                });
+                
+                const dataStr = JSON.stringify(articles, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `cvcwvuaa_articles_${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+                
+                alert(`✅ Exported ${articles.length} articles to JSON file!`);
+                
+            } catch (error) {
+                console.error('Error exporting articles:', error);
+                alert('❌ Error exporting articles: ' + error.message);
+            }
         }
         
         // Load articles on page load
-        document.addEventListener('DOMContentLoaded', loadAllArticles);
+        window.addEventListener('load', () => {
+            setTimeout(loadAllArticles, 500);
+        });
     </script>
     <!-- WVU Footer Component -->
     <div id="wvu-footer"></div>
