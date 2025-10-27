@@ -1,0 +1,23 @@
+<!-- 
+  This is a static form template for Netlify Forms detection.
+  The actual form is in membership.html - this just ensures Netlify detects it.
+-->
+<form name="membership" netlify netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="membership">
+  <input name="bot-field">
+  <input type="radio" name="Membership Type" value="Member $25">
+  <input type="radio" name="Membership Type" value="Family Member $15">
+  <input type="number" name="Additional Donation">
+  <input type="text" name="First Name">
+  <input type="text" name="Last Name">
+  <input type="email" name="Email">
+  <input type="tel" name="Phone">
+  <textarea name="Address"></textarea>
+  <input type="checkbox" name="Volunteer" value="Game Watch">
+  <input type="checkbox" name="Volunteer" value="Fund Raising">
+  <input type="checkbox" name="Volunteer" value="Networking">
+  <input type="checkbox" name="Volunteer" value="Social Events">
+  <input type="checkbox" name="Volunteer" value="Membership">
+  <input type="text" name="Other">
+  <textarea name="Family Members"></textarea>
+</form>

@@ -1,6 +1,5 @@
 ﻿<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#EEAA00">
 <title>CVCWVUAA • Board</title>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
@@ -10,27 +9,62 @@
   gtag('js', new Date());
   gtag('config', 'G-G14Q10H6Y2');
 </script>
-  <!-- WVU Official Fonts -->
-  <link rel="preconnect" href="https://cdn.fonts.net">
-  <link href="https://cdn.fonts.net/kit/b339d500-35c3-11ed-aaf7-06b70d83f6b0/b339d500-35c3-11ed-aaf7-06b70d83f6b0.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/styles.min.css">
-  <link rel="stylesheet" href="/css/wvu-components.min.css">
-  <link rel="stylesheet" href="/css/wvu-cta.min.css">
-  <link rel="stylesheet" href="/css/wvu-breadcrumbs.min.css">
-<link rel="stylesheet" href="/css/social-media.min.css">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/social-media.css">
 </head><body>
 
-<!-- Skip to main content for accessibility -->
-<a href="#main-content" class="skip-to-main">Skip to main content</a>
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
 
-    <div id="wvu-masthead"></div>
-    <div id="wvu-navigation"></div>
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
 
-    <!-- Breadcrumb Navigation -->
-    <div id="wvu-breadcrumbs"></div>
-    <main id="main-content">
-  <h1>Board Members</h1>
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
+
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">🔍</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+
+    </nav>
+  </div>
+</header>
+<main><div class="wrapper">
+  <h2>Board Members</h2>
   <p class="lead">Your Central Virginia Chapter leadership team.</p>
   
   <div class="card">
@@ -69,7 +103,15 @@
 
 </div></main>
 
-    <div id="wvu-footer"></div>
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
 
 <script>
   // year stamp
@@ -129,6 +171,11 @@
     }
   })();
 </script>
+<script>
+  // Mobile: open/close main nav
+
+</script>
+
 <script>
 // Direct dropdown functionality to ensure it works
 document.addEventListener('DOMContentLoaded', function() {
@@ -192,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- Social Media Integration -->
-<script src="/js/social-media.min.js"></script>
+<script src="/js/social-media.js"></script>
 <script>
   // Initialize social media when page loads
   document.addEventListener('DOMContentLoaded', () => {
@@ -216,6 +263,4 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 </script>
 
-    <script src="/includes/component-loader.min.js"></script>
-    <script src="/js/wvu-breadcrumbs.min.js"></script>
 </body></html>

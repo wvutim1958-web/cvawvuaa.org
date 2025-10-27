@@ -65,11 +65,52 @@
     <button type="submit">Submit Alumni Spotlight</button>
   </form>
 
+  <!-- Membership Form Template -->
+  <form name="membership" netlify netlify-honeypot="bot-field" action="/thanks.html" hidden>
+    <input type="hidden" name="form-name" value="membership">
+    <input name="bot-field">
+    <input type="radio" name="Membership Type" value="Member $25" required>
+    <input type="radio" name="Membership Type" value="Family Member $15">
+    <input type="number" name="Additional Donation">
+    <input type="text" name="First Name" required>
+    <input type="text" name="Last Name" required>
+    <input type="email" name="Email" required>
+    <input type="tel" name="Phone">
+    <textarea name="Address"></textarea>
+    <input type="checkbox" name="Volunteer" value="Game Watch">
+    <input type="checkbox" name="Volunteer" value="Fund Raising">
+    <input type="checkbox" name="Volunteer" value="Networking">
+    <input type="checkbox" name="Volunteer" value="Social Events">
+    <input type="checkbox" name="Volunteer" value="Membership">
+    <input type="text" name="Other">
+    <textarea name="Family Members"></textarea>
+    <button type="submit">Submit Membership</button>
+  </form>
+
+  <!-- Event RSVP Form Template -->
+  <form name="event-rsvp" netlify netlify-honeypot="bot-field" action="/thanks.html" hidden>
+    <input type="hidden" name="form-name" value="event-rsvp">
+    <input name="bot-field">
+    <input type="text" name="Event Name">
+    <input type="date" name="Event Date">
+    <input type="time" name="Event Time">
+    <input type="text" name="Event Location">
+    <input type="text" name="Name" required>
+    <input type="email" name="Email" required>
+    <input type="tel" name="Phone">
+    <input type="number" name="Number of Guests">
+    <textarea name="Dietary Restrictions"></textarea>
+    <textarea name="Additional Notes"></textarea>
+    <button type="submit">Submit RSVP</button>
+  </form>
+
   <p>Forms are configured on:</p>
   <ul>
     <li><a href="/contact.html">Contact Form</a></li>
     <li><a href="/media.html">Media Upload Form</a></li>
     <li><a href="/alumni-spotlight-submit.html">Alumni Spotlight Nomination Form</a></li>
+    <li><a href="/membership.html">Membership Form</a></li>
+    <li><a href="/events/rsvp.html">Event RSVP Form</a></li>
   </ul>
 </body>
 </html>

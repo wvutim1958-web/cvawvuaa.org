@@ -1,28 +1,63 @@
 ﻿<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#EEAA00">
 <title>CVCWVUAA • Programs</title>
-  <!-- WVU Official Fonts -->
-  <link rel="preconnect" href="https://cdn.fonts.net">
-  <link href="https://cdn.fonts.net/kit/b339d500-35c3-11ed-aaf7-06b70d83f6b0/b339d500-35c3-11ed-aaf7-06b70d83f6b0.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/styles.min.css">
-  <link rel="stylesheet" href="/css/wvu-components.min.css">
-  <link rel="stylesheet" href="/css/wvu-cta.min.css">
-  <link rel="stylesheet" href="/css/wvu-breadcrumbs.min.css">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/lazy-loading.css">
 </head><body>
 
-<!-- Skip to main content for accessibility -->
-<a href="#main-content" class="skip-to-main">Skip to main content</a>
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
 
-    <div id="wvu-masthead"></div>
-    <div id="wvu-navigation"></div>
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
 
-    <!-- Breadcrumb Navigation -->
-    <div id="wvu-breadcrumbs"></div>
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
 
-    <main id="main-content">
-  <h1>Programs</h1>
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">🔍</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+
+    </nav>
+  </div>
+</header>
+
+<main><div class="wrapper">
+  <h2>Programs</h2>
   <div class="grid grid-2">
     <article id="bears" class="card">
       <img class="program-img" data-src="/assets/photos/download (10).jpg" loading="lazy" alt="Bears and Blankets">
@@ -44,11 +79,64 @@
   </div>
 </div></main>
 
-  <!-- Footer Component -->
-    <div id="wvu-footer"></div>
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
 
-<!-- WVU Component Loaders -->
-<script src="/includes/component-loader.min.js"></script>
-<script src="/js/wvu-breadcrumbs.min.js"></script>
-</body>
-</html>
+<script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+<script>
+  // Mobile: open/close main nav
+  const navBtn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
+  if (navBtn && nav) {
+    navBtn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+  // Mobile: tap to open dropdowns
+  document.querySelectorAll('.menu.dropdown').forEach(menu => {
+    const btn = menu.querySelector('.dropbtn');
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 900px)').matches) {
+          e.preventDefault();
+          menu.classList.toggle('open');
+          btn.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
+        }
+      });
+    }
+  });
+
+  // Theme toggle functionality
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    });
+  }
+</script>
+
+<script src="/js/lazy-loading.js"></script>
+<script>if(window.LazyLoader){window.LazyLoader.init();}</script>
+
+</body></html>

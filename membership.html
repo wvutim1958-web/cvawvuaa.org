@@ -48,7 +48,11 @@
   <h1>Membership 2025–2026</h1>
   <p class="small">Annual dues: <strong>$25 per member</strong> and <strong>$15 per family member</strong>. After submitting, an invoice will be generated and you can pay online immediately.</p>
 
-  <form id="membership-form" class="stack">
+  <form id="membership-form" name="membership" class="stack" method="POST" netlify netlify-honeypot="bot-field" action="/thanks.html">
+    <!-- Honeypot field for spam protection (hidden) -->
+    <p style="display:none">
+      <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+    </p>
     <fieldset class="card" style="border:none">
       <legend><strong>Type of Membership</strong></legend>
       <div class="row">

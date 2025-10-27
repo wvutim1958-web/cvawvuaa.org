@@ -1,28 +1,61 @@
 ﻿<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#EEAA00">
 <title>CVCWVUAA • Scholarship</title>
-  <!-- WVU Official Fonts -->
-  <link rel="preconnect" href="https://cdn.fonts.net">
-  <link href="https://cdn.fonts.net/kit/b339d500-35c3-11ed-aaf7-06b70d83f6b0/b339d500-35c3-11ed-aaf7-06b70d83f6b0.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/styles.min.css">
-  <link rel="stylesheet" href="/css/wvu-components.min.css">
-  <link rel="stylesheet" href="/css/wvu-cta.min.css">
-  <link rel="stylesheet" href="/css/wvu-breadcrumbs.min.css">
+<link rel="stylesheet" href="/css/styles.css">
 </head><body>
 
-<!-- Skip to main content for accessibility -->
-<a href="#main-content" class="skip-to-main">Skip to main content</a>
+<header class="site">
+  <div class="wrapper topbar">
+    <a class="brand" href="/index.html" aria-label="CVCWVUAA">
+      <img class="site-logo" src="/assets/logo.png" alt="CVCWVUAA logo">
+    </a>
 
-    <div id="wvu-masthead"></div>
-    <div id="wvu-navigation"></div>
+    <!-- Mobile menu button -->
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
 
-    <!-- Breadcrumb Navigation -->
-    <div id="wvu-breadcrumbs"></div>
+    <nav id="site-nav" class="nav">
+      <a href="/index.html">Home</a>
 
-    <main id="main-content">
-  <h2>Scholarship Fund</h2>
+      <!-- Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
+        <div class="dropdown-panel" role="menu" aria-label="About">
+          <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
+          <a role="menuitem" href="/pay.html">Membership</a>
+          <a role="menuitem" href="/board.html">Board Members</a>
+          <a role="menuitem" href="/minutes.html">Meeting Minutes</a>
+          <a role="menuitem" href="/bylaws.html">Bylaws · Proclamation</a>
+        </div>
+      </div>
+
+      <a href="/events.html">Events</a>
+
+      <!-- News Dropdown -->
+      <div class="menu dropdown">
+        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
+        <div class="dropdown-panel" role="menu" aria-label="News">
+          <a role="menuitem" href="/news/">News</a>
+          <a role="menuitem" href="/newsletters/">Newsletters</a>
+          <a role="menuitem" href="/alumni-spotlight.html">Alumni Spotlight</a>
+        </div>
+      </div>
+
+      <a href="/scores.html">Scores</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/programs.html">Programs</a>
+      <a href="/scholarship.html">Scholarship</a>
+      <a href="/media.html">Media</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/search.html" class="search-btn">🔍</a>
+      
+      <!-- Theme toggle -->
+      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+    </nav>
+  </div>
+</header>
+
+<main><div class="wrapper">
+  <h1>Scholarship Fund</h1>
   <div class="grid grid-2">
     <section class="card">
       <h3>Fund Transparency</h3>
@@ -102,12 +135,23 @@
     <div id="recipient-grid" class="grid grid-2" style="gap:12px"></div>
     <div id="recipient-note" class="small" style="color:#8a5300"></div>
   </section>
-  <img data-src="/assets/photos/wvu-9.avif" loading="lazy" alt="Mountaineer statue" style="width:100%;max-width:420px;border-radius:12px;margin:16px auto;display:block"/>
+  <img src="/assets/photos/wvu-9.avif" alt="Mountaineer statue" style="width:100%;max-width:420px;border-radius:12px;margin:16px auto;display:block"/>
 </div></main>
 
-  <!-- Footer Component -->
-    <div id="wvu-footer"></div>
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-bar">
+      <div class="brandline">CVCWVUAA — Central Virginia Chapter</div>
+  <a href="/contact.html">Contact Us</a>
+    </div>
+    <div class="small footer-meta">© <span id="year"></span> CVCWVUAA — Central Virginia Chapter of the WVU Alumni Association. All rights reserved. WVU and West Virginia University are trademarks of West Virginia University. This site is not an official publication of West Virginia University.</div>
+  </div>
+</footer>
 
+<script>
+  // year stamp
+  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
 <script>
   // Render scholarship recipients from content/scholarship-recipients.json
   (async function(){
@@ -132,21 +176,11 @@
     grid.innerHTML=''; data.sort((a,b)=> String(b.year).localeCompare(String(a.year)) );
     data.forEach(r => grid.appendChild(card(r)));
   })();
-</script>
+  </script>
 
 <!-- WVU Component Loaders -->
-<script src="/includes/component-loader.min.js"></script>
-<script src="/js/wvu-breadcrumbs.min.js"></script>
-  <!-- Performance Resource Hints -->
-  <link rel="dns-prefetch" href="//fast.fonts.net">
-  <link rel="dns-prefetch" href="//www.facebook.com">
-  <link rel="dns-prefetch" href="//platform.twitter.com">
-  <link rel="dns-prefetch" href="//www.instagram.com">
-  <link rel="dns-prefetch" href="//www.linkedin.com">
-  <link rel="dns-prefetch" href="//www.youtube.com">
-  <link rel="preconnect" href="https://fast.fonts.net" crossorigin>
-  <link rel="prefetch" href="/events.html">
-  <link rel="prefetch" href="/membership.html">
+<script src="/includes/component-loader.js"></script>
+<script src="/js/wvu-breadcrumbs.js"></script>
+<script src="/js/theme-toggle.js"></script>
 
-</body>
-</html>
+</body></html>
