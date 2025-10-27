@@ -47,11 +47,12 @@
 
 <main id="main-content"><div class="wrapper">
   <h1>Contact the Chapter</h1>
-  <form class="stack" action="https://formsubmit.co/president@cvawvuaa.org" method="POST" onsubmit="trackContactForm()">
-    <input type="hidden" name="_subject" value="CVCWVUAA Contact Form Submission">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_next" value="https://cvawvuaa.org/thanks.html">
-    <input type="hidden" name="_template" value="table">
+  <form name="contact" class="stack" method="POST" netlify netlify-honeypot="bot-field" action="/thanks.html" onsubmit="trackContactForm()">
+    <input type="hidden" name="form-name" value="contact">
+    <!-- Honeypot for spam protection -->
+    <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+      <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+    </div>
     <div class="row">
       <label>Name<input type="text" name="Name" required></label>
       <label>Email<input type="email" name="Email" required></label>

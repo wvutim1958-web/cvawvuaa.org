@@ -41,13 +41,11 @@
   </p>
   <p class="small">Uploads are reviewed by our volunteers and may be featured. Thank you!</p>
 
-  <form class="stack" action="https://formsubmit.co/president@cvawvuaa.org" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="_subject" value="CVCWVUAA Photo Upload (ZIP)">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_next" value="https://cvawvuaa.org/thanks.html">
+  <form name="media-upload" class="stack" method="POST" enctype="multipart/form-data" netlify netlify-honeypot="bot-field" action="/thanks.html">
+    <input type="hidden" name="form-name" value="media-upload">
     <!-- Honeypot: bots will fill this, humans won't (hidden) -->
-    <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">
-      <label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+      <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
     </div>
 
     <div class="row">
