@@ -1,33 +1,45 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#EEAA00">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CVCWVUAA • Resources & Links</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css" />
-  <link rel="stylesheet" href="/css/wvu-components.css">
-  <style>
-    /* Page-specific polish for resource cards */
-    .res-cards .card ul{margin:.5rem 0 0 1.1rem;padding:0}
-    .res-cards .card li{margin:.25rem 0}
-    .res-cards .card a{font-weight:700}
-  </style>
+  <meta name="description" content="Central Virginia Chapter of the WVU Alumni Association">
+  <meta name="theme-color" content="#EEAA00">
+  
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <!-- WVU Official Fonts -->
+  <link rel="preconnect" href="https://cdn.fonts.net">
+  <link href="https://cdn.fonts.net/kit/b339d500-35c3-11ed-aaf7-06b70d83f6b0/b339d500-35c3-11ed-aaf7-06b70d83f6b0.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/styles.min.css">
+  <link rel="stylesheet" href="/css/wvu-components.min.css">
+  <link rel="stylesheet" href="/css/wvu-cta.min.css">
+  <link rel="stylesheet" href="/css/wvu-cards.min.css">
+  <link rel="stylesheet" href="/assets/enhanced-styles.css">
+  <link rel="stylesheet" href="/css/social-media.min.css">
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G14Q10H6Y2');
+  </script>
 </head>
 <body>
 
 <!-- Skip to main content for accessibility -->
 <a href="#main-content" class="skip-to-main">Skip to main content</a>
 
-  <!-- Header (keeps the clean v44 nav) -->
-    <div id="wvu-masthead"></div>
-    <div id="wvu-navigation"></div>
+<!-- WVU Masthead Component -->
+<div id="wvu-masthead"></div>
 
+<!-- WVU Primary Navigation Component -->
+<div id="wvu-navigation"></div>
 
-    <main id="main-content">
+<main id="main-content">
     <div class="wrapper">
       <h2>Resources &amp; Links</h2>
 
@@ -116,17 +128,15 @@
       </div>
     </div>
   </main>
+<div id="wvu-footer"></div>
 
-  <!-- Footer (compact) -->
-    <div id="wvu-footer"></div>
+<!-- Social Media Integration -->
+<script src="/js/social-media.min.js"></script>
+<script src="/js/theme-toggle.min.js"></script>
+<script src="/js/mobile-enhancer.js"></script>
 
-<script>
-  // year stamp
-  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
-<script>
+<!-- Load WVU Components (Masthead, Navigation, Footer) -->
+<script src="/includes/component-loader.min.js"></script>
 
-
-    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

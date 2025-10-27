@@ -1,30 +1,25 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#EEAA00">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alumni Spotlight • CVCWVUAA</title>
-  <meta name="description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!">
+  <meta name="theme-color" content="#EEAA00">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://cvawvuaa.org/alumni-spotlight.html">
-  <meta property="og:title" content="Alumni Spotlight • CVCWVUAA">
-  <meta property="og:description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!">
-  <meta property="og:image" content="https://cvawvuaa.org/assets/chapter-logo.jpg">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <!-- WVU Official Fonts -->
+  <link rel="preconnect" href="https://cdn.fonts.net">
+  <link href="https://cdn.fonts.net/kit/b339d500-35c3-11ed-aaf7-06b70d83f6b0/b339d500-35c3-11ed-aaf7-06b70d83f6b0.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/styles.min.css">
+  <link rel="stylesheet" href="/css/wvu-components.min.css">
+  <link rel="stylesheet" href="/css/wvu-cta.min.css">
+  <link rel="stylesheet" href="/css/wvu-cards.min.css">
+  <link rel="stylesheet" href="/assets/enhanced-styles.css">
+  <link rel="stylesheet" href="/css/social-media.min.css">
   
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://cvawvuaa.org/alumni-spotlight.html">
-  <meta property="twitter:title" content="Alumni Spotlight • CVCWVUAA">
-  <meta property="twitter:description" content="Celebrating outstanding WVU alumni making a difference in Central Virginia. Nominate an alumnus today!">
-  <meta property="twitter:image" content="https://cvawvuaa.org/assets/chapter-logo.jpg">
-  
-  <!-- Google Analytics -->
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -32,27 +27,19 @@
     gtag('js', new Date());
     gtag('config', 'G-G14Q10H6Y2');
   </script>
-  
-  <link rel="stylesheet" href="/css/styles.css" />
-  <link rel="stylesheet" href="/css/wvu-components.css">
-  <style>
-    .spot-grid{display:grid;gap:18px;grid-template-columns:1fr}
-    @media(min-width:960px){.spot-grid{grid-template-columns:1fr 1fr}}
-    .spot-card img{width:100%;height:220px;object-fit:cover;border-radius:12px}
-    .spot-meta{font-size:14px;color:#5b6777}
-  </style>
 </head>
 <body>
 
 <!-- Skip to main content for accessibility -->
 <a href="#main-content" class="skip-to-main">Skip to main content</a>
 
-  <!-- HEADER (match your current header markup) -->
-    <div id="wvu-masthead"></div>
-    <div id="wvu-navigation"></div>
+<!-- WVU Masthead Component -->
+<div id="wvu-masthead"></div>
 
+<!-- WVU Primary Navigation Component -->
+<div id="wvu-navigation"></div>
 
-    <main id="main-content">
+<main id="main-content">
     <div class="wrapper">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1em;">
         <div>
@@ -70,54 +57,15 @@
       </div>
     </div>
   </main>
+<div id="wvu-footer"></div>
 
-  <!-- FOOTER (match your current footer markup) -->
-    <div id="wvu-footer"></div>
+<!-- Social Media Integration -->
+<script src="/js/social-media.min.js"></script>
+<script src="/js/theme-toggle.min.js"></script>
+<script src="/js/mobile-enhancer.js"></script>
 
-<script>
-  // year stamp
-  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
-<script>
-  // Load spotlight entries from JSON
-  (async function(){
-    try {
-      const res = await fetch('/content/spotlight.json', {cache:'no-store'});
-      if(!res.ok) throw new Error('missing spotlight.json');
-      const items = await res.json();
-      const grid = document.getElementById('spot-grid');
-      if(!Array.isArray(items) || items.length === 0){
-        document.getElementById('spot-empty').style.display = 'block';
-        return;
-      }
-      items.forEach(s => {
-        const card = document.createElement('article');
-        card.className = 'card spot-card';
-        if(s.image){
-          const img = document.createElement('img');
-          img.src = s.image; img.alt = s.alt || s.name || 'Alumni spotlight photo';
-          img.loading = 'lazy';
-          card.appendChild(img);
-        }
-        const h3 = document.createElement('h3');
-        h3.textContent = s.title || s.name || 'Alumni Spotlight';
-        const meta = document.createElement('div');
-        meta.className = 'spot-meta';
-        meta.textContent = s.meta || '';
-        const p = document.createElement('p');
-        p.textContent = s.text || '';
-        card.appendChild(h3);
-        if(meta.textContent) card.appendChild(meta);
-        if(p.textContent) card.appendChild(p);
-        grid.appendChild(card);
-      });
-    } catch(e){
-      document.getElementById('spot-empty').style.display = 'block';
-    }
-  })();
-</script>
-<script>
+<!-- Load WVU Components (Masthead, Navigation, Footer) -->
+<script src="/includes/component-loader.min.js"></script>
 
-    <script src="/includes/component-loader.min.js"></script>
 </body>
 </html>

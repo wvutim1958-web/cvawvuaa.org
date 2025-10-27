@@ -1,32 +1,25 @@
-﻿<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CVCWVUAA • Contact</title>
-<meta name="description" content="Contact the Central Virginia Chapter of WVU Alumni Association. Get in touch for events, membership, board inquiries, or general information about our chapter.">
-<meta name="theme-color" content="#EEAA00">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CVCWVUAA • Contact</title>
+  <meta name="description" content="Contact the Central Virginia Chapter of WVU Alumni Association. Get in touch for events, membership, board inquiries, or general information about our chapter.">
+  <meta name="theme-color" content="#EEAA00">
+  
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <!-- WVU Official Fonts -->
+  <link rel="preconnect" href="https://cdn.fonts.net">
+  <link href="https://cdn.fonts.net/kit/b339d500-35c3-11ed-aaf7-06b70d83f6b0/b339d500-35c3-11ed-aaf7-06b70d83f6b0.css" rel="stylesheet">
 
-<!-- WVU Brand Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://cvawvuaa.org/contact.html">
-<meta property="og:title" content="Contact CVCWVUAA • Get In Touch">
-<meta property="og:description" content="Contact us for events, membership, board inquiries, or general information about our Central Virginia WVU Alumni chapter.">
-<meta property="og:image" content="https://cvawvuaa.org/assets/chapter-logo.jpg">
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://cvawvuaa.org/contact.html">
-<meta property="twitter:title" content="Contact CVCWVUAA • Get In Touch">
-<meta property="twitter:description" content="Contact us for events, membership, board inquiries, or general information about our Central Virginia WVU Alumni chapter.">
-<meta property="twitter:image" content="https://cvawvuaa.org/assets/chapter-logo.jpg">
-
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="/css/wvu-components.css">
-  <link rel="stylesheet" href="/css/social-media.css">
-  <!-- Google Analytics -->
+  <link rel="stylesheet" href="/css/styles.min.css">
+  <link rel="stylesheet" href="/css/wvu-components.min.css">
+  <link rel="stylesheet" href="/css/wvu-cta.min.css">
+  <link rel="stylesheet" href="/css/wvu-cards.min.css">
+  <link rel="stylesheet" href="/assets/enhanced-styles.css">
+  <link rel="stylesheet" href="/css/social-media.min.css">
+  
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-G14Q10H6Y2"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -34,16 +27,19 @@
     gtag('js', new Date());
     gtag('config', 'G-G14Q10H6Y2');
   </script>
-</head><body>
+</head>
+<body>
 
 <!-- Skip to main content for accessibility -->
 <a href="#main-content" class="skip-to-main">Skip to main content</a>
 
-<!-- Skip to main content for accessibility -->
-    <div id="wvu-masthead"></div>
-    <div id="wvu-navigation"></div>
+<!-- WVU Masthead Component -->
+<div id="wvu-masthead"></div>
 
-    <main id="main-content">
+<!-- WVU Primary Navigation Component -->
+<div id="wvu-navigation"></div>
+
+<main id="main-content">
   <h2>Contact the Chapter</h2>
   <form class="stack" action="https://formsubmit.co/president@cvawvuaa.org" method="POST" onsubmit="trackContactForm()">
     <input type="hidden" name="_subject" value="CVCWVUAA Contact Form Submission">
@@ -78,39 +74,15 @@
   </section>
 
 </div></main>
-
-    <div id="wvu-footer"></div>
-
-<script>
-  // year stamp
-  document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
-</script>
-<script>
+<div id="wvu-footer"></div>
 
 <!-- Social Media Integration -->
-<script src="/js/social-media.js"></script>
-<script>
-  // Initialize social media when page loads
-  document.addEventListener('DOMContentLoaded', () => {
-    // Load social account URLs and update links
-    const savedAccounts = localStorage.getItem('cvcwvuaa-social-accounts');
-    if (savedAccounts) {
-      const accounts = JSON.parse(savedAccounts);
-      const socialLinks = document.querySelectorAll('.social-link');
-      socialLinks.forEach(link => {
-        if (link.classList.contains('facebook') && accounts.facebook) {
-          link.href = accounts.facebook;
-        } else if (link.classList.contains('twitter') && accounts.twitter) {
-          link.href = accounts.twitter;
-        } else if (link.classList.contains('instagram') && accounts.instagram) {
-          link.href = accounts.instagram;
-        } else if (link.classList.contains('linkedin') && accounts.linkedin) {
-          link.href = accounts.linkedin;
-        }
-      });
-    }
-  });
-</script>
+<script src="/js/social-media.min.js"></script>
+<script src="/js/theme-toggle.min.js"></script>
+<script src="/js/mobile-enhancer.js"></script>
 
-    <script src="/includes/component-loader.min.js"></script>
-</body></html>
+<!-- Load WVU Components (Masthead, Navigation, Footer) -->
+<script src="/includes/component-loader.min.js"></script>
+
+</body>
+</html>
