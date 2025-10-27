@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netlify Forms - CVCWVUAA</title>
+</head>
+<body>
+  <h1>Netlify Forms Detection</h1>
+  <p>This page helps Netlify detect our forms. The forms below are hidden but ensure proper detection.</p>
+
+  <!-- Contact Form Template -->
+  <form name="contact" netlify netlify-honeypot="bot-field" action="/thanks.html" hidden>
+    <input type="hidden" name="form-name" value="contact">
+    <input name="bot-field">
+    <input type="text" name="Name" required>
+    <input type="email" name="Email" required>
+    <select name="Topic">
+      <option>General Question</option>
+      <option>Membership</option>
+      <option>Scholarship</option>
+      <option>Programs</option>
+      <option>Events/RSVP</option>
+      <option>Website</option>
+    </select>
+    <textarea name="Message" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+
+  <!-- Media Upload Form Template -->
+  <form name="media-upload" netlify netlify-honeypot="bot-field" enctype="multipart/form-data" action="/thanks.html" hidden>
+    <input type="hidden" name="form-name" value="media-upload">
+    <input name="bot-field">
+    <input type="text" name="Name" required>
+    <input type="email" name="Email" required>
+    <input type="text" name="Caption">
+    <input type="file" name="attachment" accept=".zip" required>
+    <textarea name="Message"></textarea>
+    <button type="submit">Send ZIP</button>
+  </form>
+
+  <p>Forms are configured on:</p>
+  <ul>
+    <li><a href="/contact.html">Contact Form</a></li>
+    <li><a href="/media.html">Media Upload Form</a></li>
+  </ul>
+</body>
+</html>

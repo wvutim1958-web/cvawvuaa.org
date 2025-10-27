@@ -11,6 +11,11 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# Enable Netlify Forms
+[forms]
+  # Automatically detect forms in HTML files
+  # Forms must have the 'netlify' attribute or 'data-netlify="true"'
+  
 # Disable secrets scanning - Firebase API keys are meant to be public
 # They are protected by Firebase Security Rules, not by hiding the key
 [build.processing]

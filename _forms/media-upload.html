@@ -1,0 +1,13 @@
+<!-- 
+  This is a static form template for Netlify Forms detection.
+  The actual form is in media.html - this just ensures Netlify detects it.
+-->
+<form name="media-upload" netlify netlify-honeypot="bot-field" enctype="multipart/form-data" hidden>
+  <input type="hidden" name="form-name" value="media-upload">
+  <input name="bot-field">
+  <input type="text" name="Name">
+  <input type="email" name="Email">
+  <input type="text" name="Caption">
+  <input type="file" name="attachment">
+  <textarea name="Message"></textarea>
+</form>

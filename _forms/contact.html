@@ -1,0 +1,19 @@
+<!-- 
+  This is a static form template for Netlify Forms detection.
+  The actual form is in contact.html - this just ensures Netlify detects it.
+-->
+<form name="contact" netlify netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="contact">
+  <input name="bot-field">
+  <input type="text" name="Name">
+  <input type="email" name="Email">
+  <select name="Topic">
+    <option>General Question</option>
+    <option>Membership</option>
+    <option>Scholarship</option>
+    <option>Programs</option>
+    <option>Events/RSVP</option>
+    <option>Website</option>
+  </select>
+  <textarea name="Message"></textarea>
+</form>
