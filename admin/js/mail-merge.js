@@ -103,14 +103,20 @@ function filterByEmailList() {
         .map(e => e.trim().toLowerCase())
         .filter(e => e.includes('@'));
     
+    console.log('Looking for emails:', emailList);
+    console.log('Total members in database:', allMembers.length);
+    console.log('Sample member emails:', allMembers.slice(0, 5).map(m => m.email));
+    
     // Create member objects for emails in the list
     filteredMembers = emailList.map(email => {
         // Check if this email exists in database
         const existingMember = allMembers.find(m => m.email && m.email.toLowerCase() === email);
         
         if (existingMember) {
+            console.log('Found in database:', email);
             return existingMember;
         } else {
+            console.log('NOT found in database:', email);
             // Create a basic member object for emails not in database
             return {
                 email: email,
@@ -119,6 +125,8 @@ function filterByEmailList() {
             };
         }
     });
+    
+    console.log('Filtered members count:', filteredMembers.length);
     
     displaySelectedMembers();
     updateRecipientCount();
