@@ -253,5 +253,110 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// Export HTML for social media and email
+function showExportHTMLModal() {
+    if (!event) {
+        alert('Event data not loaded yet. Please wait and try again.');
+        return;
+    }
+    
+    const yesCount = allRSVPs.filter(r => r.status === 'yes').length;
+    const eventDate = event.date ? new Date(event.date.seconds * 1000) : null;
+    const dateStr = eventDate ? eventDate.toLocaleDateString('en-US', { 
+        weekday: 'long',
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+    }) : 'Date TBA';
+    
+    // Generate beautiful HTML for social media and email
+    const html = `
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #002855 0%, #0039a6 100%); padding: 30px; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 25px;">
+        <div style="display: inline-block; background: linear-gradient(135deg, #EAAA00 0%, #ffd700 100%); padding: 10px 25px; border-radius: 50px; margin-bottom: 15px;">
+            <span style="font-size: 1.1rem; font-weight: bold; color: #002855;">🏈 UPCOMING EVENT</span>
+        </div>
+        <h1 style="color: white; font-size: 2rem; margin: 0 0 10px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">${escapeHtml(event.title || 'Chapter Event')}</h1>
+    </div>
+    
+    <!-- Event Details Card -->
+    <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px;">
+        ${event.description ? `<p style="font-size: 1.05rem; line-height: 1.6; color: #333; margin: 0 0 20px 0;">${escapeHtml(event.description)}</p>` : ''}
+        
+        <!-- Date & Time -->
+        <div style="background: linear-gradient(135deg, #002855 0%, #0d3d6f 100%); padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+            <div style="color: #EAAA00; font-size: 0.9rem; font-weight: bold; margin-bottom: 5px;">📅 WHEN</div>
+            <div style="color: white; font-size: 1.2rem; font-weight: bold;">${dateStr}</div>
+        </div>
+        
+        ${event.location ? `
+        <!-- Location -->
+        <div style="background: linear-gradient(135deg, #002855 0%, #0d3d6f 100%); padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+            <div style="color: #EAAA00; font-size: 0.9rem; font-weight: bold; margin-bottom: 5px;">📍 WHERE</div>
+            <div style="color: white; font-size: 1.2rem; font-weight: bold;">${escapeHtml(event.location)}</div>
+        </div>
+        ` : ''}
+        
+        ${yesCount > 0 ? `
+        <!-- RSVP Count -->
+        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 15px; border-radius: 10px; text-align: center; margin-top: 20px;">
+            <div style="color: white; font-size: 1.1rem;">
+                <strong>${yesCount}</strong> Mountaineer${yesCount !== 1 ? 's' : ''} attending! 
+            </div>
+        </div>
+        ` : ''}
+        
+        <!-- Call to Action -->
+        <div style="text-align: center; margin-top: 25px;">
+            <p style="color: #002855; font-size: 1.1rem; font-weight: bold; margin: 0 0 15px 0;">
+                Join your fellow alumni and let's go Mountaineers! 💛💙
+            </p>
+            <a href="https://cvawvuaa.org/events.html" style="display: inline-block; padding: 15px 35px; background: linear-gradient(135deg, #EAAA00 0%, #FFC72C 100%); color: #002855; text-decoration: none; border-radius: 30px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 6px 20px rgba(234,170,0,0.4);">
+                View Event & RSVP
+            </a>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div style="text-align: center; color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+        <p style="margin: 0;">Central Virginia Chapter - WVU Alumni Association</p>
+        <p style="margin: 5px 0 0;">
+            <a href="https://cvawvuaa.org" style="color: #EAAA00; text-decoration: none;">cvawvuaa.org</a>
+        </p>
+    </div>
+</div>
+`.trim();
+    
+    // Show modal
+    document.getElementById('htmlPreview').innerHTML = html;
+    document.getElementById('htmlCode').value = html;
+    document.getElementById('htmlExportModal').style.display = 'flex';
+}
+
+function copyHTMLCode() {
+    const codeTextarea = document.getElementById('htmlCode');
+    codeTextarea.select();
+    codeTextarea.setSelectionRange(0, 99999); // For mobile devices
+    
+    try {
+        document.execCommand('copy');
+        alert('✅ HTML code copied to clipboard! You can now paste it into Facebook, Instagram, or your email.');
+    } catch (err) {
+        // Fallback for modern browsers
+        navigator.clipboard.writeText(codeTextarea.value).then(() => {
+            alert('✅ HTML code copied to clipboard! You can now paste it into Facebook, Instagram, or your email.');
+        }).catch(() => {
+            alert('Please manually copy the code from the text area.');
+        });
+    }
+}
+
+function closeHTMLModal() {
+    document.getElementById('htmlExportModal').style.display = 'none';
+}
+
 // Load data on page load
 loadEventData();
