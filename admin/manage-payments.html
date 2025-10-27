@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Payments - CVCWVUAA Admin</title>
+    <link rel="stylesheet" href="css/admin-styles.css">
+    <style>
+        .payment-row {
+            display: grid;
+            grid-template-columns: 200px 150px 100px 150px 150px 100px;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+            align-items: center;
+        }
+        .payment-row:hover {
+            background: #f8f9fa;
+        }
+        .payment-header {
+            font-weight: bold;
+            background: #002855;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        .test-payment {
+            background: #fff3cd;
+        }
+        .filters {
+            padding: 20px;
+            background: #f8f9fa;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .filters label {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>💳 Manage Payments</h1>
+            <p>View and remove test or duplicate payments</p>
+        </header>
+
+        <div class="filters">
+            <label>
+                <input type="checkbox" id="showTestOnly" onchange="loadPayments()">
+                Show only test payments (santa claus, ikja, any useer, etc.)
+            </label>
+        </div>
+
+        <div class="section">
+            <div id="loading" class="loading">Loading payments...</div>
+            
+            <div id="paymentsContainer" style="display: none;">
+                <div class="payment-row payment-header">
+                    <div>Member Name</div>
+                    <div>Date</div>
+                    <div>Type</div>
+                    <div>Amount</div>
+                    <div>Payment Method</div>
+                    <div>Action</div>
+                </div>
+                <div id="paymentsList"></div>
+            </div>
+
+            <div id="noPayments" style="display: none;" class="no-data">
+                No payments found
+            </div>
+        </div>
+
+        <div class="admin-actions">
+            <a href="dashboard.html" class="btn btn-secondary">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script>
+        let db = null;
+        let allPayments = [];
+
+        // Initialize
+        if (typeof initializeFirebase === 'function') {
+            initializeFirebase();
+            if (typeof firebase !== 'undefined') {
+                db = firebase.firestore();
+                loadPayments();
+            }
+        }
+
+        async function loadPayments() {
+            const loading = document.getElementById('loading');
+            const container = document.getElementById('paymentsContainer');
+            const noPayments = document.getElementById('noPayments');
+            const showTestOnly = document.getElementById('showTestOnly').checked;
+
+            loading.style.display = 'block';
+            container.style.display = 'none';
+            noPayments.style.display = 'none';
+
+            try {
+                const snapshot = await db.collection('members').get();
+                allPayments = [];
+
+                snapshot.forEach(doc => {
+                    const member = doc.data();
+                    const memberId = doc.id;
+                    const payments = member.payments || [];
+                    
+                    const memberName = member.name || 
+                                      (member.firstName && member.lastName ? `${member.firstName} ${member.lastName}` : null) ||
+                                      member.email ||
+                                      'Unknown Member';
+
+                    payments.forEach((payment, index) => {
+                        let paymentDate;
+                        if (payment.date && payment.date.toDate) {
+                            paymentDate = payment.date.toDate();
+                        } else if (payment.date) {
+                            paymentDate = new Date(payment.date);
+                        } else {
+                            paymentDate = new Date();
+                        }
+
+                        const amount = payment.actualReceived || payment.amount || payment.duesAmount || 0;
+
+                        allPayments.push({
+                            memberId,
+                            memberName,
+                            paymentIndex: index,
+                            date: paymentDate,
+                            type: payment.type || 'dues',
+                            amount: amount,
+                            paymentMethod: payment.paymentMethod || 'undefined',
+                            isTest: isTestPayment(memberName)
+                        });
+                    });
+                });
+
+                // Filter if needed
+                let paymentsToShow = allPayments;
+                if (showTestOnly) {
+                    paymentsToShow = allPayments.filter(p => p.isTest);
+                }
+
+                // Sort by date (newest first)
+                paymentsToShow.sort((a, b) => b.date - a.date);
+
+                displayPayments(paymentsToShow);
+
+            } catch (error) {
+                console.error('Error loading payments:', error);
+                loading.innerHTML = '<div class="alert alert-danger">Error loading payments</div>';
+            }
+        }
+
+        function isTestPayment(memberName) {
+            const testNames = ['santa claus', 'ikja', 'lksd', 'any useer', 'test', 'unknown'];
+            const nameLower = memberName.toLowerCase();
+            return testNames.some(testName => nameLower.includes(testName));
+        }
+
+        function displayPayments(payments) {
+            const loading = document.getElementById('loading');
+            const container = document.getElementById('paymentsContainer');
+            const noPayments = document.getElementById('noPayments');
+            const listEl = document.getElementById('paymentsList');
+
+            loading.style.display = 'none';
+
+            if (payments.length === 0) {
+                noPayments.style.display = 'block';
+                return;
+            }
+
+            container.style.display = 'block';
+            listEl.innerHTML = payments.map((payment, idx) => {
+                const dateStr = payment.date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                const rowClass = payment.isTest ? 'payment-row test-payment' : 'payment-row';
+
+                return `
+                    <div class="${rowClass}">
+                        <div>${escapeHtml(payment.memberName)}</div>
+                        <div>${dateStr}</div>
+                        <div>${payment.type}</div>
+                        <div>${formatCurrency(payment.amount)}</div>
+                        <div>${payment.paymentMethod}</div>
+                        <div>
+                            <button class="delete-btn" onclick="deletePayment('${payment.memberId}', ${payment.paymentIndex})">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function deletePayment(memberId, paymentIndex) {
+            if (!confirm('Are you sure you want to delete this payment? This cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const memberRef = db.collection('members').doc(memberId);
+                const memberDoc = await memberRef.get();
+                
+                if (!memberDoc.exists) {
+                    alert('Member not found');
+                    return;
+                }
+
+                const memberData = memberDoc.data();
+                const payments = memberData.payments || [];
+                
+                // Remove the payment at the specified index
+                payments.splice(paymentIndex, 1);
+                
+                // Update the member document
+                await memberRef.update({ payments: payments });
+                
+                alert('Payment deleted successfully');
+                loadPayments();
+                
+            } catch (error) {
+                console.error('Error deleting payment:', error);
+                alert('Error deleting payment: ' + error.message);
+            }
+        }
+
+        function formatCurrency(amount) {
+            if (typeof amount !== 'number') {
+                amount = parseFloat(amount) || 0;
+            }
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
