@@ -116,14 +116,23 @@ function displaySelectedMembers() {
         return;
     }
     
-    container.innerHTML = filteredMembers.map(member => `
+    // Only show members with names (actual database members)
+    const validMembers = filteredMembers.filter(m => m.name && m.name !== 'Unknown');
+    
+    container.innerHTML = validMembers.map(member => `
         <div class="member-item">
             <div class="member-info">
-                <div class="member-name">${member.name || 'Unknown'}</div>
+                <div class="member-name">${member.name}</div>
                 <div class="member-email">${member.email}</div>
             </div>
         </div>
     `).join('');
+    
+    // Update count to reflect only valid members
+    if (validMembers.length < filteredMembers.length) {
+        filteredMembers = validMembers;
+        updateRecipientCount();
+    }
 }
 
 // Update recipient count
