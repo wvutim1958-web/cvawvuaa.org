@@ -87,6 +87,12 @@ async function loadAllData() {
         
         console.log(`Loaded ${allReminders.length} reminders, ${allMembers.length} members`);
         
+        // Debug: Show all member emails
+        console.log('First 20 member emails in database:');
+        allMembers.slice(0, 20).forEach(m => {
+            console.log(`  ${m.email} - ${m.name}`);
+        });
+        
         renderReminders();
         updateStatistics();
         
