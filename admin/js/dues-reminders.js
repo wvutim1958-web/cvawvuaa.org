@@ -87,11 +87,11 @@ async function loadAllData() {
         
         console.log(`Loaded ${allReminders.length} reminders, ${allMembers.length} members`);
         
-        // Debug: Show all member emails
-        console.log('First 20 member emails in database:');
-        allMembers.slice(0, 20).forEach(m => {
-            console.log(`  ${m.email} - ${m.name}`);
-        });
+        // Debug: Show sample member data structure
+        if (allMembers.length > 0) {
+            console.log('Sample member object:', allMembers[0]);
+            console.log('Member email fields:', Object.keys(allMembers[0]).filter(k => k.toLowerCase().includes('email')));
+        }
         
         renderReminders();
         updateStatistics();
