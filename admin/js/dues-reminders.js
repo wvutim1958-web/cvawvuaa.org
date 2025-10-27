@@ -487,8 +487,43 @@ async function sendToCustomEmails() {
         return;
     }
     
-    const confirmed = confirm(`Send dues reminders to ${emails.length} email address(es)?`);
-    if (!confirmed) return;
+    // Show preview of first email
+    const firstEmail = emails[0];
+    const member = allMembers.find(m => m.email && m.email.toLowerCase() === firstEmail);
+    
+    if (member) {
+        const previewMessage = `
+PREVIEW - Email that will be sent:
+
+To: ${member.email}
+Subject: Payment Reminder - Central Virginia WVU Alumni Association
+
+Dear ${member.name || member.email},
+
+This is a friendly reminder that your membership dues for the ${new Date().getFullYear()}-${new Date().getFullYear() + 1} membership year are currently outstanding.
+
+Membership Dues: $25.00
+
+Please visit https://cvawvuaa.org/pay to submit your payment.
+
+Thank you for your continued support!
+
+Best regards,
+Central Virginia WVU Alumni Association
+
+---
+
+This email will be sent to ${emails.length} recipient(s).
+
+Click OK to send these reminders now.
+Click Cancel to go back.`;
+        
+        const confirmed = confirm(previewMessage);
+        if (!confirmed) return;
+    } else {
+        const confirmed = confirm(`Send dues reminders to ${emails.length} email address(es)?`);
+        if (!confirmed) return;
+    }
     
     try {
         let sent = 0;
