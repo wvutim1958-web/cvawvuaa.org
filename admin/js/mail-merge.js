@@ -103,9 +103,21 @@ function filterByEmailList() {
         .map(e => e.trim().toLowerCase())
         .filter(e => e.includes('@'));
     
-    // Filter to only members with emails in the list
-    filteredMembers = allMembers.filter(member => {
-        return member.email && emailList.includes(member.email.toLowerCase());
+    // Create member objects for emails in the list
+    filteredMembers = emailList.map(email => {
+        // Check if this email exists in database
+        const existingMember = allMembers.find(m => m.email && m.email.toLowerCase() === email);
+        
+        if (existingMember) {
+            return existingMember;
+        } else {
+            // Create a basic member object for emails not in database
+            return {
+                email: email,
+                name: email,
+                id: 'external_' + email
+            };
+        }
     });
     
     displaySelectedMembers();
