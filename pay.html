@@ -1,9 +1,17 @@
 ﻿<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#EEAA00">
 <title>CVCWVUAA • Pay / Donate</title>
 <meta name="description" content="Support CVCWVUAA through membership dues or donations. Help fund scholarships, events, and programs for West Virginia University students and alumni.">
-<link rel="stylesheet" href="/css/styles.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/wvu-components.css">
 </head><body>
+
+<!-- Skip to main content for accessibility -->
+<a href="#main-content" class="skip-to-main">Skip to main content</a>
 <header class="site">
   <div class="wrapper topbar">
     <a class="brand" href="/index.html" aria-label="CVCWVUAA">
@@ -12,7 +20,7 @@
     <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">☰</button>
     <nav id="site-nav" class="nav">
       <a href="/index.html">Home</a>
-      <div class="menu dropdown">
+      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
         <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
         <div class="dropdown-panel" role="menu" aria-label="About">
           <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
@@ -23,7 +31,7 @@
         </div>
       </div>
       <a href="/events.html">Events</a>
-      <div class="menu dropdown">
+      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
         <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
         <div class="dropdown-panel" role="menu" aria-label="News">
           <a role="menuitem" href="/news/">News</a>
@@ -37,47 +45,56 @@
       <a href="/scholarship.html">Scholarship</a>
       <a href="/media.html">Media</a>
       <a href="/contact.html">Contact</a>
-      <a href="/search.html" class="search-btn">🔍</a>
-      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <a href="/search.html" class="search-btn">
+        <svg class="icon icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Search">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </a>
+      <button class="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Toggle dark mode">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
     </nav>
   </div>
 </header>
 <main><div class="wrapper">
-  <h1>WVU Alumni &amp; Friends – Central Virginia Chapter</h1>
+  <h2>WVU Alumni &amp; Friends – Central Virginia Chapter</h2>
   <p class="lead"><strong>Membership Benefits</strong></p>
   <p>Please consider joining our organization by making the contribution listed below. Membership helps support our organization, provide scholarships to local deserving students in our region, and provide resources to new and existing students attending West Virginia University.</p>
   <p>Our Chapter is hoping to obtain tickets to upcoming sporting events and we have plans to bring in featured guests from the University. Members will receive first opportunities to participate in these events.</p>
   <div class="grid grid-3">
     <section class="card">
       <h3>2025-26 Single Membership — $25/yr</h3>
-      <p><a class="wvu-cta wvu-cta--primary" href="https://www.paypal.com/ncp/payment/TGLF2Y5Z2HGYC" target="_blank" rel="noopener">Join Online</a></p>
+      <p><a class="btn" href="https://www.paypal.com/ncp/payment/TGLF2Y5Z2HGYC" target="_blank" rel="noopener">Join Online</a></p>
       <p class="small">Annual dues for one member.</p>
     </section>
     <section class="card">
       <h3>2025-26 Family Membership — $15/yr</h3>
-      <p><a class="wvu-cta wvu-cta--primary" href="https://www.paypal.com/ncp/payment/KJZDT5972M93U" target="_blank" rel="noopener">Join Online</a></p>
+      <p><a class="btn" href="https://www.paypal.com/ncp/payment/KJZDT5972M93U" target="_blank" rel="noopener">Join Online</a></p>
       <p class="small">Add family member(s) to an existing membership.</p>
     </section>
     <section class="card">
       <h3>'25 Membership — Pay By Mail</h3>
       <p class="small">Single: $25 / yr • Family Member: $15 / yr</p>
-      <p><a class="wvu-cta wvu-cta--secondary" href="/membership.html">Go to Membership Form</a></p>
+      <p><a class="btn" href="/membership.html">Go to Membership Form</a></p>
       <p class="small">Make checks payable to <strong>CVCWVAA</strong> and mail to 4701 Stoney Creek Parkway, Chester, VA 23831.</p>
     </section>
     <section class="card">
       <h3>General Donation to Chapter</h3>
       <p class="small">A donation to support the organization — you decide how much to give.</p>
-      <p><a class="wvu-cta wvu-cta--primary" href="https://www.paypal.com/ncp/payment/X4JKXF8RG47TU" target="_blank" rel="noopener">Donate</a></p>
+      <p><a class="btn" href="https://www.paypal.com/ncp/payment/X4JKXF8RG47TU" target="_blank" rel="noopener">Donate</a></p>
     </section>
     <section class="card">
       <h3>Give to the Chapter Scholarship</h3>
-      <p><a class="wvu-cta wvu-cta--primary" href="https://www.paypal.com/ncp/payment/W2QGQMAKX8TWN" target="_blank" rel="noopener">Donate to Scholarship</a></p>
+      <p><a class="btn" href="https://www.paypal.com/ncp/payment/W2QGQMAKX8TWN" target="_blank" rel="noopener">Donate to Scholarship</a></p>
       <p class="small">Support our endowed scholarship for deserving WVU students.</p>
     </section>
     <section class="card">
       <h3>Contact us about Sponsorship</h3>
       <p class="small">Discuss support, volunteering, or sponsoring an upcoming event.</p>
-      <p><a class="wvu-cta wvu-cta--tertiary" href="/contact.html">Email the Chapter</a></p>
+      <p><a class="btn" href="/contact.html">Email the Chapter</a></p>
     </section>
   </div>
   <div class="card" style="margin-top:12px">

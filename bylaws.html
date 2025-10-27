@@ -1,9 +1,17 @@
 ﻿<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#EEAA00">
 <title>CVCWVUAA • Bylaws & Proclamation</title>
 <meta name="description" content="View the official bylaws and proclamation documents for the Central Virginia Chapter of the WVU Alumni Association. Download PDF versions available.">
-<link rel="stylesheet" href="/css/styles.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/wvu-components.css">
 </head><body>
+
+<!-- Skip to main content for accessibility -->
+<a href="#main-content" class="skip-to-main">Skip to main content</a>
 
 <header class="site">
   <div class="wrapper topbar">
@@ -18,7 +26,7 @@
       <a href="/index.html">Home</a>
 
       <!-- Dropdown -->
-      <div class="menu dropdown">
+      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
         <button class="dropbtn" aria-haspopup="true" aria-expanded="false">About</button>
         <div class="dropdown-panel" role="menu" aria-label="About">
           <a role="menuitem" href="/about.html#about-chapter">About the Chapter</a>
@@ -32,7 +40,7 @@
       <a href="/events.html">Events</a>
 
       <!-- News Dropdown -->
-      <div class="menu dropdown">
+      <div class="menu dropdown" onmouseenter="this.classList.add('open')" onmouseleave="this.classList.remove('open')">
         <button class="dropbtn" aria-haspopup="true" aria-expanded="false">News</button>
         <div class="dropdown-panel" role="menu" aria-label="News">
           <a role="menuitem" href="/news/">News</a>
@@ -47,28 +55,31 @@
       <a href="/scholarship.html">Scholarship</a>
       <a href="/media.html">Media</a>
       <a href="/contact.html">Contact</a>
-      <a href="/search.html" class="search-btn">🔍</a>
+      <a href="/search.html" class="search-btn">
+        <svg class="icon icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Search">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </a>
       
       <!-- Theme toggle -->
-      <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button class="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
     </nav>
   </div>
 </header>
 
 <main><div class="wrapper">
-  <h1>Bylaws &amp; Proclamation</h1>
+  <h2>Bylaws &amp; Proclamation</h2>
   <div class="card">
     <p class="small">This viewer loads <code>/assets/docs/bylaws.pdf</code>. If it doesn’t display, use the download link below.</p>
     <object data="/assets/docs/bylaws.pdf" type="application/pdf" width="100%" height="900" style="border:1px solid #e6e9ef;border-radius:12px">
-      <p>Unable to display PDF. <a class="wvu-cta wvu-cta--secondary" href="/assets/docs/bylaws.pdf" download>
-        <span class="wvu-cta__icon wvu-cta__icon--left">📄</span>
-        Download PDF
-      </a></p>
+      <p>Unable to display PDF. <a class="btn" href="/assets/docs/bylaws.pdf">Download PDF</a></p>
     </object>
-    <p style="margin-top:10px"><a class="wvu-cta wvu-cta--secondary" href="/assets/docs/bylaws.pdf" download>
-      <span class="wvu-cta__icon wvu-cta__icon--left">📄</span>
-      Download PDF
-    </a></p>
+    <p style="margin-top:10px"><a class="btn" href="/assets/docs/bylaws.pdf">Download PDF</a></p>
   </div>
 </div></main>
 
