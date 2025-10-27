@@ -524,6 +524,7 @@
         id: doc.id,
         ...doc.data(),
         date: doc.data().date ? new Date(doc.data().date.seconds * 1000).toISOString().split("T")[0] : null
+      }));
       const now = new Date();
       const pub = events.filter(e => e && e.published !== false);
       if(!pub.length){
