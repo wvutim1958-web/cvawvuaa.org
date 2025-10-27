@@ -36,7 +36,11 @@ function initializeFirebase() {
     try {
         app = firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
-        auth = firebase.auth();
+        
+        // Only initialize auth if the auth SDK is loaded
+        if (typeof firebase.auth === 'function') {
+            auth = firebase.auth();
+        }
         
         console.log('✅ Firebase initialized successfully');
         return true;
