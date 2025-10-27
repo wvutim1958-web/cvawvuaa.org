@@ -62,49 +62,49 @@
             <div class="page-list">
                 <h3>📋 Website Pages</h3>
                 
-                <div class="page-item active" onclick="loadPage('index')">
+                <div class="page-item active" onclick="loadPage(event, 'index')">
                     <strong>🏠 Home Page</strong>
                     <div class="small">index.html</div>
                     <span class="status-indicator status-published">Published</span>
                 </div>
                 
-                <div class="page-item" onclick="loadPage('about')">
+                <div class="page-item" onclick="loadPage(event, 'about')">
                     <strong>ℹ️ About Us</strong>
                     <div class="small">about.html</div>
                     <span class="status-indicator status-published">Published</span>
                 </div>
                 
-                <div class="page-item" onclick="loadPage('membership')">
+                <div class="page-item" onclick="loadPage(event, 'membership')">
                     <strong>👥 Membership</strong>
                     <div class="small">membership.html</div>
                     <span class="status-indicator status-published">Published</span>
                 </div>
                 
-                <div class="page-item" onclick="loadPage('events')">
+                <div class="page-item" onclick="loadPage(event, 'events')">
                     <strong>🎉 Events</strong>
                     <div class="small">events.html</div>
                     <span class="status-indicator status-published">Published</span>
                 </div>
                 
-                <div class="page-item" onclick="loadPage('news')">
+                <div class="page-item" onclick="loadPage(event, 'news')">
                     <strong>📰 News</strong>
                     <div class="small">news.html</div>
                     <span class="status-indicator status-published">Published</span>
                 </div>
                 
-                <div class="page-item" onclick="loadPage('contact')">
+                <div class="page-item" onclick="loadPage(event, 'contact')">
                     <strong>📞 Contact</strong>
                     <div class="small">contact.html</div>
                     <span class="status-indicator status-published">Published</span>
                 </div>
                 
-                <div class="page-item" onclick="loadPage('board')">
+                <div class="page-item" onclick="loadPage(event, 'board')">
                     <strong>🏛️ Board</strong>
                     <div class="small">board.html</div>
                     <span class="status-indicator status-draft">Needs Update</span>
                 </div>
                 
-                <div class="page-item" onclick="loadPage('bylaws')">
+                <div class="page-item" onclick="loadPage(event, 'bylaws')">
                     <strong>📜 Bylaws</strong>
                     <div class="small">bylaws.html</div>
                     <span class="status-indicator status-published">Published</span>
@@ -235,14 +235,26 @@
             }
         };
         
-        function loadPage(pageId) {
+        function loadPage(eventObj, pageId) {
             currentPage = pageId;
             
             // Update active page indicator
             document.querySelectorAll('.page-item').forEach(item => {
                 item.classList.remove('active');
             });
-            event.target.closest('.page-item').classList.add('active');
+            
+            // If called from a click event, highlight the clicked item
+            if (eventObj && eventObj.target) {
+                eventObj.target.closest('.page-item').classList.add('active');
+            } else {
+                // If called programmatically, highlight by pageId
+                const pageItems = document.querySelectorAll('.page-item');
+                pageItems.forEach(item => {
+                    if (item.getAttribute('onclick')?.includes(`'${pageId}'`)) {
+                        item.classList.add('active');
+                    }
+                });
+            }
             
             // Load page data
             const data = pageData[pageId] || {
@@ -408,7 +420,7 @@
         }
         
         // Load initial page
-        loadPage('index');
+        loadPage(null, 'index');
     </script>
     <!-- WVU Footer Component -->
     <div id="wvu-footer"></div>
