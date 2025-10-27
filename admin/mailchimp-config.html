@@ -1,7 +1,30 @@
 <!DOCTYPE html>
-<html><head><title>Mailchimp Config</title><link rel="stylesheet" href="/css/styles.css"></head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email System Configuration - CVCWVUAA</title>
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/wvu-components.min.css">
-<body><div style="max-width: 800px; margin: 2rem auto; padding: 2rem;">
+    <style>
+        .config-container { max-width: 1000px; margin: 2rem auto; padding: 2rem; }
+        .config-header { background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .config-section { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; }
+        .config-section h3 { color: #002855; margin-top: 0; }
+        .status-box { background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #28a745; }
+        .status-item { display: flex; justify-content: space-between; margin: 0.5rem 0; padding: 0.5rem 0; border-bottom: 1px solid #e9ecef; }
+        .status-label { font-weight: 600; color: #666; }
+        .status-value { color: #002855; font-weight: 600; }
+        .btn { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; margin: 5px; font-weight: 600; border: none; cursor: pointer; }
+        .btn:hover { background: #0056b3; text-decoration: none; color: white; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        .alert { padding: 1rem; border-radius: 6px; margin: 1rem 0; }
+        .alert-info { background: #e3f2fd; border-left: 4px solid #2196f3; color: #0d47a1; }
+        .alert-warning { background: #fff3cd; border-left: 4px solid #ffc107; color: #856404; }
+    </style>
+</head>
+<body>
     <!-- WVU Masthead Component -->
     <div id="wvu-masthead"></div>
 
@@ -16,22 +39,167 @@
         </a>
     </div>
 
-<a href="index.html">← Back to Admin Hub</a>
-<div style="background: #002855; color: white; padding: 2rem; border-radius: 12px; text-align: center; margin: 2rem 0;">
-<h1>🔧 Mailchimp Configuration</h1></div>
-<div style="background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 2rem;">
-<h3>📧 Email Service Configuration</h3>
-<p>Configure Mailchimp integration for email campaigns.</p>
-<div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; margin: 1rem 0;">
-<h5>API Settings</h5>
-<p><strong>Status:</strong> <span style="color: #28a745;">✅ Connected</span><br>
-<strong>List ID:</strong> cvcwvuaa_members<br>
-<strong>Subscribers:</strong> 134 active</p>
-</div>
-<a href="email-campaign.html" style="display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px;">📧 Send Campaign</a>
-</div></div>    <!-- WVU Footer Component -->
+    <div class="config-container">
+        <a href="index.html" style="display: inline-block; margin-bottom: 1rem; color: #007bff; text-decoration: none;">← Back to Admin Hub</a>
+        
+        <div class="config-header">
+            <h1>📧 Email System Configuration</h1>
+            <p>Firebase Trigger Email Extension Settings</p>
+        </div>
+
+        <!-- System Status -->
+        <div class="config-section">
+            <h3>🔌 System Status</h3>
+            <div class="status-box">
+                <div class="status-item">
+                    <span class="status-label">Email Service:</span>
+                    <span class="status-value">✅ Firebase Trigger Email (Active)</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">SMTP Server:</span>
+                    <span class="status-value">smtp.gmail.com:587</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Sender Email:</span>
+                    <span class="status-value">cvcwvuaa@gmail.com</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Total Members:</span>
+                    <span class="status-value" id="totalMembers">Loading...</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Members with Email:</span>
+                    <span class="status-value" id="membersWithEmail">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuration Info -->
+        <div class="config-section">
+            <h3>⚙️ How It Works</h3>
+            <div class="alert alert-info">
+                <strong>Firebase Trigger Email Extension:</strong> Automatically sends emails through Gmail SMTP when documents are added to the <code>mail</code> collection in Firestore.
+            </div>
+            <p><strong>Current Configuration:</strong></p>
+            <ul>
+                <li>📧 <strong>Email Collection:</strong> <code>mail</code></li>
+                <li>🔐 <strong>Authentication:</strong> Gmail App Password (stored in Secret Manager)</li>
+                <li>📤 <strong>SMTP URI:</strong> <code>smtp://cvcwvuaa@gmail.com:***@smtp.gmail.com:587</code></li>
+                <li>📋 <strong>BCC:</strong> All emails automatically BCC to cvcwvuaa@gmail.com</li>
+            </ul>
+        </div>
+
+        <!-- Email Tools -->
+        <div class="config-section">
+            <h3>📬 Email Management Tools</h3>
+            <div style="display: grid; gap: 1rem;">
+                <a href="newsletter-manager.html" class="btn btn-success">📧 Send Newsletter</a>
+                <a href="invoice-generator.html" class="btn">📄 Send Invoice</a>
+                <a href="receipt-viewer.html" class="btn">🧾 Send Receipt</a>
+                <a href="advanced-member-manager.html" class="btn">👥 View Member Emails</a>
+            </div>
+        </div>
+
+        <!-- Member Email Statistics -->
+        <div class="config-section">
+            <h3>📊 Email Statistics</h3>
+            <div id="emailStats">
+                <p style="color: #666;">Loading email statistics...</p>
+            </div>
+        </div>
+
+        <!-- Configuration Warning -->
+        <div class="config-section">
+            <h3>⚠️ SMTP Configuration</h3>
+            <div class="alert alert-warning">
+                <strong>Note:</strong> SMTP password is managed in Firebase Console → Extensions → Trigger Email → Reconfigure.<br>
+                If emails are not sending, verify the SMTP_PASSWORD parameter is set correctly in the Firebase extension configuration.
+            </div>
+            <p><strong>To update SMTP settings:</strong></p>
+            <ol>
+                <li>Go to <a href="https://console.firebase.google.com/project/cvcwvuaa-904e2/extensions" target="_blank">Firebase Console → Extensions</a></li>
+                <li>Click on "Trigger Email with Firestore" extension</li>
+                <li>Click "Manage" → "Reconfigure"</li>
+                <li>Update SMTP URI or password as needed</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script>
+        async function loadEmailStats() {
+            try {
+                // Get total members
+                const membersSnapshot = await db.collection('members').get();
+                const totalMembers = membersSnapshot.size;
+                
+                // Count members with email
+                let membersWithEmail = 0;
+                let emailDomains = {};
+                
+                membersSnapshot.docs.forEach(doc => {
+                    const member = doc.data();
+                    if (member.email && member.email.trim() !== '') {
+                        membersWithEmail++;
+                        
+                        // Track email domains
+                        const domain = member.email.split('@')[1]?.toLowerCase();
+                        if (domain) {
+                            emailDomains[domain] = (emailDomains[domain] || 0) + 1;
+                        }
+                    }
+                });
+                
+                // Update UI
+                document.getElementById('totalMembers').textContent = totalMembers;
+                document.getElementById('membersWithEmail').textContent = `${membersWithEmail} (${Math.round(membersWithEmail/totalMembers*100)}%)`;
+                
+                // Show email domain breakdown
+                const topDomains = Object.entries(emailDomains)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 5);
+                
+                let statsHTML = `
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                        <h4 style="margin-top: 0;">Email Domain Breakdown (Top 5)</h4>
+                        <ul style="list-style: none; padding: 0;">
+                `;
+                
+                topDomains.forEach(([domain, count]) => {
+                    const percentage = Math.round(count/membersWithEmail*100);
+                    statsHTML += `
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #dee2e6;">
+                            <strong>${domain}</strong>: ${count} members (${percentage}%)
+                        </li>
+                    `;
+                });
+                
+                statsHTML += `</ul></div>`;
+                
+                document.getElementById('emailStats').innerHTML = statsHTML;
+                
+            } catch (error) {
+                console.error('Error loading email stats:', error);
+                document.getElementById('totalMembers').textContent = 'Error';
+                document.getElementById('membersWithEmail').textContent = 'Error';
+                document.getElementById('emailStats').innerHTML = '<p style="color: #c62828;">Error loading statistics</p>';
+            }
+        }
+        
+        // Load stats on page load
+        window.addEventListener('load', () => {
+            setTimeout(loadEmailStats, 500);
+        });
+    </script>
+
+    <!-- WVU Footer Component -->
     <div id="wvu-footer"></div>
 
     <!-- Load WVU Components -->
     <script src="/includes/component-loader.min.js"></script>
-</body></html>
+</body>
+</html>
