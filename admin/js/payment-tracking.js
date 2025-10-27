@@ -107,13 +107,15 @@ function filterPayments() {
     
     filteredPayments = allPayments.filter(payment => {
         // Search filter
-        const matchesSearch = payment.memberName.toLowerCase().includes(searchTerm);
+        const memberName = payment.memberName || '';
+        const matchesSearch = memberName.toLowerCase().includes(searchTerm);
         
         // Type filter
         const matchesType = typeFilter === 'all' || payment.type === typeFilter;
         
         // Method filter
-        const matchesMethod = methodFilter === 'all' || payment.paymentMethod === methodFilter;
+        const paymentMethod = payment.paymentMethod || '';
+        const matchesMethod = methodFilter === 'all' || paymentMethod === methodFilter;
         
         return matchesSearch && matchesType && matchesMethod;
     });
@@ -198,7 +200,9 @@ function renderPayments() {
     document.getElementById('paymentTable').style.display = 'table';
     
     tbody.innerHTML = filteredPayments.map(payment => {
-        const fee = payment.expectedAmount - payment.actualReceived;
+        const expectedAmount = parseFloat(payment.expectedAmount) || 0;
+        const actualReceived = parseFloat(payment.actualReceived) || 0;
+        const fee = expectedAmount - actualReceived;
         const typeLabel = {
             'dues': 'Dues',
             'chapter': 'Chapter',
@@ -215,13 +219,13 @@ function renderPayments() {
                 <td>${formatDate(payment.date)}</td>
                 <td><strong>${escapeHtml(payment.memberName)}</strong></td>
                 <td><span class="payment-type ${payment.type}">${typeLabel}</span></td>
-                <td class="amount gross">$${payment.expectedAmount.toFixed(2)}</td>
+                <td class="amount gross">$${expectedAmount.toFixed(2)}</td>
                 <td>
-                    <span class="amount net">$${payment.actualReceived.toFixed(2)}</span>
+                    <span class="amount net">$${actualReceived.toFixed(2)}</span>
                     ${fee > 0 ? `<br><span class="fee">-$${fee.toFixed(2)} fee</span>` : ''}
                 </td>
-                <td>${escapeHtml(payment.paymentMethod)}</td>
-                <td>${escapeHtml(payment.notes)}</td>
+                <td>${escapeHtml(payment.paymentMethod || '')}</td>
+                <td>${escapeHtml(payment.notes || '')}</td>
                 <td style="text-align: center; white-space: nowrap;">
                     <button onclick="window.open('/admin/receipt-viewer.html?memberId=${payment.memberId}&timestamp=${timestamp}', '_blank')" 
                             style="background: #4a90e2; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; margin-right: 5px;">
