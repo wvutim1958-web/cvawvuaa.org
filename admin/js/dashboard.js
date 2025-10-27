@@ -170,17 +170,25 @@
                     let paymentDate;
                     if (payment.date && payment.date.toDate) {
                         paymentDate = payment.date.toDate();
-                    } else {
+                    } else if (payment.date) {
                         paymentDate = new Date(payment.date);
+                    } else {
+                        return; // Skip payments without dates
                     }
                     
-                    allPayments.push({
-                        memberName: member.name,
-                        date: paymentDate,
-                        type: payment.type,
-                        amount: payment.actualReceived,
-                        paymentMethod: payment.paymentMethod
-                    });
+                    // Get amount from various possible fields
+                    const amount = payment.actualReceived || payment.amount || payment.duesAmount || 0;
+                    
+                    // Only include payments with valid amounts
+                    if (amount && amount > 0) {
+                        allPayments.push({
+                            memberName: member.name || 'Unknown Member',
+                            date: paymentDate,
+                            type: payment.type || 'dues',
+                            amount: amount,
+                            paymentMethod: payment.paymentMethod || 'undefined'
+                        });
+                    }
                 });
             });
             
