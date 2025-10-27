@@ -451,6 +451,80 @@ async function deleteReminder(reminderId) {
     }
 }
 
+// Show/hide custom email panel
+function showCustomEmailPanel() {
+    document.getElementById('customEmailPanel').style.display = 'block';
+}
+
+function hideCustomEmailPanel() {
+    document.getElementById('customEmailPanel').style.display = 'none';
+    document.getElementById('customEmailList').value = '';
+}
+
+// Send reminders to custom email list
+async function sendToCustomEmails() {
+    const emailText = document.getElementById('customEmailList').value.trim();
+    
+    if (!emailText) {
+        alert('Please enter email addresses');
+        return;
+    }
+    
+    // Parse emails
+    const emails = emailText
+        .split(/[\n,]+/)
+        .map(e => e.trim().toLowerCase())
+        .filter(e => e.includes('@'));
+    
+    if (emails.length === 0) {
+        alert('No valid email addresses found');
+        return;
+    }
+    
+    const confirmed = confirm(`Send dues reminders to ${emails.length} email address(es)?`);
+    if (!confirmed) return;
+    
+    try {
+        let sent = 0;
+        let failed = 0;
+        
+        for (const email of emails) {
+            // Find member in database
+            const member = allMembers.find(m => m.email && m.email.toLowerCase() === email);
+            
+            if (!member) {
+                console.log(`Member not found for email: ${email}`);
+                failed++;
+                continue;
+            }
+            
+            // Create reminder document
+            const reminder = {
+                memberId: member.id,
+                memberName: member.name || email,
+                memberEmail: email,
+                type: 'manual',
+                scheduledDate: new Date(),
+                sentDate: new Date(),
+                status: 'sent',
+                createdBy: 'admin',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            await db.collection('duesReminders').add(reminder);
+            sent++;
+        }
+        
+        alert(`Successfully sent ${sent} reminder(s).\n${failed > 0 ? `Failed: ${failed} (not in database)` : ''}`);
+        hideCustomEmailPanel();
+        loadAllData(); // Refresh the list
+        
+    } catch (error) {
+        console.error('Error sending reminders:', error);
+        alert('Error sending reminders: ' + error.message);
+    }
+}
+
 // Helper functions
 function formatDate(date) {
     return date.toLocaleDateString('en-US', {
@@ -468,3 +542,4 @@ function escapeHtml(text) {
 
 // Load data on page load
 loadAllData();
+

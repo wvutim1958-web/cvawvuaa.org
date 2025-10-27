@@ -333,7 +333,21 @@
         <div class="actions">
             <button class="btn btn-success" onclick="generateReminders()">🔄 Generate New Reminders</button>
             <button class="btn btn-primary" onclick="sendPendingReminders()">📧 Send All Pending</button>
+            <button class="btn btn-primary" onclick="showCustomEmailPanel()">📧 Send to Specific Emails</button>
             <a href="dashboard.html" class="btn btn-secondary">← Back to Dashboard</a>
+        </div>
+        
+        <!-- Custom Email Panel (hidden by default) -->
+        <div class="settings-panel" id="customEmailPanel" style="display: none;">
+            <h2>📧 Send Reminders to Specific Emails</h2>
+            <div class="form-group">
+                <label for="customEmailList">Paste Email Addresses (one per line or comma-separated):</label>
+                <textarea id="customEmailList" style="width: 100%; min-height: 150px; padding: 0.75rem; border: 2px solid #ddd; border-radius: 8px; font-family: monospace;" placeholder="email1@example.com&#10;email2@example.com"></textarea>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-primary" onclick="sendToCustomEmails()">📧 Send Reminders Now</button>
+                <button class="btn btn-secondary" onclick="hideCustomEmailPanel()">Cancel</button>
+            </div>
         </div>
         
         <!-- Reminder List -->
