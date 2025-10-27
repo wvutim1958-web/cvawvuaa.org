@@ -10,9 +10,16 @@ document.addEventListener('DOMContentLoaded', function() {
     loadCampaignHistory();
     loadSavedTemplates();
     
-    // Add event listeners for filters
-    document.getElementById('filterPaid').addEventListener('change', filterMembers);
-    document.getElementById('filterUnpaid').addEventListener('change', filterMembers);
+    // Add event listeners for filters if they exist
+    const filterPaid = document.getElementById('filterPaid');
+    const filterUnpaid = document.getElementById('filterUnpaid');
+    
+    if (filterPaid) {
+        filterPaid.addEventListener('change', filterMembers);
+    }
+    if (filterUnpaid) {
+        filterUnpaid.addEventListener('change', filterMembers);
+    }
 });
 
 // Load all members from Firestore
@@ -56,9 +63,9 @@ async function loadMembers() {
 
 // Filter members based on criteria
 function filterMembers() {
-    const searchTerm = document.getElementById('memberSearch').value.toLowerCase();
-    const includePaid = document.getElementById('filterPaid').checked;
-    const includeUnpaid = document.getElementById('filterUnpaid').checked;
+    const searchTerm = document.getElementById('memberSearch')?.value.toLowerCase() || '';
+    const includePaid = document.getElementById('filterPaid')?.checked ?? true;
+    const includeUnpaid = document.getElementById('filterUnpaid')?.checked ?? true;
     
     filteredMembers = allMembers.filter(member => {
         // Check payment status
