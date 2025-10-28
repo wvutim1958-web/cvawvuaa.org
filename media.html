@@ -40,13 +40,13 @@
 <div id="wvu-navigation"></div>
 
 <main id="main-content">
+  <div style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
 
   <h2>Share Your Photos</h2>
   <p class="small">
     Please compress your photos into a single <strong>.zip</strong> file and upload it here.<br>
     Example filename: <code>watch-party-2025-10-12-j-smith.zip</code>
   </p>
-  <p class="small">Please compress your photos into a single <strong>.zip</strong> and upload it here. Example: <code>watch-party-2025-10-12-j-smith.zip</code></p>
   <p class="small">Uploads are reviewed by our volunteers and may be featured. Thank you!</p>
 
   <form class="stack" action="https://formsubmit.co/president@cvawvuaa.org" method="POST" enctype="multipart/form-data">
@@ -65,19 +65,15 @@
       <label>Email
         <input type="email" name="Email" required>
       </label>
-      <label>Your Name <input type="text" name="Name" required></label>
-      <label>Email <input type="email" name="Email" required></label>
     </div>
 
     <label>Event / Caption
       <input type="text" name="Caption" placeholder="Event name, date, brief caption">
     </label>
 
-    <label>Event / Caption <input type="text" name="Caption" placeholder="Event name, date, brief caption"></label>
     <fieldset class="card" style="border:none">
       <legend><strong>Upload your ZIP file</strong></legend>
       <p class="small" style="margin-top:0">Select one .zip file. If your photos are large, create multiple ZIPs and submit separately.</p>
-      <p class="small" style="margin-top:0">Select one .zip file. If large, split into multiple ZIPs and submit each.</p>
       <input type="file" name="attachment" accept=".zip" required>
     </fieldset>
 
@@ -85,14 +81,14 @@
       <textarea name="Message" rows="3" placeholder="Anything we should know?"></textarea>
     </label>
 
-    <label>Message (optional) <textarea name="Message" rows="3" placeholder="Anything we should know?"></textarea></label>
     <button class="btn" type="submit">Send ZIP</button>
   </form>
 
   <h2 style="margin-top:28px">Chapter Gallery</h2>
   <div id="gallery-grid" class="gallery-grid"></div>
 
-</div></main>
+  </div>
+</main>
 <div id="wvu-footer"></div>
 
 <!-- Social Media Integration -->
