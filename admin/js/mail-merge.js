@@ -46,13 +46,15 @@ async function loadMembers() {
         
         // Populate preview dropdown
         const previewSelect = document.getElementById('previewMember');
-        previewSelect.innerHTML = '<option value="">Select a member...</option>';
-        allMembers.forEach(member => {
-            const option = document.createElement('option');
-            option.value = member.id;
-            option.textContent = `${member.name} (${member.email})`;
-            previewSelect.appendChild(option);
-        });
+        if (previewSelect) {
+            previewSelect.innerHTML = '<option value="">Select a member...</option>';
+            allMembers.forEach(member => {
+                const option = document.createElement('option');
+                option.value = member.id;
+                option.textContent = `${member.name} (${member.email})`;
+                previewSelect.appendChild(option);
+            });
+        }
         
         filterMembers();
     } catch (error) {
