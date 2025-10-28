@@ -5,19 +5,30 @@
 
 Dear Fellow Mountaineer,
 
-I hope this message finds you well and filled with pride in our West Virginia University heritage. I am reaching out to you today with an important opportunity to make a meaningful impact on our Central Virginia alumni community.
+I hope this message finds you well and filled with pride in our West Virginia
+University heritage. I am reaching out to you today with an important
+opportunity to make a meaningful impact on our Central Virginia alumni
+community.
 
 ## THE SITUATION
 
-As you may know, our previous Board of Directors resigned effective June 30, 2025. While this was a difficult transition, I am honored to have stepped forward as President to ensure our Chapter continues serving the WVU alumni community in Central Virginia.
+As you may know, our previous Board of Directors resigned effective June 30,
+2025. While this was a difficult transition, I am honored to have stepped
+forward as President to ensure our Chapter continues serving the WVU alumni
+community in Central Virginia.
 
 However, I cannot do this alone.
 
-Despite our Chapter's success in hosting game watch parties, managing member benefits, and supporting our scholarship fund, we currently have vacant positions on our Board of Directors. Our bylaws call for a Vice President, Secretary, and Treasurer, as well as optional positions like Communications Director and Activities Coordinator.
+Despite our Chapter's success in hosting game watch parties, managing member
+benefits, and supporting our scholarship fund, we currently have vacant
+positions on our Board of Directors. Our bylaws call for a Vice President,
+Secretary, and Treasurer, as well as optional positions like Communications
+Director and Activities Coordinator.
 
 ## WHY WE NEED YOU
 
-Our Chapter serves dozens of WVU alumni across the Richmond, Charlottesville, and surrounding areas. We have:
+Our Chapter serves dozens of WVU alumni across the Richmond, Charlottesville,
+and surrounding areas. We have:
 
 - An active membership base paying annual dues
 - Successful game watch events throughout football season
@@ -25,7 +36,8 @@ Our Chapter serves dozens of WVU alumni across the Richmond, Charlottesville, an
 - A professional website and social media presence
 - Strong relationships with local venues and businesses
 
-But to continue this important work, we need dedicated volunteers willing to serve on the Board.
+But to continue this important work, we need dedicated volunteers willing to
+serve on the Board.
 
 ## WHAT WE ARE ASKING
 
@@ -79,7 +91,10 @@ We understand everyone is busy. Here is what we realistically need:
 
 ## NO FUNDRAISING PRESSURE
 
-Let me be clear: We are NOT asking you to fundraise, solicit donations, or sell anything. Our Chapter is funded through member dues and operates on a modest budget. We simply need people willing to help with governance, planning, and execution of our mission.
+Let me be clear: We are NOT asking you to fundraise, solicit donations, or sell
+anything. Our Chapter is funded through member dues and operates on a modest
+budget. We simply need people willing to help with governance, planning, and
+execution of our mission.
 
 ## CURRENT OPERATIONS
 
@@ -101,7 +116,9 @@ If you are interested in serving, or even just want to learn more, please:
 2. **Call/text me at:** (804) 566-8058, or
 3. **Visit our website:** cvawvuaa.org/contact
 
-I am happy to answer any questions, discuss specific roles, or simply talk about what Board service entails. There is no pressure, just an honest conversation about how you can help.
+I am happy to answer any questions, discuss specific roles, or simply talk about
+what Board service entails. There is no pressure, just an honest conversation
+about how you can help.
 
 ## EVEN IF YOU CANNOT SERVE
 
@@ -120,22 +137,28 @@ Our Chapter is at a crossroads. We can either:
 
 I choose to thrive. I hope you will join me.
 
-West Virginia University alumni are known for their loyalty, passion, and community spirit. Let us show that same spirit here in Central Virginia. Whether you graduated last year or decades ago, whether you live in Richmond or Charlottesville, whether you can give 5 hours a month or 10, we have a place for you.
+West Virginia University alumni are known for their loyalty, passion, and
+community spirit. Let us show that same spirit here in Central Virginia. Whether
+you graduated last year or decades ago, whether you live in Richmond or
+Charlottesville, whether you can give 5 hours a month or 10, we have a place for
+you.
 
 ## LET'S GO MOUNTAINEERS!
 
-Thank you for considering this opportunity. Our Chapter has tremendous potential, and with your help, we can achieve great things for WVU alumni in Central Virginia.
+Thank you for considering this opportunity. Our Chapter has tremendous
+potential, and with your help, we can achieve great things for WVU alumni in
+Central Virginia.
 
 Feel free to reach out anytime. I look forward to hearing from you.
 
 Sincerely,
 
-**Timothy Casten**  
-President  
-Central Virginia Chapter, WVU Alumni Association, Inc.  
+**Timothy Casten**
+President
+Central Virginia Chapter, WVU Alumni Association, Inc.
 
-Email: cvcwvuaa@gmail.com  
-Phone: (804) 566-8058  
+Email: cvcwvuaa@gmail.com
+Phone: (804) 566-8058
 Website: cvawvuaa.org
 
 ---
@@ -144,4 +167,6 @@ Website: cvawvuaa.org
 
 ---
 
-*Central Virginia Chapter of the WVU Alumni Association, Inc. is a 501(c)(3) nonprofit organization dedicated to fostering connections among WVU alumni in the Richmond, Charlottesville, and surrounding areas of Virginia.*
+*Central Virginia Chapter of the WVU Alumni Association, Inc. is a 501(c)(3)
+nonprofit organization dedicated to fostering connections among WVU alumni in
+the Richmond, Charlottesville, and surrounding areas of Virginia.*

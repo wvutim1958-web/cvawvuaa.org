@@ -15,23 +15,31 @@
 
 2. Timothy Casten was elected President and is the sole remaining Board member;
 
-3. The Chapter Bylaws require the positions of President, Vice President, Secretary, and Treasurer;
+3. The Chapter Bylaws require the positions of President, Vice President,
+Secretary, and Treasurer;
 
-4. Despite good faith recruitment efforts, no additional qualified candidates have volunteered to serve on the Board;
+4. Despite good faith recruitment efforts, no additional qualified candidates
+have volunteered to serve on the Board;
 
-5. The continuation of Chapter operations and service to members requires these officer positions to be filled;
+5. The continuation of Chapter operations and service to members requires these
+officer positions to be filled;
 
-6. The Bylaws do not explicitly prohibit one person from holding multiple officer positions;
+6. The Bylaws do not explicitly prohibit one person from holding multiple
+officer positions;
 
-7. Article IV, Section 12, Paragraph 3 provides that the President may nominate members to fill vacancies, subject to Board confirmation;
+7. Article IV, Section 12, Paragraph 3 provides that the President may nominate
+members to fill vacancies, subject to Board confirmation;
 
-8. As the sole Board member, Timothy Casten constitutes both the nominating authority and the confirming Board;
+8. As the sole Board member, Timothy Casten constitutes both the nominating
+authority and the confirming Board;
 
 ## NOW, THEREFORE, BE IT RESOLVED:
 
 **Section 1. Emergency Appointment**
 
-That Timothy Casten, currently serving as President, is hereby appointed to serve concurrently in the following officer positions until such time as qualified candidates can be recruited and elected:
+That Timothy Casten, currently serving as President, is hereby appointed to
+serve concurrently in the following officer positions until such time as
+qualified candidates can be recruited and elected:
 
 - President (current)
 - Treasurer
@@ -39,7 +47,8 @@ That Timothy Casten, currently serving as President, is hereby appointed to serv
 
 **Section 2. Authority to Execute Duties**
 
-That Timothy Casten is authorized to execute all duties associated with each office, including but not limited to:
+That Timothy Casten is authorized to execute all duties associated with each
+office, including but not limited to:
 
 - Signing checks and financial instruments as both President and Treasurer
 - Maintaining corporate records and meeting minutes as Secretary
@@ -47,7 +56,8 @@ That Timothy Casten is authorized to execute all duties associated with each off
 
 **Section 3. Financial Controls**
 
-That to maintain proper financial oversight, the following controls are established:
+That to maintain proper financial oversight, the following controls are
+established:
 
 - All expenditures over $500 shall be documented with written justification
 - Monthly financial statements shall be prepared and maintained
@@ -56,7 +66,8 @@ That to maintain proper financial oversight, the following controls are establis
 
 **Section 4. Good Faith Recruitment**
 
-That the President shall continue to make good faith efforts to recruit qualified Board members and officers, including:
+That the President shall continue to make good faith efforts to recruit
+qualified Board members and officers, including:
 
 - Regular communications to membership seeking volunteers
 - Outreach to active and engaged alumni
@@ -73,19 +84,27 @@ That this resolution shall remain in effect until such time as:
 
 **Section 6. Reporting**
 
-That the status of Board recruitment efforts shall be reported to the membership at the Annual Business Meeting.
+That the status of Board recruitment efforts shall be reported to the membership
+at the Annual Business Meeting.
 
 **Section 7. Bylaw Amendment**
 
-That the President is directed to prepare proposed Bylaw amendments for membership consideration at the next Annual Business Meeting to address officer requirements when volunteer recruitment is insufficient.
+That the President is directed to prepare proposed Bylaw amendments for
+membership consideration at the next Annual Business Meeting to address officer
+requirements when volunteer recruitment is insufficient.
 
 ---
 
 ## CERTIFICATION
 
-I, Timothy Casten, as the sole member of the Board of Directors, hereby certify that this resolution was duly adopted by unanimous vote of the Board (100% of Board members present) at a meeting held on October 28, 2025, at which a quorum was present.
+I, Timothy Casten, as the sole member of the Board of Directors, hereby certify
+that this resolution was duly adopted by unanimous vote of the Board (100% of
+Board members present) at a meeting held on October 28, 2025, at which a quorum
+was present.
 
-This resolution is adopted in accordance with Article IV, Section 10 (Majority Actions) and Article XI, Section 2 (Amendment by unanimous Board vote) of the Chapter Bylaws.
+This resolution is adopted in accordance with Article IV, Section 10 (Majority
+Actions) and Article XI, Section 2 (Amendment by unanimous Board vote) of the
+Chapter Bylaws.
 
 ---
 
@@ -117,4 +136,5 @@ Date: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 ---
 
-*This resolution shall be filed with the Chapter's corporate records and made available to members upon request.*
+*This resolution shall be filed with the Chapter's corporate records and made
+available to members upon request.*
