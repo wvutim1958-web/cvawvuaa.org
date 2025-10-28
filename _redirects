@@ -1,3 +1,9 @@
+# Redirect cvcwvuaa.org to cvawvuaa.org
+https://cvcwvuaa.org/*    https://cvawvuaa.org/:splat    301!
+https://www.cvcwvuaa.org/*    https://cvawvuaa.org/:splat    301!
+http://cvcwvuaa.org/*    https://cvawvuaa.org/:splat    301!
+http://www.cvcwvuaa.org/*    https://cvawvuaa.org/:splat    301!
+
 /pay    https://www.paypal.com/ncp/payment/T3KL8ZLPL25Q2    302
 /donate https://www.paypal.com/ncp/payment/T3KL8ZLPL25Q2    302
 /scoresense   /scores.html   301
