@@ -85,6 +85,33 @@
 <script src="/js/theme-toggle.min.js"></script>
 <script src="/js/mobile-enhancer.js"></script>
 
+<!-- Load Board Members -->
+<script>
+async function loadBoardMembers() {
+  try {
+    const response = await fetch('/content/board-members.json');
+    const members = await response.json();
+    const tbody = document.getElementById('board-tbody');
+    
+    tbody.innerHTML = members.map(member => `
+      <tr style="border-bottom: 1px solid #dee2e6;">
+        <td style="padding: 12px; font-weight: 500;">${member.position}</td>
+        <td style="padding: 12px;">${member.name}</td>
+        <td style="padding: 12px;">${member.phone || '<em style="color: #6c757d;">N/A</em>'}</td>
+        <td style="padding: 12px;">${member.email ? `<a href="mailto:${member.email}">${member.email}</a>` : '<em style="color: #6c757d;">N/A</em>'}</td>
+        <td style="padding: 12px;">${member.degree || '<em style="color: #6c757d;">N/A</em>'}</td>
+      </tr>
+    `).join('');
+  } catch (error) {
+    console.error('Error loading board members:', error);
+    document.getElementById('board-tbody').innerHTML = '<tr><td colspan="5" style="padding: 20px; text-align: center; color: #dc3545;">Error loading board members. Please try again later.</td></tr>';
+  }
+}
+
+// Load board members when page loads
+document.addEventListener('DOMContentLoaded', loadBoardMembers);
+</script>
+
 <!-- Load WVU Components (Masthead, Navigation, Footer) -->
 <script src="/includes/component-loader.min.js"></script>
 
