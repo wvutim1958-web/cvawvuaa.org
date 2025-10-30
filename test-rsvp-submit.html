@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit Test RSVP</title>
+</head>
+<body>
+    <h1>Submit Test RSVP to Firebase</h1>
+    <button onclick="submitTestRSVP()">Submit Test RSVP for Timothy Casten</button>
+    <div id="result"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/js/firebase-config.js"></script>
+
+    <script>
+        async function submitTestRSVP() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Submitting...';
+            
+            try {
+                const rsvpData = {
+                    eventId: '9pMhBVfwznmd84ef0ZVK',
+                    name: 'Timothy Casten',
+                    email: 'pcctim@aol.com',
+                    response: 'yes',
+                    guests: 1,
+                    submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    eventName: 'WVU vs Houston Game Watch',
+                    eventDate: '2025-11-01',
+                    eventTime: '12:00 PM'
+                };
+                
+                const docRef = await db.collection('eventRSVPs').add(rsvpData);
+                resultDiv.innerHTML = '✅ SUCCESS! RSVP submitted with ID: ' + docRef.id + 
+                    '<br><br>Now go to: <a href="/admin/event-details.html?id=9pMhBVfwznmd84ef0ZVK">View RSVPs</a>';
+            } catch (error) {
+                resultDiv.innerHTML = '❌ ERROR: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

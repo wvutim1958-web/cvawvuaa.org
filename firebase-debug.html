@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firebase Debug</title>
+</head>
+<body>
+    <h1>Firebase Connection Test</h1>
+    <div id="results"></div>
+    
+    <button onclick="testConnection()">Test Firebase Connection</button>
+    <button onclick="testAddRSVP()">Test Add RSVP</button>
+    <button onclick="testReadRSVPs()">Test Read RSVPs</button>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/js/firebase-config.js"></script>
+
+    <script>
+        function log(message) {
+            document.getElementById('results').innerHTML += '<p>' + message + '</p>';
+        }
+
+        async function testConnection() {
+            log('Testing Firebase connection...');
+            try {
+                if (typeof db === 'undefined') {
+                    log('❌ db is undefined - Firebase not initialized');
+                    return;
+                }
+                
+                // Try to read from a collection
+                const testDoc = await db.collection('test').limit(1).get();
+                log('✅ Firebase connection successful');
+                log('Collections can be accessed');
+            } catch (error) {
+                log('❌ Firebase connection failed: ' + error.message);
+            }
+        }
+
+        async function testAddRSVP() {
+            log('Testing add RSVP...');
+            try {
+                const testRSVP = {
+                    eventId: '9pMhBVfwznmd84ef0ZVK',
+                    name: 'Test User',
+                    email: 'test@test.com',
+                    response: 'yes',
+                    guests: 2,
+                    submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    eventName: 'WVU vs Houston Game Watch',
+                    eventDate: '2025-11-01',
+                    eventTime: '12:00 PM'
+                };
+                
+                const docRef = await db.collection('eventRSVPs').add(testRSVP);
+                log('✅ Test RSVP added successfully with ID: ' + docRef.id);
+            } catch (error) {
+                log('❌ Failed to add test RSVP: ' + error.message);
+            }
+        }
+
+        async function testReadRSVPs() {
+            log('Testing read RSVPs...');
+            try {
+                const snapshot = await db.collection('eventRSVPs').get();
+                log('✅ Successfully read RSVPs collection');
+                log('Total documents: ' + snapshot.size);
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    log('RSVP: ' + data.name + ' - ' + data.response + ' (' + data.guests + ' guests)');
+                });
+                
+                if (snapshot.size === 0) {
+                    log('⚠️ No RSVPs found in database');
+                }
+            } catch (error) {
+                log('❌ Failed to read RSVPs: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
