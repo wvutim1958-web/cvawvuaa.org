@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View RSVPs</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 20px auto; padding: 20px; }
+        h1 { color: #002855; }
+        .stats { display: flex; gap: 20px; margin: 20px 0; }
+        .stat-box { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; flex: 1; }
+        .stat-box h3 { margin: 0; font-size: 2rem; }
+        .stat-box.yes h3 { color: #10b981; }
+        .stat-box.no h3 { color: #ef4444; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #002855; color: white; }
+        .loading { text-align: center; padding: 40px; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>🎫 WVU vs Houston - RSVPs</h1>
+    <div id="loading" class="loading">Loading RSVPs...</div>
+    <div id="content" style="display: none;">
+        <div class="stats">
+            <div class="stat-box yes">
+                <p>Attending</p>
+                <h3 id="yesCount">0</h3>
+            </div>
+            <div class="stat-box no">
+                <p>Not Attending</p>
+                <h3 id="noCount">0</h3>
+            </div>
+            <div class="stat-box">
+                <p>Total Guests</p>
+                <h3 id="guestCount">0</h3>
+            </div>
+        </div>
+
+        <h2>RSVP List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Response</th>
+                    <th>Guests</th>
+                    <th>Submitted</th>
+                </tr>
+            </thead>
+            <tbody id="rsvpList"></tbody>
+        </table>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/js/firebase-config.js"></script>
+
+    <script>
+        async function loadRSVPs() {
+            try {
+                const eventId = '9pMhBVfwznmd84ef0ZVK';
+                
+                // Query all RSVPs for this event
+                const snapshot = await db.collection('eventRSVPs')
+                    .where('eventId', '==', eventId)
+                    .orderBy('submittedAt', 'desc')
+                    .get();
+
+                let yesCount = 0;
+                let noCount = 0;
+                let totalGuests = 0;
+                const rsvps = [];
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    rsvps.push(data);
+                    
+                    if (data.response === 'yes') {
+                        yesCount++;
+                        totalGuests += data.guests || 0;
+                    } else if (data.response === 'no') {
+                        noCount++;
+                    }
+                });
+
+                // Update stats
+                document.getElementById('yesCount').textContent = yesCount;
+                document.getElementById('noCount').textContent = noCount;
+                document.getElementById('guestCount').textContent = totalGuests;
+
+                // Populate table
+                const tbody = document.getElementById('rsvpList');
+                tbody.innerHTML = '';
+
+                if (rsvps.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #666;">No RSVPs yet</td></tr>';
+                } else {
+                    rsvps.forEach(rsvp => {
+                        const row = document.createElement('tr');
+                        const date = rsvp.submittedAt ? new Date(rsvp.submittedAt.toDate()).toLocaleString() : 'N/A';
+                        
+                        row.innerHTML = `
+                            <td>${rsvp.name}</td>
+                            <td>${rsvp.email}</td>
+                            <td>${rsvp.response === 'yes' ? '✅ Yes' : '❌ No'}</td>
+                            <td>${rsvp.guests || 0}</td>
+                            <td>${date}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+
+                // Show content, hide loading
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+
+            } catch (error) {
+                document.getElementById('loading').innerHTML = '❌ Error loading RSVPs: ' + error.message;
+                console.error('Error:', error);
+            }
+        }
+
+        // Wait for Firebase to initialize, then load RSVPs
+        setTimeout(loadRSVPs, 1000);
+    </script>
+</body>
+</html>
