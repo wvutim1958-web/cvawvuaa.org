@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP - WVU vs Houston Game Watch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #002855 0%, #0039a6 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #EAAA00;
+        }
+
+        .header img {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            color: #002855;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .event-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #EAAA00;
+        }
+
+        .event-details h3 {
+            color: #002855;
+            margin-bottom: 10px;
+        }
+
+        .event-details p {
+            color: #333;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #002855;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #EAAA00;
+        }
+
+        .rsvp-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .rsvp-btn {
+            padding: 20px;
+            border: 3px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .rsvp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .rsvp-btn.selected {
+            border-color: #EAAA00;
+            background: #FFF9E6;
+        }
+
+        .rsvp-btn.yes.selected {
+            border-color: #059669;
+            background: #D4EDDA;
+        }
+
+        .rsvp-btn.no.selected {
+            border-color: #DC3545;
+            background: #F8D7DA;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: #002855;
+            color: #EAAA00;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #003d82;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="/assets/mountaineer-game-day.png" alt="Game Day">
+            <h1>🏈 Game Watch RSVP</h1>
+            <p>WVU vs Houston • Big 12 Action</p>
+        </div>
+
+        <div class="event-details">
+            <h3>Event Details</h3>
+            <p><strong>📅 Date:</strong> Saturday, November 1, 2025</p>
+            <p><strong>⏰ Time:</strong> 12:00 PM (Noon Kickoff)</p>
+            <p><strong>📍 Location:</strong> Capital Ale House, 4024 Cox Rd., Glen Allen, VA 23060</p>
+        </div>
+
+        <form id="rsvpForm">
+            <div class="form-group">
+                <label>Will you attend? *</label>
+                <div class="rsvp-buttons">
+                    <div class="rsvp-btn yes" onclick="selectResponse('yes')">
+                        ✅ Yes, I'll be there!
+                    </div>
+                    <div class="rsvp-btn no" onclick="selectResponse('no')">
+                        ❌ Can't make it
+                    </div>
+                </div>
+                <input type="hidden" id="response" name="response" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Your Name *</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
+
+            <div class="form-group" id="guestsGroup" style="display: none;">
+                <label for="guests">Number of Guests (including yourself) *</label>
+                <select id="guests" name="guests">
+                    <option value="1">1 (Just me)</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6+</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Submit RSVP
+            </button>
+        </form>
+
+        <div id="message" class="message"></div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/js/firebase-config.js"></script>
+
+    <script>
+        const eventId = '9pMhBVfwznmd84ef0ZVK';
+        let selectedResponse = null;
+
+        function selectResponse(response) {
+            selectedResponse = response;
+            document.getElementById('response').value = response;
+            
+            // Update button styles
+            document.querySelectorAll('.rsvp-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.closest('.rsvp-btn').classList.add('selected');
+
+            // Show/hide guests field
+            if (response === 'yes') {
+                document.getElementById('guestsGroup').style.display = 'block';
+                document.getElementById('guests').required = true;
+            } else {
+                document.getElementById('guestsGroup').style.display = 'none';
+                document.getElementById('guests').required = false;
+            }
+        }
+
+        document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!selectedResponse) {
+                showMessage('Please select Yes or No', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            const formData = {
+                eventId: eventId,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                response: selectedResponse,
+                guests: selectedResponse === 'yes' ? parseInt(document.getElementById('guests').value) : 0,
+                submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                eventName: 'WVU vs Houston Game Watch',
+                eventDate: '2025-11-01',
+                eventTime: '12:00 PM'
+            };
+
+            try {
+                // Wait for Firebase to initialize
+                if (!db) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                await db.collection('eventRSVPs').add(formData);
+
+                showMessage(
+                    selectedResponse === 'yes' 
+                        ? '✅ Thanks! Your RSVP has been confirmed. See you at the game watch! 💛💙'
+                        : '👍 Thanks for letting us know. Hope to see you at the next event!',
+                    'success'
+                );
+
+                // Reset form
+                document.getElementById('rsvpForm').reset();
+                document.querySelectorAll('.rsvp-btn').forEach(btn => btn.classList.remove('selected'));
+                document.getElementById('guestsGroup').style.display = 'none';
+                selectedResponse = null;
+
+            } catch (error) {
+                console.error('Error submitting RSVP:', error);
+                showMessage('Error submitting RSVP. Please try again or contact cvawvuaa@gmail.com', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit RSVP';
+            }
+        });
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = 'message ' + type;
+            msg.style.display = 'block';
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    msg.style.display = 'none';
+                }, 10000);
+            }
+        }
+    </script>
+</body>
+</html>
