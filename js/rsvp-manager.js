@@ -114,12 +114,14 @@ class RSVPManager {
 
   // Setup form event listeners
   setupEventListeners() {
-    // Enhanced RSVP form submission
+    // Enhanced RSVP form submission - allow Netlify to handle the submission
     const rsvpForm = document.getElementById('rsvp-form');
     if (rsvpForm) {
       rsvpForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        this.handleRSVPSubmission(e.target);
+        // Don't prevent default - let Netlify handle the submission
+        // Just save to local storage for admin tracking
+        const record = this.getFormDataForLocalStorage(e.target);
+        this.saveToLocalStorage(record);
       });
     }
 
@@ -127,73 +129,37 @@ class RSVPManager {
     this.autoPopulateEventFromURL();
   }
 
-  // Handle RSVP form submission
-  handleRSVPSubmission(form) {
+  // Get form data for local storage (simplified version)
+  getFormDataForLocalStorage(form) {
     const formData = new FormData(form);
-    const rsvpData = {
-      name: formData.get('Name'),
-      email: formData.get('Email'),
-      phone: formData.get('Phone'),
+    return {
+      ts: new Date().toISOString(),
+      name: (formData.get('Name') || '').trim(),
+      email: (formData.get('Email') || '').trim(),
+      game: (formData.get('Event') || '').trim(),
+      count: parseInt(formData.get('guests') || 0) + 1, // guests + attendee
+      requests: (formData.get('comments') || '').trim(),
       attending: formData.get('attending'),
-      guests: parseInt(formData.get('guests')) || 0,
-      comments: formData.get('comments'),
+      phone: formData.get('Phone'),
       memberType: formData.get('member-type'),
-      eventName: formData.get('Event')
+      eventId: formData.get('eventId') || this.getEventSlugFromURL()
     };
+  }
 
-    // Get event slug from form or URL
-    const eventSlug = formData.get('event-slug') || this.getEventSlugFromURL();
-    
-    if (!eventSlug) {
-      this.showNotification('❌ Event not specified', 'error');
-      return;
-    }
-
-    // Validate required fields
-    if (!rsvpData.name || !rsvpData.email || !rsvpData.attending) {
-      this.showNotification('❌ Please fill in all required fields', 'error');
-      return;
-    }
-
+  // Save to local storage for admin tracking
+  saveToLocalStorage(record) {
     try {
-      const rsvpId = this.submitRSVP(eventSlug, rsvpData);
-      
-      // Still submit to FormSubmit for email notifications
-      this.submitToFormSubmit(form, rsvpId);
-      
-      // Clear form
-      form.reset();
-      
-      // Show success message
-      this.showRSVPSuccess(rsvpId);
-      
+      const stored = localStorage.getItem('cvcwvuaa-rsvps');
+      const rsvps = stored ? JSON.parse(stored) : [];
+      rsvps.push(record);
+      localStorage.setItem('cvcwvuaa-rsvps', JSON.stringify(rsvps));
     } catch (error) {
-      console.error('RSVP submission error:', error);
-      this.showNotification('❌ RSVP submission failed. Please try again.', 'error');
+      console.warn('Could not save RSVP to local storage:', error);
     }
   }
 
-  // Submit to FormSubmit for email notifications
-  async submitToFormSubmit(form, rsvpId) {
-    try {
-      // Add RSVP ID to form data
-      const hiddenInput = document.createElement('input');
-      hiddenInput.type = 'hidden';
-      hiddenInput.name = 'rsvp_id';
-      hiddenInput.value = rsvpId;
-      form.appendChild(hiddenInput);
-
-      // Submit form
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form)
-      });
-
-      console.log('FormSubmit response:', response.ok);
-    } catch (error) {
-      console.warn('FormSubmit error:', error);
-    }
-  }
+  // Note: Form submission is now handled by Netlify directly
+  // No need to manually submit to external services
 
   // Auto-populate event details from URL parameters
   autoPopulateEventFromURL() {
