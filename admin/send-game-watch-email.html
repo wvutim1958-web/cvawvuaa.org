@@ -324,26 +324,31 @@
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/js/firebase-config.js"></script>
 
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBE8W-vHFEpz8F5lQXqZn8X0PqKBZq7yYw",
-            authDomain: "cvawvuaa-org.firebaseapp.com",
-            projectId: "cvawvuaa-org",
-            storageBucket: "cvawvuaa-org.firebasestorage.app",
-            messagingSenderId: "966956364238",
-            appId: "1:966956364238:web:1e4e7b5e7d4c8a0a8b5e3f"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // Firebase is initialized by firebase-config.js
+        let db;
+        
+        // Wait for Firebase to initialize
+        function initDB() {
+            if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+                db = firebase.firestore();
+                loadMembers();
+            } else {
+                setTimeout(initDB, 100);
+            }
+        }
 
         let members = [];
 
         // Load members on page load
         async function loadMembers() {
+            if (!db) {
+                setTimeout(loadMembers, 100);
+                return;
+            }
+
             try {
                 const snapshot = await db.collection('members').get();
                 members = snapshot.docs
@@ -478,8 +483,8 @@
 
         // Initialize
         window.addEventListener('load', () => {
-            loadMembers();
             updatePreview();
+            // loadMembers will be called after Firebase initializes
         });
     </script>
 </body>
