@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Diagnostic Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; padding: 20px; }
+        .status-box { padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .search-result { background: #f8f9fa; padding: 10px; margin: 5px 0; border-left: 4px solid #007bff; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔧 RSVP Diagnostic Tool</h1>
+    <p>This tool will help diagnose what happened to your RSVP submission for Timothy Casten.</p>
+
+    <div id="diagnostic-results"></div>
+    
+    <button onclick="runDiagnostic()">🔍 Run Full Diagnostic</button>
+    <button onclick="searchForTimothy()">👤 Search for Timothy Casten</button>
+    <button onclick="showRawData()">📋 Show Raw Data</button>
+    <button onclick="testRSVPSystem()">⚡ Test RSVP System</button>
+
+    <script>
+        function runDiagnostic() {
+            const resultsEl = document.getElementById('diagnostic-results');
+            let results = '<h2>🔍 Diagnostic Results</h2>';
+            
+            // Check localStorage
+            const storedRSVPs = localStorage.getItem('cvcwvuaa-rsvps');
+            const rsvps = storedRSVPs ? JSON.parse(storedRSVPs) : [];
+            
+            results += `<div class="status-box ${rsvps.length > 0 ? 'success' : 'warning'}">
+                <strong>📦 Local Storage Check:</strong><br>
+                Found ${rsvps.length} RSVPs stored locally in your browser.
+                ${rsvps.length === 0 ? '<br><small>This could mean: 1) No RSVPs submitted from this browser, 2) Browser data was cleared, or 3) RSVP was submitted but not saved locally due to an error.</small>' : ''}
+            </div>`;
+            
+            // Check for Timothy specifically
+            const timothyRSVPs = rsvps.filter(r => 
+                (r.name && r.name.toLowerCase().includes('timothy')) ||
+                (r.name && r.name.toLowerCase().includes('casten')) ||
+                (r.email && r.email.toLowerCase().includes('pcctim'))
+            );
+            
+            results += `<div class="status-box ${timothyRSVPs.length > 0 ? 'success' : 'warning'}">
+                <strong>👤 Timothy Casten Search:</strong><br>
+                Found ${timothyRSVPs.length} RSVPs matching "Timothy Casten" or "pcctim@aol.com"
+            </div>`;
+            
+            if (timothyRSVPs.length > 0) {
+                results += '<h3>📋 Found RSVPs for Timothy:</h3>';
+                timothyRSVPs.forEach((rsvp, i) => {
+                    results += `<div class="search-result">
+                        <strong>RSVP #${i + 1}</strong><br>
+                        Name: ${rsvp.name}<br>
+                        Email: ${rsvp.email}<br>
+                        Event: ${rsvp.game || rsvp.eventName || 'Not specified'}<br>
+                        Count: ${rsvp.count || 1}<br>
+                        Date: ${rsvp.ts ? new Date(rsvp.ts).toLocaleString() : 'Unknown'}<br>
+                        ${rsvp.requests ? `Requests: ${rsvp.requests}<br>` : ''}
+                    </div>`;
+                });
+            }
+            
+            // Check browser info
+            results += `<div class="status-box info">
+                <strong>🌐 Browser Information:</strong><br>
+                User Agent: ${navigator.userAgent}<br>
+                localStorage Available: ${typeof(Storage) !== "undefined" ? "✅ Yes" : "❌ No"}<br>
+                Current URL: ${window.location.href}
+            </div>`;
+            
+            // Check for recent RSVPs
+            const recentRSVPs = rsvps.filter(r => {
+                const rsvpTime = new Date(r.ts);
+                const now = new Date();
+                const hoursDiff = (now - rsvpTime) / (1000 * 60 * 60);
+                return hoursDiff <= 24; // Last 24 hours
+            });
+            
+            results += `<div class="status-box ${recentRSVPs.length > 0 ? 'success' : 'info'}">
+                <strong>⏰ Recent Activity:</strong><br>
+                Found ${recentRSVPs.length} RSVPs submitted in the last 24 hours.
+            </div>`;
+            
+            resultsEl.innerHTML = results;
+        }
+        
+        function searchForTimothy() {
+            const storedRSVPs = localStorage.getItem('cvcwvuaa-rsvps');
+            const rsvps = storedRSVPs ? JSON.parse(storedRSVPs) : [];
+            
+            const searchTerms = ['timothy', 'casten', 'pcctim'];
+            const matches = rsvps.filter(r => 
+                searchTerms.some(term => 
+                    (r.name && r.name.toLowerCase().includes(term)) ||
+                    (r.email && r.email.toLowerCase().includes(term))
+                )
+            );
+            
+            const resultsEl = document.getElementById('diagnostic-results');
+            let html = '<h2>👤 Timothy Casten Search Results</h2>';
+            
+            if (matches.length === 0) {
+                html += `<div class="status-box warning">
+                    <strong>No matches found</strong><br>
+                    Searched for: timothy, casten, pcctim<br>
+                    Total RSVPs in storage: ${rsvps.length}
+                </div>`;
+                
+                if (rsvps.length > 0) {
+                    html += '<h3>All stored RSVPs:</h3>';
+                    rsvps.forEach((r, i) => {
+                        html += `<div class="search-result">
+                            ${i + 1}. ${r.name || 'Unknown'} (${r.email || 'No email'}) - ${r.game || 'No event'} - ${r.ts ? new Date(r.ts).toLocaleString() : 'Unknown time'}
+                        </div>`;
+                    });
+                }
+            } else {
+                html += `<div class="status-box success">
+                    <strong>✅ Found ${matches.length} matching RSVP(s)</strong>
+                </div>`;
+                
+                matches.forEach((match, i) => {
+                    html += `<div class="search-result">
+                        <strong>Match #${i + 1}</strong><br>
+                        Name: ${match.name}<br>
+                        Email: ${match.email}<br>
+                        Event: ${match.game || match.eventName || 'Not specified'}<br>
+                        Attendees: ${match.count || 1}<br>
+                        Submitted: ${match.ts ? new Date(match.ts).toLocaleString() : 'Unknown time'}<br>
+                        ${match.requests ? `Special Requests: ${match.requests}<br>` : ''}
+                        ${match.eventId ? `Event ID: ${match.eventId}<br>` : ''}
+                    </div>`;
+                });
+            }
+            
+            resultsEl.innerHTML = html;
+        }
+        
+        function showRawData() {
+            const storedRSVPs = localStorage.getItem('cvcwvuaa-rsvps');
+            const resultsEl = document.getElementById('diagnostic-results');
+            
+            let html = '<h2>📋 Raw localStorage Data</h2>';
+            
+            if (!storedRSVPs) {
+                html += '<div class="status-box warning">No RSVP data found in localStorage</div>';
+            } else {
+                try {
+                    const parsed = JSON.parse(storedRSVPs);
+                    html += `<div class="status-box info">
+                        <strong>Data found:</strong> ${parsed.length} records
+                    </div>`;
+                    html += '<pre>' + JSON.stringify(parsed, null, 2) + '</pre>';
+                } catch (e) {
+                    html += `<div class="status-box error">
+                        <strong>Error parsing data:</strong> ${e.message}
+                    </div>`;
+                    html += '<pre>' + storedRSVPs + '</pre>';
+                }
+            }
+            
+            resultsEl.innerHTML = html;
+        }
+        
+        function testRSVPSystem() {
+            const resultsEl = document.getElementById('diagnostic-results');
+            let html = '<h2>⚡ RSVP System Test</h2>';
+            
+            // Test localStorage functionality
+            try {
+                const testKey = 'test-rsvp-' + Date.now();
+                const testData = { test: true, timestamp: new Date().toISOString() };
+                localStorage.setItem(testKey, JSON.stringify(testData));
+                const retrieved = JSON.parse(localStorage.getItem(testKey));
+                localStorage.removeItem(testKey);
+                
+                html += `<div class="status-box success">
+                    <strong>✅ localStorage Test:</strong> Working correctly
+                </div>`;
+            } catch (e) {
+                html += `<div class="status-box error">
+                    <strong>❌ localStorage Test:</strong> Failed - ${e.message}
+                </div>`;
+            }
+            
+            // Check if RSVP form exists
+            const formExists = document.querySelector('#rsvp-form') !== null;
+            html += `<div class="status-box ${formExists ? 'success' : 'warning'}">
+                <strong>📝 RSVP Form:</strong> ${formExists ? 'Found on page' : 'Not found (you may need to go to /events/rsvp.html)'}
+            </div>`;
+            
+            // Check if RSVP manager is loaded
+            const managerLoaded = typeof window.rsvpManager !== 'undefined';
+            html += `<div class="status-box ${managerLoaded ? 'success' : 'warning'}">
+                <strong>⚙️ RSVP Manager:</strong> ${managerLoaded ? 'Loaded' : 'Not loaded (may need to be on RSVP page)'}
+            </div>`;
+            
+            resultsEl.innerHTML = html;
+        }
+        
+        // Auto-run diagnostic on load
+        window.addEventListener('load', runDiagnostic);
+    </script>
+</body>
+</html>

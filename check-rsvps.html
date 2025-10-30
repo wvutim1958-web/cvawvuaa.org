@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Local RSVPs</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .rsvp-item { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .no-rsvps { background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .search-box { width: 100%; padding: 10px; margin: 20px 0; border: 1px solid #ddd; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Local RSVP Checker</h1>
+    <p>This tool checks what RSVPs are stored locally in your browser for the CVCWVUAA website.</p>
+    
+    <input type="text" id="searchBox" class="search-box" placeholder="Search by name, email, or event...">
+    
+    <div>
+        <button onclick="loadRSVPs()">🔄 Refresh RSVPs</button>
+        <button onclick="exportToCSV()">📊 Export to CSV</button>
+        <button onclick="clearAll()">🗑️ Clear All RSVPs</button>
+    </div>
+
+    <div id="rsvp-count" style="margin: 20px 0; font-weight: bold;"></div>
+    <div id="rsvp-list"></div>
+
+    <script>
+        function loadRSVPs() {
+            const stored = localStorage.getItem('cvcwvuaa-rsvps');
+            const rsvps = stored ? JSON.parse(stored) : [];
+            
+            const countEl = document.getElementById('rsvp-count');
+            const listEl = document.getElementById('rsvp-list');
+            
+            countEl.innerHTML = `Found ${rsvps.length} local RSVPs`;
+            
+            if (rsvps.length === 0) {
+                listEl.innerHTML = '<div class="no-rsvps">No RSVPs found in local storage. If you submitted an RSVP, it may have been sent via email but not stored locally, or you may have cleared your browser data.</div>';
+                return;
+            }
+            
+            // Sort by timestamp (newest first)
+            rsvps.sort((a, b) => new Date(b.ts) - new Date(a.ts));
+            
+            listEl.innerHTML = rsvps.map((rsvp, index) => `
+                <div class="rsvp-item">
+                    <strong>#${index + 1} - ${rsvp.name || 'Unknown'}</strong><br>
+                    📧 Email: ${rsvp.email || 'Not provided'}<br>
+                    🎯 Event: ${rsvp.game || rsvp.eventName || 'Not specified'}<br>
+                    👥 Count: ${rsvp.count || 1}<br>
+                    📅 Submitted: ${rsvp.ts ? new Date(rsvp.ts).toLocaleString() : 'Unknown time'}<br>
+                    ${rsvp.requests ? `💬 Requests: ${rsvp.requests}<br>` : ''}
+                    ${rsvp.eventId ? `🔗 Event ID: ${rsvp.eventId}<br>` : ''}
+                </div>
+            `).join('');
+        }
+        
+        function exportToCSV() {
+            const stored = localStorage.getItem('cvcwvuaa-rsvps');
+            const rsvps = stored ? JSON.parse(stored) : [];
+            
+            if (rsvps.length === 0) {
+                alert('No RSVPs to export');
+                return;
+            }
+            
+            const headers = ['Timestamp', 'Name', 'Email', 'Event', 'Count', 'Requests', 'EventID'];
+            const csvContent = [
+                headers.join(','),
+                ...rsvps.map(rsvp => [
+                    rsvp.ts || '',
+                    `"${rsvp.name || ''}"`,
+                    rsvp.email || '',
+                    `"${rsvp.game || rsvp.eventName || ''}"`,
+                    rsvp.count || 1,
+                    `"${(rsvp.requests || '').replace(/"/g, '""')}"`,
+                    rsvp.eventId || ''
+                ].join(','))
+            ].join('\\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cvcwvuaa-rsvps-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function clearAll() {
+            if (confirm('Are you sure you want to clear all local RSVPs? This cannot be undone.')) {
+                localStorage.removeItem('cvcwvuaa-rsvps');
+                loadRSVPs();
+                alert('All RSVPs cleared from local storage.');
+            }
+        }
+        
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.rsvp-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+        
+        // Load RSVPs on page load
+        window.addEventListener('load', loadRSVPs);
+    </script>
+</body>
+</html>

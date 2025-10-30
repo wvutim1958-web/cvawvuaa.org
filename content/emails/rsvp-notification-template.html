@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New RSVP Submission</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #002855 0%, #EAAA00 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .header .logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .rsvp-details {
+            background: #f8f9fa;
+            border-left: 4px solid #EAAA00;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .detail-row {
+            display: flex;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #002855;
+            min-width: 120px;
+            flex-shrink: 0;
+        }
+        .detail-value {
+            color: #333;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-yes {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-no {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-maybe {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #002855;
+            color: white;
+        }
+        .btn-secondary {
+            background: #EAAA00;
+            color: #002855;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .footer {
+            background: #002855;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #EAAA00;
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            .content {
+                padding: 20px 15px;
+            }
+            .btn {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🎫</div>
+            <h1>New RSVP Received</h1>
+            <p style="margin: 0; opacity: 0.9;">Central Virginia Chapter WVU Alumni</p>
+        </div>
+        
+        <div class="content">
+            <h2 style="color: #002855; margin-top: 0;">Event RSVP Details</h2>
+            
+            <div class="rsvp-details">
+                <div class="detail-row">
+                    <div class="detail-label">Name:</div>
+                    <div class="detail-value">{Name}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Email:</div>
+                    <div class="detail-value"><a href="mailto:{Email}">{Email}</a></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Phone:</div>
+                    <div class="detail-value">{Phone}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Event:</div>
+                    <div class="detail-value"><strong>{Event}</strong></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Attending:</div>
+                    <div class="detail-value">
+                        <span class="status-badge status-{attending}">{attending}</span>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Total Count:</div>
+                    <div class="detail-value">{guests} guests + 1 attendee = <strong>{total_count} total</strong></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Member Type:</div>
+                    <div class="detail-value">{member-type}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Comments:</div>
+                    <div class="detail-value">{comments}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Submitted:</div>
+                    <div class="detail-value">{_date}</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="mailto:{Email}?subject=RE: Your RSVP for {Event}" class="btn btn-primary">
+                    📧 Reply to {Name}
+                </a>
+                <a href="https://cvawvuaa.org/events/" class="btn btn-secondary">
+                    📅 View All Events
+                </a>
+            </div>
+
+            <div style="background: #e7f3ff; padding: 20px; border-radius: 8px; margin-top: 30px;">
+                <h3 style="color: #002855; margin-top: 0;">📊 Quick Actions</h3>
+                <ul style="margin: 0; padding-left: 20px; color: #333;">
+                    <li>Add to your event planning spreadsheet</li>
+                    <li>Send confirmation email to attendee</li>
+                    <li>Update catering/seating count if needed</li>
+                    <li>Check for any special accommodation requests</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>CVCWVUAA</strong> - Central Virginia Chapter</p>
+            <p>This RSVP was submitted through <a href="https://cvawvuaa.org">cvawvuaa.org</a></p>
+            <p>Questions? Contact <a href="mailto:president@cvawvuaa.org">president@cvawvuaa.org</a></p>
+        </div>
+    </div>
+</body>
+</html>
