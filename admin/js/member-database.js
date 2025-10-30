@@ -1168,9 +1168,19 @@ async function savePayment(event) {
         // Add new payment
         payments.push(paymentData);
         
+        // Format payment date for notes
+        const paymentDateStr = new Date(paymentData.date).toLocaleDateString('en-US');
+        
+        // Add payment info to notes
+        const currentNotes = memberData.notes || '';
+        const paymentNote = `Payment received on ${paymentDateStr} - $${paymentData.actualReceived} via ${paymentData.paymentMethod}`;
+        const updatedNotes = currentNotes ? `${currentNotes}\n${paymentNote}` : paymentNote;
+        
         // Prepare update data
         const updateData = {
             payments: payments,
+            status: 'Active',  // Set member to Active when payment is received
+            notes: updatedNotes,  // Add payment date to notes
             lastModified: new Date()
         };
         
