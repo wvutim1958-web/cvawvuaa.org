@@ -28,26 +28,11 @@ async function loadEventData() {
         
         event = { id: eventDoc.id, ...eventDoc.data() };
         
-        // Load RSVPs with member details
-        const rsvpSnapshot = await db.collection('events').doc(eventId).collection('rsvps').get();
-        const rsvpData = rsvpSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        
-        // Get all member details
-        if (rsvpData.length > 0) {
-            const memberIds = rsvpData.map(rsvp => rsvp.memberId);
-            const membersSnapshot = await db.collection('members').where(firebase.firestore.FieldPath.documentId(), 'in', memberIds).get();
-            const membersMap = {};
-            membersSnapshot.docs.forEach(doc => {
-                membersMap[doc.id] = { id: doc.id, ...doc.data() };
-            });
-            
-            allRSVPs = rsvpData.map(rsvp => ({
-                ...rsvp,
-                member: membersMap[rsvp.memberId] || null
-            }));
-        } else {
-            allRSVPs = [];
-        }
+        // Load RSVPs from eventRSVPs collection
+        const rsvpSnapshot = await db.collection('eventRSVPs')
+            .where('eventId', '==', eventId)
+            .get();
+        allRSVPs = rsvpSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
         console.log(`Loaded event with ${allRSVPs.length} RSVPs`);
         
@@ -65,9 +50,9 @@ function renderEventInfo() {
     const eventDate = event.date.toDate ? event.date.toDate() : new Date(event.date);
     const dateStr = formatEventDate(eventDate);
     
-    const yesCnt = allRSVPs.filter(r => r.status === 'yes').length;
-    const maybeCnt = allRSVPs.filter(r => r.status === 'maybe').length;
-    const noCnt = allRSVPs.filter(r => r.status === 'no').length;
+    const yesCnt = allRSVPs.filter(r => (r.response || r.status) === 'yes').length;
+    const maybeCnt = allRSVPs.filter(r => (r.response || r.status) === 'maybe').length;
+    const noCnt = allRSVPs.filter(r => (r.response || r.status) === 'no').length;
     
     document.getElementById('eventTitle').textContent = event.name;
     
@@ -167,16 +152,16 @@ function renderRSVPTable() {
             </thead>
             <tbody>
                 ${sorted.map(rsvp => {
-                    const member = rsvp.member;
-                    const memberName = member ? `${member.firstName} ${member.lastName}` : 'Unknown Member';
-                    const email = member?.email || 'N/A';
-                    const rsvpDate = rsvp.timestamp?.toDate ? rsvp.timestamp.toDate() : new Date(rsvp.timestamp);
+                    const memberName = rsvp.name || 'Unknown';
+                    const email = rsvp.email || 'N/A';
+                    const status = rsvp.response || rsvp.status || 'unknown';
+                    const rsvpDate = rsvp.submittedAt?.toDate ? rsvp.submittedAt.toDate() : (rsvp.timestamp?.toDate ? rsvp.timestamp.toDate() : new Date());
                     
                     return `
                         <tr>
                             <td>${escapeHtml(memberName)}</td>
                             <td>${escapeHtml(email)}</td>
-                            <td><span class="status-badge ${rsvp.status}">${rsvp.status}</span></td>
+                            <td><span class="status-badge ${status}">${status}</span></td>
                             <td>${formatDate(rsvpDate)}</td>
                         </tr>
                     `;
@@ -195,15 +180,15 @@ function exportRSVPs() {
     
     const headers = ['Name', 'Email', 'Status', 'RSVP Date'];
     const rows = filteredRSVPs.map(rsvp => {
-        const member = rsvp.member;
-        const memberName = member ? `${member.firstName} ${member.lastName}` : 'Unknown';
-        const email = member?.email || '';
-        const rsvpDate = rsvp.timestamp?.toDate ? rsvp.timestamp.toDate() : new Date(rsvp.timestamp);
+        const memberName = rsvp.name || 'Unknown';
+        const email = rsvp.email || '';
+        const status = rsvp.response || rsvp.status || 'unknown';
+        const rsvpDate = rsvp.submittedAt?.toDate ? rsvp.submittedAt.toDate() : (rsvp.timestamp?.toDate ? rsvp.timestamp.toDate() : new Date());
         
         return [
             memberName,
             email,
-            rsvp.status,
+            status,
             formatDate(rsvpDate)
         ];
     });
@@ -260,7 +245,7 @@ function showExportHTMLModal() {
         return;
     }
     
-    const yesCount = allRSVPs.filter(r => r.status === 'yes').length;
+    const yesCount = allRSVPs.filter(r => (r.response || r.status) === 'yes').length;
     const eventDate = event.date ? new Date(event.date.seconds * 1000) : null;
     const dateStr = eventDate ? eventDate.toLocaleDateString('en-US', { 
         weekday: 'long',
