@@ -329,6 +329,7 @@
     <script>
         // Firebase is initialized by firebase-config.js
         let db;
+        let members = [];
         
         // Wait for Firebase to initialize
         function initDB() {
@@ -339,8 +340,6 @@
                 setTimeout(initDB, 100);
             }
         }
-
-        let members = [];
 
         // Load members on page load
         async function loadMembers() {
@@ -484,7 +483,7 @@
         // Initialize
         window.addEventListener('load', () => {
             updatePreview();
-            // loadMembers will be called after Firebase initializes
+            initDB();
         });
     </script>
 </body>
