@@ -328,19 +328,9 @@
 
     <script>
         // Firebase is initialized by firebase-config.js
-        let db;
+        // db is already declared in firebase-config.js
         let members = [];
         
-        // Wait for Firebase to initialize
-        function initDB() {
-            if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
-                db = firebase.firestore();
-                loadMembers();
-            } else {
-                setTimeout(initDB, 100);
-            }
-        }
-
         // Load members on page load
         async function loadMembers() {
             if (!db) {
@@ -483,7 +473,7 @@
         // Initialize
         window.addEventListener('load', () => {
             updatePreview();
-            initDB();
+            loadMembers();
         });
     </script>
 </body>
