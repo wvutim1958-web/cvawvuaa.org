@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Game Watch Email - CVCWVUAA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #002855 0%, #0039a6 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #EAAA00;
+        }
+
+        .header h1 {
+            color: #002855;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #002855;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #002855;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #EAAA00;
+        }
+
+        .preview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #EAAA00;
+        }
+
+        .preview h3 {
+            color: #002855;
+            margin-bottom: 15px;
+        }
+
+        .email-preview {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #002855;
+            color: #EAAA00;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #003d82;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #EAAA00;
+            color: #002855;
+        }
+
+        .btn-secondary:hover {
+            background: #FFC72C;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #EAAA00 0%, #FFC72C 100%);
+            color: #002855;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #002855;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏈 Send Game Watch Email</h1>
+            <p>Send the Saturday game watch reminder to all members</p>
+        </div>
+
+        <div class="section">
+            <h2>📊 Email Recipients</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 id="totalMembers">-</h3>
+                    <p>Total Members</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="withEmails">-</h3>
+                    <p>With Valid Emails</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="sendCount">0</h3>
+                    <p>Emails Sent</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✉️ Email Content</h2>
+            
+            <div class="form-group">
+                <label for="subject">Subject Line:</label>
+                <input type="text" id="subject" value="🏈 THIS SATURDAY: WVU Game Watch at Capital Ale House - Noon Kickoff!">
+            </div>
+
+            <div class="form-group">
+                <label for="message">Email Message (HTML):</label>
+                <textarea id="message" readonly><!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { background: #002855; color: #EAAA00; padding: 30px; text-align: center; }
+        .content { padding: 30px; background: #f8f9fa; }
+        .game-info { background: #EAAA00; color: #002855; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0; }
+        .venue { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .footer { background: #002855; color: white; padding: 20px; text-align: center; }
+        a { color: #002855; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏈 GAME WATCH THIS SATURDAY!</h1>
+        </div>
+        <div class="content">
+            <div class="game-info">
+                <h2>WVU MOUNTAINEERS</h2>
+                <p><strong>KICKOFF: 12:00 PM (Noon)</strong></p>
+                <p><strong>Saturday, November 2, 2025</strong></p>
+            </div>
+            
+            <div class="venue">
+                <h3>📍 Location</h3>
+                <p><strong>Capital Ale House</strong><br>
+                Glen Allen, VA</p>
+            </div>
+            
+            <p><strong>Join your fellow Mountaineers for an afternoon of WVU Football!</strong></p>
+            
+            <ul>
+                <li>🏈 Game on big screens</li>
+                <li>🍺 Great food & drinks</li>
+                <li>🎉 Mountaineer camaraderie</li>
+                <li>💙💛 Blue & Gold spirit!</li>
+            </ul>
+            
+            <p style="text-align: center; margin-top: 30px;">
+                <strong>Let's Go Mountaineers!</strong><br>
+                🔵🟡 #HailWV
+            </p>
+        </div>
+        <div class="footer">
+            <p><strong>Central Virginia Chapter</strong><br>
+            WVU Alumni Association<br>
+            <a href="https://cvawvuaa.org" style="color: #EAAA00;">cvawvuaa.org</a></p>
+        </div>
+    </div>
+</body>
+</html></textarea>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📧 Preview</h2>
+            <div class="preview">
+                <h3>Email Preview:</h3>
+                <div class="email-preview" id="emailPreview"></div>
+            </div>
+        </div>
+
+        <div class="section" style="text-align: center;">
+            <button class="btn" id="sendBtn" onclick="sendBulkEmail()">
+                📤 Send to All Members
+            </button>
+            <button class="btn btn-secondary" onclick="sendTestEmail()" style="margin-left: 10px;">
+                🧪 Send Test Email to Yourself
+            </button>
+        </div>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBE8W-vHFEpz8F5lQXqZn8X0PqKBZq7yYw",
+            authDomain: "cvawvuaa-org.firebaseapp.com",
+            projectId: "cvawvuaa-org",
+            storageBucket: "cvawvuaa-org.firebasestorage.app",
+            messagingSenderId: "966956364238",
+            appId: "1:966956364238:web:1e4e7b5e7d4c8a0a8b5e3f"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let members = [];
+
+        // Load members on page load
+        async function loadMembers() {
+            try {
+                const snapshot = await db.collection('members').get();
+                members = snapshot.docs
+                    .map(doc => ({ id: doc.id, ...doc.data() }))
+                    .filter(m => m.email && m.email.includes('@'));
+
+                document.getElementById('totalMembers').textContent = snapshot.size;
+                document.getElementById('withEmails').textContent = members.length;
+
+                console.log(`Loaded ${members.length} members with valid emails`);
+            } catch (error) {
+                console.error('Error loading members:', error);
+                showStatus('Failed to load members: ' + error.message, 'error');
+            }
+        }
+
+        // Show email preview
+        function updatePreview() {
+            const html = document.getElementById('message').value;
+            document.getElementById('emailPreview').innerHTML = html;
+        }
+
+        // Send test email
+        async function sendTestEmail() {
+            const testEmail = prompt('Enter your email address for test:');
+            if (!testEmail || !testEmail.includes('@')) {
+                alert('Invalid email address');
+                return;
+            }
+
+            const subject = document.getElementById('subject').value;
+            const html = document.getElementById('message').value;
+
+            try {
+                await db.collection('mail').add({
+                    to: testEmail,
+                    from: 'CVAWVUAA <cvawvuaa@gmail.com>',
+                    replyTo: 'cvawvuaa@gmail.com',
+                    message: {
+                        subject: subject,
+                        html: html
+                    }
+                });
+
+                showStatus(`Test email sent to ${testEmail}! Check your inbox in a few seconds.`, 'success');
+            } catch (error) {
+                console.error('Error sending test email:', error);
+                showStatus('Failed to send test email: ' + error.message, 'error');
+            }
+        }
+
+        // Send bulk email to all members
+        async function sendBulkEmail() {
+            if (members.length === 0) {
+                alert('No members loaded yet. Please wait...');
+                return;
+            }
+
+            const confirmed = confirm(
+                `⚠️ You are about to send emails to ${members.length} members.\n\n` +
+                `Subject: ${document.getElementById('subject').value}\n\n` +
+                `This action cannot be undone. Continue?`
+            );
+
+            if (!confirmed) return;
+
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = '📤 Sending...';
+
+            const subject = document.getElementById('subject').value;
+            const html = document.getElementById('message').value;
+
+            let sent = 0;
+            let failed = 0;
+
+            try {
+                for (const member of members) {
+                    try {
+                        await db.collection('mail').add({
+                            to: member.email,
+                            from: 'CVAWVUAA <cvawvuaa@gmail.com>',
+                            replyTo: 'cvawvuaa@gmail.com',
+                            message: {
+                                subject: subject,
+                                html: html
+                            }
+                        });
+
+                        sent++;
+                        document.getElementById('sendCount').textContent = sent;
+
+                        // Small delay to avoid rate limiting
+                        await new Promise(resolve => setTimeout(resolve, 100));
+
+                    } catch (error) {
+                        console.error(`Failed to queue email for ${member.email}:`, error);
+                        failed++;
+                    }
+                }
+
+                showStatus(
+                    `✅ Email campaign complete!\n\n` +
+                    `📧 Queued: ${sent} emails\n` +
+                    `❌ Failed: ${failed} emails\n\n` +
+                    `Emails will be delivered within the next few minutes.`,
+                    'success'
+                );
+
+            } catch (error) {
+                console.error('Error sending bulk email:', error);
+                showStatus('Error during bulk send: ' + error.message, 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = '📤 Send to All Members';
+            }
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status ' + type;
+            status.style.display = 'block';
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 10000);
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            loadMembers();
+            updatePreview();
+        });
+    </script>
+</body>
+</html>
