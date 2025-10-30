@@ -13,7 +13,8 @@ let currentFilter = 'all';
 // Load event and RSVPs
 async function loadEventData() {
     if (!eventId) {
-        document.getElementById('eventInfo').innerHTML = '<div class="no-data">No event ID provided.</div>';
+        // Show list of all events to choose from
+        await showEventList();
         return;
     }
     
@@ -341,6 +342,46 @@ function copyHTMLCode() {
 
 function closeHTMLModal() {
     document.getElementById('htmlExportModal').style.display = 'none';
+}
+
+// Show event list when no eventId is provided
+async function showEventList() {
+    try {
+        const eventsSnapshot = await db.collection('events').orderBy('date', 'desc').limit(20).get();
+        const events = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        document.getElementById('eventInfo').innerHTML = `
+            <h2 style="margin: 0 0 1rem;">Select an Event to View RSVPs</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Choose an event below to see its RSVP details:</p>
+        `;
+        
+        const container = document.getElementById('rsvpTableContainer');
+        if (events.length === 0) {
+            container.innerHTML = '<div class="no-data">No events found.</div>';
+            return;
+        }
+        
+        container.innerHTML = events.map(evt => {
+            const date = evt.date?.toDate ? evt.date.toDate() : new Date(evt.date);
+            const dateStr = date.toLocaleDateString('en-US', { 
+                month: 'short', day: 'numeric', year: 'numeric' 
+            });
+            
+            return `
+                <div style="background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.2s;" 
+                     onclick="window.location.href='event-rsvps.html?eventId=${evt.id}'"
+                     onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'"
+                     onmouseout="this.style.boxShadow='none'">
+                    <h3 style="margin: 0 0 10px; color: #003057;">${escapeHtml(evt.name || evt.title || 'Untitled Event')}</h3>
+                    <p style="margin: 0; color: #666;">📅 ${dateStr}</p>
+                    ${evt.location ? `<p style="margin: 5px 0 0; color: #666;">📍 ${escapeHtml(evt.location)}</p>` : ''}
+                </div>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        document.getElementById('eventInfo').innerHTML = '<div class="no-data">Error loading events: ' + error.message + '</div>';
+    }
 }
 
 // Load data on page load
