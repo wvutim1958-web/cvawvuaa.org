@@ -298,6 +298,187 @@
         .shake {
             animation: shake 0.5s;
         }
+
+        /* New Portal Enhancement Styles */
+        .portal-tabs {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: transparent;
+            border: 2px solid transparent;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab-btn:hover {
+            background: #f8f9fa;
+            color: #002855;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            border-color: #002855;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .event-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .event-card:hover {
+            border-color: #002855;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .member-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.25rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .member-card:hover {
+            background: #f8f9fa;
+            border-color: #002855;
+        }
+        
+        .member-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #002855, #1e40af);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .document-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .document-item:last-child {
+            border-bottom: none;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .poll-option {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .poll-option:hover {
+            border-color: #002855;
+            background: white;
+        }
+        
+        .poll-option.selected {
+            background: #002855;
+            color: white;
+            border-color: #002855;
+        }
+        
+        .poll-results {
+            margin-top: 0.5rem;
+        }
+        
+        .poll-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+        
+        .poll-bar-fill {
+            background: linear-gradient(135deg, #002855, #1e40af);
+            height: 100%;
+            transition: width 0.5s;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #memberCard, #memberCard * {
+                visibility: visible;
+            }
+            #memberCard {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -379,41 +560,243 @@
         </div>
 
         <div class="portal-container">
-            <div class="welcome-banner">
-                <h2>� Financial Transparency Dashboard</h2>
-                <p>View chapter balance sheet and recent transactions</p>
+            <!-- Tab Navigation -->
+            <div class="portal-tabs">
+                <button class="tab-btn active" onclick="switchTab('dashboard')" data-tab="dashboard">
+                    <span style="font-size: 1.2rem;">💰</span> Dashboard
+                </button>
+                <button class="tab-btn" onclick="switchTab('member-card')" data-tab="member-card">
+                    <span style="font-size: 1.2rem;">🪪</span> My Card
+                </button>
+                <button class="tab-btn" onclick="switchTab('events')" data-tab="events">
+                    <span style="font-size: 1.2rem;">🏈</span> Events
+                </button>
+                <button class="tab-btn" onclick="switchTab('directory')" data-tab="directory">
+                    <span style="font-size: 1.2rem;">👥</span> Directory
+                </button>
+                <button class="tab-btn" onclick="switchTab('documents')" data-tab="documents">
+                    <span style="font-size: 1.2rem;">📄</span> Documents
+                </button>
+                <button class="tab-btn" onclick="switchTab('gallery')" data-tab="gallery">
+                    <span style="font-size: 1.2rem;">📸</span> Gallery
+                </button>
+                <button class="tab-btn" onclick="switchTab('polls')" data-tab="polls">
+                    <span style="font-size: 1.2rem;">📊</span> Polls
+                </button>
             </div>
 
-            <div id="loadingFinancials" style="text-align: center; padding: 3rem; color: #666;">
-                <p>Loading financial data...</p>
-            </div>
-
-            <div id="financialContent" style="display: none;">
-                <!-- Balance Summary -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
-                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #28a745;">
-                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Current Balance</h3>
-                        <div id="currentBalance" style="font-size: 2.5rem; font-weight: 700; color: #28a745; margin: 0;">$0.00</div>
-                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Operating Account</div>
-                    </div>
-                    
-                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #007bff;">
-                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Total Income</h3>
-                        <div id="totalIncome" style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin: 0;">$0.00</div>
-                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Year to Date</div>
-                    </div>
-                    
-                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #dc3545;">
-                        <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Total Expenses</h3>
-                        <div id="totalExpenses" style="font-size: 2.5rem; font-weight: 700; color: #dc3545; margin: 0;">$0.00</div>
-                        <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Year to Date</div>
-                    </div>
+            <!-- DASHBOARD TAB -->
+            <div id="tab-dashboard" class="tab-content active">
+                <!-- New Member Welcome Banner -->
+                <div id="newMemberBanner" style="display: none; background: linear-gradient(135deg, #EAAA00, #ffd700); color: #002855; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; text-align: center;">
+                    <h3 style="margin: 0 0 0.5rem; font-size: 1.5rem;">🎉 Welcome to the Family!</h3>
+                    <p style="margin: 0; font-size: 1rem;">You're a new member! We're excited to have you join us. Don't miss upcoming events below.</p>
                 </div>
 
-                <!-- Recent Transactions -->
+                <!-- Birthday/Anniversary Section -->
+                <div id="celebrationsSection" style="display: none; background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                    <h3 style="margin: 0 0 1rem; color: #002855; font-size: 1.3rem;">🎂 Upcoming Celebrations</h3>
+                    <div id="celebrationsList" style="display: grid; gap: 1rem;"></div>
+                </div>
+
+                <div class="welcome-banner">
+                    <h2>💰 Financial Transparency Dashboard</h2>
+                    <p>View chapter balance sheet and recent transactions</p>
+                </div>
+
+                <div id="loadingFinancials" style="text-align: center; padding: 3rem; color: #666;">
+                    <p>Loading financial data...</p>
+                </div>
+
+                <div id="financialContent" style="display: none;">
+                    <!-- Balance Summary -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #28a745;">
+                            <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Current Balance</h3>
+                            <div id="currentBalance" style="font-size: 2.5rem; font-weight: 700; color: #28a745; margin: 0;">$0.00</div>
+                            <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Operating Account</div>
+                        </div>
+                        
+                        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #007bff;">
+                            <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Total Income</h3>
+                            <div id="totalIncome" style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin: 0;">$0.00</div>
+                            <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Year to Date</div>
+                        </div>
+                        
+                        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #dc3545;">
+                            <h3 style="margin: 0 0 1rem; color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Total Expenses</h3>
+                            <div id="totalExpenses" style="font-size: 2.5rem; font-weight: 700; color: #dc3545; margin: 0;">$0.00</div>
+                            <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Year to Date</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <h2 style="margin: 0 0 1.5rem; color: #003057;">📊 Recent Transactions</h2>
+                        <div id="transactionsList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEMBER CARD TAB -->
+            <div id="tab-member-card" class="tab-content" style="display: none;">
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto;">
+                    <h2 style="margin: 0 0 1.5rem; color: #002855; text-align: center;">🪪 Your Member Card</h2>
+                    
+                    <!-- Digital Member Card -->
+                    <div id="memberCard" style="background: linear-gradient(135deg, #002855, #1e40af); color: white; padding: 2rem; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(234,170,0,0.1); border-radius: 50%;"></div>
+                        <div style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; background: rgba(234,170,0,0.15); border-radius: 50%;"></div>
+                        
+                        <div style="position: relative; z-index: 1;">
+                            <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; color: #EAAA00;">CVCWVUAA</div>
+                            <div style="font-size: 0.9rem; margin-bottom: 2rem; opacity: 0.9;">Central Virginia Chapter • WVU Alumni</div>
+                            
+                            <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;" id="cardMemberName"></div>
+                            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 1.5rem;">Member Since <span id="cardMemberSince"></span></div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                <div>
+                                    <div style="font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.25rem;">Member ID</div>
+                                    <div style="font-size: 1.1rem; font-weight: 600;" id="cardMemberId"></div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.25rem;">Valid Through</div>
+                                    <div style="font-size: 1.1rem; font-weight: 600;" id="cardExpiration"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <button onclick="downloadMemberCard()" style="background: #EAAA00; color: #002855; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 1rem; margin-right: 1rem;">
+                            💾 Download Card
+                        </button>
+                        <button onclick="printMemberCard()" style="background: #002855; color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 1rem;">
+                            🖨️ Print Card
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 10px;">
+                        <h4 style="margin: 0 0 1rem; color: #002855;">💡 Member Benefits</h4>
+                        <ul style="margin: 0; padding-left: 1.5rem; color: #666; line-height: 1.8;">
+                            <li>Access to Members-Only Portal</li>
+                            <li>Event RSVPs and Game Watch Invites</li>
+                            <li>Scholarship Fund Donation Impact Reports</li>
+                            <li>Networking Directory Access</li>
+                            <li>Exclusive Member Communications</li>
+                            <li>Raffle and Prize Eligibility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVENTS TAB -->
+            <div id="tab-events" class="tab-content" style="display: none;">
                 <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                    <h2 style="margin: 0 0 1.5rem; color: #003057;">📊 Recent Transactions</h2>
-                    <div id="transactionsList"></div>
+                    <h2 style="margin: 0 0 1.5rem; color: #002855;">🏈 Upcoming Events</h2>
+                    <div id="eventsList" style="display: grid; gap: 1.5rem;"></div>
+                    <div id="eventsLoading" style="text-align: center; padding: 2rem; color: #666;">Loading events...</div>
+                    <div id="eventsEmpty" style="display: none; text-align: center; padding: 3rem; color: #999;">
+                        <p style="font-size: 1.2rem;">📅 No upcoming events at this time</p>
+                        <p>Check back soon for Game Watches and chapter activities!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIRECTORY TAB -->
+            <div id="tab-directory" class="tab-content" style="display: none;">
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <h2 style="margin: 0 0 1.5rem; color: #002855;">👥 Member Directory</h2>
+                    
+                    <!-- Search and Filters -->
+                    <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; margin-bottom: 2rem;">
+                        <input type="text" id="directorySearch" placeholder="🔍 Search by name, location, graduation year..." 
+                            style="padding: 0.75rem; border: 2px solid #dee2e6; border-radius: 10px; font-size: 1rem;" 
+                            oninput="filterDirectory()">
+                        <select id="directoryFilter" onchange="filterDirectory()" 
+                            style="padding: 0.75rem; border: 2px solid #dee2e6; border-radius: 10px; font-size: 1rem;">
+                            <option value="all">All Members</option>
+                            <option value="active">Active (2025-26)</option>
+                            <option value="recent">Recent Graduates</option>
+                            <option value="local">Local Area</option>
+                        </select>
+                    </div>
+                    
+                    <div id="directoryList" style="display: grid; gap: 1rem;"></div>
+                    <div id="directoryLoading" style="text-align: center; padding: 2rem; color: #666;">Loading members...</div>
+                </div>
+            </div>
+
+            <!-- DOCUMENTS TAB -->
+            <div id="tab-documents" class="tab-content" style="display: none;">
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <h2 style="margin: 0 0 1.5rem; color: #002855;">📄 Document Library</h2>
+                    
+                    <!-- Document Categories -->
+                    <div style="display: grid; gap: 1.5rem;">
+                        <!-- Bylaws & Governance -->
+                        <div style="border-left: 4px solid #002855; padding-left: 1.5rem;">
+                            <h3 style="margin: 0 0 1rem; color: #002855; font-size: 1.2rem;">📜 Bylaws & Governance</h3>
+                            <div class="document-item">
+                                <a href="/bylaws.html" target="_blank" style="color: #1e40af; text-decoration: none; font-weight: 600;">Chapter Bylaws</a>
+                                <span style="color: #999; font-size: 0.9rem; margin-left: 1rem;">Updated 2025</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Financial Reports -->
+                        <div style="border-left: 4px solid #28a745; padding-left: 1.5rem;">
+                            <h3 style="margin: 0 0 1rem; color: #002855; font-size: 1.2rem;">💰 Financial Reports</h3>
+                            <div id="financialArchive" style="display: grid; gap: 0.75rem;"></div>
+                        </div>
+                        
+                        <!-- Meeting Minutes -->
+                        <div style="border-left: 4px solid #007bff; padding-left: 1.5rem;">
+                            <h3 style="margin: 0 0 1rem; color: #002855; font-size: 1.2rem;">📝 Meeting Minutes</h3>
+                            <div id="minutesArchive" style="display: grid; gap: 0.75rem;"></div>
+                        </div>
+                        
+                        <!-- Templates & Resources -->
+                        <div style="border-left: 4px solid #EAAA00; padding-left: 1.5rem;">
+                            <h3 style="margin: 0 0 1rem; color: #002855; font-size: 1.2rem;">📋 Templates & Resources</h3>
+                            <div class="document-item">
+                                <a href="#" onclick="alert('Template coming soon!'); return false;" style="color: #1e40af; text-decoration: none; font-weight: 600;">Event Planning Template</a>
+                            </div>
+                            <div class="document-item" style="margin-top: 0.75rem;">
+                                <a href="#" onclick="alert('Template coming soon!'); return false;" style="color: #1e40af; text-decoration: none; font-weight: 600;">Pepperoni Roll Recipe Collection</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GALLERY TAB -->
+            <div id="tab-gallery" class="tab-content" style="display: none;">
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <h2 style="margin: 0 0 1.5rem; color: #002855;">📸 Photo Gallery</h2>
+                    <p style="color: #666; margin-bottom: 2rem;">Members-only photos from chapter events and Game Watches</p>
+                    
+                    <div id="galleryGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;"></div>
+                    <div id="galleryLoading" style="text-align: center; padding: 2rem; color: #666;">Loading photos...</div>
+                    <div id="galleryEmpty" style="display: none; text-align: center; padding: 3rem; color: #999;">
+                        <p style="font-size: 1.2rem;">📷 No photos yet</p>
+                        <p>Photos from events will appear here!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POLLS TAB -->
+            <div id="tab-polls" class="tab-content" style="display: none;">
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <h2 style="margin: 0 0 1.5rem; color: #002855;">📊 Surveys & Polls</h2>
+                    <p style="color: #666; margin-bottom: 2rem;">Help shape chapter events and activities</p>
+                    
+                    <div id="pollsList" style="display: grid; gap: 1.5rem;"></div>
+                    <div id="pollsLoading" style="text-align: center; padding: 2rem; color: #666;">Loading polls...</div>
+                    <div id="pollsEmpty" style="display: none; text-align: center; padding: 3rem; color: #999;">
+                        <p style="font-size: 1.2rem;">📋 No active polls</p>
+                        <p>Check back soon for event planning surveys!</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1048,6 +1431,562 @@ CVAWVUAA Chapter
                 submitBtn.textContent = 'Send Reset Link';
             }
         }
+
+        // ===== NEW PORTAL ENHANCEMENTS =====
+        
+        let currentMemberData = null;
+        let allMembersData = [];
+        let allEventsData = [];
+        let allPollsData = [];
+
+        // Tab Switching Function
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById('tab-' + tabName).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Load data for specific tabs
+            if (tabName === 'events') {
+                loadEvents();
+            } else if (tabName === 'directory') {
+                loadDirectory();
+            } else if (tabName === 'documents') {
+                loadDocuments();
+            } else if (tabName === 'gallery') {
+                loadGallery();
+            } else if (tabName === 'polls') {
+                loadPolls();
+            } else if (tabName === 'member-card') {
+                populateMemberCard();
+            }
+        }
+
+        // Initialize celebrations and new member banner
+        async function initializeDashboardExtras() {
+            try {
+                // Get current member data
+                const memberDoc = await db.collection('members').doc(currentMemberId).get();
+                if (!memberDoc.exists) return;
+                
+                currentMemberData = memberDoc.data();
+                
+                // Check if new member (joined within last 30 days)
+                const memberSince = currentMemberData.memberSince?.toDate?.() || new Date(currentMemberData.memberSince || Date.now());
+                const daysSinceMembership = (new Date() - memberSince) / (1000 * 60 * 60 * 24);
+                
+                if (daysSinceMembership <= 30) {
+                    document.getElementById('newMemberBanner').style.display = 'block';
+                }
+                
+                // Load celebrations
+                loadCelebrations();
+            } catch (error) {
+                console.error('Error initializing dashboard extras:', error);
+            }
+        }
+
+        // Load celebrations (birthdays, anniversaries)
+        async function loadCelebrations() {
+            try {
+                const celebrationsList = document.getElementById('celebrationsList');
+                const celebrationsSection = document.getElementById('celebrationsSection');
+                const now = new Date();
+                
+                const celebrations = [];
+                
+                // Get all members for birthday/anniversary checks
+                const membersSnapshot = await db.collection('members').get();
+                
+                membersSnapshot.forEach(doc => {
+                    const member = doc.data();
+                    
+                    // Check birthday (if exists and within next 30 days)
+                    if (member.dateOfBirth) {
+                        const dob = member.dateOfBirth.toDate?.() || new Date(member.dateOfBirth);
+                        const birthdayThisYear = new Date(now.getFullYear(), dob.getMonth(), dob.getDate());
+                        const daysUntil = Math.ceil((birthdayThisYear - now) / (1000 * 60 * 60 * 24));
+                        
+                        if (daysUntil >= 0 && daysUntil <= 30) {
+                            celebrations.push({
+                                type: '🎂 Birthday',
+                                name: `${member.firstName} ${member.lastName}`,
+                                date: birthdayThisYear,
+                                daysUntil: daysUntil
+                            });
+                        }
+                    }
+                    
+                    // Check WVU graduation anniversary
+                    if (member.graduationYear) {
+                        const anniversaryThisYear = new Date(now.getFullYear(), 4, 15);
+                        const daysUntil = Math.ceil((anniversaryThisYear - now) / (1000 * 60 * 60 * 24));
+                        const yearsAgo = now.getFullYear() - member.graduationYear;
+                        
+                        if (daysUntil >= 0 && daysUntil <= 30 && yearsAgo > 0 && yearsAgo % 5 === 0) {
+                            celebrations.push({
+                                type: '🎓 Graduation Anniversary',
+                                name: `${member.firstName} ${member.lastName}`,
+                                date: anniversaryThisYear,
+                                daysUntil: daysUntil,
+                                years: yearsAgo
+                            });
+                        }
+                    }
+                });
+                
+                // Sort by date
+                celebrations.sort((a, b) => a.daysUntil - b.daysUntil);
+                
+                if (celebrations.length > 0) {
+                    celebrationsList.innerHTML = celebrations.map(cel => `
+                        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #EAAA00;">
+                            <div style="font-weight: 600; color: #002855; margin-bottom: 0.25rem;">
+                                ${cel.type} - ${cel.name}
+                            </div>
+                            <div style="color: #666; font-size: 0.9rem;">
+                                ${cel.daysUntil === 0 ? 'Today!' : `In ${cel.daysUntil} day${cel.daysUntil > 1 ? 's' : ''}`}
+                                ${cel.years ? ` (${cel.years} years since graduation)` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                    celebrationsSection.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading celebrations:', error);
+            }
+        }
+
+        // Populate member card
+        function populateMemberCard() {
+            if (!currentMemberData) {
+                // Try to get it from currentMemberId
+                db.collection('members').doc(currentMemberId).get().then(doc => {
+                    if (doc.exists) {
+                        currentMemberData = doc.data();
+                        renderMemberCard();
+                    }
+                });
+            } else {
+                renderMemberCard();
+            }
+        }
+
+        function renderMemberCard() {
+            const memberSince = currentMemberData.memberSince?.toDate?.() || new Date(currentMemberData.memberSince || Date.now());
+            const expirationDate = currentMemberData.membershipExpiration?.toDate?.() || new Date(memberSince.getFullYear() + 1, 5, 30);
+            
+            document.getElementById('cardMemberName').textContent = 
+                `${currentMemberData.firstName} ${currentMemberData.lastName}`;
+            document.getElementById('cardMemberSince').textContent = 
+                memberSince.getFullYear();
+            document.getElementById('cardMemberId').textContent = 
+                currentMemberData.memberNumber || currentMemberId.slice(-6).toUpperCase();
+            document.getElementById('cardExpiration').textContent = 
+                `${(expirationDate.getMonth() + 1).toString().padStart(2, '0')}/${expirationDate.getFullYear()}`;
+        }
+
+        // Download/Print member card
+        function downloadMemberCard() {
+            alert('💡 Tip: Use "Print to PDF" or "Save as PDF" to save your member card!');
+            printMemberCard();
+        }
+
+        function printMemberCard() {
+            window.print();
+        }
+
+        // Load events
+        async function loadEvents() {
+            const eventsList = document.getElementById('eventsList');
+            const eventsLoading = document.getElementById('eventsLoading');
+            const eventsEmpty = document.getElementById('eventsEmpty');
+            
+            try {
+                eventsLoading.style.display = 'block';
+                eventsEmpty.style.display = 'none';
+                
+                const eventsSnapshot = await db.collection('events')
+                    .where('date', '>=', firebase.firestore.Timestamp.now())
+                    .orderBy('date', 'asc')
+                    .limit(10)
+                    .get();
+                
+                eventsLoading.style.display = 'none';
+                
+                if (eventsSnapshot.empty) {
+                    eventsEmpty.style.display = 'block';
+                    return;
+                }
+                
+                allEventsData = [];
+                eventsSnapshot.forEach(doc => {
+                    allEventsData.push({ id: doc.id, ...doc.data() });
+                });
+                
+                eventsList.innerHTML = allEventsData.map(event => {
+                    const eventDate = event.date.toDate();
+                    const hasRSVP = event.rsvps && event.rsvps.includes(currentMemberId);
+                    const rsvpCount = event.rsvps ? event.rsvps.length : 0;
+                    
+                    return `
+                        <div class="event-card">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <div>
+                                    <h3 style="margin: 0 0 0.5rem; color: #002855; font-size: 1.3rem;">${event.title}</h3>
+                                    <div style="color: #666; font-size: 0.95rem;">
+                                        📅 ${eventDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}<br>
+                                        🕒 ${event.time || 'Time TBD'}<br>
+                                        📍 ${event.location || 'Location TBD'}
+                                    </div>
+                                </div>
+                                <div style="background: #f8f9fa; padding: 0.75rem; border-radius: 8px; text-align: center; min-width: 80px;">
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #002855;">${rsvpCount}</div>
+                                    <div style="font-size: 0.8rem; color: #666;">Attending</div>
+                                </div>
+                            </div>
+                            
+                            ${event.description ? `<p style="color: #666; margin: 0 0 1rem;">${event.description}</p>` : ''}
+                            
+                            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                                <button onclick="toggleRSVP('${event.id}', ${!hasRSVP})" 
+                                    style="background: ${hasRSVP ? '#28a745' : '#EAAA00'}; color: ${hasRSVP ? 'white' : '#002855'}; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; flex: 1; min-width: 150px;">
+                                    ${hasRSVP ? '✓ You\'re Going!' : '📝 RSVP Now'}
+                                </button>
+                                <button onclick="addToCalendar('${event.id}')" 
+                                    style="background: white; color: #002855; border: 2px solid #002855; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                                    📅 Add to Calendar
+                                </button>
+                            </div>
+                            
+                            ${hasRSVP ? `
+                                <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                                    <div style="font-weight: 600; color: #002855; margin-bottom: 0.5rem;">Who else is coming:</div>
+                                    <div id="attendees-${event.id}" style="color: #666; font-size: 0.9rem;">Loading...</div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+                
+                // Load attendee lists for RSVP'd events
+                allEventsData.forEach(event => {
+                    if (event.rsvps && event.rsvps.includes(currentMemberId)) {
+                        loadAttendees(event.id, event.rsvps);
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error loading events:', error);
+                eventsLoading.innerHTML = '<p style="color: #dc3545;">Error loading events. Please try again.</p>';
+            }
+        }
+
+        // Load attendees for an event
+        async function loadAttendees(eventId, rsvpIds) {
+            try {
+                const attendeeNames = [];
+                for (const memberId of rsvpIds.slice(0, 10)) {
+                    const memberDoc = await db.collection('members').doc(memberId).get();
+                    if (memberDoc.exists) {
+                        const member = memberDoc.data();
+                        attendeeNames.push(`${member.firstName} ${member.lastName}`);
+                    }
+                }
+                
+                const attendeesDiv = document.getElementById(`attendees-${eventId}`);
+                if (attendeesDiv) {
+                    attendeesDiv.textContent = attendeeNames.join(', ') + 
+                        (rsvpIds.length > 10 ? ` and ${rsvpIds.length - 10} more` : '');
+                }
+            } catch (error) {
+                console.error('Error loading attendees:', error);
+            }
+        }
+
+        // Toggle RSVP
+        async function toggleRSVP(eventId, isRSVP) {
+            try {
+                const eventRef = db.collection('events').doc(eventId);
+                
+                if (isRSVP) {
+                    await eventRef.update({
+                        rsvps: firebase.firestore.FieldValue.arrayUnion(currentMemberId)
+                    });
+                } else {
+                    await eventRef.update({
+                        rsvps: firebase.firestore.FieldValue.arrayRemove(currentMemberId)
+                    });
+                }
+                
+                // Reload events
+                loadEvents();
+            } catch (error) {
+                console.error('Error updating RSVP:', error);
+                alert('Error updating RSVP. Please try again.');
+            }
+        }
+
+        // Add event to calendar
+        function addToCalendar(eventId) {
+            const event = allEventsData.find(e => e.id === eventId);
+            if (!event) return;
+            
+            const eventDate = event.date.toDate();
+            const startDate = eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            
+            // Create Google Calendar link
+            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${startDate}/${startDate}&details=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}`;
+            
+            window.open(calendarUrl, '_blank');
+        }
+
+        // Load member directory
+        async function loadDirectory() {
+            const directoryList = document.getElementById('directoryList');
+            const directoryLoading = document.getElementById('directoryLoading');
+            
+            try {
+                directoryLoading.style.display = 'block';
+                
+                const membersSnapshot = await db.collection('members')
+                    .orderBy('lastName', 'asc')
+                    .get();
+                
+                directoryLoading.style.display = 'none';
+                
+                allMembersData = [];
+                membersSnapshot.forEach(doc => {
+                    allMembersData.push({ id: doc.id, ...doc.data() });
+                });
+                
+                filterDirectory();
+                
+            } catch (error) {
+                console.error('Error loading directory:', error);
+                directoryLoading.innerHTML = '<p style="color: #dc3545;">Error loading directory. Please try again.</p>';
+            }
+        }
+
+        // Filter directory
+        function filterDirectory() {
+            const searchTerm = document.getElementById('directorySearch').value.toLowerCase();
+            const filter = document.getElementById('directoryFilter').value;
+            const directoryList = document.getElementById('directoryList');
+            
+            let filteredMembers = allMembersData;
+            
+            // Apply filter
+            if (filter === 'active') {
+                filteredMembers = filteredMembers.filter(m => m.status === 'Active');
+            } else if (filter === 'recent') {
+                const currentYear = new Date().getFullYear();
+                filteredMembers = filteredMembers.filter(m => 
+                    m.graduationYear && m.graduationYear >= currentYear - 5
+                );
+            } else if (filter === 'local') {
+                filteredMembers = filteredMembers.filter(m => 
+                    m.state === 'VA' && (m.city?.toLowerCase().includes('richmond') || 
+                    m.city?.toLowerCase().includes('glen allen') || 
+                    m.city?.toLowerCase().includes('mechanicsville'))
+                );
+            }
+            
+            // Apply search
+            if (searchTerm) {
+                filteredMembers = filteredMembers.filter(m => 
+                    `${m.firstName} ${m.lastName}`.toLowerCase().includes(searchTerm) ||
+                    m.city?.toLowerCase().includes(searchTerm) ||
+                    m.graduationYear?.toString().includes(searchTerm)
+                );
+            }
+            
+            // Render
+            directoryList.innerHTML = filteredMembers.map(member => {
+                const initials = `${member.firstName[0]}${member.lastName[0]}`;
+                const gradYear = member.graduationYear ? `'${member.graduationYear.toString().slice(-2)}` : '';
+                const location = [member.city, member.state].filter(Boolean).join(', ');
+                
+                return `
+                    <div class="member-card">
+                        <div class="member-avatar">${initials}</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #002855; font-size: 1.1rem;">
+                                ${member.firstName} ${member.lastName} ${gradYear ? `<span style="color: #EAAA00;">${gradYear}</span>` : ''}
+                            </div>
+                            <div style="color: #666; font-size: 0.9rem;">
+                                ${location ? `📍 ${location}` : ''}
+                                ${member.employer ? `<br>💼 ${member.employer}` : ''}
+                            </div>
+                        </div>
+                        <div>
+                            <span style="display: inline-block; padding: 0.35rem 0.75rem; background: ${member.status === 'Active' ? '#28a745' : '#dc3545'}; color: white; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
+                                ${member.status || 'Inactive'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            if (filteredMembers.length === 0) {
+                directoryList.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">No members found matching your criteria.</p>';
+            }
+        }
+
+        // Load documents
+        function loadDocuments() {
+            // Populate financial archive
+            const financialArchive = document.getElementById('financialArchive');
+            const currentYear = new Date().getFullYear();
+            const years = [currentYear, currentYear - 1, currentYear - 2];
+            
+            financialArchive.innerHTML = years.map(year => `
+                <div class="document-item">
+                    <a href="#" onclick="alert('Financial report for ${year} coming soon!'); return false;" 
+                       style="color: #1e40af; text-decoration: none; font-weight: 600;">
+                        Financial Report ${year}
+                    </a>
+                    <span style="color: #999; font-size: 0.9rem; margin-left: 1rem;">PDF</span>
+                </div>
+            `).join('');
+            
+            // Populate meeting minutes archive
+            const minutesArchive = document.getElementById('minutesArchive');
+            minutesArchive.innerHTML = `
+                <div class="document-item">
+                    <a href="/minutes.html" target="_blank" style="color: #1e40af; text-decoration: none; font-weight: 600;">
+                        All Meeting Minutes
+                    </a>
+                    <span style="color: #999; font-size: 0.9rem; margin-left: 1rem;">Archive</span>
+                </div>
+            `;
+        }
+
+        // Load gallery
+        async function loadGallery() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const galleryLoading = document.getElementById('galleryLoading');
+            const galleryEmpty = document.getElementById('galleryEmpty');
+            
+            galleryLoading.style.display = 'none';
+            galleryEmpty.style.display = 'block';
+            galleryGrid.style.display = 'none';
+            
+            // TODO: Implement Firebase Storage gallery
+            // For now, show empty state
+        }
+
+        // View photo in lightbox
+        function viewPhoto(index) {
+            alert('Photo viewer coming soon!');
+        }
+
+        // Load polls
+        async function loadPolls() {
+            const pollsList = document.getElementById('pollsList');
+            const pollsLoading = document.getElementById('pollsLoading');
+            const pollsEmpty = document.getElementById('pollsEmpty');
+            
+            try {
+                pollsLoading.style.display = 'block';
+                pollsEmpty.style.display = 'none';
+                
+                const pollsSnapshot = await db.collection('polls')
+                    .where('active', '==', true)
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                pollsLoading.style.display = 'none';
+                
+                if (pollsSnapshot.empty) {
+                    pollsEmpty.style.display = 'block';
+                    return;
+                }
+                
+                allPollsData = [];
+                pollsSnapshot.forEach(doc => {
+                    allPollsData.push({ id: doc.id, ...doc.data() });
+                });
+                
+                pollsList.innerHTML = allPollsData.map(poll => {
+                    const hasVoted = poll.votes && poll.votes[currentMemberId];
+                    const totalVotes = poll.votes ? Object.keys(poll.votes).length : 0;
+                    
+                    return `
+                        <div style="border: 2px solid #e0e0e0; border-radius: 12px; padding: 1.5rem;">
+                            <h3 style="margin: 0 0 0.5rem; color: #002855;">${poll.question}</h3>
+                            <p style="color: #666; font-size: 0.9rem; margin: 0 0 1rem;">
+                                ${totalVotes} vote${totalVotes !== 1 ? 's' : ''} • ${poll.closesAt ? `Closes ${poll.closesAt.toDate().toLocaleDateString()}` : 'Open'}
+                            </p>
+                            
+                            <div id="poll-options-${poll.id}">
+                                ${poll.options.map((option, index) => {
+                                    const optionVotes = poll.votes ? Object.values(poll.votes).filter(v => v === index).length : 0;
+                                    const percentage = totalVotes > 0 ? Math.round((optionVotes / totalVotes) * 100) : 0;
+                                    
+                                    return `
+                                        <div class="poll-option ${hasVoted && poll.votes[currentMemberId] === index ? 'selected' : ''}" 
+                                             onclick="${hasVoted ? '' : `votePoll('${poll.id}', ${index})`}">
+                                            <span>${option}</span>
+                                            ${hasVoted ? `<span style="font-weight: 600;">${percentage}%</span>` : ''}
+                                        </div>
+                                        ${hasVoted ? `
+                                            <div class="poll-results">
+                                                <div class="poll-bar">
+                                                    <div class="poll-bar-fill" style="width: ${percentage}%"></div>
+                                                </div>
+                                            </div>
+                                        ` : ''}
+                                    `;
+                                }).join('')}
+                            </div>
+                            
+                            ${!hasVoted ? `
+                                <p style="margin-top: 1rem; color: #666; font-size: 0.85rem; text-align: center;">
+                                    💡 Click an option to vote
+                                </p>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error loading polls:', error);
+                pollsLoading.innerHTML = '<p style="color: #dc3545;">Error loading polls. Please try again.</p>';
+            }
+        }
+
+        // Vote on poll
+        async function votePoll(pollId, optionIndex) {
+            try {
+                await db.collection('polls').doc(pollId).update({
+                    [`votes.${currentMemberId}`]: optionIndex
+                });
+                
+                // Reload polls
+                loadPolls();
+            } catch (error) {
+                console.error('Error voting on poll:', error);
+                alert('Error submitting vote. Please try again.');
+            }
+        }
+
+        // Call initializeDashboardExtras after showing member portal
+        // Modify the existing showMemberPortal function to call this
+        const originalShowMemberPortal = showMemberPortal;
+        showMemberPortal = function() {
+            originalShowMemberPortal();
+            setTimeout(() => {
+                initializeDashboardExtras();
+            }, 500);
+        };
     </script>
 
 <!-- WVU Footer Component -->

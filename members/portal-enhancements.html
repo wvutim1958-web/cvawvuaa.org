@@ -1,0 +1,745 @@
+<!-- ENHANCED MEMBER PORTAL SECTIONS -->
+<!-- Add this CSS to the existing <style> section -->
+<style>
+    /* Tab Styles */
+    .portal-tabs {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        display: flex;
+        gap: 0.5rem;
+        overflow-x: auto;
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        background: transparent;
+        border: 2px solid transparent;
+        padding: 0.75rem 1.25rem;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+    }
+    
+    .tab-btn:hover {
+        background: #f8f9fa;
+        color: #002855;
+    }
+    
+    .tab-btn.active {
+        background: linear-gradient(135deg, #002855, #1e40af);
+        color: white;
+        border-color: #002855;
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    .event-card {
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s;
+    }
+    
+    .event-card:hover {
+        border-color: #002855;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .member-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 1.25rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        transition: all 0.3s;
+    }
+    
+    .member-card:hover {
+        background: #f8f9fa;
+        border-color: #002855;
+    }
+    
+    .member-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #002855, #1e40af);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    
+    .document-item {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .document-item:last-child {
+        border-bottom: none;
+    }
+    
+    .gallery-item {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        aspect-ratio: 1;
+    }
+    
+    .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+    
+    .gallery-item:hover img {
+        transform: scale(1.05);
+    }
+    
+    .gallery-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        color: white;
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .poll-option {
+        background: #f8f9fa;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .poll-option:hover {
+        border-color: #002855;
+        background: white;
+    }
+    
+    .poll-option.selected {
+        background: #002855;
+        color: white;
+        border-color: #002855;
+    }
+    
+    .poll-results {
+        margin-top: 0.5rem;
+    }
+    
+    .poll-bar {
+        background: #e0e0e0;
+        height: 8px;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 0.25rem;
+    }
+    
+    .poll-bar-fill {
+        background: linear-gradient(135deg, #002855, #1e40af);
+        height: 100%;
+        transition: width 0.5s;
+    }
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #memberCard, #memberCard * {
+            visibility: visible;
+        }
+        #memberCard {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+</style>
+
+<!-- JavaScript Functions -->
+<script>
+    let currentMemberData = null;
+    let allMembersData = [];
+    let allEventsData = [];
+    let allPollsData = [];
+
+    // Tab Switching Function
+    function switchTab(tabName) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab
+        document.getElementById('tab-' + tabName).classList.add('active');
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        
+        // Load data for specific tabs
+        if (tabName === 'events') {
+            loadEvents();
+        } else if (tabName === 'directory') {
+            loadDirectory();
+        } else if (tabName === 'documents') {
+            loadDocuments();
+        } else if (tabName === 'gallery') {
+            loadGallery();
+        } else if (tabName === 'polls') {
+            loadPolls();
+        } else if (tabName === 'member-card') {
+            populateMemberCard();
+        }
+    }
+
+    // Initialize celebrations and new member banner
+    function initializeDashboardExtras() {
+        if (!currentMemberData) return;
+        
+        // Check if new member (joined within last 30 days)
+        const memberSince = currentMemberData.memberSince?.toDate?.() || new Date(currentMemberData.memberSince);
+        const daysSinceMembership = (new Date() - memberSince) / (1000 * 60 * 60 * 24);
+        
+        if (daysSinceMembership <= 30) {
+            document.getElementById('newMemberBanner').style.display = 'block';
+        }
+        
+        // Load celebrations
+        loadCelebrations();
+    }
+
+    // Load celebrations (birthdays, anniversaries)
+    async function loadCelebrations() {
+        try {
+            const celebrationsList = document.getElementById('celebrationsList');
+            const celebrationsSection = document.getElementById('celebrationsSection');
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentDay = now.getDate();
+            
+            const celebrations = [];
+            
+            // Get all members for birthday/anniversary checks
+            const membersSnapshot = await db.collection('members').get();
+            
+            membersSnapshot.forEach(doc => {
+                const member = doc.data();
+                
+                // Check birthday (if exists and within next 30 days)
+                if (member.dateOfBirth) {
+                    const dob = member.dateOfBirth.toDate?.() || new Date(member.dateOfBirth);
+                    const birthdayThisYear = new Date(now.getFullYear(), dob.getMonth(), dob.getDate());
+                    const daysUntil = Math.ceil((birthdayThisYear - now) / (1000 * 60 * 60 * 24));
+                    
+                    if (daysUntil >= 0 && daysUntil <= 30) {
+                        celebrations.push({
+                            type: '🎂 Birthday',
+                            name: `${member.firstName} ${member.lastName}`,
+                            date: birthdayThisYear,
+                            daysUntil: daysUntil
+                        });
+                    }
+                }
+                
+                // Check WVU graduation anniversary
+                if (member.graduationYear) {
+                    const gradDate = new Date(member.graduationYear, 4, 15); // Approximate May 15
+                    const anniversaryThisYear = new Date(now.getFullYear(), 4, 15);
+                    const daysUntil = Math.ceil((anniversaryThisYear - now) / (1000 * 60 * 60 * 24));
+                    const yearsAgo = now.getFullYear() - member.graduationYear;
+                    
+                    if (daysUntil >= 0 && daysUntil <= 30 && yearsAgo > 0 && yearsAgo % 5 === 0) {
+                        celebrations.push({
+                            type: '🎓 Graduation Anniversary',
+                            name: `${member.firstName} ${member.lastName}`,
+                            date: anniversaryThisYear,
+                            daysUntil: daysUntil,
+                            years: yearsAgo
+                        });
+                    }
+                }
+            });
+            
+            // Sort by date
+            celebrations.sort((a, b) => a.daysUntil - b.daysUntil);
+            
+            if (celebrations.length > 0) {
+                celebrationsList.innerHTML = celebrations.map(cel => `
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #EAAA00;">
+                        <div style="font-weight: 600; color: #002855; margin-bottom: 0.25rem;">
+                            ${cel.type} - ${cel.name}
+                        </div>
+                        <div style="color: #666; font-size: 0.9rem;">
+                            ${cel.daysUntil === 0 ? 'Today!' : `In ${cel.daysUntil} day${cel.daysUntil > 1 ? 's' : ''}`}
+                            ${cel.years ? ` (${cel.years} years since graduation)` : ''}
+                        </div>
+                    </div>
+                `).join('');
+                celebrationsSection.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error loading celebrations:', error);
+        }
+    }
+
+    // Populate member card
+    function populateMemberCard() {
+        if (!currentMemberData) return;
+        
+        const memberSince = currentMemberData.memberSince?.toDate?.() || new Date(currentMemberData.memberSince);
+        const expirationDate = currentMemberData.membershipExpiration?.toDate?.() || new Date(memberSince.getFullYear() + 1, 5, 30);
+        
+        document.getElementById('cardMemberName').textContent = 
+            `${currentMemberData.firstName} ${currentMemberData.lastName}`;
+        document.getElementById('cardMemberSince').textContent = 
+            memberSince.getFullYear();
+        document.getElementById('cardMemberId').textContent = 
+            currentMemberData.memberNumber || currentMemberId.slice(-6).toUpperCase();
+        document.getElementById('cardExpiration').textContent = 
+            `${(expirationDate.getMonth() + 1).toString().padStart(2, '0')}/${expirationDate.getFullYear()}`;
+    }
+
+    // Download member card as image
+    function downloadMemberCard() {
+        // Simple implementation - opens print dialog
+        alert('💡 Tip: Use "Print to PDF" or "Save as PDF" to save your member card!');
+        printMemberCard();
+    }
+
+    // Print member card
+    function printMemberCard() {
+        window.print();
+    }
+
+    // Load events
+    async function loadEvents() {
+        const eventsList = document.getElementById('eventsList');
+        const eventsLoading = document.getElementById('eventsLoading');
+        const eventsEmpty = document.getElementById('eventsEmpty');
+        
+        try {
+            eventsLoading.style.display = 'block';
+            eventsEmpty.style.display = 'none';
+            
+            const eventsSnapshot = await db.collection('events')
+                .where('date', '>=', firebase.firestore.Timestamp.now())
+                .orderBy('date', 'asc')
+                .limit(10)
+                .get();
+            
+            eventsLoading.style.display = 'none';
+            
+            if (eventsSnapshot.empty) {
+                eventsEmpty.style.display = 'block';
+                return;
+            }
+            
+            allEventsData = [];
+            eventsSnapshot.forEach(doc => {
+                allEventsData.push({ id: doc.id, ...doc.data() });
+            });
+            
+            eventsList.innerHTML = allEventsData.map(event => {
+                const eventDate = event.date.toDate();
+                const hasRSVP = event.rsvps && event.rsvps.includes(currentMemberId);
+                const rsvpCount = event.rsvps ? event.rsvps.length : 0;
+                
+                return `
+                    <div class="event-card">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <h3 style="margin: 0 0 0.5rem; color: #002855; font-size: 1.3rem;">${event.title}</h3>
+                                <div style="color: #666; font-size: 0.95rem;">
+                                    📅 ${eventDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}<br>
+                                    🕒 ${event.time || 'Time TBD'}<br>
+                                    📍 ${event.location || 'Location TBD'}
+                                </div>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 0.75rem; border-radius: 8px; text-align: center; min-width: 80px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: #002855;">${rsvpCount}</div>
+                                <div style="font-size: 0.8rem; color: #666;">Attending</div>
+                            </div>
+                        </div>
+                        
+                        ${event.description ? `<p style="color: #666; margin: 0 0 1rem;">${event.description}</p>` : ''}
+                        
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <button onclick="toggleRSVP('${event.id}', ${!hasRSVP})" 
+                                style="background: ${hasRSVP ? '#28a745' : '#EAAA00'}; color: ${hasRSVP ? 'white' : '#002855'}; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; flex: 1;">
+                                ${hasRSVP ? '✓ You\'re Going!' : '📝 RSVP Now'}
+                            </button>
+                            <button onclick="addToCalendar('${event.id}')" 
+                                style="background: white; color: #002855; border: 2px solid #002855; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                                📅 Add to Calendar
+                            </button>
+                        </div>
+                        
+                        ${hasRSVP ? `
+                            <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                                <div style="font-weight: 600; color: #002855; margin-bottom: 0.5rem;">Who else is coming:</div>
+                                <div id="attendees-${event.id}" style="color: #666; font-size: 0.9rem;">Loading...</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            // Load attendee lists for RSVP'd events
+            allEventsData.forEach(event => {
+                if (event.rsvps && event.rsvps.includes(currentMemberId)) {
+                    loadAttendees(event.id, event.rsvps);
+                }
+            });
+            
+        } catch (error) {
+            console.error('Error loading events:', error);
+            eventsLoading.innerHTML = '<p style="color: #dc3545;">Error loading events. Please try again.</p>';
+        }
+    }
+
+    // Load attendees for an event
+    async function loadAttendees(eventId, rsvpIds) {
+        try {
+            const attendeeNames = [];
+            for (const memberId of rsvpIds.slice(0, 10)) { // Show first 10
+                const memberDoc = await db.collection('members').doc(memberId).get();
+                if (memberDoc.exists) {
+                    const member = memberDoc.data();
+                    attendeeNames.push(`${member.firstName} ${member.lastName}`);
+                }
+            }
+            
+            const attendeesDiv = document.getElementById(`attendees-${eventId}`);
+            if (attendeesDiv) {
+                attendeesDiv.textContent = attendeeNames.join(', ') + 
+                    (rsvpIds.length > 10 ? ` and ${rsvpIds.length - 10} more` : '');
+            }
+        } catch (error) {
+            console.error('Error loading attendees:', error);
+        }
+    }
+
+    // Toggle RSVP
+    async function toggleRSVP(eventId, isRSVP) {
+        try {
+            const eventRef = db.collection('events').doc(eventId);
+            
+            if (isRSVP) {
+                await eventRef.update({
+                    rsvps: firebase.firestore.FieldValue.arrayUnion(currentMemberId)
+                });
+            } else {
+                await eventRef.update({
+                    rsvps: firebase.firestore.FieldValue.arrayRemove(currentMemberId)
+                });
+            }
+            
+            // Reload events
+            loadEvents();
+        } catch (error) {
+            console.error('Error updating RSVP:', error);
+            alert('Error updating RSVP. Please try again.');
+        }
+    }
+
+    // Add event to calendar
+    function addToCalendar(eventId) {
+        const event = allEventsData.find(e => e.id === eventId);
+        if (!event) return;
+        
+        const eventDate = event.date.toDate();
+        const startDate = eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        
+        // Create Google Calendar link
+        const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${startDate}/${startDate}&details=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}`;
+        
+        window.open(calendarUrl, '_blank');
+    }
+
+    // Load member directory
+    async function loadDirectory() {
+        const directoryList = document.getElementById('directoryList');
+        const directoryLoading = document.getElementById('directoryLoading');
+        
+        try {
+            directoryLoading.style.display = 'block';
+            
+            const membersSnapshot = await db.collection('members')
+                .orderBy('lastName', 'asc')
+                .get();
+            
+            directoryLoading.style.display = 'none';
+            
+            allMembersData = [];
+            membersSnapshot.forEach(doc => {
+                const member = doc.data();
+                // Only include members who opted in to directory (or all for now)
+                if (member.status === 'Active' || true) { // TODO: Add privacy preference
+                    allMembersData.push({ id: doc.id, ...member });
+                }
+            });
+            
+            filterDirectory();
+            
+        } catch (error) {
+            console.error('Error loading directory:', error);
+            directoryLoading.innerHTML = '<p style="color: #dc3545;">Error loading directory. Please try again.</p>';
+        }
+    }
+
+    // Filter directory
+    function filterDirectory() {
+        const searchTerm = document.getElementById('directorySearch').value.toLowerCase();
+        const filter = document.getElementById('directoryFilter').value;
+        const directoryList = document.getElementById('directoryList');
+        
+        let filteredMembers = allMembersData;
+        
+        // Apply filter
+        if (filter === 'active') {
+            filteredMembers = filteredMembers.filter(m => m.status === 'Active');
+        } else if (filter === 'recent') {
+            const currentYear = new Date().getFullYear();
+            filteredMembers = filteredMembers.filter(m => 
+                m.graduationYear && m.graduationYear >= currentYear - 5
+            );
+        } else if (filter === 'local') {
+            filteredMembers = filteredMembers.filter(m => 
+                m.state === 'VA' && (m.city?.toLowerCase().includes('richmond') || 
+                m.city?.toLowerCase().includes('glen allen') || 
+                m.city?.toLowerCase().includes('mechanicsville'))
+            );
+        }
+        
+        // Apply search
+        if (searchTerm) {
+            filteredMembers = filteredMembers.filter(m => 
+                `${m.firstName} ${m.lastName}`.toLowerCase().includes(searchTerm) ||
+                m.city?.toLowerCase().includes(searchTerm) ||
+                m.graduationYear?.toString().includes(searchTerm)
+            );
+        }
+        
+        // Render
+        directoryList.innerHTML = filteredMembers.map(member => {
+            const initials = `${member.firstName[0]}${member.lastName[0]}`;
+            const gradYear = member.graduationYear ? `'${member.graduationYear.toString().slice(-2)}` : '';
+            const location = [member.city, member.state].filter(Boolean).join(', ');
+            
+            return `
+                <div class="member-card">
+                    <div class="member-avatar">${initials}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: #002855; font-size: 1.1rem;">
+                            ${member.firstName} ${member.lastName} ${gradYear ? `<span style="color: #EAAA00;">${gradYear}</span>` : ''}
+                        </div>
+                        <div style="color: #666; font-size: 0.9rem;">
+                            ${location ? `📍 ${location}` : ''}
+                            ${member.employer ? `<br>💼 ${member.employer}` : ''}
+                        </div>
+                    </div>
+                    <div>
+                        <span style="display: inline-block; padding: 0.35rem 0.75rem; background: ${member.status === 'Active' ? '#28a745' : '#dc3545'}; color: white; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
+                            ${member.status || 'Inactive'}
+                        </span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        if (filteredMembers.length === 0) {
+            directoryList.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">No members found matching your criteria.</p>';
+        }
+    }
+
+    // Load documents
+    function loadDocuments() {
+        // Populate financial archive (sample - replace with real data)
+        const financialArchive = document.getElementById('financialArchive');
+        const currentYear = new Date().getFullYear();
+        const years = [currentYear, currentYear - 1, currentYear - 2];
+        
+        financialArchive.innerHTML = years.map(year => `
+            <div class="document-item">
+                <a href="#" onclick="alert('Financial report for ${year} coming soon!'); return false;" 
+                   style="color: #1e40af; text-decoration: none; font-weight: 600;">
+                    Financial Report ${year}
+                </a>
+                <span style="color: #999; font-size: 0.9rem; margin-left: 1rem;">PDF</span>
+            </div>
+        `).join('');
+        
+        // Populate meeting minutes archive
+        const minutesArchive = document.getElementById('minutesArchive');
+        minutesArchive.innerHTML = `
+            <div class="document-item">
+                <a href="/minutes.html" target="_blank" style="color: #1e40af; text-decoration: none; font-weight: 600;">
+                    All Meeting Minutes
+                </a>
+                <span style="color: #999; font-size: 0.9rem; margin-left: 1rem;">Archive</span>
+            </div>
+        `;
+    }
+
+    // Load gallery
+    async function loadGallery() {
+        const galleryGrid = document.getElementById('galleryGrid');
+        const galleryLoading = document.getElementById('galleryLoading');
+        const galleryEmpty = document.getElementById('galleryEmpty');
+        
+        // Sample gallery data - replace with Firebase Storage later
+        const samplePhotos = [
+            { url: '/assets/gallery/2024/game-watch-1.jpg', caption: 'Game Watch vs TCU - Oct 2024', event: 'Game Watch' },
+            { url: '/assets/gallery/2024/game-watch-2.jpg', caption: 'Bears & Blankets Drive', event: 'Charity Event' },
+            // Add more as available
+        ];
+        
+        galleryLoading.style.display = 'none';
+        
+        if (samplePhotos.length === 0) {
+            galleryEmpty.style.display = 'block';
+            return;
+        }
+        
+        galleryGrid.innerHTML = samplePhotos.map((photo, index) => `
+            <div class="gallery-item" onclick="viewPhoto(${index})">
+                <img src="${photo.url}" alt="${photo.caption}" 
+                     onerror="this.parentElement.style.display='none'">
+                <div class="gallery-overlay">
+                    <div>${photo.caption}</div>
+                </div>
+            </div>
+        `).join('');
+        
+        // If all images failed to load, show empty state
+        setTimeout(() => {
+            const visibleItems = galleryGrid.querySelectorAll('.gallery-item[style*="display: none"]');
+            if (visibleItems.length === 0) {
+                galleryEmpty.style.display = 'block';
+                galleryGrid.style.display = 'none';
+            }
+        }, 2000);
+    }
+
+    // View photo in lightbox (simple implementation)
+    function viewPhoto(index) {
+        alert('Photo viewer coming soon!');
+    }
+
+    // Load polls
+    async function loadPolls() {
+        const pollsList = document.getElementById('pollsList');
+        const pollsLoading = document.getElementById('pollsLoading');
+        const pollsEmpty = document.getElementById('pollsEmpty');
+        
+        try {
+            pollsLoading.style.display = 'block';
+            pollsEmpty.style.display = 'none';
+            
+            const pollsSnapshot = await db.collection('polls')
+                .where('active', '==', true)
+                .orderBy('createdAt', 'desc')
+                .get();
+            
+            pollsLoading.style.display = 'none';
+            
+            if (pollsSnapshot.empty) {
+                pollsEmpty.style.display = 'block';
+                return;
+            }
+            
+            allPollsData = [];
+            pollsSnapshot.forEach(doc => {
+                allPollsData.push({ id: doc.id, ...doc.data() });
+            });
+            
+            pollsList.innerHTML = allPollsData.map(poll => {
+                const hasVoted = poll.votes && poll.votes[currentMemberId];
+                const totalVotes = poll.votes ? Object.keys(poll.votes).length : 0;
+                
+                return `
+                    <div style="border: 2px solid #e0e0e0; border-radius: 12px; padding: 1.5rem;">
+                        <h3 style="margin: 0 0 0.5rem; color: #002855;">${poll.question}</h3>
+                        <p style="color: #666; font-size: 0.9rem; margin: 0 0 1rem;">
+                            ${totalVotes} vote${totalVotes !== 1 ? 's' : ''} • ${poll.closesAt ? `Closes ${poll.closesAt.toDate().toLocaleDateString()}` : 'Open'}
+                        </p>
+                        
+                        <div id="poll-options-${poll.id}">
+                            ${poll.options.map((option, index) => {
+                                const optionVotes = poll.votes ? Object.values(poll.votes).filter(v => v === index).length : 0;
+                                const percentage = totalVotes > 0 ? Math.round((optionVotes / totalVotes) * 100) : 0;
+                                
+                                return `
+                                    <div class="poll-option ${hasVoted && poll.votes[currentMemberId] === index ? 'selected' : ''}" 
+                                         onclick="${hasVoted ? '' : `votePoll('${poll.id}', ${index})`}">
+                                        <span>${option}</span>
+                                        ${hasVoted ? `<span style="font-weight: 600;">${percentage}%</span>` : ''}
+                                    </div>
+                                    ${hasVoted ? `
+                                        <div class="poll-results">
+                                            <div class="poll-bar">
+                                                <div class="poll-bar-fill" style="width: ${percentage}%"></div>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        ${!hasVoted ? `
+                            <p style="margin-top: 1rem; color: #666; font-size: 0.85rem; text-align: center;">
+                                💡 Click an option to vote
+                            </p>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+        } catch (error) {
+            console.error('Error loading polls:', error);
+            pollsLoading.innerHTML = '<p style="color: #dc3545;">Error loading polls. Please try again.</p>';
+        }
+    }
+
+    // Vote on poll
+    async function votePoll(pollId, optionIndex) {
+        try {
+            await db.collection('polls').doc(pollId).update({
+                [`votes.${currentMemberId}`]: optionIndex
+            });
+            
+            // Reload polls
+            loadPolls();
+        } catch (error) {
+            console.error('Error voting on poll:', error);
+            alert('Error submitting vote. Please try again.');
+        }
+    }
+</script>
