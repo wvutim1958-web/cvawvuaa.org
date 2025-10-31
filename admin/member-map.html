@@ -187,6 +187,7 @@
                 console.log(`Found ${members.length} members with addresses`);
                 
                 // Geocode and add markers
+                const markers = [];
                 for (const member of members) {
                     const coords = await geocodeAddress(
                         member.address, 
@@ -199,6 +200,8 @@
                         // Add marker
                         const marker = L.marker([coords.lat, coords.lng], { icon: wvuIcon })
                             .addTo(map);
+                        
+                        markers.push(marker);
                         
                         // Add popup
                         marker.bindPopup(`
@@ -234,13 +237,8 @@
                 document.getElementById('loading').classList.add('hide');
                 
                 // Fit map to show all markers
-                if (mappedMembers > 0) {
-                    const group = new L.featureGroup(
-                        Array.from(document.querySelectorAll('.leaflet-marker-icon'))
-                            .map(el => el._leaflet_id)
-                            .map(id => map._layers[id])
-                            .filter(Boolean)
-                    );
+                if (markers.length > 0) {
+                    const group = new L.featureGroup(markers);
                     map.fitBounds(group.getBounds().pad(0.1));
                 }
                 
