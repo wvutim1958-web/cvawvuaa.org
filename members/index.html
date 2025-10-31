@@ -1152,6 +1152,15 @@
             document.getElementById('memberContent').style.display = 'block';
             document.getElementById('memberName').textContent = memberName;
             
+            // DEBUG: Show what member we loaded
+            console.log('=== LOGGED IN MEMBER DEBUG ===');
+            console.log('Member ID:', currentMemberId);
+            console.log('Member Name from session:', memberName);
+            console.log('Member Data:', currentMemberData);
+            console.log('Email:', currentMemberData?.email);
+            console.log('Name field:', currentMemberData?.name);
+            console.log('==============================');
+            
             // Load financial data
             loadFinancialData();
             
