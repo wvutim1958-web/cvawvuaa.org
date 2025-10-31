@@ -168,16 +168,28 @@
         let map = L.map('map').setView([37.5407, -77.4360], 9);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap', maxZoom: 18}).addTo(map);
         
+        const geocodeCache = {};
+        
         async function geocode(city, state, zip) {
             if (!city || !state) return null;
-            const q = encodeURIComponent(`${city}, ${state} ${zip}, USA`);
+            
+            const cacheKey = `${city},${state},${zip}`;
+            if (geocodeCache[cacheKey]) return geocodeCache[cacheKey];
+            
+            // Try zip first for better accuracy
+            let q = zip ? encodeURIComponent(`${zip}, USA`) : encodeURIComponent(`${city}, ${state}, USA`);
+            
             try {
                 const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1`, {
                     headers: {'User-Agent': 'CVAWVUAA/1.0'}
                 });
                 const d = await r.json();
-                return d[0] ? {lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon)} : null;
-            } catch(e) { return null; }
+                const result = d[0] ? {lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon)} : null;
+                geocodeCache[cacheKey] = result;
+                return result;
+            } catch(e) { 
+                return null; 
+            }
         }
         
         async function load() {
