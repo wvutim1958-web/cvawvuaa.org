@@ -205,50 +205,62 @@
                 
                 // Geocode and add markers
                 const markers = [];
+                let processed = 0;
+                
                 for (const member of members) {
-                    const coords = await geocodeAddress(
-                        member.address, 
-                        member.city, 
-                        member.state, 
-                        member.zip
-                    );
+                    processed++;
+                    console.log(`Processing ${processed}/${members.length}: ${member.name} - ${member.city}, ${member.state}`);
                     
-                    if (coords) {
-                        // Add marker
-                        const marker = L.marker([coords.lat, coords.lng], { icon: wvuIcon })
-                            .addTo(map);
+                    try {
+                        const coords = await geocodeAddress(
+                            member.address, 
+                            member.city, 
+                            member.state, 
+                            member.zip
+                        );
                         
-                        markers.push(marker);
-                        
-                        // Add popup
-                        marker.bindPopup(`
-                            <div style="font-family: sans-serif;">
-                                <h3 style="margin: 0 0 0.5rem; color: #002855;">${member.name}</h3>
-                                <p style="margin: 0.25rem 0; font-size: 0.9rem;">
-                                    📍 ${member.city}, ${member.state}
-                                </p>
-                                <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #666;">
-                                    Status: ${member.status}
-                                </p>
-                            </div>
-                        `);
-                        
-                        mappedMembers++;
-                        
-                        // Count Richmond area vs others
-                        const richmondCities = ['richmond', 'henrico', 'glen allen', 'mechanicsville', 'midlothian', 'chesterfield'];
-                        if (richmondCities.some(city => member.city.toLowerCase().includes(city))) {
-                            richmondCount++;
+                        if (coords) {
+                            // Add marker
+                            const marker = L.marker([coords.lat, coords.lng], { icon: wvuIcon })
+                                .addTo(map);
+                            
+                            markers.push(marker);
+                            
+                            // Add popup
+                            marker.bindPopup(`
+                                <div style="font-family: sans-serif;">
+                                    <h3 style="margin: 0 0 0.5rem; color: #002855;">${member.name}</h3>
+                                    <p style="margin: 0.25rem 0; font-size: 0.9rem;">
+                                        📍 ${member.city}, ${member.state}
+                                    </p>
+                                    <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #666;">
+                                        Status: ${member.status}
+                                    </p>
+                                </div>
+                            `);
+                            
+                            mappedMembers++;
+                            
+                            // Count Richmond area vs others
+                            const richmondCities = ['richmond', 'henrico', 'glen allen', 'mechanicsville', 'midlothian', 'chesterfield'];
+                            if (richmondCities.some(city => member.city.toLowerCase().includes(city))) {
+                                richmondCount++;
+                            } else {
+                                otherCount++;
+                            }
+                            
+                            updateStats();
                         } else {
-                            otherCount++;
+                            console.log(`Failed to geocode: ${member.name} - ${member.address}, ${member.city}, ${member.state}`);
                         }
-                        
-                        updateStats();
                         
                         // Longer delay to avoid rate limiting (2 seconds between requests)
                         await new Promise(resolve => setTimeout(resolve, 2000));
-                    } else {
-                        console.log(`Failed to geocode: ${member.name} - ${member.address}, ${member.city}`);
+                        
+                    } catch (error) {
+                        console.error(`Error processing ${member.name}:`, error);
+                        // Continue with next member even if this one fails
+                        continue;
                     }
                 }
                 
