@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Duplicate Events</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #002855;
+            margin: 0 0 1rem;
+        }
+        .event-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #EAAA00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .event-info h3 {
+            margin: 0 0 0.5rem;
+            color: #002855;
+        }
+        .event-info p {
+            margin: 0.25rem 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .event-id {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #999;
+        }
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        #log {
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            display: none;
+        }
+        #log.show {
+            display: block;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Remove Duplicate Events</h1>
+        <p>Delete duplicate Houston game watch event below.</p>
+        
+        <div id="loading" class="loading">Loading events...</div>
+        <div id="eventsList"></div>
+        <div id="log"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/admin/js/firebase-config.js"></script>
+
+    <script>
+        const logEl = document.getElementById('log');
+        
+        function log(message, type = 'info') {
+            logEl.classList.add('show');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#f00' : type === 'success' ? '#0f0' : '#0ff';
+            logEl.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        async function loadEvents() {
+            try {
+                const eventsSnapshot = await db.collection('events').orderBy('date', 'asc').get();
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                const eventsList = document.getElementById('eventsList');
+                
+                if (eventsSnapshot.empty) {
+                    eventsList.innerHTML = '<p style="text-align: center; color: #999;">No events found.</p>';
+                    return;
+                }
+                
+                log(`Loaded ${eventsSnapshot.size} events`);
+                
+                eventsList.innerHTML = eventsSnapshot.docs.map(doc => {
+                    const event = doc.data();
+                    const title = event.title || event.name || 'Untitled Event';
+                    const date = event.date?.toDate ? event.date.toDate().toLocaleDateString() : 'No date';
+                    const location = event.location || 'No location';
+                    const rsvpCount = event.rsvps ? event.rsvps.length : 0;
+                    
+                    return `
+                        <div class="event-item">
+                            <div class="event-info">
+                                <h3>${title}</h3>
+                                <p>📅 ${date}</p>
+                                <p>📍 ${location}</p>
+                                <p>✅ ${rsvpCount} RSVPs</p>
+                                <p class="event-id">ID: ${doc.id}</p>
+                            </div>
+                            <button class="btn-delete" onclick="deleteEvent('${doc.id}', '${title}')">
+                                Delete
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                log(`Error loading events: ${error.message}`, 'error');
+                console.error('Load error:', error);
+            }
+        }
+        
+        async function deleteEvent(id, title) {
+            if (!confirm(`Delete "${title}"?\n\nThis cannot be undone!`)) {
+                return;
+            }
+            
+            try {
+                log(`Deleting "${title}"...`);
+                await db.collection('events').doc(id).delete();
+                log(`✅ Deleted "${title}"`, 'success');
+                
+                // Reload events
+                document.getElementById('eventsList').innerHTML = '';
+                document.getElementById('loading').style.display = 'block';
+                loadEvents();
+                
+            } catch (error) {
+                log(`❌ Error deleting event: ${error.message}`, 'error');
+                console.error('Delete error:', error);
+            }
+        }
+        
+        // Load events on page load
+        loadEvents();
+    </script>
+</body>
+</html>
