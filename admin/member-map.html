@@ -198,10 +198,25 @@
             
             let mapped = 0;
             const bounds = [];
+            const failed = [];
             
             for (let i = 0; i < members.length; i++) {
                 const m = members[i];
-                const coords = await geocode(m.city, m.state, m.zip);
+                let coords = await geocode(m.city, m.state, m.zip);
+                
+                // Retry with just city,state if zip failed
+                if (!coords && m.city && m.state) {
+                    await new Promise(r => setTimeout(r, 500));
+                    const q = encodeURIComponent(`${m.city}, ${m.state}, USA`);
+                    try {
+                        const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1`, {
+                            headers: {'User-Agent': 'CVAWVUAA/1.0'}
+                        });
+                        const d = await r.json();
+                        coords = d[0] ? {lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon)} : null;
+                    } catch(e) {}
+                }
+                
                 if (coords) {
                     const color = m.status === 'active' ? '#00cc00' : '#ff6600';
                     L.circleMarker([coords.lat, coords.lng], {
@@ -209,14 +224,18 @@
                     }).bindPopup(`<b>${m.name}</b><br>${m.status}<br>${m.city}, ${m.state}`).addTo(map);
                     bounds.push([coords.lat, coords.lng]);
                     mapped++;
+                } else {
+                    failed.push(m.name);
                 }
+                
                 document.getElementById('text').textContent = `Mapped ${mapped}/${i+1} members...`;
-                if (i < members.length - 1) await new Promise(r => setTimeout(r, 1000));
+                if (i < members.length - 1) await new Promise(r => setTimeout(r, 1200));
             }
             
             document.getElementById('mapped').textContent = mapped;
             if (bounds.length > 0) map.fitBounds(bounds, {padding: [50, 50]});
-            document.getElementById('text').textContent = 'Done!';
+            document.getElementById('text').textContent = failed.length > 0 ? `Done! (${failed.length} could not be mapped)` : 'Done!';
+            if (failed.length > 0) console.log('Failed to map:', failed);
         }
         
         load();
