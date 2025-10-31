@@ -1446,6 +1446,8 @@ CVAWVUAA Chapter
 
         // Tab Switching Function
         function switchTab(tabName) {
+            console.log('Switching to tab:', tabName);
+            
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
@@ -1455,8 +1457,17 @@ CVAWVUAA Chapter
             });
             
             // Show selected tab
-            document.getElementById('tab-' + tabName).classList.add('active');
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            const selectedTab = document.getElementById('tab-' + tabName);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            } else {
+                console.error('Tab not found:', 'tab-' + tabName);
+            }
+            
+            const selectedBtn = document.querySelector(`[data-tab="${tabName}"]`);
+            if (selectedBtn) {
+                selectedBtn.classList.add('active');
+            }
             
             // Load data for specific tabs
             if (tabName === 'events') {
