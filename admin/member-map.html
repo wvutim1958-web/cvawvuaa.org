@@ -31,32 +31,142 @@
         </div>
         <div style="background: white; padding: 20px; border-radius: 10px;">
             <div id="map"></div>
-            <div id="progress" style="margin-top: 15px; text-align: center; display: none;">
-                <div style="background: #f0f0f0; height: 30px; border-radius: 15px; overflow: hidden;">
-                    <div id="bar" style="background: #EAAA00; height: 100%; width: 0%; transition: width 0.3s;"></div>
-                </div>
-                <div id="text" style="margin-top: 10px; color: #666;">Loading...</div>
+            <div id="progress" style="margin-top: 15px; text-align: center;">
+                <div id="text" style="color: #666;">Loading members...</div>
             </div>
         </div>
     </div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="/js/firebase-config.js"></script>
     <script>
+        const members = [
+            {name: "Aaron & Kristin Rife", status: "inactive", city: "Chester", state: "VA", zip: "23831"},
+            {name: "Abigail Roberts", status: "inactive", city: "Charlottesville", state: "VA", zip: "22902"},
+            {name: "Addison Bradley", status: "inactive", city: "Powhatan", state: "VA", zip: "23139"},
+            {name: "Al & Marsha Dietz", status: "inactive", city: "Richmond", state: "VA", zip: "23229"},
+            {name: "Alecia Daves-Johnson", status: "inactive", city: "Prospect", state: "VA", zip: "23960"},
+            {name: "Amy & Blake Boschen", status: "inactive", city: "Henrico", state: "VA", zip: "23238"},
+            {name: "Andrew Chambers", status: "inactive", city: "Ashland", state: "VA", zip: "23005"},
+            {name: "Anmarie & Rich Volta Collins", status: "inactive", city: "Wilsons", state: "VA", zip: "23894"},
+            {name: "Annetta Reed & Thomas Riekel", status: "active", city: "Midlothian", state: "VA", zip: "23113"},
+            {name: "Beth Rogers", status: "inactive", city: "Richmond", state: "VA", zip: "23227"},
+            {name: "Bill & Karen Poole", status: "inactive", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Bill & Sharon Gouckenour", status: "inactive", city: "Glen Allen", state: "VA", zip: "23059"},
+            {name: "Bill Wilson", status: "inactive", city: "Chester", state: "VA", zip: "23831"},
+            {name: "Bob & Martha Jones", status: "active", city: "Shenandoah", state: "VA", zip: "22849"},
+            {name: "Bob & Sandy Whiteman", status: "inactive", city: "Glen Allen", state: "VA", zip: "23059"},
+            {name: "Bob & Theresa Moffett, Jr.", status: "inactive", city: "Richmond", state: "VA", zip: "23225"},
+            {name: "Bob Basham", status: "inactive", city: "Manakin-Sabot", state: "VA", zip: "23103"},
+            {name: "Bowen & Lanetta Hyatt", status: "inactive", city: "Chester", state: "VA", zip: "23836"},
+            {name: "Brian Jenkins", status: "active", city: "Glen Allen", state: "VA", zip: "23059"},
+            {name: "Carolyn Buletza", status: "inactive", city: "Richmond", state: "VA", zip: "23235"},
+            {name: "Catherine Ziegler", status: "inactive", city: "Bel Air", state: "MD", zip: "21014"},
+            {name: "Charles & Lisa Bradley", status: "inactive", city: "Richmond", state: "VA", zip: "23220"},
+            {name: "Charles Chuck Riffee", status: "active", city: "Glen Allen", state: "VA", zip: "23059"},
+            {name: "Cherryll & Harry Jr. Ellis", status: "inactive", city: "Midlothian", state: "VA", zip: "23114"},
+            {name: "Christina Sullivan", status: "inactive", city: "North Chesterfield", state: "VA", zip: "23234"},
+            {name: "Cindi Woody", status: "inactive", city: "Midlothian", state: "VA", zip: "23114"},
+            {name: "Cindy Lawson", status: "active", city: "Chester", state: "VA", zip: "23831"},
+            {name: "Clifford Gillham", status: "inactive", city: "Prince George", state: "VA", zip: "23875"},
+            {name: "Curtis Hise", status: "inactive", city: "Colonial Heights", state: "VA", zip: "23834"},
+            {name: "DR. Gary Hartwell", status: "active", city: "Richmond", state: "VA", zip: "23221"},
+            {name: "David & Kristie Haines", status: "inactive", city: "Richmond", state: "VA", zip: "23235"},
+            {name: "David & Vallerie Conley", status: "inactive", city: "Henrico", state: "VA", zip: "23294"},
+            {name: "Dennis & Pamala Pack", status: "inactive", city: "Manakin Sabot", state: "VA", zip: "23103"},
+            {name: "Domenick Casuccio", status: "inactive", city: "Henrico", state: "VA", zip: "23228"},
+            {name: "Donal & Amy Hall", status: "inactive", city: "Chesterfield", state: "VA", zip: "23803"},
+            {name: "Doug & Dawn & Doug Jr. Blackburn", status: "inactive", city: "Richmond", state: "VA", zip: "23223"},
+            {name: "Dr. Elaine Traynelis Yurek", status: "inactive", city: "Manakin-Sabot", state: "VA", zip: "23013"},
+            {name: "Dr. Michael Spinelli", status: "active", city: "Glen Allen", state: "VA", zip: "23059"},
+            {name: "Ed Douglas", status: "inactive", city: "Henrico", state: "VA", zip: "23233"},
+            {name: "Frank & Pat Lawson, Jr.", status: "inactive", city: "Ashland", state: "VA", zip: "23005"},
+            {name: "George Sutton", status: "active", city: "Mechancisville", state: "VA", zip: "23111"},
+            {name: "Harry, III Ellis III", status: "inactive", city: "Midlothian", state: "VA", zip: "23114"},
+            {name: "Haskell Brown , III", status: "active", city: "Richmond", state: "VA", zip: "23226"},
+            {name: "Ike & Vickie Pethtel", status: "inactive", city: "Glen Allen", state: "VA", zip: "23059"},
+            {name: "J David & Zoie Murdock, Jr.", status: "inactive", city: "Chester", state: "VA", zip: "23836"},
+            {name: "Jack & Cindy Heyl", status: "inactive", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Jane Himmelman Lanham", status: "inactive", city: "Henrico", state: "VA", zip: "23233"},
+            {name: "Jay & Tracy Poling", status: "inactive", city: "Manakin Sabot", state: "VA", zip: "23103"},
+            {name: "Jeanne Chapman", status: "inactive", city: "Richmond", state: "VA", zip: "23224"},
+            {name: "Jeff Carlson", status: "inactive", city: "Chesterfield", state: "VA", zip: "23838"},
+            {name: "Jeff Rohr", status: "inactive", city: "Mechanicsville", state: "VA", zip: "23116"},
+            {name: "Jeff Wilson", status: "active", city: "Midlothian", state: "VA", zip: "23113"},
+            {name: "Jeffrey & Brandon Layne", status: "active", city: "North Chesterfield", state: "VA", zip: "23236"},
+            {name: "Jeffrey Lepard", status: "inactive", city: "Miidlothian", state: "VA", zip: "23112"},
+            {name: "Jen & Michael Condaras", status: "active", city: "Richmond", state: "VA", zip: "23228"},
+            {name: "Jenny Alsop", status: "inactive", city: "Richmond", state: "VA", zip: "23223"},
+            {name: "Jerry MacAulay", status: "inactive", city: "N. Chesterfield", state: "VA", zip: "23235"},
+            {name: "Jim & Miriam Wickham, MD", status: "inactive", city: "Richmond", state: "VA", zip: "23235"},
+            {name: "John & Annetta Murdock", status: "inactive", city: "S. Chesterfield", state: "VA", zip: "23834"},
+            {name: "John Boston", status: "inactive", city: "North Chesterfield", state: "VA", zip: "61368"},
+            {name: "John Radford", status: "inactive", city: "Chester", state: "VA", zip: "23831"},
+            {name: "John Stolarik", status: "active", city: "Chester", state: "VA", zip: "23831"},
+            {name: "John Toutsi", status: "inactive", city: "Richmond", state: "VA", zip: "23231"},
+            {name: "Joseph & MaryAngela Morgan", status: "inactive", city: "Richmond", state: "VA", zip: "23227"},
+            {name: "Joseph Klages", status: "inactive", city: "Galveston", state: "TX", zip: "77550"},
+            {name: "Josh Dietz", status: "inactive", city: "Richmond", state: "VA", zip: "23229"},
+            {name: "Julia Council", status: "inactive", city: "North Chesterfield", state: "VA", zip: "23234"},
+            {name: "Justin & Tiffany Madron", status: "inactive", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Lauren (Lo) Hill", status: "inactive", city: "Midlothian", state: "VA", zip: "23114"},
+            {name: "Lindy Hill", status: "inactive", city: "Highland Springs", state: "VA", zip: "23075"},
+            {name: "Marc & Debbie Halbritter", status: "inactive", city: "Hilton Head Island", state: "SC", zip: "29926"},
+            {name: "Marcia & Michael Vick", status: "inactive", city: "Midlothian", state: "VA", zip: "23113"},
+            {name: "Marge Dwyer", status: "active", city: "Chesterfield", state: "VA", zip: "23832"},
+            {name: "Marianne & Jim Mohn", status: "active", city: "Henrico", state: "VA", zip: "23233"},
+            {name: "Mark & Stephanie Mabry", status: "inactive", city: "Midlothian", state: "VA", zip: "23114"},
+            {name: "Mark & Vicki Allen", status: "active", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Mark George", status: "inactive", city: "Glen Allen", state: "VA", zip: "23059"},
+            {name: "Mark McCoy", status: "inactive", city: "Colonial Heights", state: "VA", zip: "23834"},
+            {name: "Matthew & Kelli Phillips", status: "inactive", city: "Ashland", state: "VA", zip: "23005"},
+            {name: "Mel Fletcher", status: "active", city: "Henrico", state: "VA", zip: "23233"},
+            {name: "Melissa Phillips", status: "active", city: "Midlothian", state: "VA", zip: "23114"},
+            {name: "Michael & Meghan Keogh", status: "inactive", city: "N Chesterfield", state: "VA", zip: "23235"},
+            {name: "Monty & Valorie Bennett", status: "inactive", city: "Chesterfield", state: "VA", zip: "23832"},
+            {name: "Nancy R. Nicholls", status: "inactive", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Nelson & Carol Richards", status: "inactive", city: "Richmond", state: "VA", zip: "23238"},
+            {name: "Patrick & Ross Simms", status: "active", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Philip & Melissa Berry", status: "inactive", city: "Henrico", state: "VA", zip: "23233"},
+            {name: "Rebecca & Chase Morehouse Schuetz", status: "inactive", city: "Richmond", state: "VA", zip: "23226"},
+            {name: "Rob & Teresa Estep", status: "inactive", city: "Manakin-Sabot", state: "VA", zip: "23103"},
+            {name: "Robert & Pandora Benton", status: "inactive", city: "Midlothian", state: "VA", zip: "23114"},
+            {name: "Robert & Shonna Meadows", status: "active", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Robert Billcheck", status: "inactive", city: "Providence Forge", state: "VA", zip: "23140"},
+            {name: "Robert Gitttleson", status: "inactive", city: "Glen Allen", state: "VA", zip: "23059"},
+            {name: "Roger & Nancy Lovejoy", status: "active", city: "Richmond", state: "VA", zip: "23233"},
+            {name: "Rosemary Salcedo", status: "inactive", city: "Richmond", state: "VA", zip: "23233"},
+            {name: "Ryan Keller", status: "inactive", city: "Moseley", state: "VA", zip: "23120"},
+            {name: "Samantha Teets", status: "inactive", city: "Ashland", state: "VA", zip: "23005"},
+            {name: "Samuel & Debra Teets", status: "inactive", city: "Ashland", state: "VA", zip: "23005"},
+            {name: "Saundra Whitson", status: "inactive", city: "Moseley", state: "VA", zip: "23120"},
+            {name: "Scott & Jennifer Phillips", status: "active", city: "Manakin Sabot", state: "VA", zip: "23103"},
+            {name: "Scott & Tim Radford", status: "inactive", city: "Glen Allen", state: "VA", zip: "23060"},
+            {name: "Seth Ball", status: "inactive", city: "Chesapeake", state: "VA", zip: "23320"},
+            {name: "Sharon & Melinda Young Mitchell Hill", status: "inactive", city: "Glen Allen", state: "VA", zip: "23235"},
+            {name: "Sharon Lind Charles", status: "inactive", city: "Richmond", state: "VA", zip: "23229"},
+            {name: "Sharon Noble", status: "inactive", city: "Richmond", state: "VA", zip: "23112"},
+            {name: "Sherri Ellis", status: "inactive", city: "Richmond", state: "VA", zip: "23228"},
+            {name: "Stephen Finch", status: "active", city: "Richmond", state: "VA", zip: "23229"},
+            {name: "Stephen Siegrist", status: "inactive", city: "Chester", state: "VA", zip: "23836"},
+            {name: "Stuart & Carol Solan", status: "inactive", city: "Richmond", state: "VA", zip: "23229"},
+            {name: "Suzette Hutchens", status: "active", city: "", state: "VA", zip: ""},
+            {name: "Tara Tyler", status: "inactive", city: "Richmond", state: "VA", zip: "23225"},
+            {name: "Thomas & Mar Zahler", status: "active", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Thomas Simyak", status: "inactive", city: "Richmond", state: "VA", zip: "23224"},
+            {name: "Timothy Casten", status: "active", city: "Chester", state: "VA", zip: "23831"},
+            {name: "Todd Furbee", status: "inactive", city: "Henrico", state: "VA", zip: "23233"},
+            {name: "Todd Picklesimer", status: "inactive", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Tony & Nancy Scrimizzi", status: "active", city: "Midlothian", state: "VA", zip: "23113"},
+            {name: "Travis Milburn", status: "active", city: "Richmond", state: "VA", zip: "23235"},
+            {name: "Wes & Terri Keck", status: "inactive", city: "Glen Allen", state: "VA", zip: "23059"},
+            {name: "William & Kimberly Ross", status: "inactive", city: "Midlothian", state: "VA", zip: "23114"},
+            {name: "William & Marybeth Adams Blackburn", status: "inactive", city: "Mechanicsville", state: "VA", zip: "23116"},
+            {name: "William Kertsos", status: "inactive", city: "Fredericksburg", state: "VA", zip: "22401"},
+            {name: "Zachary Bradley", status: "inactive", city: "Midlothian", state: "VA", zip: "23112"},
+            {name: "Zachary Brant", status: "inactive", city: "Richmond", state: "VA", zip: "23225"}
+        ];
+        
         let map = L.map('map').setView([37.5407, -77.4360], 9);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap', maxZoom: 18}).addTo(map);
-        
-        let markers = [];
-        
-        function showProgress(show, pct, txt) {
-            const p = document.getElementById('progress');
-            if (show) {
-                p.style.display = 'block';
-                document.getElementById('bar').style.width = pct + '%';
-                document.getElementById('text').textContent = txt;
-            } else {
-                p.style.display = 'none';
-            }
-        }
         
         async function geocode(city, state, zip) {
             if (!city || !state) return null;
@@ -71,21 +181,6 @@
         }
         
         async function load() {
-            showProgress(true, 0, 'Loading...');
-            const snap = await db.collection('members').get();
-            let members = [];
-            snap.forEach(doc => {
-                const d = doc.data();
-                members.push({
-                    name: d.name || 'Unknown',
-                    status: d.status || 'inactive',
-                    city: d.city || '',
-                    state: d.state || 'VA',
-                    zip: d.zip || '',
-                    email: d.email || ''
-                });
-            });
-            
             document.getElementById('total').textContent = members.length;
             document.getElementById('active').textContent = members.filter(m => m.status === 'active').length;
             
@@ -97,20 +192,19 @@
                 const coords = await geocode(m.city, m.state, m.zip);
                 if (coords) {
                     const color = m.status === 'active' ? '#00cc00' : '#ff6600';
-                    const marker = L.circleMarker([coords.lat, coords.lng], {
+                    L.circleMarker([coords.lat, coords.lng], {
                         radius: 8, fillColor: color, color: '#333', weight: 2, opacity: 1, fillOpacity: 0.8
                     }).bindPopup(`<b>${m.name}</b><br>${m.status}<br>${m.city}, ${m.state}`).addTo(map);
-                    markers.push(marker);
                     bounds.push([coords.lat, coords.lng]);
                     mapped++;
                 }
-                showProgress(true, ((i+1)/members.length)*100, `Mapped ${mapped}/${i+1}...`);
+                document.getElementById('text').textContent = `Mapped ${mapped}/${i+1} members...`;
                 if (i < members.length - 1) await new Promise(r => setTimeout(r, 1000));
             }
             
             document.getElementById('mapped').textContent = mapped;
             if (bounds.length > 0) map.fitBounds(bounds, {padding: [50, 50]});
-            showProgress(false);
+            document.getElementById('text').textContent = 'Done!';
         }
         
         load();
