@@ -150,6 +150,13 @@
                     }
                 );
                 
+                // Check for rate limiting
+                if (response.status === 429) {
+                    console.warn('Rate limited, waiting 5 seconds...');
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    return await geocodeAddress(address, city, state, zip); // Retry
+                }
+                
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
@@ -159,9 +166,10 @@
                     };
                 }
                 
+                console.warn(`No coordinates found for: ${fullAddress}`);
                 return null;
             } catch (error) {
-                console.error('Geocoding error:', error);
+                console.error('Geocoding error for', fullAddress, ':', error);
                 return null;
             }
         }
@@ -237,8 +245,10 @@
                         
                         updateStats();
                         
-                        // Small delay to avoid rate limiting
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        // Longer delay to avoid rate limiting (2 seconds between requests)
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    } else {
+                        console.log(`Failed to geocode: ${member.name} - ${member.address}, ${member.city}`);
                     }
                 }
                 
