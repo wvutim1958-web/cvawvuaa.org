@@ -1,302 +1,803 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Location Map - CVCWVUAA</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-        #map {
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="en"><html lang="en">
+
+<head><head>
+
+    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Member Geographic Distribution - CVAWVUAA Admin</title>    <title>Member Location Map - CVCWVUAA</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />    <style>
+
+    <style>        body {
+
+        * {            margin: 0;
+
+            margin: 0;            padding: 0;
+
+            padding: 0;            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+            box-sizing: border-box;        }
+
+        }        #map {
+
             height: 100vh;
-            width: 100%;
-        }
-        .header {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+
+        body {            width: 100%;
+
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;        }
+
+            background: linear-gradient(135deg, #003366 0%, #0062B1 100%);        .header {
+
+            min-height: 100vh;            position: absolute;
+
+            padding: 20px;            top: 20px;
+
+        }            left: 20px;
+
             background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
+
+        .container {            padding: 1.5rem;
+
+            max-width: 1400px;            border-radius: 12px;
+
+            margin: 0 auto;            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+        }            z-index: 1000;
+
             max-width: 300px;
-        }
-        .header h1 {
-            margin: 0 0 0.5rem;
-            color: #002855;
-            font-size: 1.5rem;
-        }
-        .header p {
+
+        .header {        }
+
+            background: white;        .header h1 {
+
+            padding: 20px 30px;            margin: 0 0 0.5rem;
+
+            border-radius: 10px;            color: #002855;
+
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            font-size: 1.5rem;
+
+            margin-bottom: 20px;        }
+
+        }        .header p {
+
             margin: 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-        .stats {
-            position: absolute;
+
+        h1 {            color: #666;
+
+            color: #003366;            font-size: 0.9rem;
+
+            font-size: 28px;        }
+
+            margin-bottom: 5px;        .stats {
+
+        }            position: absolute;
+
             bottom: 20px;
-            right: 20px;
-            background: white;
-            padding: 1rem;
-            border-radius: 12px;
+
+        .subtitle {            right: 20px;
+
+            color: #666;            background: white;
+
+            font-size: 14px;            padding: 1rem;
+
+        }            border-radius: 12px;
+
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
+
+        .stats-bar {            z-index: 1000;
+
+            background: white;        }
+
+            padding: 15px 30px;        .stats h3 {
+
+            border-radius: 10px;            margin: 0 0 0.5rem;
+
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            color: #002855;
+
+            margin-bottom: 20px;            font-size: 1rem;
+
+            display: flex;        }
+
+            justify-content: space-around;        .stats p {
+
+            flex-wrap: wrap;            margin: 0.25rem 0;
+
+            gap: 20px;            color: #666;
+
+        }            font-size: 0.85rem;
+
         }
-        .stats h3 {
-            margin: 0 0 0.5rem;
-            color: #002855;
-            font-size: 1rem;
-        }
-        .stats p {
-            margin: 0.25rem 0;
-            color: #666;
-            font-size: 0.85rem;
-        }
-        .loading {
-            position: absolute;
-            top: 50%;
+
+        .stat-item {        .loading {
+
+            text-align: center;            position: absolute;
+
+        }            top: 50%;
+
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+        .stat-number {            transform: translate(-50%, -50%);
+
+            font-size: 32px;            background: white;
+
+            font-weight: bold;            padding: 2rem;
+
+            color: #EAAA00;            border-radius: 12px;
+
+        }            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
             z-index: 2000;
-            text-align: center;
-        }
-        .loading.hide {
-            display: none;
-        }
+
+        .stat-label {            text-align: center;
+
+            font-size: 14px;        }
+
+            color: #666;        .loading.hide {
+
+            margin-top: 5px;            display: none;
+
+        }        }
+
     </style>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-</head>
-<body>
-    <div class="header">
-        <h1>🗺️ Member Map</h1>
-        <p>Central Virginia Chapter Members</p>
-    </div>
-    
-    <div class="stats">
-        <h3>📊 Statistics</h3>
-        <p><strong>Total Members:</strong> <span id="totalMembers">0</span></p>
-        <p><strong>Mapped:</strong> <span id="mappedMembers">0</span></p>
-        <p><strong>Richmond Area:</strong> <span id="richmondCount">0</span></p>
-        <p><strong>Other Areas:</strong> <span id="otherCount">0</span></p>
-    </div>
-    
-    <div id="loading" class="loading">
-        <h2 style="color: #002855; margin: 0 0 1rem;">Loading Members...</h2>
-        <p style="color: #666;">Geocoding addresses...</p>
-    </div>
-    
-    <div id="map"></div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="/admin/js/firebase-config.js"></script>
+        .map-container {    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+            background: white;</head>
+
+            padding: 20px;<body>
+
+            border-radius: 10px;    <div class="header">
+
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);        <h1>🗺️ Member Map</h1>
+
+            margin-bottom: 20px;        <p>Central Virginia Chapter Members</p>
+
+        }    </div>
+
     
+
+        #map {    <div class="stats">
+
+            height: 600px;        <h3>📊 Statistics</h3>
+
+            width: 100%;        <p><strong>Total Members:</strong> <span id="totalMembers">0</span></p>
+
+            border-radius: 8px;        <p><strong>Mapped:</strong> <span id="mappedMembers">0</span></p>
+
+            border: 2px solid #003366;        <p><strong>Richmond Area:</strong> <span id="richmondCount">0</span></p>
+
+        }        <p><strong>Other Areas:</strong> <span id="otherCount">0</span></p>
+
+    </div>
+
+        .legend {    
+
+            background: white;    <div id="loading" class="loading">
+
+            padding: 15px;        <h2 style="color: #002855; margin: 0 0 1rem;">Loading Members...</h2>
+
+            border-radius: 8px;        <p style="color: #666;">Geocoding addresses...</p>
+
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);    </div>
+
+            margin-top: 15px;    
+
+        }    <div id="map"></div>
+
+
+
+        .legend h3 {    <!-- Firebase SDK -->
+
+            color: #003366;    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+
+            font-size: 16px;    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+            margin-bottom: 10px;    <script src="/admin/js/firebase-config.js"></script>
+
+        }    
+
     <!-- Leaflet (OpenStreetMap) -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <script>
-        // Initialize map centered on Richmond, VA
-        const map = L.map('map').setView([37.5407, -77.4360], 10);
+        .legend-item {    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+            display: flex;
+
+            align-items: center;    <script>
+
+            margin-bottom: 8px;        // Initialize map centered on Richmond, VA
+
+        }        const map = L.map('map').setView([37.5407, -77.4360], 10);
+
         
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
-            maxZoom: 19
-        }).addTo(map);
-        
-        let totalMembers = 0;
+
+        .legend-color {        // Add OpenStreetMap tiles
+
+            width: 20px;        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+            height: 20px;            attribution: '© OpenStreetMap contributors',
+
+            border-radius: 50%;            maxZoom: 19
+
+            margin-right: 10px;        }).addTo(map);
+
+            border: 2px solid #333;        
+
+        }        let totalMembers = 0;
+
         let mappedMembers = 0;
-        let richmondCount = 0;
-        let otherCount = 0;
-        
-        // Custom small pin-shaped marker
-        const wvuIcon = L.divIcon({
+
+        .loading {        let richmondCount = 0;
+
+            text-align: center;        let otherCount = 0;
+
+            padding: 40px;        
+
+            color: #666;        // Custom small pin-shaped marker
+
+        }        const wvuIcon = L.divIcon({
+
             className: 'custom-marker',
-            html: `
-                <svg width="16" height="22" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Pin shape -->
-                    <path d="M15,0 C6.716,0 0,6.716 0,15 C0,25 15,40 15,40 C15,40 30,25 30,15 C30,6.716 23.284,0 15,0 Z" 
-                          fill="#dc3545" stroke="#8b0000" stroke-width="1"/>
-                    <!-- Inner circle -->
-                    <circle cx="15" cy="15" r="6" fill="white" opacity="0.9"/>
+
+        .error {            html: `
+
+            background: #fee;                <svg width="16" height="22" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
+
+            color: #c33;                    <!-- Pin shape -->
+
+            padding: 15px;                    <path d="M15,0 C6.716,0 0,6.716 0,15 C0,25 15,40 15,40 C15,40 30,25 30,15 C30,6.716 23.284,0 15,0 Z" 
+
+            border-radius: 8px;                          fill="#dc3545" stroke="#8b0000" stroke-width="1"/>
+
+            margin: 20px 0;                    <!-- Inner circle -->
+
+        }                    <circle cx="15" cy="15" r="6" fill="white" opacity="0.9"/>
+
                 </svg>
-            `,
-            iconSize: [16, 22],
-            iconAnchor: [8, 22],
-            popupAnchor: [0, -22]
-        });
-        
-        async function geocodeAddress(address, city, state, zip) {
+
+        .controls {            `,
+
+            background: white;            iconSize: [16, 22],
+
+            padding: 15px 30px;            iconAnchor: [8, 22],
+
+            border-radius: 10px;            popupAnchor: [0, -22]
+
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);        });
+
+            margin-bottom: 20px;        
+
+        }        async function geocodeAddress(address, city, state, zip) {
+
             // Build full address - use ZIP to help determine location
-            const fullAddress = zip ? 
-                `${address}, ${city}, ${zip}` : 
-                `${address}, ${city}`;
-            
-            try {
-                // Use Nominatim (OpenStreetMap) geocoding service
+
+        .control-group {            const fullAddress = zip ? 
+
+            display: flex;                `${address}, ${city}, ${zip}` : 
+
+            gap: 15px;                `${address}, ${city}`;
+
+            flex-wrap: wrap;            
+
+            align-items: center;            try {
+
+        }                // Use Nominatim (OpenStreetMap) geocoding service
+
                 const response = await fetch(
-                    `https://nominatim.openstreetmap.org/search?` + 
-                    `q=${encodeURIComponent(fullAddress)}&format=json&limit=1&countrycodes=us`,
-                    {
-                        headers: {
+
+        .control-group label {                    `https://nominatim.openstreetmap.org/search?` + 
+
+            font-weight: 600;                    `q=${encodeURIComponent(fullAddress)}&format=json&limit=1&countrycodes=us`,
+
+            color: #003366;                    {
+
+        }                        headers: {
+
                             'User-Agent': 'CVCWVUAA Member Map'
-                        }
-                    }
-                );
-                
-                // Check for rate limiting
-                if (response.status === 429) {
-                    console.warn('Rate limited, waiting 5 seconds...');
-                    await new Promise(resolve => setTimeout(resolve, 5000));
+
+        .control-group select {                        }
+
+            padding: 8px 12px;                    }
+
+            border: 2px solid #003366;                );
+
+            border-radius: 5px;                
+
+            font-size: 14px;                // Check for rate limiting
+
+            background: white;                if (response.status === 429) {
+
+            cursor: pointer;                    console.warn('Rate limited, waiting 5 seconds...');
+
+        }                    await new Promise(resolve => setTimeout(resolve, 5000));
+
                     return await geocodeAddress(address, city, state, zip); // Retry
-                }
+
+        .back-link {                }
+
+            display: inline-block;                
+
+            color: #003366;                const data = await response.json();
+
+            text-decoration: none;                
+
+            font-weight: 600;                if (data && data.length > 0) {
+
+            margin-bottom: 10px;                    return {
+
+            padding: 8px 15px;                        lat: parseFloat(data[0].lat),
+
+            background: white;                        lng: parseFloat(data[0].lon),
+
+            border-radius: 5px;                        display_name: data[0].display_name // Full address from geocoder
+
+            transition: background 0.3s;                    };
+
+        }                }
+
                 
+
+        .back-link:hover {                console.warn(`No coordinates found for: ${fullAddress}`);
+
+            background: #f0f0f0;                return null;
+
+        }            } catch (error) {
+
+                console.error('Geocoding error for', fullAddress, ':', error);
+
+        .progress {                return null;
+
+            background: white;            }
+
+            padding: 20px;        }
+
+            border-radius: 8px;        
+
+            margin-top: 15px;        async function loadMembers() {
+
+            display: none;            try {
+
+        }                const membersSnapshot = await db.collection('members').get();
+
+                totalMembers = membersSnapshot.size;
+
+        .progress.active {                
+
+            display: block;                const members = [];
+
+        }                membersSnapshot.forEach(doc => {
+
+                    const memberData = doc.data();
+
+        .progress-bar {                    
+
+            width: 100%;                    // Skip test accounts
+
+            height: 30px;                    const email = (memberData.email || '').toLowerCase();
+
+            background: #f0f0f0;                    const name = (memberData.name || '').toLowerCase();
+
+            border-radius: 15px;                    const isTest = email.includes('test') || name.includes('test') || name === 'santa claus';
+
+            overflow: hidden;                    
+
+            margin-bottom: 10px;                    if (!isTest && memberData.address && memberData.city) {
+
+        }                        console.log(`Adding member: ${memberData.name}, City: ${memberData.city}, ZIP: ${memberData.zip}`);
+
+                        members.push({
+
+        .progress-fill {                            id: doc.id,
+
+            height: 100%;                            name: memberData.name,
+
+            background: linear-gradient(90deg, #EAAA00, #003366);                            address: memberData.address,
+
+            transition: width 0.3s;                            city: memberData.city,
+
+            display: flex;                            state: memberData.state || '', // May not exist
+
+            align-items: center;                            zip: memberData.zip || '',
+
+            justify-content: center;                            status: memberData.status || 'unknown'
+
+            color: white;                        });
+
+            font-weight: bold;                    }
+
+        }                });
+
+                
+
+        .progress-text {                console.log(`Found ${members.length} members with addresses`);
+
+            text-align: center;                
+
+            color: #666;                // Geocode and add markers
+
+            font-size: 14px;                const markers = [];
+
+        }                let processed = 0;
+
+    </style>                
+
+</head>                for (const member of members) {
+
+<body>                    processed++;
+
+    <div class="container">                    console.log(`Processing ${processed}/${members.length}: ${member.name} - ${member.city}, ${member.state}`);
+
+        <a href="/admin/member-database.html" class="back-link">← Back to Member Database</a>                    
+
+                            try {
+
+        <div class="header">                        const coords = await geocodeAddress(
+
+            <h1>📍 Member Geographic Distribution</h1>                            member.address, 
+
+            <p class="subtitle">Central Virginia Chapter - WVU Alumni Association</p>                            member.city, 
+
+        </div>                            member.state, 
+
+                            member.zip
+
+        <div class="stats-bar">                        );
+
+            <div class="stat-item">                        
+
+                <div class="stat-number" id="totalMembers">0</div>                        if (coords) {
+
+                <div class="stat-label">Total Members</div>                            // Add marker
+
+            </div>                            const marker = L.marker([coords.lat, coords.lng], { icon: wvuIcon })
+
+            <div class="stat-item">                                .addTo(map);
+
+                <div class="stat-number" id="activeMembers">0</div>                            
+
+                <div class="stat-label">Active Members</div>                            markers.push(marker);
+
+            </div>                            
+
+            <div class="stat-item">                            // Extract state from geocoded address
+
+                <div class="stat-number" id="mappedMembers">0</div>                            const locationParts = coords.display_name ? coords.display_name.split(', ') : [];
+
+                <div class="stat-label">Mapped Locations</div>                            const detectedState = locationParts.length > 2 ? locationParts[locationParts.length - 2] : 'Unknown';
+
+            </div>                            
+
+            <div class="stat-item">                            // Add popup
+
+                <div class="stat-number" id="statesCount">0</div>                            marker.bindPopup(`
+
+                <div class="stat-label">States Represented</div>                                <div style="font-family: sans-serif;">
+
+            </div>                                    <h3 style="margin: 0 0 0.5rem; color: #002855;">${member.name}</h3>
+
+        </div>                                    <p style="margin: 0.25rem 0; font-size: 0.9rem;">
+
+                                        📍 ${member.city}, ${detectedState}
+
+        <div class="controls">                                    </p>
+
+            <div class="control-group">                                    <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #666;">
+
+                <label for="statusFilter">Filter by Status:</label>                                        Status: ${member.status}
+
+                <select id="statusFilter">                                    </p>
+
+                    <option value="all">All Members</option>                                </div>
+
+                    <option value="active">Active Only</option>                            `);
+
+                    <option value="inactive">Inactive Only</option>                            
+
+                </select>                            mappedMembers++;
+
+                                            
+
+                <label for="membershipFilter">Filter by Type:</label>                            // Count Richmond area vs others
+
+                <select id="membershipFilter">                            const richmondCities = ['richmond', 'henrico', 'glen allen', 'mechanicsville', 'midlothian', 'chesterfield'];
+
+                    <option value="all">All Types</option>                            if (richmondCities.some(city => member.city.toLowerCase().includes(city))) {
+
+                    <option value="Individual - $25/yr">Individual</option>                                richmondCount++;
+
+                    <option value="Family - $40/yr">Family</option>                            } else {
+
+                </select>                                otherCount++;
+
+            </div>                            }
+
+        </div>                            
+
+                            updateStats();
+
+        <div class="map-container">                        } else {
+
+            <div id="map"></div>                            console.log(`Failed to geocode: ${member.name} - ${member.address}, ${member.city}, ${member.state}`);
+
+                                    }
+
+            <div class="progress" id="progressBar">                        
+
+                <div class="progress-bar">                        // Longer delay to avoid rate limiting (2 seconds between requests)
+
+                    <div class="progress-fill" id="progressFill">0%</div>                        await new Promise(resolve => setTimeout(resolve, 2000));
+
+                </div>                        
+
+                <div class="progress-text" id="progressText">Loading members...</div>                    } catch (error) {
+
+            </div>                        console.error(`Error processing ${member.name}:`, error);
+
+                                    // Continue with next member even if this one fails
+
+            <div class="legend">                        continue;
+
+                <h3>Legend</h3>                    }
+
+                <div class="legend-item">                }
+
+                    <div class="legend-color" style="background: #00cc00;"></div>                
+
+                    <span>Active Members</span>                // Hide loading
+
+                </div>                document.getElementById('loading').classList.add('hide');
+
+                <div class="legend-item">                
+
+                    <div class="legend-color" style="background: #ff6600;"></div>                // Fit map to show all markers
+
+                    <span>Inactive Members</span>                if (markers.length > 0) {
+
+                </div>                    const group = new L.featureGroup(markers);
+
+                <div class="legend-item">                    map.fitBounds(group.getBounds().pad(0.1));
+
+                    <div class="legend-color" style="background: #EAAA00;"></div>                }
+
+                    <span>Multiple Members (Cluster)</span>                
+
+                </div>                console.log(`Mapped ${mappedMembers} out of ${members.length} members`);
+
+            </div>                
+
+        </div>            } catch (error) {
+
+    </div>                console.error('Error loading members:', error);
+
+                alert('Error loading member data. Check console for details.');
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>            }
+
+    <script src="/js/firebase-config.js"></script>        }
+
+    <script>        
+
+        let map;        function updateStats() {
+
+        let markers = [];            document.getElementById('totalMembers').textContent = totalMembers;
+
+        let allMembers = [];            document.getElementById('mappedMembers').textContent = mappedMembers;
+
+            document.getElementById('richmondCount').textContent = richmondCount;
+
+        // Initialize map centered on Richmond, VA            document.getElementById('otherCount').textContent = otherCount;
+
+        function initMap() {        }
+
+            map = L.map('map').setView([37.5407, -77.4360], 9);        
+
+        // Load members on page load
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {        loadMembers();
+
+                attribution: '© OpenStreetMap contributors',    </script>
+
+                maxZoom: 18</body>
+
+            }).addTo(map);</html>
+
+        }
+
+        // Show/hide progress bar
+        function showProgress(show, percent = 0, text = '') {
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            if (show) {
+                progressBar.classList.add('active');
+                progressFill.style.width = percent + '%';
+                progressFill.textContent = Math.round(percent) + '%';
+                progressText.textContent = text;
+            } else {
+                progressBar.classList.remove('active');
+            }
+        }
+
+        // Geocode address using Nominatim (OpenStreetMap)
+        async function geocodeAddress(address, city, state, zip) {
+            try {
+                // Build query string
+                let query = '';
+                if (city && state && zip) {
+                    query = `${city}, ${state} ${zip}, USA`;
+                } else if (city && state) {
+                    query = `${city}, ${state}, USA`;
+                } else if (zip) {
+                    query = `${zip}, USA`;
+                } else {
+                    return null;
+                }
+
+                const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'User-Agent': 'CVAWVUAA-Member-Map/1.0'
+                    }
+                });
+
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
                     return {
                         lat: parseFloat(data[0].lat),
-                        lng: parseFloat(data[0].lon),
-                        display_name: data[0].display_name // Full address from geocoder
+                        lng: parseFloat(data[0].lon)
                     };
                 }
-                
-                console.warn(`No coordinates found for: ${fullAddress}`);
+
                 return null;
             } catch (error) {
-                console.error('Geocoding error for', fullAddress, ':', error);
+                console.error('Geocoding error:', error);
                 return null;
             }
         }
-        
+
+        // Add delay to respect rate limiting
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Create marker for member
+        function createMarker(member, coords) {
+            const color = member.status === 'active' ? '#00cc00' : '#ff6600';
+            
+            const marker = L.circleMarker([coords.lat, coords.lng], {
+                radius: 8,
+                fillColor: color,
+                color: '#333',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+
+            const popupContent = `
+                <div style="min-width: 200px;">
+                    <h3 style="margin: 0 0 10px 0; color: #003366; font-size: 16px;">${member.name}</h3>
+                    <p style="margin: 5px 0;"><strong>Status:</strong> ${member.status}</p>
+                    <p style="margin: 5px 0;"><strong>Type:</strong> ${member.membershipType}</p>
+                    <p style="margin: 5px 0;"><strong>Location:</strong> ${member.city}, ${member.state} ${member.zip}</p>
+                    ${member.email ? `<p style="margin: 5px 0;"><strong>Email:</strong> ${member.email}</p>` : ''}
+                </div>
+            `;
+
+            marker.bindPopup(popupContent);
+            marker.memberData = member;
+            
+            return marker;
+        }
+
+        // Load members from Firebase
         async function loadMembers() {
             try {
-                const membersSnapshot = await db.collection('members').get();
-                totalMembers = membersSnapshot.size;
-                
-                const members = [];
-                membersSnapshot.forEach(doc => {
-                    const memberData = doc.data();
-                    
-                    // Skip test accounts
-                    const email = (memberData.email || '').toLowerCase();
-                    const name = (memberData.name || '').toLowerCase();
-                    const isTest = email.includes('test') || name.includes('test') || name === 'santa claus';
-                    
-                    if (!isTest && memberData.address && memberData.city) {
-                        console.log(`Adding member: ${memberData.name}, City: ${memberData.city}, ZIP: ${memberData.zip}`);
-                        members.push({
-                            id: doc.id,
-                            name: memberData.name,
-                            address: memberData.address,
-                            city: memberData.city,
-                            state: memberData.state || '', // May not exist
-                            zip: memberData.zip || '',
-                            status: memberData.status || 'unknown'
-                        });
-                    }
+                const membersRef = db.collection('members');
+                const snapshot = await membersRef.get();
+
+                allMembers = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    allMembers.push({
+                        id: doc.id,
+                        name: data.name || 'Unknown',
+                        status: data.status || 'inactive',
+                        membershipType: data.membershipType || 'Individual - $25/yr',
+                        address: data.address || '',
+                        city: data.city || '',
+                        state: data.state || 'VA',
+                        zip: data.zip || '',
+                        email: data.email || ''
+                    });
                 });
-                
-                console.log(`Found ${members.length} members with addresses`);
-                
-                // Geocode and add markers
-                const markers = [];
-                let processed = 0;
-                
-                for (const member of members) {
-                    processed++;
-                    console.log(`Processing ${processed}/${members.length}: ${member.name} - ${member.city}, ${member.state}`);
-                    
-                    try {
-                        const coords = await geocodeAddress(
-                            member.address, 
-                            member.city, 
-                            member.state, 
-                            member.zip
-                        );
-                        
-                        if (coords) {
-                            // Add marker
-                            const marker = L.marker([coords.lat, coords.lng], { icon: wvuIcon })
-                                .addTo(map);
-                            
-                            markers.push(marker);
-                            
-                            // Extract state from geocoded address
-                            const locationParts = coords.display_name ? coords.display_name.split(', ') : [];
-                            const detectedState = locationParts.length > 2 ? locationParts[locationParts.length - 2] : 'Unknown';
-                            
-                            // Add popup
-                            marker.bindPopup(`
-                                <div style="font-family: sans-serif;">
-                                    <h3 style="margin: 0 0 0.5rem; color: #002855;">${member.name}</h3>
-                                    <p style="margin: 0.25rem 0; font-size: 0.9rem;">
-                                        📍 ${member.city}, ${detectedState}
-                                    </p>
-                                    <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #666;">
-                                        Status: ${member.status}
-                                    </p>
-                                </div>
-                            `);
-                            
-                            mappedMembers++;
-                            
-                            // Count Richmond area vs others
-                            const richmondCities = ['richmond', 'henrico', 'glen allen', 'mechanicsville', 'midlothian', 'chesterfield'];
-                            if (richmondCities.some(city => member.city.toLowerCase().includes(city))) {
-                                richmondCount++;
-                            } else {
-                                otherCount++;
-                            }
-                            
-                            updateStats();
-                        } else {
-                            console.log(`Failed to geocode: ${member.name} - ${member.address}, ${member.city}, ${member.state}`);
-                        }
-                        
-                        // Longer delay to avoid rate limiting (2 seconds between requests)
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        
-                    } catch (error) {
-                        console.error(`Error processing ${member.name}:`, error);
-                        // Continue with next member even if this one fails
-                        continue;
-                    }
-                }
-                
-                // Hide loading
-                document.getElementById('loading').classList.add('hide');
-                
-                // Fit map to show all markers
-                if (markers.length > 0) {
-                    const group = new L.featureGroup(markers);
-                    map.fitBounds(group.getBounds().pad(0.1));
-                }
-                
-                console.log(`Mapped ${mappedMembers} out of ${members.length} members`);
-                
+
+                updateStats();
+                await mapMembers();
             } catch (error) {
                 console.error('Error loading members:', error);
-                alert('Error loading member data. Check console for details.');
+                alert('Error loading member data. Please refresh the page.');
             }
         }
-        
-        function updateStats() {
-            document.getElementById('totalMembers').textContent = totalMembers;
-            document.getElementById('mappedMembers').textContent = mappedMembers;
-            document.getElementById('richmondCount').textContent = richmondCount;
-            document.getElementById('otherCount').textContent = otherCount;
+
+        // Map all members
+        async function mapMembers() {
+            // Clear existing markers
+            markers.forEach(marker => marker.remove());
+            markers = [];
+
+            const statusFilter = document.getElementById('statusFilter').value;
+            const membershipFilter = document.getElementById('membershipFilter').value;
+
+            // Filter members
+            let filteredMembers = allMembers.filter(member => {
+                if (statusFilter !== 'all' && member.status !== statusFilter) return false;
+                if (membershipFilter !== 'all' && member.membershipType !== membershipFilter) return false;
+                return true;
+            });
+
+            let mappedCount = 0;
+            const bounds = [];
+
+            showProgress(true, 0, `Mapping 0 of ${filteredMembers.length} members...`);
+
+            for (let i = 0; i < filteredMembers.length; i++) {
+                const member = filteredMembers[i];
+                
+                // Try to geocode
+                const coords = await geocodeAddress(member.address, member.city, member.state, member.zip);
+                
+                if (coords) {
+                    const marker = createMarker(member, coords);
+                    marker.addTo(map);
+                    markers.push(marker);
+                    bounds.push([coords.lat, coords.lng]);
+                    mappedCount++;
+                }
+
+                // Update progress
+                const percent = ((i + 1) / filteredMembers.length) * 100;
+                showProgress(true, percent, `Mapped ${mappedCount} of ${i + 1} members...`);
+
+                // Rate limiting: wait 1 second between requests
+                if (i < filteredMembers.length - 1) {
+                    await delay(1000);
+                }
+            }
+
+            // Hide progress bar
+            showProgress(false);
+
+            // Fit map to show all markers
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+
+            document.getElementById('mappedMembers').textContent = mappedCount;
         }
-        
-        // Load members on page load
+
+        // Update statistics
+        function updateStats() {
+            const total = allMembers.length;
+            const active = allMembers.filter(m => m.status === 'active').length;
+            const states = new Set(allMembers.map(m => m.state).filter(s => s));
+
+            document.getElementById('totalMembers').textContent = total;
+            document.getElementById('activeMembers').textContent = active;
+            document.getElementById('statesCount').textContent = states.size;
+        }
+
+        // Event listeners
+        document.getElementById('statusFilter').addEventListener('change', mapMembers);
+        document.getElementById('membershipFilter').addEventListener('change', mapMembers);
+
+        // Initialize
+        initMap();
         loadMembers();
     </script>
 </body>
