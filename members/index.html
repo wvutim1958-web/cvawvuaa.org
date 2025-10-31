@@ -1596,15 +1596,20 @@ CVAWVUAA Chapter
         }
 
         function renderMemberCard() {
+            if (!currentMemberData) {
+                console.error('No member data available');
+                return;
+            }
+            
             const memberSince = currentMemberData.memberSince?.toDate?.() || new Date(currentMemberData.memberSince || Date.now());
             const expirationDate = currentMemberData.membershipExpiration?.toDate?.() || new Date(memberSince.getFullYear() + 1, 5, 30);
             
             document.getElementById('cardMemberName').textContent = 
-                `${currentMemberData.firstName} ${currentMemberData.lastName}`;
+                `${currentMemberData.firstName || 'Member'} ${currentMemberData.lastName || 'Name'}`;
             document.getElementById('cardMemberSince').textContent = 
                 memberSince.getFullYear();
             document.getElementById('cardMemberId').textContent = 
-                currentMemberData.memberNumber || currentMemberId.slice(-6).toUpperCase();
+                currentMemberData.memberNumber || currentMemberId?.slice(-6).toUpperCase() || 'N/A';
             document.getElementById('cardExpiration').textContent = 
                 `${(expirationDate.getMonth() + 1).toString().padStart(2, '0')}/${expirationDate.getFullYear()}`;
         }
@@ -1648,7 +1653,7 @@ CVAWVUAA Chapter
                 });
                 
                 eventsList.innerHTML = allEventsData.map(event => {
-                    const eventDate = event.date.toDate();
+                    const eventDate = event.date?.toDate ? event.date.toDate() : new Date();
                     const hasRSVP = event.rsvps && event.rsvps.includes(currentMemberId);
                     const rsvpCount = event.rsvps ? event.rsvps.length : 0;
                     
@@ -1656,7 +1661,7 @@ CVAWVUAA Chapter
                         <div class="event-card">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
                                 <div>
-                                    <h3 style="margin: 0 0 0.5rem; color: #002855; font-size: 1.3rem;">${event.title}</h3>
+                                    <h3 style="margin: 0 0 0.5rem; color: #002855; font-size: 1.3rem;">${event.title || event.name || 'Event'}</h3>
                                     <div style="color: #666; font-size: 0.95rem;">
                                         📅 ${eventDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}<br>
                                         🕒 ${event.time || 'Time TBD'}<br>
