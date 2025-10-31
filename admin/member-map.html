@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Location Map - CVCWVUAA</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-width: 300px;
+        }
+        .header h1 {
+            margin: 0 0 0.5rem;
+            color: #002855;
+            font-size: 1.5rem;
+        }
+        .header p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .stats {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .stats h3 {
+            margin: 0 0 0.5rem;
+            color: #002855;
+            font-size: 1rem;
+        }
+        .stats p {
+            margin: 0.25rem 0;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 2000;
+            text-align: center;
+        }
+        .loading.hide {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div class="header">
+        <h1>🗺️ Member Map</h1>
+        <p>Central Virginia Chapter Members</p>
+    </div>
+    
+    <div class="stats">
+        <h3>📊 Statistics</h3>
+        <p><strong>Total Members:</strong> <span id="totalMembers">0</span></p>
+        <p><strong>Mapped:</strong> <span id="mappedMembers">0</span></p>
+        <p><strong>Richmond Area:</strong> <span id="richmondCount">0</span></p>
+        <p><strong>Other Areas:</strong> <span id="otherCount">0</span></p>
+    </div>
+    
+    <div id="loading" class="loading">
+        <h2 style="color: #002855; margin: 0 0 1rem;">Loading Members...</h2>
+        <p style="color: #666;">Geocoding addresses...</p>
+    </div>
+    
+    <div id="map"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/admin/js/firebase-config.js"></script>
+    
+    <!-- Leaflet (OpenStreetMap) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Initialize map centered on Richmond, VA
+        const map = L.map('map').setView([37.5407, -77.4360], 10);
+        
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+        
+        let totalMembers = 0;
+        let mappedMembers = 0;
+        let richmondCount = 0;
+        let otherCount = 0;
+        
+        // Custom WVU-colored marker
+        const wvuIcon = L.divIcon({
+            className: 'custom-marker',
+            html: '<div style="background: #EAAA00; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #002855; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
+        
+        async function geocodeAddress(address, city, state, zip) {
+            // Build full address
+            const fullAddress = `${address}, ${city}, ${state} ${zip}`;
+            
+            try {
+                // Use Nominatim (OpenStreetMap) geocoding service
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/search?` + 
+                    `q=${encodeURIComponent(fullAddress)}&format=json&limit=1`,
+                    {
+                        headers: {
+                            'User-Agent': 'CVCWVUAA Member Map'
+                        }
+                    }
+                );
+                
+                const data = await response.json();
+                
+                if (data && data.length > 0) {
+                    return {
+                        lat: parseFloat(data[0].lat),
+                        lng: parseFloat(data[0].lon)
+                    };
+                }
+                
+                return null;
+            } catch (error) {
+                console.error('Geocoding error:', error);
+                return null;
+            }
+        }
+        
+        async function loadMembers() {
+            try {
+                const membersSnapshot = await db.collection('members').get();
+                totalMembers = membersSnapshot.size;
+                
+                const members = [];
+                membersSnapshot.forEach(doc => {
+                    const memberData = doc.data();
+                    
+                    // Skip test accounts
+                    const email = (memberData.email || '').toLowerCase();
+                    const name = (memberData.name || '').toLowerCase();
+                    const isTest = email.includes('test') || name.includes('test') || name === 'santa claus';
+                    
+                    if (!isTest && memberData.address && memberData.city && memberData.state) {
+                        members.push({
+                            id: doc.id,
+                            name: memberData.name,
+                            address: memberData.address,
+                            city: memberData.city,
+                            state: memberData.state,
+                            zip: memberData.zip || '',
+                            status: memberData.status || 'unknown'
+                        });
+                    }
+                });
+                
+                console.log(`Found ${members.length} members with addresses`);
+                
+                // Geocode and add markers
+                for (const member of members) {
+                    const coords = await geocodeAddress(
+                        member.address, 
+                        member.city, 
+                        member.state, 
+                        member.zip
+                    );
+                    
+                    if (coords) {
+                        // Add marker
+                        const marker = L.marker([coords.lat, coords.lng], { icon: wvuIcon })
+                            .addTo(map);
+                        
+                        // Add popup
+                        marker.bindPopup(`
+                            <div style="font-family: sans-serif;">
+                                <h3 style="margin: 0 0 0.5rem; color: #002855;">${member.name}</h3>
+                                <p style="margin: 0.25rem 0; font-size: 0.9rem;">
+                                    📍 ${member.city}, ${member.state}
+                                </p>
+                                <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #666;">
+                                    Status: ${member.status}
+                                </p>
+                            </div>
+                        `);
+                        
+                        mappedMembers++;
+                        
+                        // Count Richmond area vs others
+                        const richmondCities = ['richmond', 'henrico', 'glen allen', 'mechanicsville', 'midlothian', 'chesterfield'];
+                        if (richmondCities.some(city => member.city.toLowerCase().includes(city))) {
+                            richmondCount++;
+                        } else {
+                            otherCount++;
+                        }
+                        
+                        updateStats();
+                        
+                        // Small delay to avoid rate limiting
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                }
+                
+                // Hide loading
+                document.getElementById('loading').classList.add('hide');
+                
+                // Fit map to show all markers
+                if (mappedMembers > 0) {
+                    const group = new L.featureGroup(
+                        Array.from(document.querySelectorAll('.leaflet-marker-icon'))
+                            .map(el => el._leaflet_id)
+                            .map(id => map._layers[id])
+                            .filter(Boolean)
+                    );
+                    map.fitBounds(group.getBounds().pad(0.1));
+                }
+                
+                console.log(`Mapped ${mappedMembers} out of ${members.length} members`);
+                
+            } catch (error) {
+                console.error('Error loading members:', error);
+                alert('Error loading member data. Check console for details.');
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('totalMembers').textContent = totalMembers;
+            document.getElementById('mappedMembers').textContent = mappedMembers;
+            document.getElementById('richmondCount').textContent = richmondCount;
+            document.getElementById('otherCount').textContent = otherCount;
+        }
+        
+        // Load members on page load
+        loadMembers();
+    </script>
+</body>
+</html>
