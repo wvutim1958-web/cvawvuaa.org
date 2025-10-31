@@ -135,14 +135,16 @@
         });
         
         async function geocodeAddress(address, city, state, zip) {
-            // Build full address
-            const fullAddress = `${address}, ${city}, ${state} ${zip}`;
+            // Build full address - use ZIP to help determine location
+            const fullAddress = zip ? 
+                `${address}, ${city}, ${zip}` : 
+                `${address}, ${city}`;
             
             try {
                 // Use Nominatim (OpenStreetMap) geocoding service
                 const response = await fetch(
                     `https://nominatim.openstreetmap.org/search?` + 
-                    `q=${encodeURIComponent(fullAddress)}&format=json&limit=1`,
+                    `q=${encodeURIComponent(fullAddress)}&format=json&limit=1&countrycodes=us`,
                     {
                         headers: {
                             'User-Agent': 'CVCWVUAA Member Map'
@@ -162,7 +164,8 @@
                 if (data && data.length > 0) {
                     return {
                         lat: parseFloat(data[0].lat),
-                        lng: parseFloat(data[0].lon)
+                        lng: parseFloat(data[0].lon),
+                        display_name: data[0].display_name // Full address from geocoder
                     };
                 }
                 
@@ -188,14 +191,14 @@
                     const name = (memberData.name || '').toLowerCase();
                     const isTest = email.includes('test') || name.includes('test') || name === 'santa claus';
                     
-                    if (!isTest && memberData.address && memberData.city && memberData.state) {
-                        console.log(`Adding member: ${memberData.name}, State: ${memberData.state}, City: ${memberData.city}`);
+                    if (!isTest && memberData.address && memberData.city) {
+                        console.log(`Adding member: ${memberData.name}, City: ${memberData.city}, ZIP: ${memberData.zip}`);
                         members.push({
                             id: doc.id,
                             name: memberData.name,
                             address: memberData.address,
                             city: memberData.city,
-                            state: memberData.state,
+                            state: memberData.state || '', // May not exist
                             zip: memberData.zip || '',
                             status: memberData.status || 'unknown'
                         });
@@ -227,12 +230,16 @@
                             
                             markers.push(marker);
                             
+                            // Extract state from geocoded address
+                            const locationParts = coords.display_name ? coords.display_name.split(', ') : [];
+                            const detectedState = locationParts.length > 2 ? locationParts[locationParts.length - 2] : 'Unknown';
+                            
                             // Add popup
                             marker.bindPopup(`
                                 <div style="font-family: sans-serif;">
                                     <h3 style="margin: 0 0 0.5rem; color: #002855;">${member.name}</h3>
                                     <p style="margin: 0.25rem 0; font-size: 0.9rem;">
-                                        📍 ${member.city}, ${member.state}
+                                        📍 ${member.city}, ${detectedState}
                                     </p>
                                     <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #666;">
                                         Status: ${member.status}
