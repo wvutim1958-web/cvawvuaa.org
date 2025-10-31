@@ -1799,13 +1799,12 @@ CVAWVUAA Chapter
             try {
                 directoryLoading.style.display = 'block';
                 
-                const membersSnapshot = await db.collection('members')
-                    .where('status', '==', 'active')  // Only load active members
-                    .get();
+                // Load ALL members (not just active)
+                const membersSnapshot = await db.collection('members').get();
                 
                 directoryLoading.style.display = 'none';
                 
-                console.log('Total active members found:', membersSnapshot.size);
+                console.log('Total members found:', membersSnapshot.size);
                 
                 allMembersData = [];
                 membersSnapshot.forEach(doc => {
