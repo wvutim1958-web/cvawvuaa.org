@@ -179,7 +179,7 @@ function renderCardView(members) {
             <div class="member-info">
                 ${member.email ? `<div>📧 <span class="member-info-value">${escapeHtml(member.email)}</span></div>` : ''}
                 ${member.phone ? `<div>📞 <span class="member-info-value">${escapeHtml(member.phone)}</span></div>` : ''}
-                ${member.city && member.zip ? `<div>📍 <span class="member-info-value">${escapeHtml(member.city)}, WV ${escapeHtml(member.zip)}</span></div>` : ''}
+                ${member.city && member.zip ? `<div>📍 <span class="member-info-value">${escapeHtml(member.city)}, ${escapeHtml(member.state || 'VA')} ${escapeHtml(member.zip)}</span></div>` : ''}
                 ${member.gradYear ? `<div>🎓 <span class="member-info-value">Class of ${member.gradYear}</span></div>` : ''}
                 ${member.major ? `<div>📚 <span class="member-info-value">${escapeHtml(member.major)}${member.minor ? ` / ${escapeHtml(member.minor)}` : ''}</span></div>` : ''}
                 ${member.degree ? `<div>🎯 <span class="member-info-value">${escapeHtml(member.degree)}</span></div>` : ''}
@@ -539,7 +539,7 @@ function viewMemberDetails(memberId) {
             <h3 style="color: #666; margin-top: 25px;">Contact Information</h3>
             <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                 ${member.address ? `<strong>Address:</strong> ${escapeHtml(member.address)}<br>` : ''}
-                ${member.city || member.zip ? `<strong>Location:</strong> ${escapeHtml(member.city || '')}, WV ${escapeHtml(member.zip || '')}<br>` : ''}
+                ${member.city || member.zip ? `<strong>Location:</strong> ${escapeHtml(member.city || '')}, ${escapeHtml(member.state || 'VA')} ${escapeHtml(member.zip || '')}<br>` : ''}
                 ${member.email ? `<strong>Email:</strong> <a href="mailto:${escapeHtml(member.email)}">${escapeHtml(member.email)}</a><br>` : ''}
                 ${member.phone ? `<strong>Phone:</strong> ${escapeHtml(member.phone)}<br>` : ''}
             </div>
