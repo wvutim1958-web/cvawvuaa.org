@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail Merge Instructions - CVCWVUAA Admin</title>
+    <link rel="stylesheet" href="/css/wvu-components.min.css">
+    <style>
+        .help-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-section h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+        }
+
+        .header-section p {
+            margin: 0;
+            opacity: 0.95;
+        }
+
+        .help-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .help-section h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #4a90e2;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .help-section h3 {
+            color: #4a90e2;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #4a90e2;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .tip-box {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .tip-box strong {
+            color: #f57c00;
+        }
+
+        .warning-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .warning-box strong {
+            color: #c62828;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .success-box strong {
+            color: #2e7d32;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+
+        .merge-field {
+            display: inline-block;
+            background: #4a90e2;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 0.25rem;
+        }
+
+        .screenshot-placeholder {
+            background: #f5f5f5;
+            border: 2px dashed #ddd;
+            padding: 2rem;
+            text-align: center;
+            color: #999;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .quick-link-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: #2c3e50;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .quick-link-card:hover {
+            border-color: #4a90e2;
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        .quick-link-card h3 {
+            margin: 0 0 0.5rem 0;
+            color: #4a90e2;
+        }
+
+        .quick-link-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <!-- WVU Masthead Component -->
+    <div id="wvu-masthead"></div>
+
+    <!-- WVU Primary Navigation Component -->
+    <div id="wvu-navigation"></div>
+
+    <!-- Back to Mail Merge Button -->
+    <div style="max-width: 1000px; margin: 20px auto; padding: 0 20px;">
+        <a href="/admin/mail-merge.html" class="btn-back">
+            <span>←</span>
+            <span>Back to Mail Merge</span>
+        </a>
+    </div>
+
+    <div class="help-container">
+        <div class="header-section">
+            <h1>📚 Mail Merge Instructions</h1>
+            <p>Complete guide to sending personalized bulk emails to chapter members</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <a href="#overview" class="quick-link-card">
+                <h3>📋 Overview</h3>
+                <p>What is mail merge and how it works</p>
+            </a>
+            <a href="#basic-usage" class="quick-link-card">
+                <h3>🚀 Basic Usage</h3>
+                <p>Send your first campaign</p>
+            </a>
+            <a href="#yamm-integration" class="quick-link-card">
+                <h3>📧 YAMM Integration</h3>
+                <p>Use with Gmail's Yet Another Mail Merge</p>
+            </a>
+            <a href="#templates" class="quick-link-card">
+                <h3>📝 Templates</h3>
+                <p>Pre-made email templates</p>
+            </a>
+            <a href="#merge-fields" class="quick-link-card">
+                <h3>🏷️ Merge Fields</h3>
+                <p>Personalization options</p>
+            </a>
+            <a href="#troubleshooting" class="quick-link-card">
+                <h3>🔧 Troubleshooting</h3>
+                <p>Common issues and solutions</p>
+            </a>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="help-section" id="overview">
+            <h2>📋 What is Mail Merge?</h2>
+            <p>Mail Merge allows you to send personalized emails to multiple recipients at once. Instead of sending the same generic message to everyone, each person receives an email customized with their name, address, and other personal information.</p>
+            
+            <h3>Why Use Mail Merge?</h3>
+            <ul>
+                <li><strong>Personalization:</strong> Each email addresses the recipient by name (e.g., "Dear John Smith")</li>
+                <li><strong>Efficiency:</strong> Send to hundreds of members in minutes instead of hours</li>
+                <li><strong>Professional:</strong> Looks like individual emails, not mass spam</li>
+                <li><strong>Tracking:</strong> Keep records of all campaigns sent</li>
+            </ul>
+
+            <div class="success-box">
+                <strong>✅ Best For:</strong> Membership renewals, event announcements, newsletter distributions, payment reminders, chapter updates
+            </div>
+        </div>
+
+        <!-- Basic Usage Section -->
+        <div class="help-section" id="basic-usage">
+            <h2>🚀 Basic Usage - Send Your First Campaign</h2>
+            
+            <ol class="step-list">
+                <li>
+                    <strong>Open Mail Merge Page</strong>
+                    <p>Go to <a href="/admin/mail-merge.html" target="_blank">Admin → Mail Merge</a></p>
+                </li>
+                
+                <li>
+                    <strong>Write Your Email Subject</strong>
+                    <p>In the "Subject Line" field, enter your email subject. You can use merge fields like <span class="merge-field">{{NAME}}</span></p>
+                    <div class="code-block">Example: Welcome {{NAME}} to the 2025 Game Watch Season!</div>
+                </li>
+                
+                <li>
+                    <strong>Write Your Email Body</strong>
+                    <p>In the "Email Body" field, write your message. Click the merge field tags to insert personalization.</p>
+                    <div class="code-block">Dear {{NAME}},
+
+We're excited to announce our upcoming game watch events...
+
+Best regards,
+CVCWVUAA</div>
+                </li>
+                
+                <li>
+                    <strong>Select Recipients</strong>
+                    <p>Choose who receives the email:</p>
+                    <ul>
+                        <li>Check "Paid Members" to include members who have paid dues</li>
+                        <li>Check "Unpaid Members" to include those who haven't paid</li>
+                        <li>Use the search box to filter by name or email</li>
+                        <li><strong>OR</strong> paste specific email addresses in the "Email List" box (one per line or comma-separated)</li>
+                    </ul>
+                </li>
+                
+                <li>
+                    <strong>Preview Your Email</strong>
+                    <p>Select a member from the dropdown and click "👁️ Preview" to see how the personalized email will look.</p>
+                </li>
+                
+                <li>
+                    <strong>Export for YAMM</strong>
+                    <p>Click "📥 Export Mailing List" to download a CSV file with all personalized emails.</p>
+                </li>
+            </ol>
+
+            <div class="tip-box">
+                <strong>💡 Pro Tip:</strong> Always preview with 2-3 different members to make sure the personalization looks correct for everyone!
+            </div>
+        </div>
+
+        <!-- YAMM Integration Section -->
+        <div class="help-section" id="yamm-integration">
+            <h2>📧 Using YAMM (Yet Another Mail Merge) with Gmail</h2>
+            
+            <p>YAMM is a Gmail add-on that lets you send bulk personalized emails directly from your Gmail account. Here's how to use the CSV file you exported:</p>
+            
+            <h3>Step 1: Install YAMM</h3>
+            <ol class="step-list">
+                <li>
+                    <strong>Open Gmail</strong>
+                    <p>Go to <a href="https://mail.google.com" target="_blank">mail.google.com</a> and sign in with your CVCWVUAA email</p>
+                </li>
+                
+                <li>
+                    <strong>Install YAMM Extension</strong>
+                    <p>Search for "Yet Another Mail Merge" in the Google Workspace Marketplace or visit <a href="https://yamm.com" target="_blank">yamm.com</a></p>
+                </li>
+                
+                <li>
+                    <strong>Grant Permissions</strong>
+                    <p>YAMM will ask for permission to access Gmail and Google Sheets - this is normal and required</p>
+                </li>
+            </ol>
+
+            <h3>Step 2: Prepare Your Mail Merge</h3>
+            <ol class="step-list">
+                <li>
+                    <strong>Export CSV from Admin Page</strong>
+                    <p>From the Mail Merge page, click "📥 Export Mailing List" - this downloads a CSV file</p>
+                </li>
+                
+                <li>
+                    <strong>Upload to Google Sheets</strong>
+                    <p>In Google Drive, create a new Google Sheet and import the CSV file (File → Import)</p>
+                </li>
+                
+                <li>
+                    <strong>Review the Columns</strong>
+                    <p>Your sheet will have these columns:</p>
+                    <ul>
+                        <li><strong>Name</strong> - Full member name</li>
+                        <li><strong>Email</strong> - Recipient email address</li>
+                        <li><strong>Phone</strong> - Member phone number</li>
+                        <li><strong>Subject</strong> - Personalized subject line (already customized!)</li>
+                        <li><strong>Body</strong> - Personalized email body (already customized!)</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>Step 3: Send Mail Merge with YAMM</h3>
+            <ol class="step-list">
+                <li>
+                    <strong>Open YAMM</strong>
+                    <p>In your Google Sheet with the imported data, click "Extensions → Yet Another Mail Merge → Start Mail Merge"</p>
+                </li>
+                
+                <li>
+                    <strong>Create Email Template</strong>
+                    <p>YAMM will ask you to compose an email. Since we already personalized everything, simply use:</p>
+                    <div class="code-block">Subject: {{Subject}}
+
+{{Body}}</div>
+                    <p>This tells YAMM to use the pre-personalized Subject and Body columns from your spreadsheet.</p>
+                </li>
+                
+                <li>
+                    <strong>Send Test Email</strong>
+                    <p>YAMM will offer to send a test email to yourself first - <strong>always do this!</strong></p>
+                </li>
+                
+                <li>
+                    <strong>Send to All Recipients</strong>
+                    <p>Once the test looks good, click "Send Emails" to send to all recipients in your sheet.</p>
+                </li>
+            </ol>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong> Gmail has sending limits (500 emails per day for regular accounts, 2,000 for Google Workspace). If you have more recipients, YAMM will automatically schedule the rest for the next day.
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Tracking:</strong> YAMM adds a "Merge Status" column to your sheet showing "EMAIL_SENT" for each successful delivery. You can track opens and clicks with YAMM's premium features.
+            </div>
+        </div>
+
+        <!-- Templates Section -->
+        <div class="help-section" id="templates">
+            <h2>📝 Pre-Made Email Templates</h2>
+            
+            <p>We have several ready-to-use templates for common scenarios. Click "📂 Load Template" in the Mail Merge page to use these:</p>
+
+            <h3>Available Templates</h3>
+            
+            <div style="margin: 1.5rem 0;">
+                <h4 style="color: #4a90e2;">1. "Old Gold - New Fire" Chapter Update</h4>
+                <p><strong>Use for:</strong> General chapter updates, membership encouragement</p>
+                <div class="code-block">Subject: 🔥 Old Gold - New Fire | Chapter Update
+
+Dear {{NAME}},
+
+Our new slogan says it all: OLD GOLD - NEW FIRE.
+
+Little by little, the Game Watches are growing. People are coming back...
+
+[Full template available in the system]</div>
+                <p><strong>Location:</strong> <code>/content/emails/chapter-update-old-gold-new-fire.txt</code></p>
+            </div>
+
+            <div style="margin: 1.5rem 0;">
+                <h4 style="color: #4a90e2;">2. Game Watch Invitation</h4>
+                <p><strong>Use for:</strong> Inviting members to game watch events</p>
+                <p><strong>Location:</strong> <code>/content/emails/game-watch-template.html</code></p>
+            </div>
+
+            <div style="margin: 1.5rem 0;">
+                <h4 style="color: #4a90e2;">3. Dues Reminder</h4>
+                <p><strong>Use for:</strong> Reminding members to pay annual dues</p>
+                <p>Can be exported from Outstanding Dues page</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Creating Your Own Template:</strong> Write your email in the Mail Merge editor, then click "💾 Save Template" to save it for future use. You can load it anytime with "📂 Load Template".
+            </div>
+        </div>
+
+        <!-- Merge Fields Section -->
+        <div class="help-section" id="merge-fields">
+            <h2>🏷️ Available Merge Fields</h2>
+            
+            <p>Merge fields are placeholders that get replaced with actual member data. Click any merge field tag in the Mail Merge page to insert it.</p>
+
+            <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                <thead style="background: #4a90e2; color: white;">
+                    <tr>
+                        <th style="padding: 1rem; text-align: left;">Merge Field</th>
+                        <th style="padding: 1rem; text-align: left;">Description</th>
+                        <th style="padding: 1rem; text-align: left;">Example Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><span class="merge-field">{{NAME}}</span></td>
+                        <td style="padding: 1rem;">Full member name</td>
+                        <td style="padding: 1rem;">John Smith</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><span class="merge-field">{{EMAIL}}</span></td>
+                        <td style="padding: 1rem;">Email address</td>
+                        <td style="padding: 1rem;">john.smith@example.com</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><span class="merge-field">{{PHONE}}</span></td>
+                        <td style="padding: 1rem;">Phone number</td>
+                        <td style="padding: 1rem;">(804) 555-1234</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><span class="merge-field">{{ADDRESS}}</span></td>
+                        <td style="padding: 1rem;">Street address</td>
+                        <td style="padding: 1rem;">123 Main St</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><span class="merge-field">{{CITY}}</span></td>
+                        <td style="padding: 1rem;">City</td>
+                        <td style="padding: 1rem;">Richmond</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><span class="merge-field">{{STATE}}</span></td>
+                        <td style="padding: 1rem;">State</td>
+                        <td style="padding: 1rem;">VA</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><span class="merge-field">{{ZIP}}</span></td>
+                        <td style="padding: 1rem;">ZIP code</td>
+                        <td style="padding: 1rem;">23832</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Usage Examples</h3>
+            <div class="code-block">Subject: {{NAME}}, Don't Miss the WVU vs Virginia Tech Game Watch!
+
+Dear {{NAME}},
+
+We hope this email finds you well at {{CITY}}, {{STATE}}. 
+
+We wanted to personally invite you to our next game watch event...
+
+If you have questions, call us at our office or reply to this email.
+
+See you there!
+CVCWVUAA</div>
+
+            <div class="tip-box">
+                <strong>💡 Best Practices:</strong>
+                <ul>
+                    <li>Always use {{NAME}} in the greeting to personalize</li>
+                    <li>Only use {{ADDRESS}}, {{CITY}}, {{STATE}} if relevant to your message</li>
+                    <li>Test with members who have complete vs. incomplete data</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Troubleshooting Section -->
+        <div class="help-section" id="troubleshooting">
+            <h2>🔧 Troubleshooting Common Issues</h2>
+
+            <h3>Problem: No members showing up in recipient list</h3>
+            <div class="success-box">
+                <strong>Solution:</strong>
+                <ul>
+                    <li>Check that "Paid Members" or "Unpaid Members" boxes are checked</li>
+                    <li>Clear the search box - you might be filtering everyone out</li>
+                    <li>Verify members have email addresses in the database</li>
+                    <li>Refresh the page to reload member data</li>
+                </ul>
+            </div>
+
+            <h3>Problem: Merge fields showing as {{NAME}} in final email</h3>
+            <div class="success-box">
+                <strong>Solution:</strong>
+                <ul>
+                    <li>Make sure you clicked "📥 Export Mailing List" which pre-processes the merge fields</li>
+                    <li>The CSV columns "Subject" and "Body" should already have names filled in</li>
+                    <li>If using YAMM directly, use the correct YAMM syntax (different from our system)</li>
+                </ul>
+            </div>
+
+            <h3>Problem: Some members getting blank name field</h3>
+            <div class="success-box">
+                <strong>Solution:</strong>
+                <ul>
+                    <li>Some members may not have a name in the database</li>
+                    <li>Check the Member Database and add missing names</li>
+                    <li>Consider using "Dear Member" as fallback for generic greetings</li>
+                </ul>
+            </div>
+
+            <h3>Problem: Gmail/YAMM won't send to all recipients</h3>
+            <div class="warning-box">
+                <strong>Gmail Sending Limits:</strong>
+                <ul>
+                    <li>Free Gmail: 500 emails per day</li>
+                    <li>Google Workspace: 2,000 emails per day</li>
+                    <li>YAMM will automatically schedule overflow for the next day</li>
+                    <li>To send immediately to more people, split into multiple campaigns or upgrade your Google account</li>
+                </ul>
+            </div>
+
+            <h3>Problem: Emails going to spam</h3>
+            <div class="success-box">
+                <strong>Solution:</strong>
+                <ul>
+                    <li>Avoid spam trigger words: "FREE", "ACT NOW", "LIMITED TIME", excessive exclamation marks!!!</li>
+                    <li>Include your physical address (4701 Stoney Creek Pkwy, Chester, VA 23831)</li>
+                    <li>Add an unsubscribe link if sending promotional content</li>
+                    <li>Use a professional subject line</li>
+                    <li>Send from a verified email address (cvcwvuaa@gmail.com)</li>
+                </ul>
+            </div>
+
+            <h3>Problem: CSV file won't open in Google Sheets</h3>
+            <div class="success-box">
+                <strong>Solution:</strong>
+                <ul>
+                    <li>Use File → Import in Google Sheets instead of trying to open directly</li>
+                    <li>Select "Replace current sheet" or "Insert new sheet"</li>
+                    <li>Make sure "Detect automatically" is selected for separator type</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Quick Reference Section -->
+        <div class="help-section">
+            <h2>📌 Quick Reference Card</h2>
+            
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #4a90e2; color: white;">
+                    <tr>
+                        <th style="padding: 1rem; text-align: left;">Task</th>
+                        <th style="padding: 1rem; text-align: left;">How To</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><strong>Send to all members</strong></td>
+                        <td style="padding: 1rem;">Check both "Paid Members" and "Unpaid Members"</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><strong>Send to specific people</strong></td>
+                        <td style="padding: 1rem;">Paste emails in "Email List" box</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><strong>Personalize with name</strong></td>
+                        <td style="padding: 1rem;">Use {{NAME}} in subject and body</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><strong>Preview before sending</strong></td>
+                        <td style="padding: 1rem;">Select member + click "👁️ Preview"</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><strong>Save for later</strong></td>
+                        <td style="padding: 1rem;">Click "💾 Save Template"</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 1rem;"><strong>Use with YAMM</strong></td>
+                        <td style="padding: 1rem;">Click "📥 Export Mailing List" → Import to Google Sheets → Use YAMM extension</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Support Section -->
+        <div class="help-section">
+            <h2>💬 Need More Help?</h2>
+            <p>If you're still having trouble or have questions not covered here:</p>
+            <ul>
+                <li>📧 Email: <a href="mailto:cvcwvuaa@gmail.com">cvcwvuaa@gmail.com</a></li>
+                <li>🌐 Visit: <a href="https://cvawvuaa.org/contact.html">Contact Page</a></li>
+                <li>📚 Check: <a href="/admin/dashboard.html">Admin Dashboard</a> for other tools</li>
+            </ul>
+        </div>
+
+        <!-- Back Button -->
+        <div style="text-align: center; margin: 2rem 0;">
+            <a href="/admin/mail-merge.html" class="btn-back">
+                <span>←</span>
+                <span>Back to Mail Merge</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- WVU Footer Component -->
+    <div id="wvu-footer"></div>
+
+    <!-- Load WVU Components -->
+    <script src="/includes/component-loader.min.js"></script>
+</body>
+</html>
