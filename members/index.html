@@ -1633,12 +1633,15 @@ CVAWVUAA Chapter
             try {
                 eventsLoading.style.display = 'block';
                 eventsEmpty.style.display = 'none';
+                eventsList.innerHTML = '';
                 
+                // Get ALL events (not just future ones)
                 const eventsSnapshot = await db.collection('events')
-                    .where('date', '>=', firebase.firestore.Timestamp.now())
-                    .orderBy('date', 'asc')
-                    .limit(10)
+                    .orderBy('date', 'desc')
+                    .limit(20)
                     .get();
+                
+                console.log('Total events found:', eventsSnapshot.size);
                 
                 eventsLoading.style.display = 'none';
                 
@@ -1649,7 +1652,9 @@ CVAWVUAA Chapter
                 
                 allEventsData = [];
                 eventsSnapshot.forEach(doc => {
-                    allEventsData.push({ id: doc.id, ...doc.data() });
+                    const eventData = doc.data();
+                    console.log('Event:', doc.id, eventData);
+                    allEventsData.push({ id: doc.id, ...eventData });
                 });
                 
                 eventsList.innerHTML = allEventsData.map(event => {
@@ -1783,9 +1788,13 @@ CVAWVUAA Chapter
                 
                 directoryLoading.style.display = 'none';
                 
+                console.log('Total members found:', membersSnapshot.size);
+                
                 allMembersData = [];
                 membersSnapshot.forEach(doc => {
-                    allMembersData.push({ id: doc.id, ...doc.data() });
+                    const memberData = doc.data();
+                    console.log('Member:', doc.id, memberData.firstName, memberData.lastName, memberData.status);
+                    allMembersData.push({ id: doc.id, ...memberData });
                 });
                 
                 filterDirectory();
