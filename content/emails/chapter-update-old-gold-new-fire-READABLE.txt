@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Old Gold, New Fire</title>
+    <style type="text/css">
+        body { margin:0; padding:0; background:#f6f6f6; }
+        table { border-collapse:collapse; }
+        .wrapper { width:100%; background:#f6f6f6; }
+        .container { max-width:640px; margin:0 auto; }
+        .card {
+            background:#ffffff;
+            border-radius:6px;
+        }
+        .header-image {
+            width:100%;
+            max-width:640px;
+            border-top-left-radius:6px;
+            border-top-right-radius:6px;
+            display:block;
+            height:auto;
+        }
+        .content {
+            padding:24px 24px 8px 24px;
+            color:#0b1217;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size:16px;
+            line-height:1.6;
+        }
+        .cta-wrap {
+            padding:16px 24px 32px 24px;
+            text-align:center;
+        }
+        .btn {
+            display:inline-block;
+            background:#002855;
+            color:#ffffff !important;
+            text-decoration:none;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight:700;
+            padding:14px 22px;
+            border-radius:4px;
+            letter-spacing:0.3px;
+        }
+        .stats-box {
+            background:#002855;
+            color:#ffffff;
+            padding:20px;
+            margin:16px 0;
+            border-radius:4px;
+            text-align:center;
+        }
+        .stats-box h3 {
+            margin:0 0 12px 0;
+            color:#EAAA00;
+            font-size:20px;
+        }
+        .stat-item {
+            margin:8px 0;
+            font-size:16px;
+        }
+        .stat-number {
+            font-size:24px;
+            font-weight:bold;
+            color:#EAAA00;
+        }
+        .footer {
+            text-align:left;
+            padding:0 24px 24px 24px;
+            color:#4a4f56;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size:14px;
+            line-height:1.6;
+        }
+        .rule { height:1px; background:#e3e3e3; margin:16px 24px; }
+        a.inline-link { color:#002855; text-decoration:underline; }
+    </style>
+</head>
+<body style="margin:0;padding:0;background:#f6f6f6;">
+    <table role="presentation" class="wrapper" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;background:#f6f6f6;">
+        <tr>
+            <td align="center" style="padding:24px 12px;">
+                <table role="presentation" class="container" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:640px;margin:0 auto;">
+                    <tr>
+                        <td class="card" style="background:#ffffff;border-radius:6px;">
+                            
+                            <!-- Header Image: Small Crowd Big Spirit -->
+                            <img src="https://cvawvuaa.org/assets/SMALL-CROWD-BIG-SPIRIT-FIRE-STILL-BURNING.png" alt="Small Crowd, Big Spirit - The Fire's Still Burning" class="header-image" style="width:100%;max-width:640px;border-top-left-radius:6px;border-top-right-radius:6px;display:block;height:auto;">
+                            
+                            <!-- Body -->
+                            <div class="content" style="padding:24px 24px 8px 24px;color:#0b1217;font-family:Arial, Helvetica, sans-serif;font-size:16px;line-height:1.6;">
+                                <p>Dear Mountaineer,</p>
+
+                                <p><strong>Our new slogan says it all: Old Gold - New Fire.</strong></p>
+
+                                <p>Little by little, the Game Watches are growing. People are coming back. Game watches will move around the Richmond Area. And the Chapter will show we still have some Fire, and it's growing every week.</p>
+
+                                <p>Moments like our recent game watch prove what being a Mountaineer is all about — showing up, sticking together, and keeping that old gold and blue spirit alive no matter what. The flame doesn't fade; it just needs fuel.</p>
+
+                                <!-- Stats Box -->
+                                <div class="stats-box" style="background:#002855;color:#ffffff;padding:20px;margin:16px 0;border-radius:4px;text-align:center;">
+                                    <h3 style="margin:0 0 12px 0;color:#EAAA00;font-size:20px;">📊 Membership Update</h3>
+                                    <div class="stat-item" style="margin:8px 0;font-size:16px;">
+                                        <div class="stat-number" style="font-size:24px;font-weight:bold;color:#EAAA00;">27</div>
+                                        Members Paid
+                                    </div>
+                                    <div class="stat-item" style="margin:8px 0;font-size:16px;">
+                                        <div class="stat-number" style="font-size:24px;font-weight:bold;color:#EAAA00;">$811.02</div>
+                                        Total Received
+                                    </div>
+                                    <div class="stat-item" style="margin:8px 0;font-size:16px;">
+                                        Individual Members: <strong>17</strong> | Family Members: <strong>10</strong>
+                                    </div>
+                                </div>
+
+                                <p><strong>We can do so much better!</strong></p>
+
+                                <p>Remember: Your dues keep the scholarship fund alive. Every membership renewal directly supports deserving students and strengthens our chapter. Your support makes a real difference.</p>
+
+                                <p>Whether you're joining us at game watches or renewing your membership, you're helping rebuild the fire that makes our chapter special. We may be small in number right now, but we're big in heart — and that's exactly how every great Mountaineer story begins.</p>
+                            </div>
+
+                            <!-- CTA -->
+                            <div class="cta-wrap" style="padding:16px 24px 32px 24px;text-align:center;">
+                                <a class="btn" href="https://cvawvuaa.org/membership.html" target="_blank" rel="noopener" style="display:inline-block;background:#002855;text-decoration:none;font-family:Arial, Helvetica, sans-serif;font-weight:700;padding:14px 22px;border-radius:4px;letter-spacing:0.3px;color:#ffffff !important;">Renew Your Membership Today</a>
+                                <div style="margin-top:10px;font-family:Arial, Helvetica, sans-serif;font-size:13px;color:#4a4f56;">
+                                    Or visit <a class="inline-link" href="https://cvawvuaa.org/membership.html" target="_blank" rel="noopener" style="color:#002855;text-decoration:underline;">cvawvuaa.org/membership</a>
+                                </div>
+                            </div>
+
+                            <div class="rule" style="height:1px;background:#e3e3e3;margin:16px 24px;"></div>
+
+                            <!-- Footer / Signature -->
+                            <div class="footer" style="text-align:left;padding:0 24px 24px 24px;color:#4a4f56;font-family:Arial, Helvetica, sans-serif;font-size:14px;line-height:1.6;">
+                                <p>Let's keep the momentum going. Together, we're proving that Old Gold still has plenty of New Fire.</p>
+
+                                <p><strong>Let's Go Mountaineers!</strong><br>
+                                Central Virginia Chapter<br>
+                                WVU Alumni Association</p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- MailChimp Footer -->
+    <center>
+        <br><br><br><br><br><br>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="canspamBarWrapper" style="background-color:#FFFFFF;border-top:1px solid #E5E5E5;border-collapse:collapse;">
+            <tr>
+                <td align="center" valign="top" style="padding-top:20px;padding-bottom:20px;">
+                    <table border="0" cellpadding="0" cellspacing="0" id="canspamBar" style="border-collapse:collapse;">
+                        <tr>
+                            <td align="center" valign="top" style="color:#606060;font-family:Helvetica, Arial, sans-serif;font-size:11px;line-height:150%;padding-right:20px;padding-bottom:5px;padding-left:20px;text-align:center;">
+                                This email was sent to <a href="mailto:*|EMAIL|*" target="_blank" style="color:#404040 !important;">*|EMAIL|*</a>
+                                <br>
+                                <a href="*|ABOUT_LIST|*" target="_blank" style="color:#404040 !important;"><em>why did I get this?</em></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="*|UNSUB|*" style="color:#404040 !important;">unsubscribe from this list</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="*|UPDATE_PROFILE|*" style="color:#404040 !important;">update subscription preferences</a>
+                                <br>
+                                CVCWVUAA · 4701 Stoney Creek Parkway · Chester, VA 23831 · USA
+                                <br><br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <style type="text/css">
+            @media only screen and (max-width: 480px){
+                table#canspamBar td{font-size:14px !important;}
+                table#canspamBar td a{display:block !important; margin-top:10px !important;}
+            }
+        </style>
+    </center>
+</body>
+</html>

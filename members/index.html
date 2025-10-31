@@ -1601,13 +1601,21 @@ CVAWVUAA Chapter
                 return;
             }
             
-            const memberSince = currentMemberData.memberSince?.toDate?.() || new Date(currentMemberData.memberSince || Date.now());
+            console.log('Member data:', currentMemberData);
+            
+            const memberSince = currentMemberData.dateAdded?.toDate?.() || currentMemberData.memberSince?.toDate?.() || new Date();
             const expirationDate = currentMemberData.membershipExpiration?.toDate?.() || new Date(memberSince.getFullYear() + 1, 5, 30);
             
-            document.getElementById('cardMemberName').textContent = 
-                `${currentMemberData.firstName || 'Member'} ${currentMemberData.lastName || 'Name'}`;
-            document.getElementById('cardMemberSince').textContent = 
-                memberSince.getFullYear();
+            // Use the 'name' field directly (this is what your CSV import created)
+            const displayName = currentMemberData.name || 
+                               `${currentMemberData.firstName || ''} ${currentMemberData.lastName || ''}`.trim() ||
+                               currentMemberData.email?.split('@')[0] ||
+                               'Member Name';
+            
+            console.log('Displaying name:', displayName);
+            
+            document.getElementById('cardMemberName').textContent = displayName;
+            document.getElementById('cardMemberSince').textContent = memberSince.getFullYear();
             document.getElementById('cardMemberId').textContent = 
                 currentMemberData.memberNumber || currentMemberId?.slice(-6).toUpperCase() || 'N/A';
             document.getElementById('cardExpiration').textContent = 

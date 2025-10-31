@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync Events to Firebase</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #002855;
+            margin: 0 0 1rem;
+        }
+        .event {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #EAAA00;
+        }
+        .event h3 {
+            margin: 0 0 0.5rem;
+            color: #002855;
+        }
+        .event p {
+            margin: 0.25rem 0;
+            color: #666;
+        }
+        button {
+            background: #EAAA00;
+            color: #002855;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background: #d49900;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #log {
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            display: none;
+        }
+        #log.show {
+            display: block;
+        }
+        .success {
+            color: #0f0;
+        }
+        .error {
+            color: #f00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Sync Events to Firebase</h1>
+        <p>This will add the 3 upcoming game watch events to Firebase so they show in the member portal.</p>
+        
+        <div class="event">
+            <h3>vs Houston Cougars</h3>
+            <p><strong>Date:</strong> Saturday, November 1, 2025 • 12:00 PM (Noon)</p>
+            <p><strong>Location:</strong> Capital Ale House, Glen Allen, VA</p>
+        </div>
+        
+        <div class="event">
+            <h3>vs Colorado Buffaloes</h3>
+            <p><strong>Date:</strong> Saturday, November 8, 2025 • 12:00 PM (Noon)</p>
+            <p><strong>Location:</strong> Sports Page Bar & Grill, 8319 Bell Creek Rd N, Mechanicsville, VA 23116</p>
+        </div>
+        
+        <div class="event">
+            <h3>vs Arizona State Sun Devils</h3>
+            <p><strong>Date:</strong> Saturday, November 15, 2025 • Time TBD</p>
+            <p><strong>Location:</strong> Capital Ale House, 13831 Village Place Drive, Midlothian, VA 23114</p>
+        </div>
+        
+        <button id="syncBtn" onclick="syncEvents()">Sync These Events to Firebase</button>
+        
+        <div id="log"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script>
+        const logEl = document.getElementById('log');
+        const btn = document.getElementById('syncBtn');
+        
+        function log(message, type = 'info') {
+            logEl.classList.add('show');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : '';
+            logEl.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        async function syncEvents() {
+            btn.disabled = true;
+            logEl.innerHTML = '';
+            log('Starting sync...');
+            
+            const events = [
+                {
+                    title: 'vs Houston Cougars',
+                    name: 'vs Houston Cougars',
+                    date: firebase.firestore.Timestamp.fromDate(new Date('2025-11-01T12:00:00')),
+                    time: '12:00 PM (Noon)',
+                    location: 'Capital Ale House, Glen Allen, VA',
+                    description: 'Join fellow Mountaineers for the Houston game! Kickoff at noon.',
+                    rsvps: [],
+                    status: 'upcoming'
+                },
+                {
+                    title: 'vs Colorado Buffaloes',
+                    name: 'vs Colorado Buffaloes',
+                    date: firebase.firestore.Timestamp.fromDate(new Date('2025-11-08T12:00:00')),
+                    time: '12:00 PM (Noon)',
+                    location: 'Sports Page Bar & Grill, 8319 Bell Creek Rd N, Mechanicsville, VA 23116',
+                    description: 'Watch the Buffaloes game with fellow WVU fans! Great food and atmosphere.',
+                    rsvps: [],
+                    status: 'upcoming'
+                },
+                {
+                    title: 'vs Arizona State Sun Devils',
+                    name: 'vs Arizona State Sun Devils',
+                    date: firebase.firestore.Timestamp.fromDate(new Date('2025-11-15T15:00:00')),
+                    time: 'Time TBD',
+                    location: 'Capital Ale House, 13831 Village Place Drive, Midlothian, VA 23114',
+                    description: 'Arizona State game watch! Time will be confirmed closer to game day.',
+                    rsvps: [],
+                    status: 'upcoming'
+                }
+            ];
+            
+            try {
+                for (let i = 0; i < events.length; i++) {
+                    const event = events[i];
+                    log(`Adding "${event.title}"...`);
+                    
+                    const docRef = await db.collection('events').add({
+                        ...event,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    log(`✅ Added "${event.title}" (ID: ${docRef.id})`, 'success');
+                }
+                
+                log('', 'info');
+                log('🎉 SUCCESS! All 3 events added to Firebase!', 'success');
+                log('', 'info');
+                log('✅ Member portal will now show all 3 events', 'success');
+                log('✅ Members can RSVP to each event', 'success');
+                log('✅ Refresh the member portal to see them!', 'success');
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                console.error('Sync error:', error);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

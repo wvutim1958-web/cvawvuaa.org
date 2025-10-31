@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Database Inspector</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #002855;
+            margin: 0 0 1rem;
+        }
+        h2 {
+            color: #002855;
+            margin: 2rem 0 1rem;
+            border-bottom: 2px solid #EAAA00;
+            padding-bottom: 0.5rem;
+        }
+        .section {
+            margin: 2rem 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        th {
+            background: #002855;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .id {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        .btn-view {
+            background: #007bff;
+            color: white;
+        }
+        .btn-view:hover {
+            background: #0056b3;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        .count {
+            background: #EAAA00;
+            color: #002855;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .test-account {
+            background: #fff3cd;
+        }
+        .missing-data {
+            color: #dc3545;
+            font-style: italic;
+        }
+        #log {
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            display: none;
+        }
+        #log.show {
+            display: block;
+        }
+        .filters {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .filters label {
+            margin-right: 1rem;
+            font-weight: 600;
+        }
+        .filters input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Firebase Database Inspector</h1>
+        <p>View and clean up your Firebase collections</p>
+        
+        <div id="loading" class="loading">Loading Firebase data...</div>
+        
+        <!-- MEMBERS SECTION -->
+        <div id="membersSection" class="section" style="display: none;">
+            <h2>👥 Members Collection <span id="memberCount" class="count">0</span></h2>
+            
+            <div class="filters">
+                <label>
+                    <input type="checkbox" id="showTestOnly" onchange="filterMembers()">
+                    Show only potential test accounts
+                </label>
+                <label>
+                    <input type="checkbox" id="showMissingData" onchange="filterMembers()">
+                    Show only members with missing data
+                </label>
+            </div>
+            
+            <table id="membersTable">
+                <thead>
+                    <tr>
+                        <th>Document ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Member Since</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="membersBody"></tbody>
+            </table>
+        </div>
+        
+        <!-- EVENTS SECTION -->
+        <div id="eventsSection" class="section" style="display: none;">
+            <h2>📅 Events Collection <span id="eventCount" class="count">0</span></h2>
+            
+            <table id="eventsTable">
+                <thead>
+                    <tr>
+                        <th>Document ID</th>
+                        <th>Title/Name</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>RSVPs</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="eventsBody"></tbody>
+            </table>
+        </div>
+        
+        <div id="log"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/admin/js/firebase-config.js"></script>
+
+    <script>
+        let allMembers = [];
+        let allEvents = [];
+        const logEl = document.getElementById('log');
+        
+        function log(message, type = 'info') {
+            logEl.classList.add('show');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#f00' : type === 'success' ? '#0f0' : '#0ff';
+            logEl.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        async function loadData() {
+            try {
+                log('Loading members collection...');
+                const membersSnapshot = await db.collection('members').get();
+                allMembers = membersSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                log(`Loaded ${allMembers.length} members`, 'success');
+                
+                log('Loading events collection...');
+                const eventsSnapshot = await db.collection('events').get();
+                allEvents = eventsSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                log(`Loaded ${allEvents.length} events`, 'success');
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('membersSection').style.display = 'block';
+                document.getElementById('eventsSection').style.display = 'block';
+                
+                renderMembers();
+                renderEvents();
+                
+            } catch (error) {
+                log(`Error loading data: ${error.message}`, 'error');
+                console.error('Load error:', error);
+            }
+        }
+        
+        function isPotentialTestAccount(member) {
+            const email = (member.email || '').toLowerCase();
+            const firstName = (member.firstName || '').toLowerCase();
+            const lastName = (member.lastName || '').toLowerCase();
+            
+            // Check for test patterns
+            if (email.includes('test') || email.includes('fake') || email.includes('example')) return true;
+            if (firstName.includes('test') || firstName === 'santa' || firstName === 'timothy') return true;
+            if (lastName.includes('test') || lastName === 'claus' || lastName === 'casten') return true;
+            if (firstName.length > 20 || lastName.length > 20) return true; // Gibberish
+            
+            return false;
+        }
+        
+        function hasMissingData(member) {
+            return !member.firstName || !member.lastName || !member.email;
+        }
+        
+        function filterMembers() {
+            const showTestOnly = document.getElementById('showTestOnly').checked;
+            const showMissingData = document.getElementById('showMissingData').checked;
+            
+            let filtered = allMembers;
+            
+            if (showTestOnly) {
+                filtered = filtered.filter(m => isPotentialTestAccount(m));
+            }
+            
+            if (showMissingData) {
+                filtered = filtered.filter(m => hasMissingData(m));
+            }
+            
+            renderMembers(filtered);
+        }
+        
+        function renderMembers(members = allMembers) {
+            const tbody = document.getElementById('membersBody');
+            document.getElementById('memberCount').textContent = members.length;
+            
+            if (members.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #999;">No members found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = members.map(member => {
+                const isTest = isPotentialTestAccount(member);
+                const missing = hasMissingData(member);
+                const rowClass = isTest ? 'test-account' : '';
+                
+                const firstName = member.firstName || '<span class="missing-data">NO FIRSTNAME</span>';
+                const lastName = member.lastName || '<span class="missing-data">NO LASTNAME</span>';
+                const email = member.email || '<span class="missing-data">NO EMAIL</span>';
+                const status = member.status || 'unknown';
+                const memberSince = member.memberSince ? 
+                    new Date(member.memberSince.seconds * 1000).toLocaleDateString() : 
+                    '<span class="missing-data">N/A</span>';
+                
+                return `
+                    <tr class="${rowClass}">
+                        <td class="id">${member.id}</td>
+                        <td>${firstName}</td>
+                        <td>${lastName}</td>
+                        <td>${email}</td>
+                        <td>${status}</td>
+                        <td>${memberSince}</td>
+                        <td class="actions">
+                            <button class="btn btn-view" onclick="viewMember('${member.id}')">View JSON</button>
+                            <button class="btn btn-delete" onclick="deleteMember('${member.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        function renderEvents() {
+            const tbody = document.getElementById('eventsBody');
+            document.getElementById('eventCount').textContent = allEvents.length;
+            
+            if (allEvents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #999;">No events found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = allEvents.map(event => {
+                const title = event.title || event.name || '<span class="missing-data">NO TITLE</span>';
+                const date = event.date ? 
+                    new Date(event.date.seconds * 1000).toLocaleString() : 
+                    '<span class="missing-data">NO DATE</span>';
+                const location = event.location || '<span class="missing-data">NO LOCATION</span>';
+                const rsvpCount = event.rsvps ? event.rsvps.length : 0;
+                
+                return `
+                    <tr>
+                        <td class="id">${event.id}</td>
+                        <td>${title}</td>
+                        <td>${date}</td>
+                        <td>${location}</td>
+                        <td>${rsvpCount}</td>
+                        <td class="actions">
+                            <button class="btn btn-view" onclick="viewEvent('${event.id}')">View JSON</button>
+                            <button class="btn btn-delete" onclick="deleteEvent('${event.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        function viewMember(id) {
+            const member = allMembers.find(m => m.id === id);
+            if (member) {
+                alert(JSON.stringify(member, null, 2));
+            }
+        }
+        
+        function viewEvent(id) {
+            const event = allEvents.find(e => e.id === id);
+            if (event) {
+                alert(JSON.stringify(event, null, 2));
+            }
+        }
+        
+        async function deleteMember(id) {
+            const member = allMembers.find(m => m.id === id);
+            const name = `${member.firstName || 'Unknown'} ${member.lastName || 'Unknown'}`;
+            
+            if (!confirm(`Delete member "${name}" (${id})?\n\nThis cannot be undone!`)) {
+                return;
+            }
+            
+            try {
+                log(`Deleting member ${name}...`);
+                await db.collection('members').doc(id).delete();
+                log(`✅ Deleted ${name}`, 'success');
+                
+                // Remove from local array and re-render
+                allMembers = allMembers.filter(m => m.id !== id);
+                filterMembers();
+                
+            } catch (error) {
+                log(`❌ Error deleting member: ${error.message}`, 'error');
+                console.error('Delete error:', error);
+            }
+        }
+        
+        async function deleteEvent(id) {
+            const event = allEvents.find(e => e.id === id);
+            const title = event.title || event.name || 'Unknown Event';
+            
+            if (!confirm(`Delete event "${title}" (${id})?\n\nThis cannot be undone!`)) {
+                return;
+            }
+            
+            try {
+                log(`Deleting event ${title}...`);
+                await db.collection('events').doc(id).delete();
+                log(`✅ Deleted ${title}`, 'success');
+                
+                // Remove from local array and re-render
+                allEvents = allEvents.filter(e => e.id !== id);
+                renderEvents();
+                
+            } catch (error) {
+                log(`❌ Error deleting event: ${error.message}`, 'error');
+                console.error('Delete error:', error);
+            }
+        }
+        
+        // Load data on page load
+        loadData();
+    </script>
+</body>
+</html>
