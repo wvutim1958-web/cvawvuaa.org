@@ -189,6 +189,7 @@
                     const isTest = email.includes('test') || name.includes('test') || name === 'santa claus';
                     
                     if (!isTest && memberData.address && memberData.city && memberData.state) {
+                        console.log(`Adding member: ${memberData.name}, State: ${memberData.state}, City: ${memberData.city}`);
                         members.push({
                             id: doc.id,
                             name: memberData.name,
