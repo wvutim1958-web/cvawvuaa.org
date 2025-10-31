@@ -1800,18 +1800,32 @@ CVAWVUAA Chapter
                 directoryLoading.style.display = 'block';
                 
                 const membersSnapshot = await db.collection('members')
-                    .orderBy('lastName', 'asc')
+                    .where('status', '==', 'active')  // Only load active members
                     .get();
                 
                 directoryLoading.style.display = 'none';
                 
-                console.log('Total members found:', membersSnapshot.size);
+                console.log('Total active members found:', membersSnapshot.size);
                 
                 allMembersData = [];
                 membersSnapshot.forEach(doc => {
                     const memberData = doc.data();
-                    console.log('Member:', doc.id, memberData.firstName, memberData.lastName, memberData.status);
-                    allMembersData.push({ id: doc.id, ...memberData });
+                    
+                    // Skip test accounts (detect by email or name patterns)
+                    const email = (memberData.email || '').toLowerCase();
+                    const name = (memberData.name || '').toLowerCase();
+                    
+                    const isTest = email.includes('test') || 
+                                   email.includes('fake') || 
+                                   email.includes('example') ||
+                                   name.includes('test') ||
+                                   name === 'santa claus' ||
+                                   name.length > 50; // gibberish names
+                    
+                    if (!isTest) {
+                        console.log('Member:', doc.id, memberData.name, memberData.email, memberData.status);
+                        allMembersData.push({ id: doc.id, ...memberData });
+                    }
                 });
                 
                 filterDirectory();
@@ -1832,7 +1846,7 @@ CVAWVUAA Chapter
             
             // Apply filter
             if (filter === 'active') {
-                filteredMembers = filteredMembers.filter(m => m.status === 'Active');
+                filteredMembers = filteredMembers.filter(m => m.status === 'active');
             } else if (filter === 'recent') {
                 const currentYear = new Date().getFullYear();
                 filteredMembers = filteredMembers.filter(m => 
@@ -1842,23 +1856,29 @@ CVAWVUAA Chapter
                 filteredMembers = filteredMembers.filter(m => 
                     m.state === 'VA' && (m.city?.toLowerCase().includes('richmond') || 
                     m.city?.toLowerCase().includes('glen allen') || 
-                    m.city?.toLowerCase().includes('mechanicsville'))
+                    m.city?.toLowerCase().includes('mechanicsville') ||
+                    m.city?.toLowerCase().includes('henrico'))
                 );
             }
             
             // Apply search
             if (searchTerm) {
                 filteredMembers = filteredMembers.filter(m => 
-                    `${m.firstName} ${m.lastName}`.toLowerCase().includes(searchTerm) ||
-                    m.city?.toLowerCase().includes(searchTerm) ||
-                    m.graduationYear?.toString().includes(searchTerm)
+                    (m.name || '').toLowerCase().includes(searchTerm) ||
+                    (m.city || '').toLowerCase().includes(searchTerm) ||
+                    (m.email || '').toLowerCase().includes(searchTerm) ||
+                    m.gradYear?.toString().includes(searchTerm)
                 );
             }
             
             // Render
             directoryList.innerHTML = filteredMembers.map(member => {
-                const initials = `${member.firstName[0]}${member.lastName[0]}`;
-                const gradYear = member.graduationYear ? `'${member.graduationYear.toString().slice(-2)}` : '';
+                const fullName = member.name || `${member.firstName || ''} ${member.lastName || ''}`.trim() || 'Member';
+                const nameParts = fullName.split(' ');
+                const initials = nameParts.length >= 2 ? 
+                    `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}` : 
+                    (fullName[0] || 'M');
+                const gradYear = member.gradYear ? `'${member.gradYear.toString().slice(-2)}` : '';
                 const location = [member.city, member.state].filter(Boolean).join(', ');
                 
                 return `
@@ -1866,7 +1886,7 @@ CVAWVUAA Chapter
                         <div class="member-avatar">${initials}</div>
                         <div style="flex: 1;">
                             <div style="font-weight: 600; color: #002855; font-size: 1.1rem;">
-                                ${member.firstName} ${member.lastName} ${gradYear ? `<span style="color: #EAAA00;">${gradYear}</span>` : ''}
+                                ${fullName} ${gradYear ? `<span style="color: #EAAA00;">${gradYear}</span>` : ''}
                             </div>
                             <div style="color: #666; font-size: 0.9rem;">
                                 ${location ? `📍 ${location}` : ''}
@@ -1874,8 +1894,8 @@ CVAWVUAA Chapter
                             </div>
                         </div>
                         <div>
-                            <span style="display: inline-block; padding: 0.35rem 0.75rem; background: ${member.status === 'Active' ? '#28a745' : '#dc3545'}; color: white; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
-                                ${member.status || 'Inactive'}
+                            <span style="display: inline-block; padding: 0.35rem 0.75rem; background: ${member.status === 'active' ? '#28a745' : '#dc3545'}; color: white; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
+                                ${member.status || 'inactive'}
                             </span>
                         </div>
                     </div>
