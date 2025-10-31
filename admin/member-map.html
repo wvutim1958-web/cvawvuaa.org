@@ -117,12 +117,21 @@
         let richmondCount = 0;
         let otherCount = 0;
         
-        // Custom WVU-colored marker
+        // Custom pin-shaped marker
         const wvuIcon = L.divIcon({
             className: 'custom-marker',
-            html: '<div style="background: #EAAA00; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #002855; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
-            iconSize: [24, 24],
-            iconAnchor: [12, 12]
+            html: `
+                <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Pin shape -->
+                    <path d="M15,0 C6.716,0 0,6.716 0,15 C0,25 15,40 15,40 C15,40 30,25 30,15 C30,6.716 23.284,0 15,0 Z" 
+                          fill="#dc3545" stroke="#8b0000" stroke-width="1"/>
+                    <!-- Inner circle -->
+                    <circle cx="15" cy="15" r="6" fill="white" opacity="0.9"/>
+                </svg>
+            `,
+            iconSize: [30, 40],
+            iconAnchor: [15, 40],
+            popupAnchor: [0, -40]
         });
         
         async function geocodeAddress(address, city, state, zip) {
