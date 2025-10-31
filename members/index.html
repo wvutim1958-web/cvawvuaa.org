@@ -1154,6 +1154,11 @@
             
             // Load financial data
             loadFinancialData();
+            
+            // Initialize dashboard extras (new member banner, celebrations)
+            setTimeout(() => {
+                initializeDashboardExtras();
+            }, 500);
         }
 
         async function loadFinancialData() {
@@ -1977,16 +1982,6 @@ CVAWVUAA Chapter
                 alert('Error submitting vote. Please try again.');
             }
         }
-
-        // Call initializeDashboardExtras after showing member portal
-        // Modify the existing showMemberPortal function to call this
-        const originalShowMemberPortal = showMemberPortal;
-        showMemberPortal = function() {
-            originalShowMemberPortal();
-            setTimeout(() => {
-                initializeDashboardExtras();
-            }, 500);
-        };
     </script>
 
 <!-- WVU Footer Component -->
