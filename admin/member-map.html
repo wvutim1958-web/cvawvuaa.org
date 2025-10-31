@@ -1,392 +1,782 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
 
-<html lang="en"><html lang="en">
+<html lang="en">
 
-<head><head>
+<head><html lang="en"><html lang="en">
 
-    <meta charset="UTF-8">    <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
 
-    <title>Member Geographic Distribution - CVAWVUAA Admin</title>    <title>Member Location Map - CVCWVUAA</title>
+    <title>Member Map - CVAWVUAA</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />    <style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />    <meta charset="UTF-8">    <meta charset="UTF-8">
 
-    <style>        body {
+    <style>
 
-        * {            margin: 0;
-
-            margin: 0;            padding: 0;
-
-            padding: 0;            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-
-            box-sizing: border-box;        }
-
-        }        #map {
-
-            height: 100vh;
-
-        body {            width: 100%;
-
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;        }
-
-            background: linear-gradient(135deg, #003366 0%, #0062B1 100%);        .header {
-
-            min-height: 100vh;            position: absolute;
-
-            padding: 20px;            top: 20px;
-
-        }            left: 20px;
-
-            background: white;
-
-        .container {            padding: 1.5rem;
-
-            max-width: 1400px;            border-radius: 12px;
-
-            margin: 0 auto;            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-
-        }            z-index: 1000;
-
-            max-width: 300px;
-
-        .header {        }
-
-            background: white;        .header h1 {
-
-            padding: 20px 30px;            margin: 0 0 0.5rem;
-
-            border-radius: 10px;            color: #002855;
-
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            font-size: 1.5rem;
-
-            margin-bottom: 20px;        }
-
-        }        .header p {
+        * {    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
             margin: 0;
 
-        h1 {            color: #666;
+            padding: 0;    <title>Member Geographic Distribution - CVAWVUAA Admin</title>    <title>Member Location Map - CVCWVUAA</title>
 
-            color: #003366;            font-size: 0.9rem;
+            box-sizing: border-box;
 
-            font-size: 28px;        }
+        }    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />    <style>
 
-            margin-bottom: 5px;        .stats {
 
-        }            position: absolute;
 
-            bottom: 20px;
+        body {    <style>        body {
 
-        .subtitle {            right: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-            color: #666;            background: white;
+            background: linear-gradient(135deg, #003366 0%, #0062B1 100%);        * {            margin: 0;
 
-            font-size: 14px;            padding: 1rem;
+            min-height: 100vh;
 
-        }            border-radius: 12px;
-
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-
-        .stats-bar {            z-index: 1000;
-
-            background: white;        }
-
-            padding: 15px 30px;        .stats h3 {
-
-            border-radius: 10px;            margin: 0 0 0.5rem;
-
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            color: #002855;
-
-            margin-bottom: 20px;            font-size: 1rem;
-
-            display: flex;        }
-
-            justify-content: space-around;        .stats p {
-
-            flex-wrap: wrap;            margin: 0.25rem 0;
-
-            gap: 20px;            color: #666;
-
-        }            font-size: 0.85rem;
+            padding: 20px;            margin: 0;            padding: 0;
 
         }
 
-        .stat-item {        .loading {
+            padding: 0;            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-            text-align: center;            position: absolute;
+        .container {
 
-        }            top: 50%;
+            max-width: 1400px;            box-sizing: border-box;        }
 
-            left: 50%;
+            margin: 0 auto;
 
-        .stat-number {            transform: translate(-50%, -50%);
-
-            font-size: 32px;            background: white;
-
-            font-weight: bold;            padding: 2rem;
-
-            color: #EAAA00;            border-radius: 12px;
-
-        }            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-
-            z-index: 2000;
-
-        .stat-label {            text-align: center;
-
-            font-size: 14px;        }
-
-            color: #666;        .loading.hide {
-
-            margin-top: 5px;            display: none;
-
-        }        }
-
-    </style>
-
-        .map-container {    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-            background: white;</head>
-
-            padding: 20px;<body>
-
-            border-radius: 10px;    <div class="header">
-
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);        <h1>🗺️ Member Map</h1>
-
-            margin-bottom: 20px;        <p>Central Virginia Chapter Members</p>
-
-        }    </div>
-
-    
-
-        #map {    <div class="stats">
-
-            height: 600px;        <h3>📊 Statistics</h3>
-
-            width: 100%;        <p><strong>Total Members:</strong> <span id="totalMembers">0</span></p>
-
-            border-radius: 8px;        <p><strong>Mapped:</strong> <span id="mappedMembers">0</span></p>
-
-            border: 2px solid #003366;        <p><strong>Richmond Area:</strong> <span id="richmondCount">0</span></p>
-
-        }        <p><strong>Other Areas:</strong> <span id="otherCount">0</span></p>
-
-    </div>
-
-        .legend {    
-
-            background: white;    <div id="loading" class="loading">
-
-            padding: 15px;        <h2 style="color: #002855; margin: 0 0 1rem;">Loading Members...</h2>
-
-            border-radius: 8px;        <p style="color: #666;">Geocoding addresses...</p>
-
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);    </div>
-
-            margin-top: 15px;    
-
-        }    <div id="map"></div>
+        }        }        #map {
 
 
 
-        .legend h3 {    <!-- Firebase SDK -->
+        .header {            height: 100vh;
 
-            color: #003366;    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+            background: white;
 
-            font-size: 16px;    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+            padding: 20px 30px;        body {            width: 100%;
 
-            margin-bottom: 10px;    <script src="/admin/js/firebase-config.js"></script>
+            border-radius: 10px;
 
-        }    
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;        }
 
-    <!-- Leaflet (OpenStreetMap) -->
+            margin-bottom: 20px;
 
-        .legend-item {    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        }            background: linear-gradient(135deg, #003366 0%, #0062B1 100%);        .header {
+
+
+
+        h1 {            min-height: 100vh;            position: absolute;
+
+            color: #003366;
+
+            font-size: 28px;            padding: 20px;            top: 20px;
+
+            margin-bottom: 5px;
+
+        }        }            left: 20px;
+
+
+
+        .subtitle {            background: white;
+
+            color: #666;
+
+            font-size: 14px;        .container {            padding: 1.5rem;
+
+        }
+
+            max-width: 1400px;            border-radius: 12px;
+
+        .stats-bar {
+
+            background: white;            margin: 0 auto;            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+            padding: 15px 30px;
+
+            border-radius: 10px;        }            z-index: 1000;
+
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+            margin-bottom: 20px;            max-width: 300px;
 
             display: flex;
 
-            align-items: center;    <script>
+            justify-content: space-around;        .header {        }
 
-            margin-bottom: 8px;        // Initialize map centered on Richmond, VA
+            flex-wrap: wrap;
 
-        }        const map = L.map('map').setView([37.5407, -77.4360], 10);
+            gap: 20px;            background: white;        .header h1 {
+
+        }
+
+            padding: 20px 30px;            margin: 0 0 0.5rem;
+
+        .stat-item {
+
+            text-align: center;            border-radius: 10px;            color: #002855;
+
+        }
+
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            font-size: 1.5rem;
+
+        .stat-number {
+
+            font-size: 32px;            margin-bottom: 20px;        }
+
+            font-weight: bold;
+
+            color: #EAAA00;        }        .header p {
+
+        }
+
+            margin: 0;
+
+        .stat-label {
+
+            font-size: 14px;        h1 {            color: #666;
+
+            color: #666;
+
+            margin-top: 5px;            color: #003366;            font-size: 0.9rem;
+
+        }
+
+            font-size: 28px;        }
+
+        .map-container {
+
+            background: white;            margin-bottom: 5px;        .stats {
+
+            padding: 20px;
+
+            border-radius: 10px;        }            position: absolute;
+
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+        }            bottom: 20px;
+
+
+
+        #map {        .subtitle {            right: 20px;
+
+            height: 600px;
+
+            width: 100%;            color: #666;            background: white;
+
+            border-radius: 8px;
+
+            border: 2px solid #003366;            font-size: 14px;            padding: 1rem;
+
+        }
+
+        }            border-radius: 12px;
+
+        .legend {
+
+            background: white;            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+            padding: 15px;
+
+            border-radius: 8px;        .stats-bar {            z-index: 1000;
+
+            margin-top: 15px;
+
+        }            background: white;        }
+
+
+
+        .legend h3 {            padding: 15px 30px;        .stats h3 {
+
+            color: #003366;
+
+            font-size: 16px;            border-radius: 10px;            margin: 0 0 0.5rem;
+
+            margin-bottom: 10px;
+
+        }            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            color: #002855;
+
+
+
+        .legend-item {            margin-bottom: 20px;            font-size: 1rem;
+
+            display: flex;
+
+            align-items: center;            display: flex;        }
+
+            margin-bottom: 8px;
+
+        }            justify-content: space-around;        .stats p {
+
+
+
+        .legend-color {            flex-wrap: wrap;            margin: 0.25rem 0;
+
+            width: 20px;
+
+            height: 20px;            gap: 20px;            color: #666;
+
+            border-radius: 50%;
+
+            margin-right: 10px;        }            font-size: 0.85rem;
+
+            border: 2px solid #333;
+
+        }        }
+
+
+
+        .back-link {        .stat-item {        .loading {
+
+            display: inline-block;
+
+            color: #003366;            text-align: center;            position: absolute;
+
+            text-decoration: none;
+
+            font-weight: 600;        }            top: 50%;
+
+            margin-bottom: 10px;
+
+            padding: 8px 15px;            left: 50%;
+
+            background: white;
+
+            border-radius: 5px;        .stat-number {            transform: translate(-50%, -50%);
+
+        }
+
+            font-size: 32px;            background: white;
+
+        .back-link:hover {
+
+            background: #f0f0f0;            font-weight: bold;            padding: 2rem;
+
+        }
+
+            color: #EAAA00;            border-radius: 12px;
+
+        .progress {
+
+            background: white;        }            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+            padding: 20px;
+
+            border-radius: 8px;            z-index: 2000;
+
+            margin-top: 15px;
+
+            text-align: center;        .stat-label {            text-align: center;
+
+        }
+
+            font-size: 14px;        }
+
+        .progress-bar {
+
+            width: 100%;            color: #666;        .loading.hide {
+
+            height: 30px;
+
+            background: #f0f0f0;            margin-top: 5px;            display: none;
+
+            border-radius: 15px;
+
+            overflow: hidden;        }        }
+
+            margin-bottom: 10px;
+
+        }    </style>
+
+
+
+        .progress-fill {        .map-container {    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+            height: 100%;
+
+            background: linear-gradient(90deg, #EAAA00, #003366);            background: white;</head>
+
+            transition: width 0.3s;
+
+            display: flex;            padding: 20px;<body>
+
+            align-items: center;
+
+            justify-content: center;            border-radius: 10px;    <div class="header">
+
+            color: white;
+
+            font-weight: bold;            box-shadow: 0 4px 6px rgba(0,0,0,0.1);        <h1>🗺️ Member Map</h1>
+
+        }
+
+    </style>            margin-bottom: 20px;        <p>Central Virginia Chapter Members</p>
+
+</head>
+
+<body>        }    </div>
+
+    <div class="container">
+
+        <a href="/admin/member-database.html" class="back-link">← Back to Member Database</a>    
 
         
 
+        <div class="header">        #map {    <div class="stats">
+
+            <h1>📍 Member Geographic Distribution</h1>
+
+            <p class="subtitle">Central Virginia Chapter - WVU Alumni Association</p>            height: 600px;        <h3>📊 Statistics</h3>
+
+        </div>
+
+            width: 100%;        <p><strong>Total Members:</strong> <span id="totalMembers">0</span></p>
+
+        <div class="stats-bar">
+
+            <div class="stat-item">            border-radius: 8px;        <p><strong>Mapped:</strong> <span id="mappedMembers">0</span></p>
+
+                <div class="stat-number" id="totalMembers">0</div>
+
+                <div class="stat-label">Total Members</div>            border: 2px solid #003366;        <p><strong>Richmond Area:</strong> <span id="richmondCount">0</span></p>
+
+            </div>
+
+            <div class="stat-item">        }        <p><strong>Other Areas:</strong> <span id="otherCount">0</span></p>
+
+                <div class="stat-number" id="activeMembers">0</div>
+
+                <div class="stat-label">Active Members</div>    </div>
+
+            </div>
+
+            <div class="stat-item">        .legend {    
+
+                <div class="stat-number" id="mappedMembers">0</div>
+
+                <div class="stat-label">Mapped Locations</div>            background: white;    <div id="loading" class="loading">
+
+            </div>
+
+            <div class="stat-item">            padding: 15px;        <h2 style="color: #002855; margin: 0 0 1rem;">Loading Members...</h2>
+
+                <div class="stat-number" id="statesCount">0</div>
+
+                <div class="stat-label">States</div>            border-radius: 8px;        <p style="color: #666;">Geocoding addresses...</p>
+
+            </div>
+
+        </div>            box-shadow: 0 2px 4px rgba(0,0,0,0.1);    </div>
+
+
+
+        <div class="map-container">            margin-top: 15px;    
+
+            <div id="map"></div>
+
+                    }    <div id="map"></div>
+
+            <div class="progress" id="progressBar" style="display: none;">
+
+                <div class="progress-bar">
+
+                    <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
+
+                </div>        .legend h3 {    <!-- Firebase SDK -->
+
+                <div id="progressText">Loading members...</div>
+
+            </div>            color: #003366;    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+
+            
+
+            <div class="legend">            font-size: 16px;    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+                <h3>Legend</h3>
+
+                <div class="legend-item">            margin-bottom: 10px;    <script src="/admin/js/firebase-config.js"></script>
+
+                    <div class="legend-color" style="background: #00cc00;"></div>
+
+                    <span>Active Members</span>        }    
+
+                </div>
+
+                <div class="legend-item">    <!-- Leaflet (OpenStreetMap) -->
+
+                    <div class="legend-color" style="background: #ff6600;"></div>
+
+                    <span>Inactive Members</span>        .legend-item {    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+                </div>
+
+            </div>            display: flex;
+
+        </div>
+
+    </div>            align-items: center;    <script>
+
+
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>            margin-bottom: 8px;        // Initialize map centered on Richmond, VA
+
+    <script src="/js/firebase-config.js"></script>
+
+    <script>        }        const map = L.map('map').setView([37.5407, -77.4360], 10);
+
+        let map;
+
+        let markers = [];        
+
+        let allMembers = [];
+
         .legend-color {        // Add OpenStreetMap tiles
 
-            width: 20px;        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Initialize map
 
-            height: 20px;            attribution: '© OpenStreetMap contributors',
+        function initMap() {            width: 20px;        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
-            border-radius: 50%;            maxZoom: 19
+            map = L.map('map').setView([37.5407, -77.4360], 9);
 
-            margin-right: 10px;        }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {            height: 20px;            attribution: '© OpenStreetMap contributors',
 
-            border: 2px solid #333;        
+                attribution: '© OpenStreetMap contributors',
 
-        }        let totalMembers = 0;
+                maxZoom: 18            border-radius: 50%;            maxZoom: 19
 
-        let mappedMembers = 0;
+            }).addTo(map);
 
-        .loading {        let richmondCount = 0;
+        }            margin-right: 10px;        }).addTo(map);
 
-            text-align: center;        let otherCount = 0;
 
-            padding: 40px;        
 
-            color: #666;        // Custom small pin-shaped marker
+        // Show progress            border: 2px solid #333;        
 
-        }        const wvuIcon = L.divIcon({
+        function showProgress(show, percent, text) {
 
-            className: 'custom-marker',
+            const progressBar = document.getElementById('progressBar');        }        let totalMembers = 0;
 
-        .error {            html: `
+            const progressFill = document.getElementById('progressFill');
 
-            background: #fee;                <svg width="16" height="22" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
+            const progressText = document.getElementById('progressText');        let mappedMembers = 0;
 
-            color: #c33;                    <!-- Pin shape -->
+            
 
-            padding: 15px;                    <path d="M15,0 C6.716,0 0,6.716 0,15 C0,25 15,40 15,40 C15,40 30,25 30,15 C30,6.716 23.284,0 15,0 Z" 
+            if (show) {        .loading {        let richmondCount = 0;
 
-            border-radius: 8px;                          fill="#dc3545" stroke="#8b0000" stroke-width="1"/>
+                progressBar.style.display = 'block';
 
-            margin: 20px 0;                    <!-- Inner circle -->
+                progressFill.style.width = percent + '%';            text-align: center;        let otherCount = 0;
 
-        }                    <circle cx="15" cy="15" r="6" fill="white" opacity="0.9"/>
+                progressFill.textContent = Math.round(percent) + '%';
 
-                </svg>
+                progressText.textContent = text;            padding: 40px;        
 
-        .controls {            `,
+            } else {
 
-            background: white;            iconSize: [16, 22],
+                progressBar.style.display = 'none';            color: #666;        // Custom small pin-shaped marker
 
-            padding: 15px 30px;            iconAnchor: [8, 22],
+            }
 
-            border-radius: 10px;            popupAnchor: [0, -22]
+        }        }        const wvuIcon = L.divIcon({
 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);        });
 
-            margin-bottom: 20px;        
 
-        }        async function geocodeAddress(address, city, state, zip) {
+        // Geocode address            className: 'custom-marker',
 
-            // Build full address - use ZIP to help determine location
+        async function geocodeAddress(city, state, zip) {
 
-        .control-group {            const fullAddress = zip ? 
+            try {        .error {            html: `
 
-            display: flex;                `${address}, ${city}, ${zip}` : 
+                let query = '';
 
-            gap: 15px;                `${address}, ${city}`;
+                if (city && state && zip) {            background: #fee;                <svg width="16" height="22" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
 
-            flex-wrap: wrap;            
+                    query = `${city}, ${state} ${zip}, USA`;
 
-            align-items: center;            try {
+                } else if (city && state) {            color: #c33;                    <!-- Pin shape -->
 
-        }                // Use Nominatim (OpenStreetMap) geocoding service
+                    query = `${city}, ${state}, USA`;
 
-                const response = await fetch(
+                } else if (zip) {            padding: 15px;                    <path d="M15,0 C6.716,0 0,6.716 0,15 C0,25 15,40 15,40 C15,40 30,25 30,15 C30,6.716 23.284,0 15,0 Z" 
 
-        .control-group label {                    `https://nominatim.openstreetmap.org/search?` + 
+                    query = `${zip}, USA`;
 
-            font-weight: 600;                    `q=${encodeURIComponent(fullAddress)}&format=json&limit=1&countrycodes=us`,
+                } else {            border-radius: 8px;                          fill="#dc3545" stroke="#8b0000" stroke-width="1"/>
 
-            color: #003366;                    {
+                    return null;
 
-        }                        headers: {
+                }            margin: 20px 0;                    <!-- Inner circle -->
 
-                            'User-Agent': 'CVCWVUAA Member Map'
 
-        .control-group select {                        }
 
-            padding: 8px 12px;                    }
+                const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;        }                    <circle cx="15" cy="15" r="6" fill="white" opacity="0.9"/>
 
-            border: 2px solid #003366;                );
+                const response = await fetch(url, {
 
-            border-radius: 5px;                
+                    headers: { 'User-Agent': 'CVAWVUAA-Member-Map/1.0' }                </svg>
 
-            font-size: 14px;                // Check for rate limiting
+                });
 
-            background: white;                if (response.status === 429) {
-
-            cursor: pointer;                    console.warn('Rate limited, waiting 5 seconds...');
-
-        }                    await new Promise(resolve => setTimeout(resolve, 5000));
-
-                    return await geocodeAddress(address, city, state, zip); // Retry
-
-        .back-link {                }
-
-            display: inline-block;                
-
-            color: #003366;                const data = await response.json();
-
-            text-decoration: none;                
-
-            font-weight: 600;                if (data && data.length > 0) {
-
-            margin-bottom: 10px;                    return {
-
-            padding: 8px 15px;                        lat: parseFloat(data[0].lat),
-
-            background: white;                        lng: parseFloat(data[0].lon),
-
-            border-radius: 5px;                        display_name: data[0].display_name // Full address from geocoder
-
-            transition: background 0.3s;                    };
-
-        }                }
+                const data = await response.json();        .controls {            `,
 
                 
 
-        .back-link:hover {                console.warn(`No coordinates found for: ${fullAddress}`);
+                if (data && data.length > 0) {            background: white;            iconSize: [16, 22],
 
-            background: #f0f0f0;                return null;
+                    return {
 
-        }            } catch (error) {
+                        lat: parseFloat(data[0].lat),            padding: 15px 30px;            iconAnchor: [8, 22],
 
-                console.error('Geocoding error for', fullAddress, ':', error);
+                        lng: parseFloat(data[0].lon)
 
-        .progress {                return null;
+                    };            border-radius: 10px;            popupAnchor: [0, -22]
 
-            background: white;            }
+                }
+
+                return null;            box-shadow: 0 4px 6px rgba(0,0,0,0.1);        });
+
+            } catch (error) {
+
+                console.error('Geocoding error:', error);            margin-bottom: 20px;        
+
+                return null;
+
+            }        }        async function geocodeAddress(address, city, state, zip) {
+
+        }
+
+            // Build full address - use ZIP to help determine location
+
+        // Create marker
+
+        function createMarker(member, coords) {        .control-group {            const fullAddress = zip ? 
+
+            const color = member.status === 'active' ? '#00cc00' : '#ff6600';
+
+                        display: flex;                `${address}, ${city}, ${zip}` : 
+
+            const marker = L.circleMarker([coords.lat, coords.lng], {
+
+                radius: 8,            gap: 15px;                `${address}, ${city}`;
+
+                fillColor: color,
+
+                color: '#333',            flex-wrap: wrap;            
+
+                weight: 2,
+
+                opacity: 1,            align-items: center;            try {
+
+                fillOpacity: 0.8
+
+            });        }                // Use Nominatim (OpenStreetMap) geocoding service
+
+
+
+            const popupContent = `                const response = await fetch(
+
+                <div style="min-width: 200px;">
+
+                    <h3 style="margin: 0 0 10px 0; color: #003366;">${member.name}</h3>        .control-group label {                    `https://nominatim.openstreetmap.org/search?` + 
+
+                    <p style="margin: 5px 0;"><strong>Status:</strong> ${member.status}</p>
+
+                    <p style="margin: 5px 0;"><strong>Type:</strong> ${member.membershipType}</p>            font-weight: 600;                    `q=${encodeURIComponent(fullAddress)}&format=json&limit=1&countrycodes=us`,
+
+                    <p style="margin: 5px 0;"><strong>Location:</strong> ${member.city}, ${member.state} ${member.zip}</p>
+
+                    ${member.email ? `<p style="margin: 5px 0;"><strong>Email:</strong> ${member.email}</p>` : ''}            color: #003366;                    {
+
+                </div>
+
+            `;        }                        headers: {
+
+
+
+            marker.bindPopup(popupContent);                            'User-Agent': 'CVCWVUAA Member Map'
+
+            return marker;
+
+        }        .control-group select {                        }
+
+
+
+        // Load members            padding: 8px 12px;                    }
+
+        async function loadMembers() {
+
+            try {            border: 2px solid #003366;                );
+
+                showProgress(true, 0, 'Loading members from database...');
+
+                            border-radius: 5px;                
+
+                const membersRef = db.collection('members');
+
+                const snapshot = await membersRef.get();            font-size: 14px;                // Check for rate limiting
+
+
+
+                allMembers = [];            background: white;                if (response.status === 429) {
+
+                snapshot.forEach(doc => {
+
+                    const data = doc.data();            cursor: pointer;                    console.warn('Rate limited, waiting 5 seconds...');
+
+                    allMembers.push({
+
+                        id: doc.id,        }                    await new Promise(resolve => setTimeout(resolve, 5000));
+
+                        name: data.name || 'Unknown',
+
+                        status: data.status || 'inactive',                    return await geocodeAddress(address, city, state, zip); // Retry
+
+                        membershipType: data.membershipType || 'Individual - $25/yr',
+
+                        city: data.city || '',        .back-link {                }
+
+                        state: data.state || 'VA',
+
+                        zip: data.zip || '',            display: inline-block;                
+
+                        email: data.email || ''
+
+                    });            color: #003366;                const data = await response.json();
+
+                });
+
+            text-decoration: none;                
+
+                updateStats();
+
+                await mapMembers();            font-weight: 600;                if (data && data.length > 0) {
+
+            } catch (error) {
+
+                console.error('Error loading members:', error);            margin-bottom: 10px;                    return {
+
+                alert('Error loading member data: ' + error.message);
+
+            }            padding: 8px 15px;                        lat: parseFloat(data[0].lat),
+
+        }
+
+            background: white;                        lng: parseFloat(data[0].lon),
+
+        // Map members
+
+        async function mapMembers() {            border-radius: 5px;                        display_name: data[0].display_name // Full address from geocoder
+
+            markers.forEach(marker => marker.remove());
+
+            markers = [];            transition: background 0.3s;                    };
+
+
+
+            let mappedCount = 0;        }                }
+
+            const bounds = [];
+
+            const total = allMembers.length;                
+
+
+
+            for (let i = 0; i < total; i++) {        .back-link:hover {                console.warn(`No coordinates found for: ${fullAddress}`);
+
+                const member = allMembers[i];
+
+                            background: #f0f0f0;                return null;
+
+                const coords = await geocodeAddress(member.city, member.state, member.zip);
+
+                        }            } catch (error) {
+
+                if (coords) {
+
+                    const marker = createMarker(member, coords);                console.error('Geocoding error for', fullAddress, ':', error);
+
+                    marker.addTo(map);
+
+                    markers.push(marker);        .progress {                return null;
+
+                    bounds.push([coords.lat, coords.lng]);
+
+                    mappedCount++;            background: white;            }
+
+                }
 
             padding: 20px;        }
 
-            border-radius: 8px;        
+                const percent = ((i + 1) / total) * 100;
 
-            margin-top: 15px;        async function loadMembers() {
+                showProgress(true, percent, `Mapped ${mappedCount} of ${i + 1} members...`);            border-radius: 8px;        
 
-            display: none;            try {
 
-        }                const membersSnapshot = await db.collection('members').get();
 
-                totalMembers = membersSnapshot.size;
+                // Rate limiting            margin-top: 15px;        async function loadMembers() {
 
-        .progress.active {                
+                if (i < total - 1) {
 
-            display: block;                const members = [];
+                    await new Promise(resolve => setTimeout(resolve, 1000));            display: none;            try {
 
-        }                membersSnapshot.forEach(doc => {
+                }
+
+            }        }                const membersSnapshot = await db.collection('members').get();
+
+
+
+            showProgress(false);                totalMembers = membersSnapshot.size;
+
+
+
+            if (bounds.length > 0) {        .progress.active {                
+
+                map.fitBounds(bounds, { padding: [50, 50] });
+
+            }            display: block;                const members = [];
+
+
+
+            document.getElementById('mappedMembers').textContent = mappedCount;        }                membersSnapshot.forEach(doc => {
+
+        }
 
                     const memberData = doc.data();
 
-        .progress-bar {                    
+        // Update stats
 
-            width: 100%;                    // Skip test accounts
+        function updateStats() {        .progress-bar {                    
+
+            const total = allMembers.length;
+
+            const active = allMembers.filter(m => m.status === 'active').length;            width: 100%;                    // Skip test accounts
+
+            const states = new Set(allMembers.map(m => m.state).filter(s => s));
 
             height: 30px;                    const email = (memberData.email || '').toLowerCase();
 
-            background: #f0f0f0;                    const name = (memberData.name || '').toLowerCase();
+            document.getElementById('totalMembers').textContent = total;
 
-            border-radius: 15px;                    const isTest = email.includes('test') || name.includes('test') || name === 'santa claus';
+            document.getElementById('activeMembers').textContent = active;            background: #f0f0f0;                    const name = (memberData.name || '').toLowerCase();
 
-            overflow: hidden;                    
+            document.getElementById('statesCount').textContent = states.size;
 
-            margin-bottom: 10px;                    if (!isTest && memberData.address && memberData.city) {
+        }            border-radius: 15px;                    const isTest = email.includes('test') || name.includes('test') || name === 'santa claus';
 
-        }                        console.log(`Adding member: ${memberData.name}, City: ${memberData.city}, ZIP: ${memberData.zip}`);
+
+
+        // Initialize            overflow: hidden;                    
+
+        initMap();
+
+        loadMembers();            margin-bottom: 10px;                    if (!isTest && memberData.address && memberData.city) {
+
+    </script>
+
+</body>        }                        console.log(`Adding member: ${memberData.name}, City: ${memberData.city}, ZIP: ${memberData.zip}`);
+
+</html>
 
                         members.push({
 
