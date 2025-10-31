@@ -229,7 +229,7 @@
                 }
                 
                 document.getElementById('text').textContent = `Mapped ${mapped}/${i+1} members...`;
-                if (i < members.length - 1) await new Promise(r => setTimeout(r, 1200));
+                if (i < members.length - 1) await new Promise(r => setTimeout(r, 10000));
             }
             
             document.getElementById('mapped').textContent = mapped;
