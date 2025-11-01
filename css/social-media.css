@@ -455,14 +455,13 @@
 }
 /* Compact Social Styles - WVU Branded */
 .share-section-compact {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
   background: #f8f9fa;
   border-radius: 6px;
   border: 1px solid #dee2e6;
-  flex-wrap: wrap;
 }
 
 .share-label {
@@ -470,7 +469,6 @@
   font-weight: 600;
   color: #003366;
   margin-right: 4px;
-  flex-shrink: 0;
 }
 
 .share-btn-compact {
@@ -486,6 +484,7 @@
   justify-content: center;
   transition: all 0.2s;
   color: white;
+  flex-shrink: 0;
 }
 
 .share-btn-compact.facebook { background: #1877f2; }
