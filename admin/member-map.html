@@ -168,6 +168,10 @@
         let map = L.map('map').setView([37.5407, -77.4360], 9);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap', maxZoom: 18}).addTo(map);
         
+        function updateStatus(msg) {
+            document.getElementById('status').innerHTML = msg;
+        }
+        
         const geocodeCache = {};
         
         async function geocode(city, state, zip) {
