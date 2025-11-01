@@ -52,7 +52,7 @@ class SocialMediaManager {
     const encodedTitle = encodeURIComponent(this.pageTitle);
 
     const shareHTML = `
-      <div class="share-section-compact">
+      <div class="share-section-compact-compact">
         <span class="share-label">Share:</span>
         <button onclick="socialManager.shareOn('facebook')" class="share-btn-compact facebook" aria-label="Share on Facebook" title="Share on Facebook">f</button>
         <button onclick="socialManager.shareOn('twitter')" class="share-btn-compact twitter" aria-label="Share on Twitter" title="Share on Twitter">𝕏</button>
@@ -186,7 +186,7 @@ class SocialMediaManager {
       if (SOCIAL_CONFIG.accounts.facebook) {
         // Create enhanced social card with Facebook plugin attempt
         container.innerHTML = `
-          <div class="social-feed-container-compact">
+          <div class="social-feed-container-compact-compact">
             <div class="social-connect-compact">
               <span class="connect-label">Follow Us:</span>
               <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener" class="social-link-compact facebook" title="Facebook">
