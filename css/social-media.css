@@ -462,6 +462,7 @@
   background: #f8f9fa;
   border-radius: 6px;
   border: 1px solid #dee2e6;
+  flex-wrap: wrap;
 }
 
 .share-label {
@@ -469,6 +470,7 @@
   font-weight: 600;
   color: #003366;
   margin-right: 4px;
+  flex-shrink: 0;
 }
 
 .share-btn-compact {
