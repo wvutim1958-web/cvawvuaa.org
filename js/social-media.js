@@ -52,13 +52,15 @@ class SocialMediaManager {
     const encodedTitle = encodeURIComponent(this.pageTitle);
 
     const shareHTML = `
-      <div class="share-section-compact-compact">
+      <div class="share-section-compact">
         <span class="share-label">Share:</span>
-        <button onclick="socialManager.shareOn('facebook')" class="share-btn-compact facebook" aria-label="Share on Facebook" title="Share on Facebook">f</button>
-        <button onclick="socialManager.shareOn('twitter')" class="share-btn-compact twitter" aria-label="Share on Twitter" title="Share on Twitter">𝕏</button>
-        <button onclick="socialManager.shareOn('linkedin')" class="share-btn-compact linkedin" aria-label="Share on LinkedIn" title="Share on LinkedIn">in</button>
-        <button onclick="socialManager.shareOn('email')" class="share-btn-compact email" aria-label="Share via Email" title="Share via Email">✉</button>
-        <button onclick="socialManager.copyLink()" class="share-btn-compact copy" aria-label="Copy Link" title="Copy Link">🔗</button>
+        <div style="display: flex; gap: 8px;">
+          <button onclick="socialManager.shareOn('facebook')" class="share-btn-compact facebook" aria-label="Share on Facebook" title="Share on Facebook">f</button>
+          <button onclick="socialManager.shareOn('twitter')" class="share-btn-compact twitter" aria-label="Share on Twitter" title="Share on Twitter">𝕏</button>
+          <button onclick="socialManager.shareOn('linkedin')" class="share-btn-compact linkedin" aria-label="Share on LinkedIn" title="Share on LinkedIn">in</button>
+          <button onclick="socialManager.shareOn('email')" class="share-btn-compact email" aria-label="Share via Email" title="Share via Email">✉</button>
+          <button onclick="socialManager.copyLink()" class="share-btn-compact copy" aria-label="Copy Link" title="Copy Link">🔗</button>
+        </div>
       </div>
     `;
 
