@@ -453,3 +453,101 @@
   background: #1e293b;
   border-color: #475569;
 }
+/* Compact Social Styles - WVU Branded */
+.share-section-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.share-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #003366;
+  margin-right: 4px;
+}
+
+.share-btn-compact {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: white;
+}
+
+.share-btn-compact.facebook { background: #1877f2; }
+.share-btn-compact.twitter { background: #000; }
+.share-btn-compact.linkedin { background: #0077b5; }
+.share-btn-compact.email { background: #EAAA00; }
+.share-btn-compact.copy { background: #003366; }
+
+.share-btn-compact:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.social-feed-container-compact {
+  margin: 20px 0;
+}
+
+.social-connect-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.connect-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #003366;
+  margin-right: 4px;
+}
+
+.social-link-compact {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s;
+  color: white;
+  font-weight: bold;
+}
+
+.social-link-compact.facebook {
+  background: #1877f2;
+  font-size: 18px;
+}
+
+.social-link-compact.instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  font-size: 16px;
+}
+
+.social-link-compact:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.social-link-compact .social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

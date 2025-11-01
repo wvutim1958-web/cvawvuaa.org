@@ -52,25 +52,13 @@ class SocialMediaManager {
     const encodedTitle = encodeURIComponent(this.pageTitle);
 
     const shareHTML = `
-      <div class="share-section">
-        <h4>Share This Page</h4>
-        <div class="share-buttons-grid">
-          <button onclick="socialManager.shareOn('facebook')" class="share-btn facebook" aria-label="Share on Facebook">
-            Facebook
-          </button>
-          <button onclick="socialManager.shareOn('twitter')" class="share-btn twitter" aria-label="Share on Twitter">
-            Twitter
-          </button>
-          <button onclick="socialManager.shareOn('linkedin')" class="share-btn linkedin" aria-label="Share on LinkedIn">
-            LinkedIn
-          </button>
-          <button onclick="socialManager.shareOn('email')" class="share-btn email" aria-label="Share via Email">
-            Email
-          </button>
-          <button onclick="socialManager.copyLink()" class="share-btn copy" aria-label="Copy Link">
-            Copy Link
-          </button>
-        </div>
+      <div class="share-section-compact">
+        <span class="share-label">Share:</span>
+        <button onclick="socialManager.shareOn('facebook')" class="share-btn-compact facebook" aria-label="Share on Facebook" title="Share on Facebook">f</button>
+        <button onclick="socialManager.shareOn('twitter')" class="share-btn-compact twitter" aria-label="Share on Twitter" title="Share on Twitter">𝕏</button>
+        <button onclick="socialManager.shareOn('linkedin')" class="share-btn-compact linkedin" aria-label="Share on LinkedIn" title="Share on LinkedIn">in</button>
+        <button onclick="socialManager.shareOn('email')" class="share-btn-compact email" aria-label="Share via Email" title="Share via Email">✉</button>
+        <button onclick="socialManager.copyLink()" class="share-btn-compact copy" aria-label="Copy Link" title="Copy Link">🔗</button>
       </div>
     `;
 
@@ -198,33 +186,18 @@ class SocialMediaManager {
       if (SOCIAL_CONFIG.accounts.facebook) {
         // Create enhanced social card with Facebook plugin attempt
         container.innerHTML = `
-          <div class="social-feed-container">
-            <h3>Connect With Us</h3>
-            
-            <!-- Social Media Cards -->
-            <div class="social-cards-grid">
-              <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener" class="social-card facebook-card">
-                <div class="social-card-icon">📘</div>
-                <div class="social-card-content">
-                  <h4>Follow on Facebook</h4>
-                  <p>See our latest posts, photos, and event updates</p>
-                  <span class="social-card-button">Visit Page →</span>
-                </div>
+          <div class="social-feed-container-compact">
+            <div class="social-connect-compact">
+              <span class="connect-label">Follow Us:</span>
+              <a href="${SOCIAL_CONFIG.accounts.facebook}" target="_blank" rel="noopener" class="social-link-compact facebook" title="Facebook">
+                <span class="social-icon">f</span>
               </a>
-              
               ${SOCIAL_CONFIG.accounts.instagram ? `
-              <a href="${SOCIAL_CONFIG.accounts.instagram}" target="_blank" rel="noopener" class="social-card instagram-card">
-                <div class="social-card-icon">📷</div>
-                <div class="social-card-content">
-                  <h4>Follow on Instagram</h4>
-                  <p>View photos and stories from our events</p>
-                  <span class="social-card-button">View Profile →</span>
-                </div>
+              <a href="${SOCIAL_CONFIG.accounts.instagram}" target="_blank" rel="noopener" class="social-link-compact instagram" title="Instagram">
+                <span class="social-icon">📷</span>
               </a>
               ` : ''}
             </div>
-            
-
           </div>
         `;
         
