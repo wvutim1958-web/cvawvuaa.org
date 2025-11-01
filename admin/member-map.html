@@ -169,7 +169,7 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap', maxZoom: 18}).addTo(map);
         
         function updateStatus(msg) {
-            document.getElementById('status').innerHTML = msg;
+            document.getElementById('text').innerHTML = msg;
         }
         
         const geocodeCache = {};
