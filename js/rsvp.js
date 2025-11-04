@@ -1,7 +1,7 @@
 // RSVP helper: local JSON store + admin view
 (function(){
   const FORM_ID = 'rsvp-form';
-  const STORAGE_KEY = 'cvcwvuaa-rsvps';
+  const STORAGE_KEY = 'rsvps';
 
   function readLocal(){
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
@@ -11,14 +11,15 @@
 
   function getFormData(form){
     const data = Object.fromEntries(new FormData(form).entries());
-    // normalize
+    // normalize - handle both old and new field names
     return {
-      ts: nowISO(),
-      name: (data.Name||'').trim(),
-      email: (data.Email||'').trim(),
-      game: (data.Game||'').trim(),
-      count: Number(data.Count||1),
-      requests: (data.Requests||'').trim(),
+      timestamp: nowISO(),
+      Name: (data.Name||'').trim(),
+      Email: (data.Email||'').trim(),
+      Event: (data.Event||data.Game||'').trim(),
+      Attending: (data.Attending||'').trim(),
+      Number_of_Guests: Number(data.Number_of_Guests||data.guests||0),
+      Comments: (data.Comments||data.comments||data.Requests||'').trim(),
       eventId: (data.eventId||'').trim()
     };
   }
@@ -39,16 +40,23 @@
   let rows = readLocal();
   const filterEvent = params.get('eventId');
   if(filterEvent){ rows = rows.filter(r => (r.eventId||'') === filterEvent); }
-    rows.sort((a,b) => (a.ts < b.ts ? 1 : -1));
+    rows.sort((a,b) => ((a.timestamp||a.ts) < (b.timestamp||b.ts) ? 1 : -1));
     for(const r of rows){
       const tr = document.createElement('tr');
+      const timestamp = r.timestamp || r.ts || '';
+      const name = r.Name || r.name || '';
+      const email = r.Email || r.email || '';
+      const event = r.Event || r.game || '';
+      const attending = r.Attending || '';
+      const guests = r.Number_of_Guests || r.count || 0;
+      const comments = r.Comments || r.requests || '';
+      
       tr.innerHTML = `
-        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${new Date(r.ts).toLocaleString()}</td>
-        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${r.name}</td>
-        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)"><a href="mailto:${r.email}">${r.email}</a></td>
-        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${r.game}</td>
-        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${r.count}</td>
-        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${r.requests}</td>`;
+        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${timestamp ? new Date(timestamp).toLocaleString() : ''}</td>
+        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${name}</td>
+        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${attending}</td>
+        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${guests}</td>
+        <td style="padding:6px 8px;border-bottom:1px solid var(--border-color)">${comments}</td>`;
       tbody.appendChild(tr);
     }
   }
@@ -75,7 +83,7 @@
         const filterEvent = params.get('eventId');
         let rows = readLocal();
         if(filterEvent){ rows = rows.filter(r => (r.eventId||'') === filterEvent); }
-        const emails = Array.from(new Set(rows.map(r => (r.email||'').trim()).filter(Boolean)));
+        const emails = Array.from(new Set(rows.map(r => ((r.Email||r.email)||'').trim()).filter(Boolean)));
         const blob = new Blob([emails.join('\n')], {type:'text/plain'});
         const url = URL.createObjectURL(blob);
         const a=document.createElement('a'); a.href=url; a.download='emails.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
@@ -84,10 +92,17 @@
     if(exportCsvBtn){
       exportCsvBtn.addEventListener('click', () => {
         const rows = readLocal();
-        const cols = ['ts','name','email','game','count','requests'];
-        const header = cols.join(',');
+        const header = 'Timestamp,Name,Attending,Guests,Comments,Event';
         const toCsv = v => '"'+String(v ?? '').replaceAll('"','""')+'"';
-        const body = rows.map(r => cols.map(c => toCsv(r[c])).join(',')).join('\n');
+        const body = rows.map(r => {
+          const timestamp = r.timestamp || r.ts || '';
+          const name = r.Name || r.name || '';
+          const attending = r.Attending || '';
+          const guests = r.Number_of_Guests || r.count || 0;
+          const comments = r.Comments || r.requests || '';
+          const event = r.Event || r.game || '';
+          return [timestamp, name, attending, guests, comments, event].map(toCsv).join(',');
+        }).join('\n');
         const csv = header + '\n' + body;
         const blob = new Blob([csv], {type:'text/csv'});
         const url = URL.createObjectURL(blob);
@@ -122,11 +137,6 @@
   }
 
   function attach(){
-    // Populate game from query param
-    const params = new URLSearchParams(location.search);
-    const g = params.get('game');
-    if(g){ const input = document.getElementById('game'); input && (input.value = g); }
-
     const form = document.getElementById(FORM_ID);
     if(!form) return;
 
@@ -135,10 +145,11 @@
       const record = getFormData(form);
       // Also capture eventId from URL if present
       const params = new URLSearchParams(location.search);
-      const eid = params.get('eventId');
+      const eid = params.get('event') || params.get('eventId');
       if(eid){ record.eventId = eid; }
       // Save locally (non-blocking)
       const list = readLocal(); list.push(record); writeLocal(list);
+      console.log('RSVP saved locally:', record);
       // continue to FormSubmit for email delivery
     });
 
