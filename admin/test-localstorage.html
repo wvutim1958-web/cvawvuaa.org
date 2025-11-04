@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>localStorage Debug Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; max-width: 900px; }
+        .btn { padding: 10px 20px; background: #EAAA00; color: #002855; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin: 5px; }
+        .btn:hover { background: #FFC72C; }
+        .btn-danger { background: #dc3545; color: white; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 6px; overflow-x: auto; }
+        .section { margin: 30px 0; padding: 20px; background: white; border: 2px solid #EAAA00; border-radius: 10px; }
+        h2 { color: #002855; border-bottom: 3px solid #EAAA00; padding-bottom: 10px; }
+        .status { padding: 10px; border-radius: 6px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; }
+        .warning { background: #fff3cd; color: #856404; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🔍 localStorage Debug Tool</h1>
+    <p>This page helps you test and debug localStorage for RSVPs.</p>
+
+    <div class="section">
+        <h2>Current localStorage Contents</h2>
+        <button class="btn" onclick="showStorage()">🔄 Refresh View</button>
+        <button class="btn btn-danger" onclick="clearStorage()">🗑️ Clear All localStorage</button>
+        <div id="storage-display"></div>
+    </div>
+
+    <div class="section">
+        <h2>Add Test RSVP</h2>
+        <p>Click to add a test Colorado RSVP:</p>
+        <button class="btn" onclick="addTestRSVP()">➕ Add Test RSVP</button>
+        <button class="btn" onclick="addTestRSVPs(5)">➕ Add 5 Test RSVPs</button>
+        <div id="add-status"></div>
+    </div>
+
+    <div class="section">
+        <h2>Quick Links</h2>
+        <a href="/events/rsvp.html?event=colorado-game-watch-nov-8" class="btn">📝 Go to RSVP Form</a>
+        <a href="/admin/colorado-rsvps.html" class="btn">📊 Go to Admin View</a>
+    </div>
+
+    <script>
+        function showStorage() {
+            const display = document.getElementById('storage-display');
+            
+            try {
+                const rsvps = localStorage.getItem('rsvps');
+                
+                if (!rsvps) {
+                    display.innerHTML = '<div class="status warning"><strong>⚠️ No RSVPs found in localStorage</strong><br>localStorage key "rsvps" is empty or doesn\'t exist.</div>';
+                    return;
+                }
+                
+                const parsed = JSON.parse(rsvps);
+                
+                if (!Array.isArray(parsed) || parsed.length === 0) {
+                    display.innerHTML = '<div class="status warning"><strong>⚠️ No RSVPs found</strong><br>The "rsvps" key exists but contains no data.</div>';
+                    return;
+                }
+                
+                // Filter for Colorado
+                const colorado = parsed.filter(r => 
+                    r.eventId === 'colorado-game-watch-nov-8' || 
+                    (r.Event && r.Event.toLowerCase().includes('colorado'))
+                );
+                
+                let html = `<div class="status success">
+                    <strong>✅ Found ${parsed.length} total RSVPs (${colorado.length} for Colorado)</strong>
+                </div>`;
+                
+                html += '<h3>All RSVPs:</h3>';
+                html += '<pre>' + JSON.stringify(parsed, null, 2) + '</pre>';
+                
+                if (colorado.length > 0) {
+                    html += '<h3>Colorado RSVPs only:</h3>';
+                    html += '<pre>' + JSON.stringify(colorado, null, 2) + '</pre>';
+                }
+                
+                display.innerHTML = html;
+                
+            } catch (e) {
+                display.innerHTML = `<div class="status error"><strong>❌ Error reading localStorage:</strong><br>${e.message}</div>`;
+            }
+        }
+        
+        function clearStorage() {
+            if (!confirm('Are you sure you want to clear ALL localStorage? This will delete all RSVPs!')) {
+                return;
+            }
+            
+            localStorage.clear();
+            showStorage();
+            alert('✅ localStorage cleared!');
+        }
+        
+        function addTestRSVP() {
+            const rsvps = JSON.parse(localStorage.getItem('rsvps') || '[]');
+            
+            const testRSVP = {
+                timestamp: new Date().toISOString(),
+                Name: 'Test User ' + (Math.floor(Math.random() * 1000)),
+                Attending: 'Yes, I\'ll be there!',
+                Number_of_Guests: Math.floor(Math.random() * 4),
+                Comments: 'This is a test RSVP',
+                Event: 'Colorado Game Watch Nov 8',
+                eventId: 'colorado-game-watch-nov-8'
+            };
+            
+            rsvps.push(testRSVP);
+            localStorage.setItem('rsvps', JSON.stringify(rsvps));
+            
+            const status = document.getElementById('add-status');
+            status.innerHTML = '<div class="status success">✅ Test RSVP added successfully!</div>';
+            
+            showStorage();
+        }
+        
+        function addTestRSVPs(count) {
+            const rsvps = JSON.parse(localStorage.getItem('rsvps') || '[]');
+            const statuses = ['Yes, I\'ll be there!', 'Can\'t make it', 'Maybe'];
+            
+            for (let i = 0; i < count; i++) {
+                rsvps.push({
+                    timestamp: new Date(Date.now() - Math.random() * 86400000).toISOString(),
+                    Name: 'Test User ' + (Math.floor(Math.random() * 1000)),
+                    Attending: statuses[Math.floor(Math.random() * statuses.length)],
+                    Number_of_Guests: Math.floor(Math.random() * 5),
+                    Comments: 'Test RSVP #' + (i + 1),
+                    Event: 'Colorado Game Watch Nov 8',
+                    eventId: 'colorado-game-watch-nov-8'
+                });
+            }
+            
+            localStorage.setItem('rsvps', JSON.stringify(rsvps));
+            
+            const status = document.getElementById('add-status');
+            status.innerHTML = `<div class="status success">✅ Added ${count} test RSVPs successfully!</div>`;
+            
+            showStorage();
+        }
+        
+        // Auto-load on page load
+        document.addEventListener('DOMContentLoaded', showStorage);
+    </script>
+</body>
+</html>

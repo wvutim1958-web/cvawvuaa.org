@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Bulk SMS via Twilio - CVCWVUAA Admin</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            margin: 0; 
+            padding: 20px;
+            background: linear-gradient(135deg, #002855 0%, #0039a6 100%);
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        h1 { 
+            color: #002855; 
+            border-bottom: 4px solid #EAAA00; 
+            padding-bottom: 15px;
+            margin-top: 0;
+        }
+        h2 { color: #002855; margin-top: 30px; }
+        
+        .section { 
+            background: #f8f9fa; 
+            padding: 25px; 
+            border-radius: 10px; 
+            margin: 20px 0;
+            border-left: 5px solid #EAAA00;
+        }
+        
+        .alert { 
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        .alert-info { background: #e7f3ff; color: #004085; border-left: 4px solid #0056b3; }
+        .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+        .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+        .alert-danger { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+        
+        label { 
+            display: block; 
+            margin: 15px 0 5px 0; 
+            font-weight: 600; 
+            color: #002855;
+        }
+        input, textarea, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #ddd; 
+            border-radius: 6px; 
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #EAAA00;
+        }
+        
+        textarea { 
+            font-family: monospace; 
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .char-count {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #5b6777;
+            margin-top: 5px;
+        }
+        .char-count.warning { color: #856404; font-weight: 600; }
+        .char-count.danger { color: #dc3545; font-weight: 600; }
+        
+        .btn { 
+            display: inline-block;
+            padding: 14px 28px; 
+            background: #EAAA00; 
+            color: #002855; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 10px 10px 10px 0;
+            transition: all 0.2s;
+        }
+        .btn:hover { 
+            background: #FFC72C;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(234,170,0,0.4);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary { background: #002855; color: white; }
+        .btn-secondary:hover { background: #0039a6; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        
+        .phone-preview {
+            background: white;
+            border: 2px solid #EAAA00;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .phone-preview h3 {
+            margin-top: 0;
+            color: #002855;
+        }
+        
+        .recipient-list {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        #log {
+            background: #1e1e1e;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+            display: none;
+        }
+        #log.active { display: block; }
+        
+        .log-entry { margin: 5px 0; }
+        .log-success { color: #00ff00; }
+        .log-error { color: #ff4444; }
+        .log-info { color: #44aaff; }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #002855 0%, #0039a6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 2.5rem;
+            color: #EAAA00;
+        }
+        .stat-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .small { font-size: 0.9rem; color: #5b6777; }
+        
+        .template-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #e7f3ff;
+            color: #004085;
+            border: 1px solid #0056b3;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+        .template-btn:hover {
+            background: #d4e8ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Bulk SMS Sender (Twilio)</h1>
+        
+        <div class="alert alert-warning">
+            <strong>⚠️ First Time Setup Required:</strong> Read the 
+            <a href="/admin/TWILIO-SETUP-GUIDE.md" target="_blank" style="color: #004085; font-weight: bold;">Twilio Setup Guide</a> 
+            to get your credentials and phone number.
+        </div>
+        
+        <!-- Step 1: Twilio Credentials -->
+        <div class="section">
+            <h2>Step 1: Twilio Credentials</h2>
+            <p class="small">Your credentials are stored locally in your browser only. Never shared.</p>
+            
+            <label>Twilio Account SID *</label>
+            <input type="text" id="accountSid" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+            
+            <label>Twilio Auth Token *</label>
+            <input type="password" id="authToken" placeholder="Your auth token">
+            
+            <label>Your Twilio Phone Number *</label>
+            <input type="tel" id="fromNumber" placeholder="+15551234567">
+            <p class="small">Format: +1 followed by area code and number (e.g., +15551234567)</p>
+            
+            <button class="btn" onclick="saveCredentials()">💾 Save Credentials</button>
+            <button class="btn btn-secondary" onclick="testCredentials()">🧪 Test Connection</button>
+            <button class="btn btn-danger" onclick="clearCredentials()">🗑️ Clear Saved Credentials</button>
+        </div>
+        
+        <!-- Step 2: Recipients -->
+        <div class="section">
+            <h2>Step 2: Recipients</h2>
+            
+            <label>Load Recipients From:</label>
+            <select id="recipientSource" onchange="loadRecipients()">
+                <option value="">-- Select Source --</option>
+                <option value="text-signups">Text Notification Sign-Ups</option>
+                <option value="rsvps">Game Watch RSVPs</option>
+                <option value="manual">Enter Manually</option>
+            </select>
+            
+            <label>Phone Numbers (one per line) *</label>
+            <textarea id="recipients" placeholder="+15551234567&#10;+15559876543&#10;+15555555555"></textarea>
+            <p class="small">Format: +1 followed by 10 digits. International: include country code.</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 id="recipientCount">0</h3>
+                    <p>Recipients</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="estimatedCost">$0.00</h3>
+                    <p>Est. Cost</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3: Message -->
+        <div class="section">
+            <h2>Step 3: Compose Message</h2>
+            
+            <div style="margin-bottom: 15px;">
+                <strong>Quick Templates:</strong><br>
+                <button class="template-btn" onclick="loadTemplate('gamewatch')">🏈 Game Watch Reminder</button>
+                <button class="template-btn" onclick="loadTemplate('lastminute')">⚡ Last Minute Update</button>
+                <button class="template-btn" onclick="loadTemplate('event')">📅 Event Reminder</button>
+            </div>
+            
+            <label>Message Text *</label>
+            <textarea id="message" oninput="updateCharCount()"></textarea>
+            <div class="char-count" id="charCount">0 / 160 characters (1 message)</div>
+            <p class="small">Keep under 160 chars for single SMS. Always include opt-out option.</p>
+            
+            <div class="phone-preview">
+                <h3>📱 Preview</h3>
+                <div style="background: #f0f0f0; padding: 15px; border-radius: 12px; font-size: 0.95rem;">
+                    <div style="color: #888; font-size: 0.85rem; margin-bottom: 5px;">From: <span id="previewFrom">Your Twilio Number</span></div>
+                    <div id="previewMessage" style="white-space: pre-wrap;">Your message will appear here...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 4: Send -->
+        <div class="section">
+            <h2>Step 4: Send Messages</h2>
+            
+            <div class="alert alert-info">
+                <strong>💡 How it works:</strong> Each text is sent individually. No one sees other recipients' numbers. 
+                Messages are sent with a 1-second delay between each to avoid rate limits.
+            </div>
+            
+            <button class="btn" onclick="sendBulkSMS()" id="sendBtn">
+                🚀 Send to <span id="sendCount">0</span> Recipients
+            </button>
+            <button class="btn btn-secondary" onclick="sendTestSMS()">🧪 Send Test to Myself</button>
+            
+            <div id="log"></div>
+            
+            <div id="results" style="display: none; margin-top: 20px;">
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3 id="sentCount">0</h3>
+                        <p>✅ Sent</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="failedCount">0</h3>
+                        <p>❌ Failed</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalCost">$0.00</h3>
+                        <p>Total Cost</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <p style="text-align: center; margin-top: 40px;">
+            <a href="/text-notifications.html?admin=1" class="btn btn-secondary">📋 Manage Sign-Ups</a>
+            <a href="/admin/colorado-rsvps.html" class="btn btn-secondary">📊 View RSVPs</a>
+            <a href="/events.html" class="btn btn-secondary">← Back to Events</a>
+        </p>
+    </div>
+
+    <script>
+        // Load saved credentials on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = JSON.parse(localStorage.getItem('twilioCredentials') || '{}');
+            if (saved.accountSid) document.getElementById('accountSid').value = saved.accountSid;
+            if (saved.authToken) document.getElementById('authToken').value = saved.authToken;
+            if (saved.fromNumber) document.getElementById('fromNumber').value = saved.fromNumber;
+            
+            updateCharCount();
+            updateRecipientCount();
+        });
+        
+        function saveCredentials() {
+            const credentials = {
+                accountSid: document.getElementById('accountSid').value.trim(),
+                authToken: document.getElementById('authToken').value.trim(),
+                fromNumber: document.getElementById('fromNumber').value.trim()
+            };
+            
+            if (!credentials.accountSid || !credentials.authToken || !credentials.fromNumber) {
+                alert('❌ Please fill in all credential fields');
+                return;
+            }
+            
+            localStorage.setItem('twilioCredentials', JSON.stringify(credentials));
+            alert('✅ Credentials saved securely in your browser!');
+        }
+        
+        function clearCredentials() {
+            if (!confirm('Clear saved Twilio credentials?')) return;
+            localStorage.removeItem('twilioCredentials');
+            document.getElementById('accountSid').value = '';
+            document.getElementById('authToken').value = '';
+            document.getElementById('fromNumber').value = '';
+            alert('✅ Credentials cleared');
+        }
+        
+        async function testCredentials() {
+            const creds = JSON.parse(localStorage.getItem('twilioCredentials') || '{}');
+            if (!creds.accountSid || !creds.authToken) {
+                alert('❌ Please save your credentials first');
+                return;
+            }
+            
+            alert('⚠️ Testing requires a server-side script.\n\nFor now, try sending a test SMS to yourself using the "Send Test to Myself" button.');
+        }
+        
+        function loadRecipients() {
+            const source = document.getElementById('recipientSource').value;
+            const textarea = document.getElementById('recipients');
+            
+            if (source === 'text-signups') {
+                const signups = JSON.parse(localStorage.getItem('text-signups') || '[]');
+                const phones = signups.map(s => s.Phone).filter(p => p);
+                textarea.value = phones.join('\n');
+                alert(`✅ Loaded ${phones.length} phone numbers from text sign-ups`);
+            } else if (source === 'rsvps') {
+                const rsvps = JSON.parse(localStorage.getItem('rsvps') || '[]');
+                // RSVPs don't have phone numbers by default - this would need to be cross-referenced
+                alert('⚠️ RSVPs don\'t include phone numbers. Use text sign-ups or enter manually.');
+                textarea.value = '';
+            } else if (source === 'manual') {
+                textarea.value = '';
+                textarea.focus();
+            }
+            
+            updateRecipientCount();
+        }
+        
+        function updateRecipientCount() {
+            const textarea = document.getElementById('recipients');
+            const phones = textarea.value.split('\n').filter(p => p.trim()).length;
+            const cost = (phones * 0.0079).toFixed(2);
+            
+            document.getElementById('recipientCount').textContent = phones;
+            document.getElementById('sendCount').textContent = phones;
+            document.getElementById('estimatedCost').textContent = '$' + cost;
+        }
+        
+        document.getElementById('recipients')?.addEventListener('input', updateRecipientCount);
+        
+        function updateCharCount() {
+            const message = document.getElementById('message').value;
+            const length = message.length;
+            const messages = Math.ceil(length / 160) || 1;
+            const charCount = document.getElementById('charCount');
+            
+            charCount.textContent = `${length} / 160 characters (${messages} message${messages > 1 ? 's' : ''})`;
+            
+            if (length > 160) {
+                charCount.className = 'char-count warning';
+            }
+            if (length > 320) {
+                charCount.className = 'char-count danger';
+            }
+            
+            // Update preview
+            document.getElementById('previewMessage').textContent = message || 'Your message will appear here...';
+            const fromNum = document.getElementById('fromNumber').value || 'Your Twilio Number';
+            document.getElementById('previewFrom').textContent = fromNum;
+        }
+        
+        function loadTemplate(type) {
+            const templates = {
+                gamewatch: "CVCWVUAA: Game Watch TOMORROW vs Colorado at NOON! Kickback Jack's, Midlothian Tpk. RSVP: cvawvuaa.org/events Reply STOP to opt out",
+                lastminute: "CVCWVUAA: Location change! Game watch moved to Capital Ale House. Same time. See you there! Reply STOP to opt out",
+                event: "CVCWVUAA: Don't forget! WVU vs Colorado TOMORROW at NOON. Kickback Jack's. Free pizza & wings! Reply STOP to opt out"
+            };
+            
+            document.getElementById('message').value = templates[type] || '';
+            updateCharCount();
+        }
+        
+        async function sendBulkSMS() {
+            const creds = JSON.parse(localStorage.getItem('twilioCredentials') || '{}');
+            const message = document.getElementById('message').value.trim();
+            const recipients = document.getElementById('recipients').value
+                .split('\n')
+                .map(p => p.trim())
+                .filter(p => p);
+            
+            // Validation
+            if (!creds.accountSid || !creds.authToken || !creds.fromNumber) {
+                alert('❌ Please save your Twilio credentials first (Step 1)');
+                return;
+            }
+            
+            if (recipients.length === 0) {
+                alert('❌ Please enter at least one phone number');
+                return;
+            }
+            
+            if (!message) {
+                alert('❌ Please enter a message');
+                return;
+            }
+            
+            if (!confirm(`Send "${message}" to ${recipients.length} recipient(s)?\n\nEstimated cost: $${(recipients.length * 0.0079).toFixed(2)}`)) {
+                return;
+            }
+            
+            alert('⚠️ IMPORTANT: This requires a server-side script to work.\n\n' +
+                  'Twilio cannot be called directly from the browser for security reasons.\n\n' +
+                  'OPTIONS:\n' +
+                  '1. Use Twilio Console (console.twilio.com) for manual sends\n' +
+                  '2. Set up a simple Node.js server script (I can help with this!)\n' +
+                  '3. Use a service like Zapier or Make.com to connect forms to Twilio\n\n' +
+                  'Would you like me to create a server script for you?');
+        }
+        
+        function sendTestSMS() {
+            alert('⚠️ Test sending requires server-side integration.\n\n' +
+                  'For now, use Twilio Console to send test messages:\n' +
+                  '1. Go to console.twilio.com\n' +
+                  '2. Messaging → Try it out → Send an SMS\n' +
+                  '3. Send test to your own number\n\n' +
+                  'Want me to create a server script for automated sending?');
+        }
+    </script>
+</body>
+</html>
