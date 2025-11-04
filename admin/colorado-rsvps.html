@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Responses - Colorado Game Watch</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #002855; border-bottom: 3px solid #EAAA00; padding-bottom: 15px; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 25px 0; }
+        .stat-card { background: linear-gradient(135deg, #002855 0%, #0039a6 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-card h3 { margin: 0 0 10px 0; font-size: 2rem; color: #EAAA00; }
+        .stat-card p { margin: 0; font-size: 0.95rem; opacity: 0.9; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th { background: #002855; color: #EAAA00; padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
+        tr:hover { background: #f8f9fa; }
+        .attending-yes { color: #28a745; font-weight: 600; }
+        .attending-no { color: #dc3545; font-weight: 600; }
+        .attending-maybe { color: #ffc107; font-weight: 600; }
+        .btn { display: inline-block; padding: 10px 20px; background: #EAAA00; color: #002855; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 5px; cursor: pointer; border: none; }
+        .btn:hover { background: #FFC72C; }
+        .export-section { margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏈 Colorado Game Watch - RSVP Responses</h1>
+        <p style="color: #5b6777; margin-bottom: 25px;">Saturday, November 8, 2025 at NOON • Kickback Jack's Restaurant</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3 id="total-yes">0</h3>
+                <p>✅ Attending</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="total-no">0</h3>
+                <p>❌ Can't Make It</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="total-maybe">0</h3>
+                <p>❓ Maybe</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="total-guests">0</h3>
+                <p>👥 Total Guests</p>
+            </div>
+        </div>
+        
+        <div class="export-section">
+            <h3 style="margin-top: 0;">Export Options</h3>
+            <button class="btn" onclick="exportCSV()">📊 Export CSV</button>
+            <button class="btn" onclick="exportJSON()">💾 Export JSON</button>
+            <button class="btn" onclick="printList()">🖨️ Print List</button>
+            <button class="btn" onclick="location.reload()">🔄 Refresh Data</button>
+        </div>
+        
+        <h2>RSVP List</h2>
+        <div style="overflow-x: auto;">
+            <table id="rsvp-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Attending?</th>
+                        <th>Number of Guests</th>
+                        <th>Comments</th>
+                        <th>Submitted</th>
+                    </tr>
+                </thead>
+                <tbody id="rsvp-tbody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #5b6777; padding: 40px;">
+                            No RSVPs yet. RSVPs will appear here as they are submitted.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <p style="margin-top: 30px; text-align: center; color: #5b6777;">
+            <a href="/events/rsvp.html?event=colorado-game-watch-nov-8" class="btn">➕ Add New RSVP</a>
+            <a href="/events.html" class="btn" style="background: #002855; color: white;">← Back to Events</a>
+        </p>
+    </div>
+
+    <script>
+        // Load RSVPs from localStorage
+        function loadRSVPs() {
+            const rsvps = JSON.parse(localStorage.getItem('rsvps') || '[]');
+            
+            // Filter for Colorado game
+            const coloradoRSVPs = rsvps.filter(r => 
+                r.eventId === 'colorado-game-watch-nov-8' || 
+                (r.Event && r.Event.toLowerCase().includes('colorado'))
+            );
+            
+            // Calculate stats
+            const yesCount = coloradoRSVPs.filter(r => r.Attending && r.Attending.includes('Yes')).length;
+            const noCount = coloradoRSVPs.filter(r => r.Attending && r.Attending.includes("Can't")).length;
+            const maybeCount = coloradoRSVPs.filter(r => r.Attending && r.Attending.includes('Maybe')).length;
+            const totalGuests = coloradoRSVPs.reduce((sum, r) => sum + (parseInt(r.Number_of_Guests) || 0), 0);
+            
+            // Update stats
+            document.getElementById('total-yes').textContent = yesCount;
+            document.getElementById('total-no').textContent = noCount;
+            document.getElementById('total-maybe').textContent = maybeCount;
+            document.getElementById('total-guests').textContent = totalGuests;
+            
+            // Populate table
+            const tbody = document.getElementById('rsvp-tbody');
+            if (coloradoRSVPs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #5b6777; padding: 40px;">No RSVPs yet. RSVPs will appear here as they are submitted.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            coloradoRSVPs.forEach(rsvp => {
+                const row = document.createElement('tr');
+                
+                let attendingClass = '';
+                if (rsvp.Attending && rsvp.Attending.includes('Yes')) attendingClass = 'attending-yes';
+                else if (rsvp.Attending && rsvp.Attending.includes("Can't")) attendingClass = 'attending-no';
+                else if (rsvp.Attending && rsvp.Attending.includes('Maybe')) attendingClass = 'attending-maybe';
+                
+                const timestamp = rsvp.timestamp ? new Date(rsvp.timestamp).toLocaleString() : 'N/A';
+                
+                row.innerHTML = `
+                    <td><strong>${rsvp.Name || 'N/A'}</strong></td>
+                    <td class="${attendingClass}">${rsvp.Attending || 'N/A'}</td>
+                    <td style="text-align: center;">${rsvp.Number_of_Guests || 0}</td>
+                    <td>${rsvp.Comments || '—'}</td>
+                    <td style="font-size: 0.9rem; color: #5b6777;">${timestamp}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            return coloradoRSVPs;
+        }
+        
+        function exportCSV() {
+            const rsvps = loadRSVPs();
+            if (!rsvps || rsvps.length === 0) {
+                alert('No RSVPs to export');
+                return;
+            }
+            
+            let csv = 'Name,Attending,Number of Guests,Comments,Submitted\n';
+            rsvps.forEach(r => {
+                const timestamp = r.timestamp ? new Date(r.timestamp).toLocaleString() : '';
+                csv += `"${r.Name || ''}","${r.Attending || ''}","${r.Number_of_Guests || 0}","${(r.Comments || '').replace(/"/g, '""')}","${timestamp}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'colorado-game-rsvps-' + new Date().toISOString().split('T')[0] + '.csv';
+            a.click();
+        }
+        
+        function exportJSON() {
+            const rsvps = loadRSVPs();
+            if (!rsvps || rsvps.length === 0) {
+                alert('No RSVPs to export');
+                return;
+            }
+            
+            const blob = new Blob([JSON.stringify(rsvps, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'colorado-game-rsvps-' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+        }
+        
+        function printList() {
+            window.print();
+        }
+        
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadRSVPs);
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadRSVPs, 30000);
+    </script>
+</body>
+</html>
