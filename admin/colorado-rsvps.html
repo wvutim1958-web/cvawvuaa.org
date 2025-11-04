@@ -55,6 +55,7 @@
             <button class="btn" onclick="exportJSON()">💾 Export JSON</button>
             <button class="btn" onclick="printList()">🖨️ Print List</button>
             <button class="btn" onclick="location.reload()">🔄 Refresh Data</button>
+            <button class="btn" onclick="clearAllColoradoRSVPs()" style="background: #dc3545; color: white;">🗑️ Delete All Colorado RSVPs</button>
         </div>
         
         <h2>RSVP List</h2>
@@ -67,6 +68,7 @@
                         <th>Number of Guests</th>
                         <th>Comments</th>
                         <th>Submitted</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="rsvp-tbody">
@@ -116,7 +118,7 @@
             }
             
             tbody.innerHTML = '';
-            coloradoRSVPs.forEach(rsvp => {
+            coloradoRSVPs.forEach((rsvp, index) => {
                 const row = document.createElement('tr');
                 
                 let attendingClass = '';
@@ -126,12 +128,23 @@
                 
                 const timestamp = rsvp.timestamp ? new Date(rsvp.timestamp).toLocaleString() : 'N/A';
                 
+                // Find the original index in all RSVPs
+                const allRSVPs = JSON.parse(localStorage.getItem('rsvps') || '[]');
+                const originalIndex = allRSVPs.findIndex(r => 
+                    r.timestamp === rsvp.timestamp && 
+                    r.Name === rsvp.Name && 
+                    r.Attending === rsvp.Attending
+                );
+                
                 row.innerHTML = `
                     <td><strong>${rsvp.Name || 'N/A'}</strong></td>
                     <td class="${attendingClass}">${rsvp.Attending || 'N/A'}</td>
                     <td style="text-align: center;">${rsvp.Number_of_Guests || 0}</td>
                     <td>${rsvp.Comments || '—'}</td>
                     <td style="font-size: 0.9rem; color: #5b6777;">${timestamp}</td>
+                    <td style="text-align: center;">
+                        <button onclick="deleteRSVP(${originalIndex})" class="btn" style="background: #dc3545; color: white; padding: 6px 12px; font-size: 0.9rem;">🗑️ Delete</button>
+                    </td>
                 `;
                 tbody.appendChild(row);
             });
@@ -177,6 +190,38 @@
         
         function printList() {
             window.print();
+        }
+        
+        function deleteRSVP(index) {
+            if (!confirm('Are you sure you want to delete this RSVP?')) {
+                return;
+            }
+            
+            const rsvps = JSON.parse(localStorage.getItem('rsvps') || '[]');
+            rsvps.splice(index, 1);
+            localStorage.setItem('rsvps', JSON.stringify(rsvps));
+            
+            // Reload the list
+            loadRSVPs();
+            
+            alert('RSVP deleted successfully!');
+        }
+        
+        function clearAllColoradoRSVPs() {
+            if (!confirm('Are you sure you want to delete ALL Colorado game RSVPs? This cannot be undone!')) {
+                return;
+            }
+            
+            const allRSVPs = JSON.parse(localStorage.getItem('rsvps') || '[]');
+            const filtered = allRSVPs.filter(r => 
+                r.eventId !== 'colorado-game-watch-nov-8' && 
+                !(r.Event && r.Event.toLowerCase().includes('colorado'))
+            );
+            
+            localStorage.setItem('rsvps', JSON.stringify(filtered));
+            loadRSVPs();
+            
+            alert('All Colorado game RSVPs have been deleted!');
         }
         
         // Load on page load
