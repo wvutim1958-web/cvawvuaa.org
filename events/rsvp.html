@@ -127,8 +127,46 @@
 </div></main>
 <script src="/js/rsvp.js"></script>
 <script>
-  // Auto-load event from URL parameter
+  // Save RSVP to localStorage before form submits
   document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('rsvp-form');
+    
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        // Get form data
+        const formData = new FormData(form);
+        const rsvpData = {
+          timestamp: new Date().toISOString(),
+          Name: formData.get('Name') || '',
+          Attending: formData.get('Attending') || '',
+          Number_of_Guests: formData.get('Number_of_Guests') || 0,
+          Comments: formData.get('Comments') || '',
+          Event: formData.get('Event') || '',
+          eventId: formData.get('eventId') || ''
+        };
+        
+        // Get existing RSVPs from localStorage
+        let rsvps = [];
+        try {
+          rsvps = JSON.parse(localStorage.getItem('rsvps') || '[]');
+        } catch (e) {
+          rsvps = [];
+        }
+        
+        // Add new RSVP
+        rsvps.push(rsvpData);
+        
+        // Save back to localStorage
+        localStorage.setItem('rsvps', JSON.stringify(rsvps));
+        
+        console.log('RSVP saved to localStorage:', rsvpData);
+        console.log('Total RSVPs:', rsvps.length);
+        
+        // Let form submit normally to FormSubmit
+      });
+    }
+    
+    // Auto-load event from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const eventSlug = urlParams.get('event');
     
