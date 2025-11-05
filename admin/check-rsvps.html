@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Data Inspector</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f8f9fa; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #002855; }
+        .section { margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+        pre { background: #002855; color: #EAAA00; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 0.9rem; }
+        .btn { display: inline-block; padding: 10px 20px; background: #EAAA00; color: #002855; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 5px; cursor: pointer; border: none; }
+        .btn:hover { background: #FFC72C; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th { background: #002855; color: #EAAA00; padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #e0e0e0; }
+        .highlight { background: #fff3cd; padding: 3px 8px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 RSVP Data Inspector</h1>
+        <p>This tool helps debug RSVP storage issues by showing you exactly what's in localStorage.</p>
+        
+        <div class="section">
+            <h2>📊 Quick Stats</h2>
+            <table>
+                <tr>
+                    <th>Total RSVPs in Storage</th>
+                    <td id="total-count">—</td>
+                </tr>
+                <tr>
+                    <th>Colorado Game RSVPs (by eventId)</th>
+                    <td id="colorado-count-id">—</td>
+                </tr>
+                <tr>
+                    <th>Colorado Game RSVPs (by Event name)</th>
+                    <td id="colorado-count-name">—</td>
+                </tr>
+                <tr>
+                    <th>LocalStorage Key Exists?</th>
+                    <td id="key-exists">—</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>📋 All RSVP Data (Raw JSON)</h2>
+            <button class="btn" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+            <button class="btn" onclick="downloadJSON()">💾 Download JSON</button>
+            <pre id="raw-data">No data found in localStorage</pre>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Colorado Game RSVPs Only</h2>
+            <div id="colorado-rsvps">No Colorado RSVPs found</div>
+        </div>
+        
+        <div class="section">
+            <h2>🛠️ Actions</h2>
+            <button class="btn" onclick="location.reload()">🔄 Refresh</button>
+            <button class="btn" onclick="viewInConsole()">👁️ View in Console</button>
+            <a class="btn" href="/admin/colorado-rsvps.html">📊 Go to Admin View</a>
+            <a class="btn" href="/events/rsvp.html?event=colorado-game-watch-nov-8">➕ Submit Test RSVP</a>
+        </div>
+        
+        <div class="section" style="background: #fff3cd;">
+            <h3>💡 Troubleshooting Tips</h3>
+            <ol>
+                <li>If you see RSVPs here but not on the admin page, the <span class="highlight">eventId</span> might not match</li>
+                <li>Check that RSVPs have <code>eventId: "colorado-game-watch-nov-8"</code></li>
+                <li>If localStorage is empty but you got emails, RSVPs went to FormSubmit but didn't save locally</li>
+                <li>Try submitting a test RSVP using the button above to verify the save mechanism</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function loadData() {
+            const rawData = localStorage.getItem('rsvps');
+            const rsvps = rawData ? JSON.parse(rawData) : [];
+            
+            // Update stats
+            document.getElementById('total-count').textContent = rsvps.length;
+            document.getElementById('key-exists').textContent = rawData ? '✅ Yes' : '❌ No';
+            
+            // Filter Colorado RSVPs
+            const coloradoById = rsvps.filter(r => r.eventId === 'colorado-game-watch-nov-8');
+            const coloradoByName = rsvps.filter(r => r.Event && r.Event.toLowerCase().includes('colorado'));
+            
+            document.getElementById('colorado-count-id').textContent = coloradoById.length;
+            document.getElementById('colorado-count-name').textContent = coloradoByName.length;
+            
+            // Show raw data
+            document.getElementById('raw-data').textContent = rawData ? JSON.stringify(rsvps, null, 2) : 'No data found in localStorage';
+            
+            // Show Colorado RSVPs
+            const coloradoDiv = document.getElementById('colorado-rsvps');
+            if (coloradoById.length === 0 && coloradoByName.length === 0) {
+                coloradoDiv.innerHTML = '<p style="color: #dc3545; font-weight: bold;">❌ No Colorado RSVPs found</p><p>This explains why the admin page shows 0!</p>';
+            } else {
+                const combined = [...new Set([...coloradoById, ...coloradoByName])];
+                coloradoDiv.innerHTML = '<pre>' + JSON.stringify(combined, null, 2) + '</pre>';
+            }
+        }
+        
+        function copyToClipboard() {
+            const data = document.getElementById('raw-data').textContent;
+            navigator.clipboard.writeText(data).then(() => {
+                alert('Copied to clipboard!');
+            });
+        }
+        
+        function downloadJSON() {
+            const rawData = localStorage.getItem('rsvps') || '[]';
+            const blob = new Blob([rawData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rsvps-' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+        }
+        
+        function viewInConsole() {
+            const rsvps = JSON.parse(localStorage.getItem('rsvps') || '[]');
+            console.clear();
+            console.log('Total RSVPs:', rsvps.length);
+            console.log('All RSVPs:', rsvps);
+            console.log('Colorado RSVPs (by eventId):', rsvps.filter(r => r.eventId === 'colorado-game-watch-nov-8'));
+            console.log('Colorado RSVPs (by Event name):', rsvps.filter(r => r.Event && r.Event.toLowerCase().includes('colorado')));
+            alert('Check your browser console (F12) for detailed output');
+        }
+        
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>
