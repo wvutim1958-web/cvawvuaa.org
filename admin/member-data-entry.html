@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Roster Data Entry</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f8f9fa; 
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        h1 { 
+            color: #002855; 
+            border-bottom: 3px solid #EAAA00; 
+            padding-bottom: 15px; 
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .form-grid.full-width {
+            grid-template-columns: 1fr;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #002855;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 12px 24px;
+            background: #EAAA00;
+            color: #002855;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #FFC72C;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .member-list {
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        th {
+            background: #002855;
+            color: #EAAA00;
+            padding: 10px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .count {
+            background: #002855;
+            color: #EAAA00;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .small-text {
+            font-size: 12px;
+            color: #666;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Member Roster Data Entry</h1>
+        <p>Enter member data from the old PDF roster. Data is saved locally in your browser and can be exported to CSV.</p>
+        
+        <div class="success-message" id="success-msg">Member added successfully!</div>
+        
+        <form id="member-form">
+            <h3>Add New Member</h3>
+            
+            <div class="form-grid">
+                <div>
+                    <label>Title</label>
+                    <input type="text" id="title" placeholder="Mr., Mrs., Dr., etc.">
+                </div>
+                
+                <div>
+                    <label>First Name *</label>
+                    <input type="text" id="first-name" required>
+                </div>
+                
+                <div>
+                    <label>Last Name *</label>
+                    <input type="text" id="last-name" required>
+                </div>
+                
+                <div>
+                    <label>Suffix</label>
+                    <input type="text" id="suffix" placeholder="Jr., Sr., III, etc.">
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div>
+                    <label>Professional Suffix</label>
+                    <input type="text" id="prof-suffix" placeholder="MD, PhD, Esq., etc.">
+                </div>
+                
+                <div>
+                    <label>Salutation (Casual)</label>
+                    <input type="text" id="salutation-casual" placeholder="Hi John">
+                </div>
+                
+                <div>
+                    <label>Salutation (Formal)</label>
+                    <input type="text" id="salutation-formal" placeholder="Dear Dr. Smith">
+                </div>
+            </div>
+            
+            <h4 style="margin-top: 25px; color: #002855;">Address Information</h4>
+            
+            <div class="form-grid">
+                <div style="grid-column: 1/-1;">
+                    <label>Address Street 1</label>
+                    <input type="text" id="address-street1">
+                </div>
+                
+                <div style="grid-column: 1/-1;">
+                    <label>Address Street 2</label>
+                    <input type="text" id="address-street2" placeholder="Apt, Suite, Building, etc.">
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div>
+                    <label>City</label>
+                    <input type="text" id="address-city">
+                </div>
+                
+                <div>
+                    <label>State</label>
+                    <input type="text" id="address-state" placeholder="VA">
+                </div>
+                
+                <div>
+                    <label>ZIP Code</label>
+                    <input type="text" id="address-zip">
+                </div>
+                
+                <div>
+                    <label>Country</label>
+                    <input type="text" id="address-country" value="USA">
+                </div>
+            </div>
+            
+            <div class="form-grid" style="grid-template-columns: 200px;">
+                <div>
+                    <label>Accept Mail</label>
+                    <select id="accept-mail">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="">Unknown</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button type="submit" class="btn btn-success">➕ Add Member</button>
+                <button type="reset" class="btn">🔄 Clear Form</button>
+            </div>
+        </form>
+        
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #e0e0e0;">
+        
+        <div class="member-list">
+            <h3>Entered Members <span class="count" id="member-count">0 members</span></h3>
+            
+            <div class="actions">
+                <button class="btn" onclick="exportCSV()">📊 Export CSV</button>
+                <button class="btn" onclick="exportJSON()">💾 Export JSON</button>
+                <label class="btn" for="import-json">📥 Import JSON</label>
+                <input type="file" id="import-json" accept=".json" style="display: none;" onchange="importJSON(event)">
+                <button class="btn btn-danger" onclick="clearAll()">🗑️ Clear All</button>
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Suffix</th>
+                            <th>Prof. Suffix</th>
+                            <th>Casual</th>
+                            <th>Formal</th>
+                            <th>Street 1</th>
+                            <th>Street 2</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>ZIP</th>
+                            <th>Country</th>
+                            <th>Accept Mail</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="member-tbody">
+                        <tr>
+                            <td colspan="15" style="text-align: center; padding: 40px; color: #666;">
+                                No members entered yet. Add members using the form above.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load members from localStorage
+        function loadMembers() {
+            const members = JSON.parse(localStorage.getItem('oldRosterMembers') || '[]');
+            
+            const tbody = document.getElementById('member-tbody');
+            const countEl = document.getElementById('member-count');
+            
+            countEl.textContent = `${members.length} member${members.length !== 1 ? 's' : ''}`;
+            
+            if (members.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="15" style="text-align: center; padding: 40px; color: #666;">No members entered yet. Add members using the form above.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            members.forEach((member, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${member.title || ''}</td>
+                    <td><strong>${member.firstName}</strong></td>
+                    <td><strong>${member.lastName}</strong></td>
+                    <td>${member.suffix || ''}</td>
+                    <td>${member.profSuffix || ''}</td>
+                    <td class="small-text">${member.salutationCasual || ''}</td>
+                    <td class="small-text">${member.salutationFormal || ''}</td>
+                    <td>${member.addressStreet1 || ''}</td>
+                    <td>${member.addressStreet2 || ''}</td>
+                    <td>${member.addressCity || ''}</td>
+                    <td>${member.addressState || ''}</td>
+                    <td>${member.addressZip || ''}</td>
+                    <td>${member.addressCountry || ''}</td>
+                    <td>${member.acceptMail || ''}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteMember(${index})" style="padding: 4px 8px; font-size: 12px;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Add member
+        document.getElementById('member-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const member = {
+                title: document.getElementById('title').value.trim(),
+                firstName: document.getElementById('first-name').value.trim(),
+                lastName: document.getElementById('last-name').value.trim(),
+                suffix: document.getElementById('suffix').value.trim(),
+                profSuffix: document.getElementById('prof-suffix').value.trim(),
+                salutationCasual: document.getElementById('salutation-casual').value.trim(),
+                salutationFormal: document.getElementById('salutation-formal').value.trim(),
+                addressStreet1: document.getElementById('address-street1').value.trim(),
+                addressStreet2: document.getElementById('address-street2').value.trim(),
+                addressCity: document.getElementById('address-city').value.trim(),
+                addressState: document.getElementById('address-state').value.trim(),
+                addressZip: document.getElementById('address-zip').value.trim(),
+                addressCountry: document.getElementById('address-country').value.trim(),
+                acceptMail: document.getElementById('accept-mail').value
+            };
+            
+            const members = JSON.parse(localStorage.getItem('oldRosterMembers') || '[]');
+            members.push(member);
+            localStorage.setItem('oldRosterMembers', JSON.stringify(members));
+            
+            // Show success message
+            const successMsg = document.getElementById('success-msg');
+            successMsg.style.display = 'block';
+            setTimeout(() => { successMsg.style.display = 'none'; }, 3000);
+            
+            // Reset form
+            document.getElementById('member-form').reset();
+            document.getElementById('address-country').value = 'USA'; // Reset default
+            
+            // Reload display
+            loadMembers();
+            
+            // Focus on first field
+            document.getElementById('first-name').focus();
+        });
+        
+        // Export CSV
+        function exportCSV() {
+            const members = JSON.parse(localStorage.getItem('oldRosterMembers') || '[]');
+            if (members.length === 0) {
+                alert('No members to export');
+                return;
+            }
+            
+            let csv = 'Title,First Name,Last Name,Suffix,Professional Suffix,Salutation (Casual),Salutation (Formal),Address Street 1,Address Street 2,Address City,Address State,Address ZIP,Address Country,Accept Mail\n';
+            
+            members.forEach(m => {
+                const row = [
+                    m.title || '',
+                    m.firstName || '',
+                    m.lastName || '',
+                    m.suffix || '',
+                    m.profSuffix || '',
+                    m.salutationCasual || '',
+                    m.salutationFormal || '',
+                    m.addressStreet1 || '',
+                    m.addressStreet2 || '',
+                    m.addressCity || '',
+                    m.addressState || '',
+                    m.addressZip || '',
+                    m.addressCountry || '',
+                    m.acceptMail || ''
+                ].map(field => `"${String(field).replace(/"/g, '""')}"`);
+                
+                csv += row.join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'old-member-roster-' + new Date().toISOString().split('T')[0] + '.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Export JSON
+        function exportJSON() {
+            const members = JSON.parse(localStorage.getItem('oldRosterMembers') || '[]');
+            if (members.length === 0) {
+                alert('No members to export');
+                return;
+            }
+            
+            const blob = new Blob([JSON.stringify(members, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'old-member-roster-' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Import JSON
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const members = JSON.parse(e.target.result);
+                    if (!Array.isArray(members)) {
+                        alert('Invalid JSON format. Expected an array of members.');
+                        return;
+                    }
+                    
+                    localStorage.setItem('oldRosterMembers', JSON.stringify(members));
+                    loadMembers();
+                    alert(`Imported ${members.length} members successfully!`);
+                } catch (err) {
+                    alert('Error parsing JSON file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        // Delete member
+        function deleteMember(index) {
+            if (!confirm('Are you sure you want to delete this member?')) {
+                return;
+            }
+            
+            const members = JSON.parse(localStorage.getItem('oldRosterMembers') || '[]');
+            members.splice(index, 1);
+            localStorage.setItem('oldRosterMembers', JSON.stringify(members));
+            loadMembers();
+        }
+        
+        // Clear all
+        function clearAll() {
+            if (!confirm('Are you sure you want to delete ALL members? This cannot be undone!')) {
+                return;
+            }
+            
+            localStorage.removeItem('oldRosterMembers');
+            loadMembers();
+        }
+        
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMembers();
+            document.getElementById('first-name').focus();
+        });
+    </script>
+</body>
+</html>
