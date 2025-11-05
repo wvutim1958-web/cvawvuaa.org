@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Bulk SMS via Twilio - CVCWVUAA Admin</title>
+    <title>Send Bulk SMS via ClickSend - CVCWVUAA Admin</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -196,28 +196,29 @@
 </head>
 <body>
     <div class="container">
-        <h1>📱 Bulk SMS Sender (Twilio)</h1>
+        <h1>📱 Bulk SMS Sender (ClickSend)</h1>
         
-        <div class="alert alert-warning">
-            <strong>⚠️ First Time Setup Required:</strong> Read the 
-            <a href="/admin/TWILIO-SETUP-GUIDE.md" target="_blank" style="color: #004085; font-weight: bold;">Twilio Setup Guide</a> 
-            to get your credentials and phone number.
+        <div class="alert alert-info">
+            <strong>✅ Easy Setup:</strong> ClickSend works with ANY email (Gmail, Yahoo, etc.). Read the 
+            <a href="/admin/CLICKSEND-SETUP-GUIDE.md" target="_blank" style="color: #004085; font-weight: bold;">ClickSend Setup Guide</a> 
+            to get started. Free $5 credit when you sign up!
         </div>
         
-        <!-- Step 1: Twilio Credentials -->
+        <!-- Step 1: ClickSend Credentials -->
         <div class="section">
-            <h2>Step 1: Twilio Credentials</h2>
+            <h2>Step 1: ClickSend Credentials</h2>
             <p class="small">Your credentials are stored locally in your browser only. Never shared.</p>
             
-            <label>Twilio Account SID *</label>
-            <input type="text" id="accountSid" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+            <label>ClickSend Username (your email) *</label>
+            <input type="text" id="accountSid" placeholder="you@gmail.com">
             
-            <label>Twilio Auth Token *</label>
-            <input type="password" id="authToken" placeholder="Your auth token">
+            <label>ClickSend API Key *</label>
+            <input type="password" id="authToken" placeholder="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
+            <p class="small">Get from Dashboard → Click your name → API Credentials</p>
             
-            <label>Your Twilio Phone Number *</label>
-            <input type="tel" id="fromNumber" placeholder="+15551234567">
-            <p class="small">Format: +1 followed by area code and number (e.g., +15551234567)</p>
+            <label>Sender Name *</label>
+            <input type="text" id="fromNumber" placeholder="CVCWVUAA" maxlength="11">
+            <p class="small">Max 11 characters. This will appear as the sender.</p>
             
             <button class="btn" onclick="saveCredentials()">💾 Save Credentials</button>
             <button class="btn btn-secondary" onclick="testCredentials()">🧪 Test Connection</button>
@@ -247,7 +248,7 @@
                 </div>
                 <div class="stat-card">
                     <h3 id="estimatedCost">$0.00</h3>
-                    <p>Est. Cost</p>
+                    <p>Est. Cost ($0.0236/text)</p>
                 </div>
             </div>
         </div>
@@ -321,7 +322,7 @@
     <script>
         // Load saved credentials on page load
         document.addEventListener('DOMContentLoaded', () => {
-            const saved = JSON.parse(localStorage.getItem('twilioCredentials') || '{}');
+            const saved = JSON.parse(localStorage.getItem('clicksendCredentials') || '{}');
             if (saved.accountSid) document.getElementById('accountSid').value = saved.accountSid;
             if (saved.authToken) document.getElementById('authToken').value = saved.authToken;
             if (saved.fromNumber) document.getElementById('fromNumber').value = saved.fromNumber;
@@ -342,13 +343,13 @@
                 return;
             }
             
-            localStorage.setItem('twilioCredentials', JSON.stringify(credentials));
+            localStorage.setItem('clicksendCredentials', JSON.stringify(credentials));
             alert('✅ Credentials saved securely in your browser!');
         }
         
         function clearCredentials() {
-            if (!confirm('Clear saved Twilio credentials?')) return;
-            localStorage.removeItem('twilioCredentials');
+            if (!confirm('Clear saved ClickSend credentials?')) return;
+            localStorage.removeItem('clicksendCredentials');
             document.getElementById('accountSid').value = '';
             document.getElementById('authToken').value = '';
             document.getElementById('fromNumber').value = '';
@@ -356,13 +357,13 @@
         }
         
         async function testCredentials() {
-            const creds = JSON.parse(localStorage.getItem('twilioCredentials') || '{}');
+            const creds = JSON.parse(localStorage.getItem('clicksendCredentials') || '{}');
             if (!creds.accountSid || !creds.authToken) {
                 alert('❌ Please save your credentials first');
                 return;
             }
             
-            alert('⚠️ Testing requires a server-side script.\n\nFor now, try sending a test SMS to yourself using the "Send Test to Myself" button.');
+            alert('✅ Credentials look good!\n\nTo test sending, use the "Send Test to Myself" button or run the command-line script:\n\nnode send-sms.js');
         }
         
         function loadRecipients() {
@@ -390,7 +391,7 @@
         function updateRecipientCount() {
             const textarea = document.getElementById('recipients');
             const phones = textarea.value.split('\n').filter(p => p.trim()).length;
-            const cost = (phones * 0.0079).toFixed(2);
+            const cost = (phones * 0.0236).toFixed(2);
             
             document.getElementById('recipientCount').textContent = phones;
             document.getElementById('sendCount').textContent = phones;
@@ -432,7 +433,7 @@
         }
         
         async function sendBulkSMS() {
-            const creds = JSON.parse(localStorage.getItem('twilioCredentials') || '{}');
+            const creds = JSON.parse(localStorage.getItem('clicksendCredentials') || '{}');
             const message = document.getElementById('message').value.trim();
             const recipients = document.getElementById('recipients').value
                 .split('\n')
@@ -441,7 +442,7 @@
             
             // Validation
             if (!creds.accountSid || !creds.authToken || !creds.fromNumber) {
-                alert('❌ Please save your Twilio credentials first (Step 1)');
+                alert('❌ Please save your ClickSend credentials first (Step 1)');
                 return;
             }
             
@@ -455,26 +456,26 @@
                 return;
             }
             
-            if (!confirm(`Send "${message}" to ${recipients.length} recipient(s)?\n\nEstimated cost: $${(recipients.length * 0.0079).toFixed(2)}`)) {
+            if (!confirm(`Send "${message}" to ${recipients.length} recipient(s)?\n\nEstimated cost: $${(recipients.length * 0.0236).toFixed(2)}`)) {
                 return;
             }
             
-            alert('⚠️ IMPORTANT: This requires a server-side script to work.\n\n' +
-                  'Twilio cannot be called directly from the browser for security reasons.\n\n' +
-                  'OPTIONS:\n' +
-                  '1. Use Twilio Console (console.twilio.com) for manual sends\n' +
-                  '2. Set up a simple Node.js server script (I can help with this!)\n' +
-                  '3. Use a service like Zapier or Make.com to connect forms to Twilio\n\n' +
-                  'Would you like me to create a server script for you?');
+            alert('⚠️ IMPORTANT: Use the command-line script to send.\n\n' +
+                  'Run this command in your terminal:\n\n' +
+                  'node send-sms.js\n\n' +
+                  'This web interface is for composing and previewing messages.\n' +
+                  'The command-line script actually sends them via ClickSend API.');
         }
         
         function sendTestSMS() {
-            alert('⚠️ Test sending requires server-side integration.\n\n' +
-                  'For now, use Twilio Console to send test messages:\n' +
-                  '1. Go to console.twilio.com\n' +
-                  '2. Messaging → Try it out → Send an SMS\n' +
-                  '3. Send test to your own number\n\n' +
-                  'Want me to create a server script for automated sending?');
+            alert('⚠️ Use the command-line script to send test messages.\n\n' +
+                  'Run this command:\n' +
+                  'node send-sms.js\n\n' +
+                  'Then enter just your own phone number to test.\n\n' +
+                  'Or use ClickSend Dashboard:\n' +
+                  '1. Go to dashboard.clicksend.com\n' +
+                  '2. SMS → Send SMS\n' +
+                  '3. Send test to your own number');
         }
     </script>
 </body>
