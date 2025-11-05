@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Bulk SMS via ClickSend - CVCWVUAA Admin</title>
+    <title>Send Bulk SMS via TextMagic - CVCWVUAA Admin</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -196,29 +196,29 @@
 </head>
 <body>
     <div class="container">
-        <h1>📱 Bulk SMS Sender (ClickSend)</h1>
+        <h1>📱 Bulk SMS Sender (TextMagic)</h1>
         
         <div class="alert alert-info">
-            <strong>✅ Easy Setup:</strong> ClickSend works with ANY email (Gmail, Yahoo, etc.). Read the 
-            <a href="/admin/CLICKSEND-SETUP-GUIDE.md" target="_blank" style="color: #004085; font-weight: bold;">ClickSend Setup Guide</a> 
-            to get started. Free $5 credit when you sign up!
+            <strong>✅ Super Easy Setup:</strong> TextMagic works with ANY email and requires NO registration! Read the 
+            <a href="/admin/TEXTMAGIC-SETUP-GUIDE.md" target="_blank" style="color: #004085; font-weight: bold;">TextMagic Setup Guide</a> 
+            to get started in 5 minutes. Free trial credit available!
         </div>
         
-        <!-- Step 1: ClickSend Credentials -->
+        <!-- Step 1: TextMagic Credentials -->
         <div class="section">
-            <h2>Step 1: ClickSend Credentials</h2>
+            <h2>Step 1: TextMagic Credentials</h2>
             <p class="small">Your credentials are stored locally in your browser only. Never shared.</p>
             
-            <label>ClickSend Username (your email) *</label>
-            <input type="text" id="accountSid" placeholder="you@gmail.com">
+            <label>TextMagic Username *</label>
+            <input type="text" id="accountSid" placeholder="your-username">
             
-            <label>ClickSend API Key *</label>
-            <input type="password" id="authToken" placeholder="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
-            <p class="small">Get from Dashboard → Click your name → API Credentials</p>
+            <label>TextMagic API Key *</label>
+            <input type="password" id="authToken" placeholder="abc123def456ghi789">
+            <p class="small">Get from Dashboard → Settings → API & Webhooks → Generate new API key</p>
             
             <label>Sender Name *</label>
             <input type="text" id="fromNumber" placeholder="CVCWVUAA" maxlength="11">
-            <p class="small">Max 11 characters. This will appear as the sender.</p>
+            <p class="small">Max 11 alphanumeric characters. This will appear as the sender.</p>
             
             <button class="btn" onclick="saveCredentials()">💾 Save Credentials</button>
             <button class="btn btn-secondary" onclick="testCredentials()">🧪 Test Connection</button>
@@ -248,7 +248,7 @@
                 </div>
                 <div class="stat-card">
                     <h3 id="estimatedCost">$0.00</h3>
-                    <p>Est. Cost ($0.0236/text)</p>
+                    <p>Est. Cost ($0.04/text)</p>
                 </div>
             </div>
         </div>
@@ -322,7 +322,7 @@
     <script>
         // Load saved credentials on page load
         document.addEventListener('DOMContentLoaded', () => {
-            const saved = JSON.parse(localStorage.getItem('clicksendCredentials') || '{}');
+            const saved = JSON.parse(localStorage.getItem('textmagicCredentials') || '{}');
             if (saved.accountSid) document.getElementById('accountSid').value = saved.accountSid;
             if (saved.authToken) document.getElementById('authToken').value = saved.authToken;
             if (saved.fromNumber) document.getElementById('fromNumber').value = saved.fromNumber;
@@ -343,13 +343,13 @@
                 return;
             }
             
-            localStorage.setItem('clicksendCredentials', JSON.stringify(credentials));
+            localStorage.setItem('textmagicCredentials', JSON.stringify(credentials));
             alert('✅ Credentials saved securely in your browser!');
         }
         
         function clearCredentials() {
-            if (!confirm('Clear saved ClickSend credentials?')) return;
-            localStorage.removeItem('clicksendCredentials');
+            if (!confirm('Clear saved TextMagic credentials?')) return;
+            localStorage.removeItem('textmagicCredentials');
             document.getElementById('accountSid').value = '';
             document.getElementById('authToken').value = '';
             document.getElementById('fromNumber').value = '';
@@ -357,13 +357,13 @@
         }
         
         async function testCredentials() {
-            const creds = JSON.parse(localStorage.getItem('clicksendCredentials') || '{}');
+            const creds = JSON.parse(localStorage.getItem('textmagicCredentials') || '{}');
             if (!creds.accountSid || !creds.authToken) {
                 alert('❌ Please save your credentials first');
                 return;
             }
             
-            alert('✅ Credentials look good!\n\nTo test sending, use the "Send Test to Myself" button or run the command-line script:\n\nnode send-sms.js');
+            alert('✅ Credentials look good!\n\nTo test sending, use the command-line script:\n\nnode send-sms.js');
         }
         
         function loadRecipients() {
@@ -391,7 +391,7 @@
         function updateRecipientCount() {
             const textarea = document.getElementById('recipients');
             const phones = textarea.value.split('\n').filter(p => p.trim()).length;
-            const cost = (phones * 0.0236).toFixed(2);
+            const cost = (phones * 0.04).toFixed(2);
             
             document.getElementById('recipientCount').textContent = phones;
             document.getElementById('sendCount').textContent = phones;
@@ -433,7 +433,7 @@
         }
         
         async function sendBulkSMS() {
-            const creds = JSON.parse(localStorage.getItem('clicksendCredentials') || '{}');
+            const creds = JSON.parse(localStorage.getItem('textmagicCredentials') || '{}');
             const message = document.getElementById('message').value.trim();
             const recipients = document.getElementById('recipients').value
                 .split('\n')
@@ -442,7 +442,7 @@
             
             // Validation
             if (!creds.accountSid || !creds.authToken || !creds.fromNumber) {
-                alert('❌ Please save your ClickSend credentials first (Step 1)');
+                alert('❌ Please save your TextMagic credentials first (Step 1)');
                 return;
             }
             
@@ -456,7 +456,7 @@
                 return;
             }
             
-            if (!confirm(`Send "${message}" to ${recipients.length} recipient(s)?\n\nEstimated cost: $${(recipients.length * 0.0236).toFixed(2)}`)) {
+            if (!confirm(`Send "${message}" to ${recipients.length} recipient(s)?\n\nEstimated cost: $${(recipients.length * 0.04).toFixed(2)}`)) {
                 return;
             }
             
@@ -464,7 +464,7 @@
                   'Run this command in your terminal:\n\n' +
                   'node send-sms.js\n\n' +
                   'This web interface is for composing and previewing messages.\n' +
-                  'The command-line script actually sends them via ClickSend API.');
+                  'The command-line script actually sends them via TextMagic API.');
         }
         
         function sendTestSMS() {
@@ -472,9 +472,9 @@
                   'Run this command:\n' +
                   'node send-sms.js\n\n' +
                   'Then enter just your own phone number to test.\n\n' +
-                  'Or use ClickSend Dashboard:\n' +
-                  '1. Go to dashboard.clicksend.com\n' +
-                  '2. SMS → Send SMS\n' +
+                  'Or use TextMagic Dashboard:\n' +
+                  '1. Go to my.textmagic.com\n' +
+                  '2. Messages → Send SMS\n' +
                   '3. Send test to your own number');
         }
     </script>

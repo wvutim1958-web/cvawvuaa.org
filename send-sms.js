@@ -1,4 +1,4 @@
-// Simple ClickSend SMS sender for CVCWVUAA
+// Simple TextMagic SMS sender for CVCWVUAA
 // Usage: node send-sms.js
 
 const readline = require('readline');
@@ -18,12 +18,12 @@ function question(prompt) {
 }
 
 async function sendSMS() {
-    console.log('\n🏈 CVCWVUAA ClickSend SMS Sender\n');
+    console.log('\n🏈 CVCWVUAA TextMagic SMS Sender\n');
     console.log('════════════════════════════════════════\n');
     
     // Get credentials
-    const username = await question('ClickSend Username (your email): ');
-    const apiKey = await question('ClickSend API Key: ');
+    const username = await question('TextMagic Username (your email): ');
+    const apiKey = await question('TextMagic API Key: ');
     const fromName = await question('Sender Name (e.g., CVCWVUAA): ');
     
     if (!username || !apiKey || !fromName) {
@@ -71,7 +71,7 @@ async function sendSMS() {
     console.log(`From: ${fromName}`);
     console.log(`To: ${recipients.length} recipient(s)`);
     console.log(`Message: "${message}"`);
-    console.log(`Est. Cost: $${(recipients.length * 0.0236).toFixed(2)}`);
+    console.log(`Est. Cost: $${(recipients.length * 0.04).toFixed(2)}`);
     console.log('════════════════════════════════════════\n');
     
     const confirm = await question('Send these messages? (yes/no): ');
@@ -90,7 +90,7 @@ async function sendSMS() {
     
     for (const toNumber of recipients) {
         try {
-            const success = await sendClickSendSMS(auth, toNumber, message, fromName);
+            const success = await sendTextMagicSMS(auth, toNumber, message, fromName);
             
             if (success) {
                 console.log(`✅ ${toNumber} - Sent`);
@@ -115,32 +115,29 @@ async function sendSMS() {
     console.log('════════════════════════════════════════');
     console.log(`✅ Sent: ${sent}`);
     console.log(`❌ Failed: ${failed}`);
-    console.log(`💰 Total Cost: ~$${(sent * 0.0236).toFixed(2)}`);
+    console.log(`💰 Total Cost: ~$${(sent * 0.04).toFixed(2)}`);
     console.log('════════════════════════════════════════\n');
     
     rl.close();
 }
 
-// ClickSend API function
-function sendClickSendSMS(auth, toNumber, message, fromName) {
+// TextMagic API function
+function sendTextMagicSMS(auth, toNumber, message, fromName) {
     return new Promise((resolve, reject) => {
         const payload = JSON.stringify({
-            messages: [
-                {
-                    from: fromName,
-                    to: toNumber,
-                    body: message
-                }
-            ]
+            text: message,
+            phones: toNumber,
+            from: fromName
         });
         
         const options = {
-            hostname: 'rest.clicksend.com',
+            hostname: 'rest.textmagic.com',
             port: 443,
-            path: '/v3/sms/send',
+            path: '/api/v2/messages',
             method: 'POST',
             headers: {
-                'Authorization': `Basic ${auth}`,
+                'X-TM-Username': auth.split(':')[0],
+                'X-TM-Key': auth.split(':')[1],
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(payload)
             }
@@ -155,8 +152,7 @@ function sendClickSendSMS(auth, toNumber, message, fromName) {
             
             res.on('end', () => {
                 try {
-                    const response = JSON.parse(data);
-                    if (res.statusCode === 200 && response.response_code === 'SUCCESS') {
+                    if (res.statusCode === 201 || res.statusCode === 200) {
                         resolve(true);
                     } else {
                         resolve(false);
