@@ -132,54 +132,20 @@
             
             <div class="form-grid">
                 <div>
-                    <label>Title</label>
-                    <input type="text" id="title" placeholder="Mr., Mrs., Dr., etc.">
-                </div>
-                
-                <div>
                     <label>First Name *</label>
-                    <input type="text" id="first-name" required>
+                    <input type="text" id="first-name" required autofocus>
                 </div>
                 
                 <div>
                     <label>Last Name *</label>
                     <input type="text" id="last-name" required>
                 </div>
-                
-                <div>
-                    <label>Suffix</label>
-                    <input type="text" id="suffix" placeholder="Jr., Sr., III, etc.">
-                </div>
             </div>
             
             <div class="form-grid">
-                <div>
-                    <label>Professional Suffix</label>
-                    <input type="text" id="prof-suffix" placeholder="MD, PhD, Esq., etc.">
-                </div>
-                
-                <div>
-                    <label>Salutation (Casual)</label>
-                    <input type="text" id="salutation-casual" placeholder="Hi John">
-                </div>
-                
-                <div>
-                    <label>Salutation (Formal)</label>
-                    <input type="text" id="salutation-formal" placeholder="Dear Dr. Smith">
-                </div>
-            </div>
-            
-            <h4 style="margin-top: 25px; color: #002855;">Address Information</h4>
-            
-            <div class="form-grid">
                 <div style="grid-column: 1/-1;">
-                    <label>Address Street 1</label>
-                    <input type="text" id="address-street1">
-                </div>
-                
-                <div style="grid-column: 1/-1;">
-                    <label>Address Street 2</label>
-                    <input type="text" id="address-street2" placeholder="Apt, Suite, Building, etc.">
+                    <label>Street Address</label>
+                    <input type="text" id="address-street">
                 </div>
             </div>
             
@@ -197,22 +163,6 @@
                 <div>
                     <label>ZIP Code</label>
                     <input type="text" id="address-zip">
-                </div>
-                
-                <div>
-                    <label>Country</label>
-                    <input type="text" id="address-country" value="USA">
-                </div>
-            </div>
-            
-            <div class="form-grid" style="grid-template-columns: 200px;">
-                <div>
-                    <label>Accept Mail</label>
-                    <select id="accept-mail">
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                        <option value="">Unknown</option>
-                    </select>
                 </div>
             </div>
             
@@ -239,26 +189,18 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Title</th>
                             <th>First Name</th>
                             <th>Last Name</th>
-                            <th>Suffix</th>
-                            <th>Prof. Suffix</th>
-                            <th>Casual</th>
-                            <th>Formal</th>
-                            <th>Street 1</th>
-                            <th>Street 2</th>
+                            <th>Street Address</th>
                             <th>City</th>
                             <th>State</th>
                             <th>ZIP</th>
-                            <th>Country</th>
-                            <th>Accept Mail</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="member-tbody">
                         <tr>
-                            <td colspan="15" style="text-align: center; padding: 40px; color: #666;">
+                            <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
                                 No members entered yet. Add members using the form above.
                             </td>
                         </tr>
@@ -279,7 +221,7 @@
             countEl.textContent = `${members.length} member${members.length !== 1 ? 's' : ''}`;
             
             if (members.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="15" style="text-align: center; padding: 40px; color: #666;">No members entered yet. Add members using the form above.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #666;">No members entered yet. Add members using the form above.</td></tr>';
                 return;
             }
             
@@ -287,20 +229,12 @@
             members.forEach((member, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${member.title || ''}</td>
                     <td><strong>${member.firstName}</strong></td>
                     <td><strong>${member.lastName}</strong></td>
-                    <td>${member.suffix || ''}</td>
-                    <td>${member.profSuffix || ''}</td>
-                    <td class="small-text">${member.salutationCasual || ''}</td>
-                    <td class="small-text">${member.salutationFormal || ''}</td>
-                    <td>${member.addressStreet1 || ''}</td>
-                    <td>${member.addressStreet2 || ''}</td>
+                    <td>${member.addressStreet || ''}</td>
                     <td>${member.addressCity || ''}</td>
                     <td>${member.addressState || ''}</td>
                     <td>${member.addressZip || ''}</td>
-                    <td>${member.addressCountry || ''}</td>
-                    <td>${member.acceptMail || ''}</td>
                     <td>
                         <button class="btn btn-danger" onclick="deleteMember(${index})" style="padding: 4px 8px; font-size: 12px;">Delete</button>
                     </td>
@@ -314,20 +248,12 @@
             e.preventDefault();
             
             const member = {
-                title: document.getElementById('title').value.trim(),
                 firstName: document.getElementById('first-name').value.trim(),
                 lastName: document.getElementById('last-name').value.trim(),
-                suffix: document.getElementById('suffix').value.trim(),
-                profSuffix: document.getElementById('prof-suffix').value.trim(),
-                salutationCasual: document.getElementById('salutation-casual').value.trim(),
-                salutationFormal: document.getElementById('salutation-formal').value.trim(),
-                addressStreet1: document.getElementById('address-street1').value.trim(),
-                addressStreet2: document.getElementById('address-street2').value.trim(),
+                addressStreet: document.getElementById('address-street').value.trim(),
                 addressCity: document.getElementById('address-city').value.trim(),
                 addressState: document.getElementById('address-state').value.trim(),
-                addressZip: document.getElementById('address-zip').value.trim(),
-                addressCountry: document.getElementById('address-country').value.trim(),
-                acceptMail: document.getElementById('accept-mail').value
+                addressZip: document.getElementById('address-zip').value.trim()
             };
             
             const members = JSON.parse(localStorage.getItem('oldRosterMembers') || '[]');
@@ -341,7 +267,6 @@
             
             // Reset form
             document.getElementById('member-form').reset();
-            document.getElementById('address-country').value = 'USA'; // Reset default
             
             // Reload display
             loadMembers();
@@ -358,24 +283,16 @@
                 return;
             }
             
-            let csv = 'Title,First Name,Last Name,Suffix,Professional Suffix,Salutation (Casual),Salutation (Formal),Address Street 1,Address Street 2,Address City,Address State,Address ZIP,Address Country,Accept Mail\n';
+            let csv = 'First Name,Last Name,Street,City,State,ZIP\n';
             
             members.forEach(m => {
                 const row = [
-                    m.title || '',
                     m.firstName || '',
                     m.lastName || '',
-                    m.suffix || '',
-                    m.profSuffix || '',
-                    m.salutationCasual || '',
-                    m.salutationFormal || '',
-                    m.addressStreet1 || '',
-                    m.addressStreet2 || '',
+                    m.addressStreet || '',
                     m.addressCity || '',
                     m.addressState || '',
-                    m.addressZip || '',
-                    m.addressCountry || '',
-                    m.acceptMail || ''
+                    m.addressZip || ''
                 ].map(field => `"${String(field).replace(/"/g, '""')}"`);
                 
                 csv += row.join(',') + '\n';
