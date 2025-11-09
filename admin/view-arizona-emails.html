@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Arizona Game Watch Emails</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #002855;
+            text-align: center;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .tab {
+            padding: 12px 24px;
+            background: #002855;
+            color: #EAAA00;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .tab:hover {
+            background: #0039a6;
+        }
+        .tab.active {
+            background: #EAAA00;
+            color: #002855;
+        }
+        .email-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .email-content.active {
+            display: block;
+        }
+        .instructions {
+            background: #fff3cd;
+            border: 2px solid #EAAA00;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #002855;
+        }
+        .copy-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        .copy-btn:hover {
+            background: #218838;
+        }
+        iframe {
+            width: 100%;
+            height: 800px;
+            border: 2px solid #002855;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏈 Arizona Game Watch Email Templates</h1>
+        
+        <div class="instructions">
+            <h3>📋 How to Use These Templates:</h3>
+            <ol>
+                <li><strong>For Web Preview:</strong> Click the tabs below to see how each email looks</li>
+                <li><strong>For YAMM (Gmail Mail Merge):</strong> Click "Copy HTML Code" button, then paste into Gmail</li>
+                <li><strong>For Direct Email:</strong> Use the same HTML code in any email client that supports HTML</li>
+            </ol>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showEmail('preview')">📧 Email Preview</button>
+            <button class="tab" onclick="showEmail('yamm')">📝 YAMM Template</button>
+            <button class="tab" onclick="showEmail('code')">💻 HTML Code</button>
+        </div>
+        
+        <div id="preview" class="email-content active">
+            <h2 style="color: #002855;">Email Preview</h2>
+            <p><strong>This is how your email will look to recipients:</strong></p>
+            <button class="copy-btn" onclick="copyHTML()">📋 Copy HTML Code for YAMM</button>
+            <iframe src="arizona-game-watch-nov-15-2025.html"></iframe>
+        </div>
+        
+        <div id="yamm" class="email-content">
+            <h2 style="color: #002855;">YAMM Template (Same as Email)</h2>
+            <p><strong>Steps to use with YAMM:</strong></p>
+            <ol>
+                <li>Click "Copy HTML Code" button below</li>
+                <li>Open Gmail and compose a new email</li>
+                <li>Click the three dots (⋮) menu → "Edit draft"</li>
+                <li>Paste the HTML code</li>
+                <li>Set subject: <code>Another WIN! Join Us Saturday for Arizona Game Watch 🏈</code></li>
+                <li>Use YAMM to send to your member list</li>
+            </ol>
+            <button class="copy-btn" onclick="copyHTML()">📋 Copy HTML Code</button>
+            <iframe src="arizona-yamm-template.html"></iframe>
+        </div>
+        
+        <div id="code" class="email-content">
+            <h2 style="color: #002855;">HTML Source Code</h2>
+            <p><strong>Copy this code to paste into Gmail or your email client:</strong></p>
+            <button class="copy-btn" onclick="copyHTML()">📋 Copy to Clipboard</button>
+            <button class="copy-btn" onclick="downloadHTML()" style="background: #007bff;">💾 Download HTML File</button>
+            <textarea id="html-code" style="width: 100%; height: 600px; font-family: monospace; padding: 10px; border: 2px solid #002855; border-radius: 8px;" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        function showEmail(type) {
+            // Hide all contents
+            document.querySelectorAll('.email-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected content
+            document.getElementById(type).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Load HTML code if code tab is selected
+            if (type === 'code') {
+                loadHTMLCode();
+            }
+        }
+        
+        function loadHTMLCode() {
+            fetch('arizona-yamm-template.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('html-code').value = html;
+                })
+                .catch(error => {
+                    document.getElementById('html-code').value = 'Error loading HTML. Please check the file path.';
+                });
+        }
+        
+        function copyHTML() {
+            fetch('arizona-yamm-template.html')
+                .then(response => response.text())
+                .then(html => {
+                    navigator.clipboard.writeText(html).then(() => {
+                        alert('✅ HTML code copied to clipboard! Now paste it into Gmail.');
+                    }).catch(err => {
+                        // Fallback: show the code in a textarea for manual copy
+                        const textarea = document.createElement('textarea');
+                        textarea.value = html;
+                        textarea.style.position = 'fixed';
+                        textarea.style.opacity = 0;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        alert('✅ HTML code copied to clipboard! Now paste it into Gmail.');
+                    });
+                })
+                .catch(error => {
+                    alert('❌ Error loading HTML file. Please try again.');
+                });
+        }
+        
+        function downloadHTML() {
+            fetch('arizona-yamm-template.html')
+                .then(response => response.text())
+                .then(html => {
+                    const blob = new Blob([html], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'arizona-game-watch-email-' + new Date().toISOString().split('T')[0] + '.html';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    alert('❌ Error downloading HTML file. Please try again.');
+                });
+        }
+    </script>
+</body>
+</html>
