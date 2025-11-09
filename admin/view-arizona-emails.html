@@ -108,7 +108,7 @@
             <h2 style="color: #002855;">Email Preview</h2>
             <p><strong>This is how your email will look to recipients:</strong></p>
             <button class="copy-btn" onclick="copyHTML()">📋 Copy HTML Code for YAMM</button>
-            <iframe src="arizona-game-watch-nov-15-2025.html"></iframe>
+            <iframe src="/admin/emails/arizona-game-watch-nov-15-2025.html"></iframe>
         </div>
         
         <div id="yamm" class="email-content">
@@ -123,7 +123,7 @@
                 <li>Use YAMM to send to your member list</li>
             </ol>
             <button class="copy-btn" onclick="copyHTML()">📋 Copy HTML Code</button>
-            <iframe src="arizona-yamm-template.html"></iframe>
+            <iframe src="/admin/emails/arizona-yamm-template.html"></iframe>
         </div>
         
         <div id="code" class="email-content">
@@ -156,7 +156,7 @@
         }
         
         function loadHTMLCode() {
-            fetch('arizona-yamm-template.html')
+            fetch('/admin/emails/arizona-yamm-template.html')
                 .then(response => response.text())
                 .then(html => {
                     document.getElementById('html-code').value = html;
@@ -167,7 +167,7 @@
         }
         
         function copyHTML() {
-            fetch('arizona-yamm-template.html')
+            fetch('/admin/emails/arizona-yamm-template.html')
                 .then(response => response.text())
                 .then(html => {
                     navigator.clipboard.writeText(html).then(() => {
@@ -191,7 +191,7 @@
         }
         
         function downloadHTML() {
-            fetch('arizona-yamm-template.html')
+            fetch('/admin/emails/arizona-yamm-template.html')
                 .then(response => response.text())
                 .then(html => {
                     const blob = new Blob([html], { type: 'text/html' });
