@@ -1,6 +1,24 @@
 [
   {
     "type": "image",
+    "src": "/assets/game watch colorado cvcwvuaa 11082025.png",
+    "caption": "Colorado Game Watch - November 8, 2025",
+    "credit": "CVCWVUAA",
+    "date": "2025-11-08",
+    "tags": ["game-watch", "2025", "colorado", "kickback-jacks"],
+    "alt": "CVCWVUAA members at Colorado game watch at Kickback Jack's, November 8, 2025"
+  },
+  {
+    "type": "image",
+    "src": "/assets/Laura WVU Parent Game Watch BDAy 11082025.png",
+    "caption": "Laura, WVU Mom celebrating her birthday at Colorado game watch",
+    "credit": "CVCWVUAA",
+    "date": "2025-11-08",
+    "tags": ["game-watch", "2025", "colorado", "birthday", "kickback-jacks"],
+    "alt": "Laura, WVU Mom celebrating her birthday at Colorado game watch on November 8, 2025"
+  },
+  {
+    "type": "image",
     "src": "/assets/gallery/2025/09/509914204_10230940387802293_7404552104597369588_n.jpg",
     "caption": "PAST WATCH PARTIES",
     "credit": "FILE",
