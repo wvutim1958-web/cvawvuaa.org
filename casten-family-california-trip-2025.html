@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casten Family California Adventure - November 23 - December 7, 2025</title>
+    <style>
+        @media print {
+            .no-print { display: none; }
+            body { font-size: 10pt; }
+            h1 { font-size: 16pt; }
+            h2 { font-size: 14pt; page-break-before: always; }
+            h3 { font-size: 12pt; }
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #002855 0%, #EAAA00 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+        }
+        
+        .header p {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #002855;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .day-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 5px solid #002855;
+        }
+        
+        .day-header {
+            background: linear-gradient(135deg, #002855 0%, #0039a6 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .day-header h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.4em;
+        }
+        
+        .day-header .route {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .flight-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #1976d2;
+        }
+        
+        .flight-box h4 {
+            margin: 0 0 10px 0;
+            color: #002855;
+        }
+        
+        .hotel-box {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #0066cc;
+        }
+        
+        .hotel-box h4 {
+            margin: 0 0 10px 0;
+            color: #002855;
+        }
+        
+        .activity-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #EAAA00;
+        }
+        
+        .disney-box {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #c2185b;
+        }
+        
+        .rental-box {
+            background: #fff9c4;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #fbc02d;
+        }
+        
+        .timeline {
+            list-style: none;
+            padding-left: 20px;
+            border-left: 3px solid #EAAA00;
+        }
+        
+        .timeline li {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .timeline li:before {
+            content: "📍";
+            position: absolute;
+            left: -12px;
+            background: white;
+        }
+        
+        .cost-table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .cost-table th {
+            background: #002855;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .cost-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .cost-table tr:last-child td {
+            font-weight: bold;
+            background: #f8f9fa;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .confirmation-box {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+        }
+        
+        .print-button {
+            background: #002855;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        
+        .print-button:hover {
+            background: #001a3d;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="no-print">
+    <button class="print-button" onclick="window.print()">🖨️ Print This Itinerary</button>
+</div>
+
+<div class="header">
+    <h1>✈️ Casten Family California Adventure</h1>
+    <p><strong>November 23 - December 7, 2025</strong></p>
+    <p>Chester, VA → Pittsburgh → San Diego → Desert Hot Springs → Disneyland → Pittsburgh → Bridgeport, WV → Home</p>
+    <p style="font-size: 0.9em; margin-top: 10px;">15 Days • Flights + Rental Truck • Disneyland! • Wedding!</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="number">15</div>
+        <div class="label">Total Days</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">4</div>
+        <div class="label">Flights (RT)</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">670</div>
+        <div class="label">Miles Driving</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">10</div>
+        <div class="label">California Days</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">2</div>
+        <div class="label">Disneyland Days</div>
+    </div>
+    <div class="stat-card">
+        <div class="number">3</div>
+        <div class="label">Travelers</div>
+    </div>
+</div>
+
+<!-- DRIVING ROUTES SUMMARY -->
+<div class="section" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);">
+    <h2 style="color: #002855;">🗺️ COMPLETE DRIVING ROUTES</h2>
+    
+    <table class="cost-table">
+        <tr>
+            <th>Route</th>
+            <th>Distance</th>
+            <th>Time</th>
+            <th>Notes</th>
+        </tr>
+        <tr>
+            <td><strong>1. Chester, VA → Pittsburgh Airport Marriott</strong></td>
+            <td>260 miles</td>
+            <td>4.5 hours</td>
+            <td>I-64 W → I-79 N → I-279 N<br>Sunday Nov 23</td>
+        </tr>
+        <tr>
+            <td><strong>2. San Diego Airport → Desert Hot Springs Airbnb</strong></td>
+            <td>130 miles</td>
+            <td>2 hours</td>
+            <td>I-15 N → CA-60 E → I-10 E<br>Monday Nov 24 (late night)</td>
+        </tr>
+        <tr>
+            <td><strong>3. Desert Hot Springs Airbnb → Four Points Sheraton Anaheim</strong></td>
+            <td>100 miles</td>
+            <td>1 hr 45 min</td>
+            <td>I-10 W → CA-60 W → CA-57 S<br>Sunday Nov 30</td>
+        </tr>
+        <tr>
+            <td><strong>4. Four Points Sheraton Anaheim → San Diego Airport</strong></td>
+            <td>95 miles</td>
+            <td>1 hr 30 min</td>
+            <td>I-5 S (straight shot)<br>Tuesday Dec 3 - REFUEL FIRST!</td>
+        </tr>
+        <tr>
+            <td><strong>5. Pittsburgh Airport → SpringHill Suites Bridgeport, WV</strong></td>
+            <td>90 miles</td>
+            <td>1 hr 30 min</td>
+            <td>I-79 S (straight shot)<br>Wednesday Dec 4</td>
+        </tr>
+        <tr>
+            <td><strong>6. SpringHill Suites Bridgeport → Chester, VA (HOME!)</strong></td>
+            <td>320 miles</td>
+            <td>5 hr 30 min</td>
+            <td>I-79 S → I-77 S → I-64 E<br>Saturday Dec 7</td>
+        </tr>
+        <tr style="background: #fff3cd;">
+            <td colspan="2"><strong>TOTAL DRIVING</strong></td>
+            <td><strong>670 miles</strong></td>
+            <td><strong>~17 hours total</strong></td>
+        </tr>
+    </table>
+    
+    <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 20px;">
+        <h4 style="color: #002855; margin-top: 0;">📍 KEY ADDRESSES TO SAVE IN GPS:</h4>
+        <ul style="line-height: 2;">
+            <li><strong>Pittsburgh Airport Marriott:</strong> 777 Aten Rd, Coraopolis, PA 15108</li>
+            <li><strong>Desert Hot Springs Airbnb:</strong> 66612 San Luis Rd, Desert Hot Springs, CA 92240</li>
+            <li><strong>Four Points Sheraton Anaheim:</strong> 1221 S Harbor Blvd, Anaheim, CA 92805</li>
+            <li><strong>San Diego Airport Budget:</strong> San Diego International Airport, Terminal 1</li>
+            <li><strong>SpringHill Suites Bridgeport:</strong> 115 Platinum Dr, Bridgeport, WV 26330</li>
+            <li><strong>Home:</strong> Chester, VA</li>
+        </ul>
+    </div>
+</div>
+
+<!-- QUICK REFERENCE -->
+<div class="section">
+    <h2 style="color: #002855;">📋 QUICK REFERENCE - SAVE THIS!</h2>
+    
+    <div class="confirmation-box">
+        <h4>✈️ JETBLUE FLIGHTS</h4>
+        <p><strong>Confirmation Code: KGTBOB</strong></p>
+        <p><strong>Outbound - Monday, November 24:</strong><br>
+        JetBlue 1286: Pittsburgh (PIT) → Boston (BOS) - Departs 10:44 AM<br>
+        JetBlue 19: Boston (BOS) → San Diego (SAN) - Arrives 7:26 PM PT</p>
+        
+        <p><strong>Return - Tuesday, December 3:</strong><br>
+        JetBlue 19: San Diego (SAN) → Boston (BOS) - Departs 8:31 PM PT<br>
+        JetBlue 1585: Boston (BOS) → Pittsburgh (PIT) - Arrives 8:30 AM Wed Dec 4</p>
+        
+        <p><strong>Total Cost: $2,140.14</strong></p>
+    </div>
+    
+    <div class="rental-box">
+        <h4>🚗 BUDGET TRUCK RENTAL</h4>
+        <p><strong>Confirmation: 35136770US4</strong><br>
+        <strong>Pickup:</strong> San Diego Airport - Monday, November 24, 7:26 PM<br>
+        <strong>Return:</strong> San Diego Airport - Tuesday, December 3, 7:00 PM<br>
+        <strong>Total Cost: $685.12</strong></p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>🏨 PITTSBURGH AIRPORT MARRIOTT</h4>
+        <p><strong>Confirmation: 76384205</strong><br>
+        <strong>Check-in:</strong> Sunday, November 23<br>
+        <strong>Total Cost: $272.46</strong> (includes parking during CA trip!)</p>
+    </div>
+    
+    <div class="confirmation-box">
+        <h4>🏠 AIRBNB - DESERT HOT SPRINGS</h4>
+        <p><strong>📍 66612 San Luis Rd, Desert Hot Springs, CA 92240</strong><br>
+        <strong>Check-in:</strong> Monday, November 24<br>
+        <strong>Check-out:</strong> Sunday, November 30<br>
+        <strong>Your Share: $1,500.00</strong></p>
+    </div>
+    
+    <div class="disney-box">
+        <h4>🏰 DISNEYLAND TICKETS</h4>
+        <p><strong>2-Day Park Hopper × 3 People</strong><br>
+        <strong>Use: Monday Dec 1 & Tuesday Dec 2</strong><br>
+        <strong>Total Cost: $777.00</strong></p>
+    </div>
+    
+    <div class="confirmation-box">
+        <h4>🏨 FOUR POINTS SHERATON ANAHEIM</h4>
+        <p><strong>Confirmation: 77033562</strong><br>
+        <strong>Sunday Nov 30, Monday Dec 1, Tuesday Dec 2</strong><br>
+        <strong>3 Nights Total Cost: $540.44</strong></p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>🏨 SPRINGHILL SUITES BRIDGEPORT, WV</h4>
+        <p><strong>Confirmation: 91058782</strong><br>
+        <strong>Thursday Dec 4, Friday Dec 5, Saturday Dec 6</strong><br>
+        <strong>3 Nights - FREE (Marriott Points!)</strong><br>
+        <strong>Wedding: Saturday, December 6</strong></p>
+    </div>
+</div>
+
+<!-- DAY BY DAY -->
+<div class="section">
+    <h2 style="color: #002855;">📅 DAY-BY-DAY ITINERARY</h2>
+</div>
+
+<!-- DAY 1 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 1 - Sunday, November 23</h3>
+        <div class="route">Chester, VA → Pittsburgh Airport Marriott</div>
+    </div>
+    
+    <div class="confirmation-box">
+        <h4>🚗 ROUTE: Chester to Pittsburgh Airport Marriott</h4>
+        <p><strong>Distance: 260 miles • Time: 4.5 hours</strong><br>
+        Route: I-64 W → I-79 N → I-279 N → Airport exit<br>
+        <strong>Address:</strong> Pittsburgh Airport Marriott, 777 Aten Rd, Coraopolis, PA 15108</p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>Morning:</strong> Pack car, final house check</li>
+        <li><strong>Early Afternoon:</strong> Depart Chester (allow extra time for stops!)</li>
+        <li><strong>Arrive Pittsburgh Airport Area (Evening)</strong></li>
+    </ul>
+    
+    <div class="hotel-box">
+        <h4>🏨 CHECK IN: Pittsburgh Airport Marriott</h4>
+        <p><strong>Confirmation: 76384205</strong><br>
+        <strong>Cost: $272.46</strong> (includes parking during entire CA trip!)<br>
+        <strong>IMPORTANT: Car stays parked here until Dec 4!</strong><br>
+        Verify shuttle times to airport for tomorrow morning</p>
+    </div>
+    
+    <p><strong>Evening:</strong> Dinner, pack carry-ons, set MULTIPLE alarms for early flight, early bedtime!</p>
+</div>
+
+<!-- DAY 2 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 2 - Monday, November 24 ✈️</h3>
+        <div class="route">FLIGHT DAY - Pittsburgh → San Diego</div>
+    </div>
+    
+    <div class="flight-box">
+        <h4>✈️ JETBLUE 1286: Pittsburgh → Boston</h4>
+        <p><strong>Confirmation: KGTBOB</strong><br>
+        <strong>Departs:</strong> 10:44 AM from Pittsburgh (PIT)<br>
+        <strong>Arrives:</strong> Boston (BOS)<br>
+        <strong>Check-in opens 24 hours before!</strong></p>
+    </div>
+    
+    <div class="flight-box">
+        <h4>✈️ JETBLUE 19: Boston → San Diego</h4>
+        <p><strong>Confirmation: KGTBOB</strong><br>
+        <strong>Connection in Boston</strong><br>
+        <strong>Arrives San Diego:</strong> 7:26 PM Pacific Time<br>
+        <strong>Gain 3 hours! (EST to PST)</strong></p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>6:00 AM:</strong> Wake up, quick breakfast</li>
+        <li><strong>6:45 AM:</strong> Marriott shuttle to airport</li>
+        <li><strong>7:30 AM:</strong> Arrive airport - CHECK IN!</li>
+        <li><strong>8:30 AM:</strong> TSA Security (allow extra time!)</li>
+        <li><strong>9:30 AM:</strong> Find gate, breakfast, relax</li>
+        <li><strong>10:44 AM:</strong> FLIGHT #1 - Pittsburgh to Boston</li>
+        <li><strong>Boston:</strong> Connection (follow signs to connecting gate)</li>
+        <li><strong>FLIGHT #2:</strong> Boston to San Diego (cross-country!)</li>
+        <li><strong>7:26 PM PT:</strong> LAND IN SAN DIEGO! 🌴</li>
+    </ul>
+    
+    <div class="rental-box">
+        <h4>🚗 PICK UP BUDGET TRUCK (7:30-8:00 PM)</h4>
+        <p><strong>Confirmation: 35136770US4</strong><br>
+        <strong>Cost: $685.12 (already paid or paying now)</strong><br>
+        Budget counter at San Diego Airport<br>
+        <strong>Bring:</strong> Driver's license, credit card, confirmation number</p>
+    </div>
+    
+    <div class="confirmation-box">
+        <h4>🚗 ROUTE: San Diego Airport → Desert Hot Springs Airbnb</h4>
+        <p><strong>Distance: 130 miles • Time: 2 hours</strong><br>
+        Route: I-15 N to CA-60 E to I-10 E to Palm Dr exit<br>
+        <strong>Destination:</strong> 66612 San Luis Rd, Desert Hot Springs, CA 92240</p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>8:00 PM:</strong> Load luggage in rental truck</li>
+        <li><strong>8:15 PM:</strong> Drive to Desert Hot Springs</li>
+        <li><strong>10:15 PM:</strong> Arrive Airbnb! 🏠</li>
+    </ul>
+    
+    <div class="confirmation-box">
+        <h4>🏠 CHECK INTO AIRBNB (Late arrival OK!)</h4>
+        <p><strong>📍 66612 San Luis Rd, Desert Hot Springs, CA 92240</strong><br>
+        <strong>GPS this address!</strong><br>
+        Get check-in code from Airbnb app/email<br>
+        Your share: $1,500.00</p>
+    </div>
+    
+    <p><strong>Late Evening:</strong> Unload essentials, find beds, SLEEP! Long travel day!</p>
+</div>
+
+<!-- DAYS 3-7: Desert Hot Springs -->
+<div class="section">
+    <h2 style="color: #002855;">🌵 DAYS 3-7: DESERT HOT SPRINGS VACATION</h2>
+    <p><strong>November 25-29, 2025</strong></p>
+</div>
+
+<!-- DAY 3 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 3 - Tuesday, November 25</h3>
+        <div class="route">RECOVERY & SETUP DAY</div>
+    </div>
+    
+    <p><strong>Sleep in! No alarm! Recover from travel!</strong></p>
+    
+    <ul class="timeline">
+        <li><strong>Morning:</strong> Wake up naturally, explore Airbnb</li>
+        <li><strong>10:00 AM:</strong> GROCERY SHOPPING (Walmart/Vons - stock kitchen for week!)</li>
+        <li><strong>Noon:</strong> Lunch at Airbnb</li>
+        <li><strong>Afternoon:</strong> POOL TIME! 🏊 Relax! Unpack properly!</li>
+        <li><strong>Evening:</strong> Cook dinner together at Airbnb, movies, early bedtime</li>
+    </ul>
+</div>
+
+<!-- DAY 4 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 4 - Wednesday, November 26 🎬</h3>
+        <div class="route">NOEMI'S BIRTHDAY - ZOOTOPIA 2 MOVIE!</div>
+    </div>
+    
+    <div class="disney-box">
+        <h4>🎂 NOEMI'S BIRTHDAY CELEBRATION - MOVIE DAY!</h4>
+        <p><strong>ZOOTOPIA 2 - Noemi's Birthday Request!</strong></p>
+        
+        <p><strong>Movie Theater Options Near Desert Hot Springs:</strong><br>
+        🎬 <strong>Century Stadium 10 - Palm Springs</strong> (15 min, 12 miles)<br>
+        72777 Dinah Shore Dr, Rancho Mirage<br>
+        Best option - closest, clean, good seats!</p>
+        
+        <p><strong>🎬 Mary Pickford Theater - Cathedral City</strong> (20 min, 16 miles)<br>
+        36850 Pickfair St, Cathedral City<br>
+        Nice theater, D-Box motion seats available!</p>
+        
+        <p><strong>Check showtimes Tuesday night for Wednesday!</strong></p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>Morning:</strong> Sleep in, birthday breakfast for Noemi! 🥞</li>
+        <li><strong>Noon:</strong> Lunch out - Noemi picks restaurant!</li>
+        <li><strong>Afternoon:</strong> ZOOTOPIA 2 MOVIE! 🎬</li>
+        <li><strong>After Movie:</strong> Ice cream or birthday treat!</li>
+        <li><strong>Evening:</strong> Special birthday dinner (see restaurant guide below!)</li>
+        <li><strong>Night:</strong> Cake & presents at Airbnb! 🎂</li>
+    </ul>
+    
+    <p style="text-align: center; font-size: 1.2em; color: #c2185b;"><strong>🎉 HAPPY BIRTHDAY NOEMI! 🎉</strong></p>
+</div>
+
+<!-- DAY 5 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 5 - Tuesday, November 25</h3>
+        <div class="route">FLEXIBLE ADVENTURE DAY #2</div>
+    </div>
+    
+    <div class="activity-box">
+        <h4>🎯 TUESDAY ADVENTURE OPTIONS!</h4>
+        <p><strong>See complete activity guide below for details!</strong></p>
+        
+        <p>Perfect day to explore before Thanksgiving prep!</p>
+        
+        <p><strong>Choose from:</strong></p>
+        <ul>
+            <li>🌵 Joshua Tree National Park (30 min)</li>
+            <li>🎨 Salvation Mountain & Salton Sea (1 hr)</li>
+            <li>🦒 Living Desert Zoo (25 min)</li>
+            <li>🚡 Palm Springs Aerial Tramway (30 min)</li>
+            <li>🌴 Indian Canyons hiking (20 min)</li>
+            <li>🛍️ Downtown Palm Springs (20 min)</li>
+            <li>🏊 Pool & Relax Day</li>
+        </ul>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>Morning:</strong> Sleep in, easy breakfast</li>
+        <li><strong>10:00 AM:</strong> Head out for chosen adventure</li>
+        <li><strong>Afternoon:</strong> Explore & have fun!</li>
+        <li><strong>3:00 PM:</strong> Return to Airbnb</li>
+        <li><strong>Evening:</strong> Grocery shop for Thanksgiving! (Get turkey, all the fixings!)</li>
+    </ul>
+</div>
+
+<!-- DAY 6 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 6 - Thursday, November 27</h3>
+        <div class="route">THANKSGIVING DAY 🦃</div>
+    </div>
+    
+    <div class="activity-box">
+        <h4>🦃 THANKSGIVING AT AIRBNB!</h4>
+        
+        <p><strong>COOKING TOGETHER - FAMILY STYLE!</strong></p>
+        
+        <p><strong>Wednesday (Prep Day):</strong><br>
+        - Grocery shop together<br>
+        - Get turkey, all the sides, desserts<br>
+        - Prep what you can</p>
+        
+        <p><strong>Thursday Schedule:</strong><br>
+        - Morning: Watch Macy's Parade!<br>
+        - Turkey in oven<br>
+        - Everyone helps with sides<br>
+        - Set beautiful table<br>
+        - Feast around 2-3 PM<br>
+        - Share what you're thankful for<br>
+        - Football on TV<br>
+        - Leftovers for dinner!</p>
+    </div>
+    
+    <p><strong>Evening:</strong> Board games, family time, movies, enjoy being together</p>
+</div>
+
+<!-- DAY 6 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 6 - Friday, November 28</h3>
+        <div class="route">FLEXIBLE ADVENTURE DAY #1</div>
+    </div>
+    
+    <div class="activity-box">
+        <h4>🎯 CHOOSE YOUR FRIDAY ADVENTURE!</h4>
+        <p><strong>See complete activity guide below for all options!</strong></p>
+        
+        <p><strong>TOP PICKS FOR FRIDAY:</strong></p>
+        
+        <p>🌵 <strong>Joshua Tree National Park</strong> (30 min, 25 miles)<br>
+        $30 entrance • Amazing hiking, rock formations, photo ops!</p>
+        
+        <p>🎨 <strong>Salvation Mountain & Salton Sea</strong> (1 hr, 60 miles)<br>
+        FREE! Weird California - folk art mountain, abandoned town</p>
+        
+        <p>🦒 <strong>Living Desert Zoo</strong> (25 min, 20 miles)<br>
+        $25/adult • Giraffes, cheetahs, desert animals - great for kids!</p>
+        
+        <p>🚡 <strong>Palm Springs Aerial Tramway</strong> (30 min, 25 miles)<br>
+        $30/adult • Rotating tram to 8,500 feet! 50-degree temp drop!</p>
+        
+        <p>🛍️ <strong>Downtown Palm Springs</strong> (20 min, 16 miles)<br>
+        FREE! Shopping, VillageFest, architecture, ice cream</p>
+        
+        <p>🏊 <strong>POOL & RELAX DAY</strong><br>
+        Sometimes doing nothing is the best plan!</p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>Morning:</strong> Decide adventure based on weather & energy!</li>
+        <li><strong>10:00 AM:</strong> Head out OR pool time</li>
+        <li><strong>Afternoon:</strong> Explore chosen activity</li>
+        <li><strong>Evening:</strong> Dinner out (see restaurant guide!)</li>
+        <li><strong>Night:</strong> Prep for birthday party tomorrow!</li>
+    </ul>
+</div>
+
+<!-- DAY 7 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 7 - Saturday, November 29 🎉</h3>
+        <div class="route">NOEMI'S BIRTHDAY PARTY AT AIRBNB!</div>
+    </div>
+    
+    <div class="disney-box">
+        <h4>🎂 NOEMI'S BIRTHDAY PARTY - FAMILY & FRIENDS!</h4>
+        <p><strong>PARTY AT THE AIRBNB!</strong></p>
+        
+        <p><strong>Party Prep (Friday night or Saturday morning):</strong></p>
+        <ul>
+            <li>Buy decorations, balloons, party supplies</li>
+            <li>Get party food/snacks (chips, dips, veggies, fruit)</li>
+            <li>Order birthday cake OR bake together!</li>
+            <li>Set up pool area for guests</li>
+            <li>Party playlist ready</li>
+        </ul>
+        
+        <p><strong>Party Activities:</strong></p>
+        <ul>
+            <li>Swimming in the pool! 🏊</li>
+            <li>Outdoor games</li>
+            <li>Birthday cake & singing</li>
+            <li>Present opening</li>
+            <li>Food & fun with family/friends!</li>
+        </ul>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>Morning:</strong> Final party prep, clean Airbnb</li>
+        <li><strong>11:00 AM:</strong> Set up party area (pool, food table, decorations)</li>
+        <li><strong>1:00 PM:</strong> Guests arrive! 🎉</li>
+        <li><strong>1:00-5:00 PM:</strong> PARTY TIME! Swimming, games, food!</li>
+        <li><strong>3:00 PM:</strong> CAKE TIME! 🎂 Happy Birthday song!</li>
+        <li><strong>5:00 PM:</strong> Guests depart, cleanup</li>
+        <li><strong>Evening:</strong> Relax after party, <strong>PACK UP - checkout tomorrow!</strong></li>
+    </ul>
+    
+    <p style="text-align: center; font-size: 1.2em; color: #c2185b;"><strong>🎉 BEST BIRTHDAY PARTY EVER! 🎉</strong></p>
+</div>
+
+<!-- DAY 8 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 8 - Sunday, November 30</h3>
+        <div class="route">CHECKOUT → DRIVE TO DISNEYLAND!</div>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>9:00 AM:</strong> Wake up, breakfast</li>
+        <li><strong>9:30 AM:</strong> Final pool time</li>
+        <li><strong>10:00 AM:</strong> Pack up Airbnb completely</li>
+        <li><strong>10:45 AM:</strong> Load truck</li>
+        <li><strong>11:00 AM:</strong> CHECK OUT - head to Anaheim!</li>
+    </ul>
+    
+    <div class="confirmation-box">
+        <h4>🚗 ROUTE: Desert Hot Springs Airbnb → Four Points Sheraton Anaheim</h4>
+        <p><strong>Distance: 100 miles • Time: 1 hour 45 minutes</strong><br>
+        Route: I-10 W to CA-60 W to CA-57 S to Katella Ave<br>
+        <strong>Destination:</strong> Four Points Sheraton Anaheim, 1221 S Harbor Blvd, Anaheim, CA 92805</p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>11:00 AM - 12:45 PM:</strong> Drive to Anaheim</li>
+        <li><strong>1:00 PM:</strong> Arrive Anaheim area!</li>
+    </ul>
+    
+    <div class="hotel-box">
+        <h4>🏨 CHECK IN: FOUR POINTS SHERATON ANAHEIM</h4>
+        <p><strong>Confirmation: 77033562</strong><br>
+        <strong>Sunday, Monday, Tuesday nights (3 nights)</strong><br>
+        <strong>Total: $540.44</strong><br>
+        <strong>Walking distance to Disneyland!</strong></p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>1:30 PM:</strong> Check in hotel, unload</li>
+        <li><strong>2:30 PM:</strong> Explore Downtown Disney (FREE! No ticket needed!)</li>
+        <li><strong>Evening:</strong> Dinner at Downtown Disney (see Anaheim restaurant guide!), back to hotel, REST for big Disneyland days!</li>
+    </ul>
+    
+    <p><strong>💤 EARLY BEDTIME - Disneyland tomorrow!</strong></p>
+</div>
+
+<!-- DISNEYLAND DAYS -->
+<div class="section">
+    <h2 style="color: #c2185b;">🏰 DAYS 9-10: DISNEYLAND RESORT!</h2>
+    <p><strong>December 1-2, 2025</strong></p>
+    
+    <div class="disney-box">
+        <h4>🎟️ YOUR TICKETS: 2-Day Park Hopper × 3</h4>
+        <p><strong>Total Cost: $777.00</strong><br>
+        <strong>Access to BOTH Disneyland Park AND California Adventure!</strong></p>
+    </div>
+</div>
+
+<!-- DAY 9 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 9 - Monday, December 1 🏰</h3>
+        <div class="route">DISNEYLAND DAY ONE!</div>
+    </div>
+    
+    <div class="disney-box">
+        <h4>🏰 DISNEYLAND PARK - CLASSIC MAGIC!</h4>
+        
+        <p><strong>ARRIVE EARLY! Park opens around 8 AM</strong></p>
+        
+        <p><strong>MUST-DO FOR SON (Autism-Friendly):</strong></p>
+        <ul>
+            <li>Pirates of the Caribbean - calm, dark, story</li>
+            <li>Jungle Cruise - funny, no sudden scares</li>
+            <li>"it's a small world" - repetitive, soothing</li>
+            <li>Autopia - driving cars!</li>
+            <li>Finding Nemo Submarine - enclosed, calming</li>
+            <li>Tomorrowland - less crowded than Fantasyland</li>
+        </ul>
+        
+        <p><strong>BRING:</strong></p>
+        <ul>
+            <li>Noise-canceling headphones</li>
+            <li>Sunglasses</li>
+            <li>Fidgets</li>
+            <li>Familiar snacks</li>
+            <li>Water bottles (refill stations everywhere!)</li>
+        </ul>
+        
+        <p><strong>GET DISABILITY ACCESS SERVICE (DAS):</strong><br>
+        Go to Guest Relations FIRST THING<br>
+        Explain autism, sensory needs<br>
+        They'll set you up on app - avoid long waits!</p>
+        
+        <p><strong>SKIP:</strong> Loud shows, character meets (long lines), parades (crowds)</p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>6:30 AM:</strong> Wake up, quick breakfast at hotel</li>
+        <li><strong>7:30 AM:</strong> Walk to Disneyland entrance</li>
+        <li><strong>8:00 AM:</strong> Park opens - GO TO GUEST RELATIONS FIRST!</li>
+        <li><strong>8:00 AM - 12:00 PM:</strong> Morning rides (less crowded!)</li>
+        <li><strong>12:00 PM:</strong> Lunch (bring your own or quick service)</li>
+        <li><strong>1:00-3:00 PM:</strong> Midday break? (Pool at hotel OR continue if doing well)</li>
+        <li><strong>3:00-7:00 PM:</strong> More rides, explore, shop</li>
+        <li><strong>7:00 PM:</strong> Dinner</li>
+        <li><strong>Evening:</strong> Optional - stay for fireworks OR head back (son's comfort first!)</li>
+    </ul>
+    
+    <p><strong>🚶‍♂️ PACE YOURSELF! No need to do everything! Quality over quantity!</strong></p>
+</div>
+
+<!-- DAY 10 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 10 - Tuesday, December 2 🏰</h3>
+        <div class="route">DISNEYLAND DAY TWO!</div>
+    </div>
+    
+    <div class="disney-box">
+        <h4>🎢 CALIFORNIA ADVENTURE - MODERN FUN!</h4>
+        
+        <p><strong>Different vibe - more grown-up, less overwhelming!</strong></p>
+        
+        <p><strong>HIGHLIGHTS FOR YOUR FAMILY:</strong></p>
+        <ul>
+            <li>Cars Land - MUST SEE! (especially if son loves Cars movie)</li>
+            <li>Radiator Springs Racers - fast but SO fun!</li>
+            <li>Toy Story Midway Mania - video game ride!</li>
+            <li>Monsters Inc - dark ride, funny</li>
+            <li>Soarin' - flying simulator (might love or hate - try it!)</li>
+            <li>Incredicoaster - ONLY if son loves roller coasters!</li>
+        </ul>
+        
+        <p><strong>OR:</strong> Split day between both parks (Park Hopper benefit!)</p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>8:00 AM:</strong> Wake up (can sleep in a bit more!)</li>
+        <li><strong>9:00 AM:</strong> Breakfast</li>
+        <li><strong>10:00 AM:</strong> Enter California Adventure</li>
+        <li><strong>10:00 AM - 7:00 PM:</strong> Explore, ride, have fun!</li>
+        <li><strong>Flexible:</strong> Hop between parks as desired!</li>
+        <li><strong>Evening:</strong> Dinner, final rides, souvenir shopping</li>
+        <li><strong>Night:</strong> Back to hotel, PACK UP (fly out tomorrow!)</li>
+    </ul>
+    
+    <p><strong>💤 IMPORTANT: Pack everything tonight! Early start tomorrow!</strong></p>
+</div>
+
+<!-- DAY 11 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 11 - Tuesday, December 3 ✈️</h3>
+        <div class="route">RETURN FLIGHTS - San Diego → Pittsburgh</div>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>6:00 AM:</strong> Wake up, final check hotel</li>
+        <li><strong>7:00 AM:</strong> Check out hotel</li>
+    </ul>
+    
+    <div class="confirmation-box">
+        <h4>🚗 ROUTE: Four Points Sheraton Anaheim → San Diego Airport</h4>
+        <p><strong>Distance: 95 miles • Time: 1 hour 30 minutes</strong><br>
+        Route: I-5 S straight to San Diego Airport<br>
+        <strong>REFUEL TRUCK BEFORE AIRPORT!</strong></p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>7:00-8:30 AM:</strong> Drive to San Diego (allow extra time!)</li>
+        <li><strong>8:30 AM:</strong> Arrive San Diego Airport</li>
+    </ul>
+    
+    <div class="rental-box">
+        <h4>🚗 RETURN BUDGET TRUCK</h4>
+        <p><strong>Confirmation: 35136770US4</strong><br>
+        <strong>Return by 7:00 PM (WAY earlier!)</strong><br>
+        Return at Budget counter, get receipt<br>
+        <strong>REFUEL BEFORE RETURNING!</strong></p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>9:00-9:30 AM:</strong> Return rental truck</li>
+        <li><strong>9:30 AM:</strong> Check in for flights (if not done online)</li>
+        <li><strong>10:00 AM:</strong> TSA Security</li>
+        <li><strong>Relax, lunch, find gate</strong></li>
+    </ul>
+    
+    <div class="flight-box">
+        <h4>✈️ JETBLUE 19: San Diego → Boston</h4>
+        <p><strong>Confirmation: KGTBOB</strong><br>
+        <strong>Departs:</strong> 8:31 PM Pacific Time<br>
+        <strong>RED-EYE FLIGHT - Overnight across country!</strong><br>
+        <strong>Arrives Boston:</strong> 5:02 AM Wednesday (next morning)</p>
+    </div>
+    
+    <p><strong>OVERNIGHT FLIGHT - Try to sleep!</strong></p>
+</div>
+
+<!-- DAY 12 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 12 - Wednesday, December 4 ✈️</h3>
+        <div class="route">ARRIVAL DAY - Pittsburgh → Bridgeport, WV</div>
+    </div>
+    
+    <div class="flight-box">
+        <h4>✈️ JETBLUE 1585: Boston → Pittsburgh</h4>
+        <p><strong>Confirmation: KGTBOB</strong><br>
+        <strong>Connection in Boston</strong><br>
+        <strong>Arrives Pittsburgh:</strong> 8:30 AM<br>
+        <strong>Gain 3 hours back! (PST back to EST)</strong></p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>5:02 AM:</strong> Land Boston (early morning!)</li>
+        <li><strong>Find connecting gate</strong></li>
+        <li><strong>Coffee! Breakfast!</strong></li>
+        <li><strong>8:30 AM:</strong> Land Pittsburgh!</li>
+        <li><strong>9:00 AM:</strong> Get luggage</li>
+        <li><strong>9:30 AM:</strong> Marriott shuttle to hotel - GET YOUR CAR!</li>
+        <li><strong>10:00 AM:</strong> Pack car, check out Marriott</li>
+    </ul>
+    
+    <div class="confirmation-box">
+        <h4>🚗 ROUTE: Pittsburgh Airport → SpringHill Suites Bridgeport, WV</h4>
+        <p><strong>Distance: 90 miles • Time: 1 hour 30 minutes</strong><br>
+        Route: I-79 S straight to Bridgeport<br>
+        <strong>Destination:</strong> SpringHill Suites Bridgeport, 115 Platinum Dr, Bridgeport, WV 26330</p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>10:30 AM:</strong> Depart for Bridgeport</li>
+        <li><strong>12:00 PM:</strong> Arrive Bridgeport!</li>
+    </ul>
+    
+    <div class="hotel-box">
+        <h4>🏨 CHECK IN: SPRINGHILL SUITES BRIDGEPORT, WV</h4>
+        <p><strong>Confirmation: 91058782</strong><br>
+        <strong>Thursday Dec 4, Friday Dec 5, Saturday Dec 6 (3 nights)</strong><br>
+        <strong>FREE - Marriott Points!</strong><br>
+        <strong>Wedding: Saturday, December 6</strong></p>
+    </div>
+    
+    <p><strong>Afternoon:</strong> REST! You've been traveling since last night!<br>
+    <strong>Evening:</strong> Wedding rehearsal? Dinner with family? Early bedtime!</p>
+</div>
+
+<!-- WEDDING DAYS -->
+<div class="section">
+    <h2 style="color: #002855;">💒 DAYS 13-14: WEDDING WEEKEND</h2>
+</div>
+
+<!-- DAY 13 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 13 - Thursday, December 5</h3>
+        <div class="route">PRE-WEDDING DAY</div>
+    </div>
+    
+    <p><strong>REST & PREPARATION DAY</strong></p>
+    
+    <ul class="timeline">
+        <li>Sleep in! Recover from travel!</li>
+        <li>Relax at hotel</li>
+        <li>Optional: Visit family, explore Morgantown/WVU (30 min drive)</li>
+        <li>Wedding rehearsal?</li>
+        <li>Dinner with family</li>
+        <li>Early bedtime</li>
+    </ul>
+</div>
+
+<!-- DAY 14 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 14 - Friday, December 6</h3>
+        <div class="route">WEDDING DAY! 💒</div>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>Morning:</strong> Leisurely breakfast</li>
+        <li><strong>Afternoon:</strong> Get ready for wedding</li>
+        <li><strong>Wedding:</strong> Ceremony & Reception - Celebrate!</li>
+        <li><strong>Evening:</strong> Return to hotel</li>
+    </ul>
+    
+    <p><strong>✨ Enjoy the celebration!</strong></p>
+</div>
+
+<!-- DAY 15 -->
+<div class="day-card">
+    <div class="day-header">
+        <h3>DAY 15 - Saturday, December 7</h3>
+        <div class="route">HOME! Bridgeport, WV → Chester, VA</div>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>Morning:</strong> Leisurely breakfast, pack up</li>
+        <li><strong>10:00 AM:</strong> Check out hotel</li>
+        <li><strong>10:30 AM:</strong> Say goodbyes, depart for home</li>
+    </ul>
+    
+    <div class="confirmation-box">
+        <h4>🚗 ROUTE: SpringHill Suites Bridgeport → Chester, VA (HOME!)</h4>
+        <p><strong>Distance: 320 miles • Time: 5 hours 30 minutes</strong><br>
+        Route: I-79 S to I-77 S to I-64 E to Chester<br>
+        <strong>FINAL LEG HOME!</strong></p>
+    </div>
+    
+    <ul class="timeline">
+        <li><strong>10:30 AM - 4:00 PM:</strong> Drive home (lunch stop on the way!)</li>
+        <li><strong>4:00 PM:</strong> <strong>ARRIVE HOME CHESTER! 🏠🎉</strong></li>
+    </ul>
+    
+    <div class="confirmation-box">
+        <h4>🏠 HOME SWEET HOME!</h4>
+        <ul>
+            <li>Unload car (take your time!)</li>
+            <li>Check mail</li>
+            <li>Unpack essentials</li>
+            <li>Order pizza for dinner</li>
+            <li>Do laundry tomorrow</li>
+            <li>Sleep in YOUR OWN BED!</li>
+        </ul>
+    </div>
+    
+    <p style="text-align: center; font-size: 1.5em; color: #002855; margin-top: 20px;">
+        <strong>🎉 TRIP COMPLETE! CALIFORNIA + WEDDING DONE!</strong>
+    </p>
+</div>
+
+<!-- COST BREAKDOWN -->
+<div class="section">
+    <h2 style="color: #002855;">💰 COMPLETE COST BREAKDOWN</h2>
+    
+    <table class="cost-table">
+        <tr>
+            <th>Expense</th>
+            <th>Details</th>
+            <th>Cost</th>
+        </tr>
+        <tr>
+            <td>JetBlue Flights</td>
+            <td>Round-trip PIT-SAN × 3 people (Confirmation: KGTBOB)</td>
+            <td>$2,140.14</td>
+        </tr>
+        <tr>
+            <td>Budget Truck Rental</td>
+            <td>9 days San Diego (Confirmation: 35136770US4)</td>
+            <td>$685.12</td>
+        </tr>
+        <tr>
+            <td>Airbnb</td>
+            <td>6 nights Desert Hot Springs (Your share)</td>
+            <td>$1,500.00</td>
+        </tr>
+        <tr>
+            <td>Disneyland Tickets</td>
+            <td>2-Day Park Hopper × 3 people</td>
+            <td>$777.00</td>
+        </tr>
+        <tr>
+            <td>Four Points Sheraton Anaheim</td>
+            <td>3 nights (Nov 30, Dec 1-2)</td>
+            <td>$540.44</td>
+        </tr>
+        <tr>
+            <td>Pittsburgh Airport Marriott</td>
+            <td>1 night + parking (Confirmation: 76384205)</td>
+            <td>$272.46</td>
+        </tr>
+        <tr>
+            <td>SpringHill Suites Bridgeport</td>
+            <td>3 nights (Dec 4-6) - Marriott Points (Conf: 91058782)</td>
+            <td>$0</td>
+        </tr>
+        <tr>
+            <td>Gas (VA-Pittsburgh-WV-VA)</td>
+            <td>~670 miles total driving × $3.50/gal</td>
+            <td>~$106</td>
+        </tr>
+        <tr>
+            <td>Food & Dining</td>
+            <td>15 days × $150/day (groceries + restaurants)</td>
+            <td>$2,250</td>
+        </tr>
+        <tr>
+            <td>Activities</td>
+            <td>Movies, attractions, party supplies, misc</td>
+            <td>$200</td>
+        </tr>
+        <tr>
+            <td>Miscellaneous</td>
+            <td>Noemi's birthday cake/gifts, souvenirs, emergencies</td>
+            <td>$500</td>
+        </tr>
+        <tr>
+            <td colspan="2"><strong>GRAND TOTAL</strong></td>
+            <td><strong>~$8,871.16</strong></td>
+        </tr>
+    </table>
+    
+    <p style="text-align: center; margin-top: 20px; font-size: 1.1em; color: #666;">
+        <strong>This includes EVERYTHING except airport parking verification!</strong>
+    </p>
+</div>
+
+<!-- DESERT HOT SPRINGS ACTIVITIES -->
+<div class="section">
+    <h2 style="color: #002855;">🌵 DESERT HOT SPRINGS AREA - THINGS TO DO</h2>
+    <p><strong>For Tuesday (Nov 25) and Friday (Nov 28) flexible days!</strong></p>
+    
+    <h3>🏞️ OUTDOOR ADVENTURES</h3>
+    
+    <div class="activity-box">
+        <h4>Joshua Tree National Park</h4>
+        <p><strong>Distance from Airbnb:</strong> 25 miles, 30 minutes<br>
+        <strong>Cost:</strong> $30 per vehicle (7-day pass)<br>
+        <strong>Time needed:</strong> Half day to full day</p>
+        
+        <p><strong>Must-See Spots:</strong></p>
+        <ul>
+            <li><strong>Keys View</strong> - Panoramic desert vista, highest point</li>
+            <li><strong>Skull Rock</strong> - Easy 1.7-mile walk, perfect photos</li>
+            <li><strong>Cholla Cactus Garden</strong> - 0.25-mile loop, stunning at golden hour</li>
+            <li><strong>Hidden Valley</strong> - 1-mile loop trail through rock formations</li>
+            <li><strong>Barker Dam</strong> - 1.3-mile loop, usually has water</li>
+        </ul>
+        
+        <p><strong>Tips:</strong> Go early morning (cooler!), bring LOTS of water, sunscreen, hats. Pack lunch - limited food options inside.</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Salvation Mountain & Salton Sea</h4>
+        <p><strong>Distance from Airbnb:</strong> 60 miles, 1 hour<br>
+        <strong>Cost:</strong> FREE! (donations appreciated)<br>
+        <strong>Time needed:</strong> Half day</p>
+        
+        <p><strong>The Route:</strong></p>
+        <ul>
+            <li><strong>Salvation Mountain</strong> - Folk art masterpiece, "God is Love" painted on mountain, bring camera!</li>
+            <li><strong>Bombay Beach</strong> - Abandoned town on Salton Sea, post-apocalyptic art installations</li>
+            <li><strong>Salton Sea</strong> - California's largest lake, unique ecosystem</li>
+        </ul>
+        
+        <p><strong>Tips:</strong> Weird California at its best! Go in afternoon, stay for sunset. Bring picnic lunch. Gets hot - water essential!</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Indian Canyons</h4>
+        <p><strong>Distance from Airbnb:</strong> 16 miles, 20 minutes<br>
+        <strong>Cost:</strong> $12/adult, $6/child<br>
+        <strong>Time needed:</strong> 2-4 hours</p>
+        
+        <p><strong>Three Canyons to Explore:</strong></p>
+        <ul>
+            <li><strong>Palm Canyon</strong> - 3-mile loop, most popular, palm oasis</li>
+            <li><strong>Andreas Canyon</strong> - 1-mile loop, rock formations, stream</li>
+            <li><strong>Murray Canyon</strong> - 4 miles round trip, waterfall (seasonal)</li>
+        </ul>
+        
+        <p><strong>Tips:</strong> Easy hiking, great for kids! Go morning for cooler temps. Trading post has snacks. Good for granddaughter!</p>
+    </div>
+    
+    <h3>🎢 FAMILY ATTRACTIONS</h3>
+    
+    <div class="activity-box">
+        <h4>Living Desert Zoo & Gardens</h4>
+        <p><strong>Distance from Airbnb:</strong> 20 miles, 25 minutes (Palm Desert)<br>
+        <strong>Cost:</strong> $25/adult, $17/child (3-12)<br>
+        <strong>Time needed:</strong> 3-4 hours</p>
+        
+        <p><strong>Animals:</strong> Giraffes, zebras, cheetahs, bighorn sheep, desert tortoises, meerkats!<br>
+        <strong>Features:</strong> Petting zoo, carousel, wildlife shows<br>
+        <strong>Tips:</strong> Go early (animals more active when cooler). Bring hats/sunscreen. Manageable size - perfect for kids!</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Palm Springs Aerial Tramway</h4>
+        <p><strong>Distance from Airbnb:</strong> 25 miles, 30 minutes<br>
+        <strong>Cost:</strong> $30/adult, $20/child (3-10)<br>
+        <strong>Time needed:</strong> 2-3 hours</p>
+        
+        <p><strong>Experience:</strong> Rotating tram car climbs 8,500 feet! 50-degree temperature drop from desert floor to mountain top!<br>
+        <strong>At Top:</strong> Hiking trails, restaurant, observation decks, maybe snow!<br>
+        <strong>Tips:</strong> Bring jackets! Can be 80° at bottom, 30° at top! Last tram down is 9:45 PM. Buy tickets online to save time.</p>
+    </div>
+    
+    <h3>🏛️ CULTURE & SHOPPING</h3>
+    
+    <div class="activity-box">
+        <h4>Downtown Palm Springs</h4>
+        <p><strong>Distance from Airbnb:</strong> 16 miles, 20 minutes<br>
+        <strong>Cost:</strong> FREE! (parking ~$1/hour)<br>
+        <strong>Time needed:</strong> 2-4 hours</p>
+        
+        <p><strong>Palm Canyon Drive</strong> - Main street with shops, galleries, restaurants<br>
+        <strong>VillageFest</strong> - Thursday nights 6-10 PM, street fair!<br>
+        <strong>Palm Springs Art Museum</strong> - $15/adult, FREE Thursdays 4-8 PM<br>
+        <strong>Uptown Design District</strong> - Mid-century modern shops</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Cabazon Dinosaurs</h4>
+        <p><strong>Distance from Airbnb:</strong> 35 miles, 35 minutes (on way to/from Anaheim!)<br>
+        <strong>Cost:</strong> $14/adult, $12/child<br>
+        <strong>Time needed:</strong> 1 hour</p>
+        
+        <p>Giant roadside dinosaurs! Climb inside T-Rex! Museum, fossil dig for kids. Quick fun stop!</p>
+    </div>
+</div>
+
+<!-- DESERT HOT SPRINGS RESTAURANTS -->
+<div class="section">
+    <h2 style="color: #EAAA00;">🍽️ DESERT HOT SPRINGS AREA - WHERE TO EAT</h2>
+    
+    <h3>👨‍👩‍👧 FAMILY-FRIENDLY (Great for Noemi's Birthday!)</h3>
+    
+    <div class="hotel-box">
+        <h4>Lulu California Bistro - Palm Springs</h4>
+        <p><strong>Distance:</strong> 16 miles, 20 min<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> California comfort food, burgers, pasta, great kids menu<br>
+        <strong>Vibe:</strong> Fun, casual, colorful, perfect for birthday! Outdoor patio.<br>
+        <strong>Address:</strong> 200 S Palm Canyon Dr, Palm Springs</p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Sherman's Deli & Bakery - Palm Desert</h4>
+        <p><strong>Distance:</strong> 20 miles, 25 min<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> Huge portions! Sandwiches, breakfast all day, bakery<br>
+        <strong>Vibe:</strong> NY deli style, family-friendly, everyone finds something<br>
+        <strong>Address:</strong> 73161 Country Club Dr, Palm Desert</p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Tyler's Burgers - Palm Springs</h4>
+        <p><strong>Distance:</strong> 18 miles, 22 min<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> Best burgers in the desert! Shakes, fries<br>
+        <strong>Vibe:</strong> Classic diner, locals love it, quick & good<br>
+        <strong>Address:</strong> 149 S Indian Canyon Dr, Palm Springs</p>
+    </div>
+    
+    <h3>🍕 PIZZA & CASUAL</h3>
+    
+    <div class="hotel-box">
+        <h4>Stuft Pizza - Palm Desert</h4>
+        <p><strong>Distance:</strong> 22 miles, 25 min<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> Chicago-style deep dish, salads, wings<br>
+        <strong>Great for groups! Can feed the birthday party!</strong><br>
+        <strong>Address:</strong> 73750 El Paseo, Palm Desert</p>
+    </div>
+    
+    <h3>🌮 MEXICAN</h3>
+    
+    <div class="hotel-box">
+        <h4>Las Casuelas Nuevas - Rancho Mirage</h4>
+        <p><strong>Distance:</strong> 18 miles, 22 min<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> Traditional Mexican, huge portions, fresh tortillas<br>
+        <strong>Vibe:</strong> Upscale casual, beautiful patio, kids menu<br>
+        <strong>Address:</strong> 70050 CA-111, Rancho Mirage</p>
+    </div>
+    
+    <h3>🍳 BREAKFAST/BRUNCH</h3>
+    
+    <div class="hotel-box">
+        <h4>Keedy's Fountain & Grill - Palm Springs</h4>
+        <p><strong>Distance:</strong> 16 miles, 20 min<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> Classic American breakfast, pancakes, omelets<br>
+        <strong>Vibe:</strong> Retro diner, been there since 1957!<br>
+        <strong>Perfect for Noemi's birthday breakfast Wednesday!</strong><br>
+        <strong>Address:</strong> 73633 CA-111, Palm Desert</p>
+    </div>
+    
+    <h3>🍰 DESSERT & TREATS</h3>
+    
+    <div class="disney-box">
+        <h4>Ice Cream & Shoppe - Palm Springs</h4>
+        <p><strong>Distance:</strong> 16 miles, 20 min<br>
+        <strong>Perfect for after Zootopia 2!</strong><br>
+        Hand-dipped ice cream, milkshakes, sundaes<br>
+        <strong>Address:</strong> 123 N Palm Canyon Dr, Palm Springs</p>
+    </div>
+    
+    <div class="disney-box">
+        <h4>Great Shakes - Palm Desert</h4>
+        <p><strong>Distance:</strong> 20 miles, 25 min<br>
+        <strong>50's style ice cream parlor!</strong><br>
+        Huge sundaes, floats, malts<br>
+        <strong>Address:</strong> 78065 Main St #102, La Quinta</p>
+    </div>
+    
+    <h3>🛒 GROCERIES</h3>
+    
+    <div class="confirmation-box">
+        <h4>For Thanksgiving & Party Supplies:</h4>
+        <p><strong>Walmart Supercenter</strong> - 12 miles, 15 min (66100 Pierson Blvd, Desert Hot Springs)<br>
+        Everything! Turkey, groceries, party supplies, decorations</p>
+        
+        <p><strong>Vons</strong> - 16 miles, 20 min (Palm Springs)<br>
+        Nice grocery store, good for quality turkey/fresh items</p>
+        
+        <p><strong>Trader Joe's</strong> - 20 miles, 25 min (Palm Desert)<br>
+        Unique snacks, wine, prepared foods</p>
+    </div>
+</div>
+
+<!-- ANAHEIM ACTIVITIES -->
+<div class="section">
+    <h2 style="color: #c2185b;">🎡 ANAHEIM AREA - THINGS TO DO (NON-DISNEY DAYS)</h2>
+    <p><strong>Sunday afternoon (Nov 30), and any downtime between Disneyland days!</strong></p>
+    
+    <h3>🎢 ATTRACTIONS</h3>
+    
+    <div class="disney-box">
+        <h4>Knott's Berry Farm</h4>
+        <p><strong>Distance from hotel:</strong> 10 miles, 20 minutes<br>
+        <strong>Cost:</strong> ~$75/person (check online deals!)<br>
+        <strong>Time needed:</strong> Full day</p>
+        
+        <p><strong>If you want another theme park day!</strong> Roller coasters, Camp Snoopy (kid area), Mrs. Knott's Chicken Dinner Restaurant (famous!)</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Downtown Disney District</h4>
+        <p><strong>Distance from hotel:</strong> WALKING DISTANCE!<br>
+        <strong>Cost:</strong> FREE entry! (shopping/dining costs vary)<br>
+        <strong>Time needed:</strong> 1-3 hours</p>
+        
+        <p><strong>Perfect for Sunday evening!</strong><br>
+        NO Disneyland ticket needed! Shops, restaurants, entertainment, LEGO Store, World of Disney (biggest Disney store!), live music</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Medieval Times Dinner & Tournament</h4>
+        <p><strong>Distance from hotel:</strong> 3 miles, 8 minutes<br>
+        <strong>Cost:</strong> ~$65/adult, ~$35/child<br>
+        <strong>Time needed:</strong> 2 hours</p>
+        
+        <p>Knights, horses, jousting, 4-course medieval feast! Kids love it! Book ahead online.</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Pretend City Children's Museum</h4>
+        <p><strong>Distance from hotel:</strong> 12 miles, 20 minutes (Irvine)<br>
+        <strong>Cost:</strong> $15/person<br>
+        <strong>Time needed:</strong> 2-3 hours</p>
+        
+        <p>Interactive play for younger kids. Great if Noemi needs a break from big theme parks!</p>
+    </div>
+    
+    <h3>🏖️ BEACH!</h3>
+    
+    <div class="activity-box">
+        <h4>Huntington Beach (Surf City USA)</h4>
+        <p><strong>Distance from hotel:</strong> 18 miles, 30 minutes<br>
+        <strong>Cost:</strong> FREE! (parking $15)<br>
+        <strong>Time needed:</strong> Half day</p>
+        
+        <p>Beautiful beach, pier, Main Street shops & restaurants. Perfect if you want ocean time!</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Newport Beach</h4>
+        <p><strong>Distance from hotel:</strong> 22 miles, 35 minutes<br>
+        <strong>Cost:</strong> FREE! (parking varies)<br>
+        <strong>Time needed:</strong> Half day</p>
+        
+        <p>Balboa Island (cute!), Balboa Pier, beach, tide pools. More upscale beach vibe.</p>
+    </div>
+    
+    <h3>🛍️ SHOPPING</h3>
+    
+    <div class="activity-box">
+        <h4>The Outlets at Orange</h4>
+        <p><strong>Distance from hotel:</strong> 8 miles, 15 minutes<br>
+        <strong>Cost:</strong> FREE! (shopping costs vary)<br>
+        <strong>Time needed:</strong> 2-4 hours</p>
+        
+        <p>Outlet mall - Nike, Disney Store, LEGO, Gap, more. Good deals! Indoor/outdoor.</p>
+    </div>
+</div>
+
+<!-- ANAHEIM RESTAURANTS -->
+<div class="section">
+    <h2 style="color: #EAAA00;">🍽️ ANAHEIM AREA - WHERE TO EAT</h2>
+    
+    <h3>🏰 NEAR DISNEYLAND/HOTEL (WALKING OR SHORT DRIVE)</h3>
+    
+    <div class="hotel-box">
+        <h4>Earl of Sandwich - Downtown Disney</h4>
+        <p><strong>Distance:</strong> Walking distance from hotel!<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> Hot sandwiches, salads, breakfast<br>
+        <strong>Perfect for quick, cheap, filling meal before/after Disneyland!</strong></p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Naples Ristorante - Downtown Disney</h4>
+        <p><strong>Distance:</strong> Walking distance<br>
+        <strong>Price:</strong> $$$<br>
+        <strong>Food:</strong> Italian, pizza, pasta, great for nice dinner<br>
+        <strong>Sit-down restaurant, reservations recommended</strong></p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Tortilla Jo's - Downtown Disney</h4>
+        <p><strong>Distance:</strong> Walking distance<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> Mexican, make-your-own guacamole, margaritas<br>
+        <strong>Fun atmosphere, patio seating</strong></p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Black Tap Craft Burgers - Downtown Disney</h4>
+        <p><strong>Distance:</strong> Walking distance<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> Gourmet burgers, CRAZY milkshakes (Instagram famous!)<br>
+        <strong>Kids will LOVE the milkshakes!</strong></p>
+    </div>
+    
+    <h3>🥞 BREAKFAST (Near Hotel)</h3>
+    
+    <div class="hotel-box">
+        <h4>Anaheim White House Restaurant</h4>
+        <p><strong>Distance:</strong> 2 miles, 6 min drive<br>
+        <strong>Price:</strong> $$-$$$<br>
+        <strong>Food:</strong> Italian & American breakfast/brunch<br>
+        <strong>Upscale, special occasion feel</strong><br>
+        <strong>Address:</strong> 887 S Anaheim Blvd, Anaheim</p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Hash House A Go Go</h4>
+        <p><strong>Distance:</strong> 1 mile, 5 min drive<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> HUGE portions! Twisted farm food, crazy pancakes<br>
+        <strong>Perfect for pre-Disneyland fuel!</strong><br>
+        <strong>Address:</strong> 370 W Katella Ave, Anaheim</p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Captain Kidd's - Across from Disneyland</h4>
+        <p><strong>Distance:</strong> 0.5 miles, walking!<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> Classic American breakfast, huge portions, cheap!<br>
+        <strong>Local favorite since 1957!</strong><br>
+        <strong>Address:</strong> 1200 S Harbor Blvd, Anaheim</p>
+    </div>
+    
+    <h3>🍕 FAMILY CASUAL</h3>
+    
+    <div class="hotel-box">
+        <h4>Goofy's Kitchen - Disneyland Hotel</h4>
+        <p><strong>Distance:</strong> 0.3 miles, walking<br>
+        <strong>Price:</strong> $$$<br>
+        <strong>Food:</strong> Buffet with CHARACTER DINING! (No park ticket needed!)<br>
+        <strong>Noemi would LOVE meeting characters! Make reservations!</strong></p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Pieology - Harbor Blvd</h4>
+        <p><strong>Distance:</strong> 0.5 miles, walking<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> Build-your-own pizza, fast casual<br>
+        <strong>Quick, good, cheap option</strong></p>
+    </div>
+    
+    <h3>🌮 MEXICAN</h3>
+    
+    <div class="hotel-box">
+        <h4>La Brea Bakery Cafe - Downtown Disney</h4>
+        <p><strong>Distance:</strong> Walking<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> Sandwiches, salads, soups, fresh bread<br>
+        <strong>Healthy options! Good for lunch!</strong></p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Porto's Bakery - Buena Park</h4>
+        <p><strong>Distance:</strong> 6 miles, 12 min<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> Cuban bakery - pastries, sandwiches, cakes<br>
+        <strong>LEGENDARY! Get there early - always packed! Worth it!</strong><br>
+        <strong>Address:</strong> 8233 Firestone Blvd, Downey</p>
+    </div>
+    
+    <h3>🍰 DESSERT</h3>
+    
+    <div class="disney-box">
+        <h4>Salt & Straw - Downtown Disney</h4>
+        <p><strong>Walking distance!</strong><br>
+        Artisan ice cream, unique flavors, always a line (worth it!)</p>
+    </div>
+    
+    <div class="disney-box">
+        <h4>Sprinkles Cupcakes - Downtown Disney</h4>
+        <p><strong>Walking distance!</strong><br>
+        Gourmet cupcakes, cupcake ATM (yes, really!)</p>
+    </div>
+</div>
+
+<!-- BRIDGEPORT ACTIVITIES -->
+<div class="section">
+    <h2 style="color: #002855;">⛰️ BRIDGEPORT, WV AREA - THINGS TO DO & EAT</h2>
+    <p><strong>Thursday Dec 4 & Friday Dec 5 (before wedding Saturday)</strong></p>
+    
+    <h3>🏞️ THINGS TO DO</h3>
+    
+    <div class="activity-box">
+        <h4>Morgantown & WVU Campus</h4>
+        <p><strong>Distance from hotel:</strong> 20 miles, 25 minutes<br>
+        <strong>Cost:</strong> FREE!<br>
+        <strong>Time needed:</strong> 2-4 hours</p>
+        
+        <p><strong>Must-See WVU Spots:</strong></p>
+        <ul>
+            <li><strong>Woodburn Circle</strong> - Historic heart of campus, rub Woodburn Hall lions for luck!</li>
+            <li><strong>Milan Puskar Stadium</strong> - Mountaineer football! Drive by, take photos</li>
+            <li><strong>PRT (Personal Rapid Transit)</strong> - Unique! Ride the automated people mover</li>
+            <li><strong>Downtown Morgantown</strong> - High Street - shops, restaurants, WVU bookstore!</li>
+            <li><strong>WVU Mountainlair</strong> - Student union, get WVU gear</li>
+        </ul>
+        
+        <p><strong>Perfect for showing Mountaineer pride before the wedding!</strong></p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Bridgeport Conference Center</h4>
+        <p><strong>Distance from hotel:</strong> Adjacent! Connected to SpringHill Suites!<br>
+        <strong>Cost:</strong> FREE<br>
+        <strong>Time needed:</strong> 1 hour</p>
+        
+        <p>Shops, restaurants connected to hotel. Easy walking around.</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>Valley Falls State Park</h4>
+        <p><strong>Distance from hotel:</strong> 30 miles, 40 minutes<br>
+        <strong>Cost:</strong> FREE!<br>
+        <strong>Time needed:</strong> 2 hours</p>
+        
+        <p>Beautiful waterfall, easy trails, picnic areas. Nice if weather is good!</p>
+    </div>
+    
+    <div class="activity-box">
+        <h4>West Virginia Italian Heritage Festival Museum</h4>
+        <p><strong>Distance from hotel:</strong> In Clarksburg, 5 miles, 10 min<br>
+        <strong>Cost:</strong> FREE<br>
+        <strong>Time needed:</strong> 1 hour</p>
+        
+        <p>Small museum about Italian immigration to WV. Interesting local history!</p>
+    </div>
+    
+    <h3>🍽️ WHERE TO EAT IN BRIDGEPORT AREA</h3>
+    
+    <div class="hotel-box">
+        <h4>Oliverio's Cash & Carry</h4>
+        <p><strong>Distance:</strong> 5 miles, 10 min (Clarksburg)<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> Famous pepperoni rolls (WV specialty!), Italian deli<br>
+        <strong>MUST TRY! Stock up on pepperoni rolls for home!</strong><br>
+        <strong>Address:</strong> 506 Pennsylvania Ave, Clarksburg</p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Minard's Spaghetti Inn</h4>
+        <p><strong>Distance:</strong> 5 miles, 10 min (Clarksburg)<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> Old-school Italian, huge portions, been there since 1940s<br>
+        <strong>Local institution! Spaghetti, lasagna, chicken parm</strong><br>
+        <strong>Address:</strong> 813 E Pike St, Clarksburg</p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>DeLonghi's</h4>
+        <p><strong>Distance:</strong> 1 mile from hotel<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> Burgers, wings, sandwiches, sports bar<br>
+        <strong>Casual, good for quick bite</strong><br>
+        <strong>Address:</strong> 300 Johnson Ave, Bridgeport</p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Oliverio's Ristorante</h4>
+        <p><strong>Distance:</strong> 5 miles, 10 min (Clarksburg)<br>
+        <strong>Price:</strong> $$$<br>
+        <strong>Food:</strong> Upscale Italian, steaks, seafood<br>
+        <strong>Nice dinner option for Thursday or Friday night!</strong><br>
+        <strong>Address:</strong> 125 S 2nd St, Clarksburg</p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Black Bear Burritos - Morgantown</h4>
+        <p><strong>Distance:</strong> 20 miles, 25 min<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> HUGE burritos, local ingredients, vegetarian options<br>
+        <strong>Morgantown favorite! WVU students love it!</strong><br>
+        <strong>Address:</strong> 415 High St, Morgantown</p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Iron Horse Tavern - Morgantown</h4>
+        <p><strong>Distance:</strong> 20 miles, 25 min<br>
+        <strong>Price:</strong> $$<br>
+        <strong>Food:</strong> American, burgers, salads, craft beer<br>
+        <strong>Downtown Morgantown, walking distance from WVU bookstore</strong><br>
+        <strong>Address:</strong> 22 Wall St, Morgantown</p>
+    </div>
+    
+    <h3>🥞 BREAKFAST</h3>
+    
+    <div class="hotel-box">
+        <h4>SpringHill Suites Breakfast</h4>
+        <p><strong>Distance:</strong> In your hotel!<br>
+        <strong>Price:</strong> FREE! (included with room)<br>
+        <strong>Food:</strong> Hot breakfast buffet<br>
+        <strong>Easy option before wedding prep!</strong></p>
+    </div>
+    
+    <div class="hotel-box">
+        <h4>Tudor's Biscuit World</h4>
+        <p><strong>Distance:</strong> 2 miles, 5 min<br>
+        <strong>Price:</strong> $<br>
+        <strong>Food:</strong> WV CLASSIC! Biscuits, country breakfast<br>
+        <strong>MUST TRY! Get a "Ron" (biscuit with pepperoni, egg, cheese)</strong><br>
+        <strong>Address:</strong> Multiple locations Bridgeport/Clarksburg</p>
+    </div>
+</div>
+
+<!-- PACKING LIST -->
+<div class="section">
+    <h2 style="color: #002855;">🎒 PACKING LIST - FLYING VERSION!</h2>
+    
+    <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="margin-top: 0;">✈️ REMEMBER: Flying! TSA Rules!</h3>
+        <ul>
+            <li>Liquids: 3.4 oz or less, all in 1 quart bag</li>
+            <li>NO spray paint (can't fly with aerosols!)</li>
+            <li>Laptops/tablets out for screening</li>
+            <li>Shoes off at TSA</li>
+            <li>Pack smartly - you're carrying luggage through airports!</li>
+        </ul>
+    </div>
+    
+    <h3>CARRY-ON ESSENTIALS (Keep with you on plane!):</h3>
+    <ul>
+        <li>Medications (ALL - never check these!)</li>
+        <li>iPad/tablet for son + charger</li>
+        <li>Headphones (MUST for plane!)</li>
+        <li>Snacks (son's favorites!)</li>
+        <li>Fidget toys</li>
+        <li>Change of clothes (in case luggage lost)</li>
+        <li>Toothbrushes</li>
+        <li>Phone chargers</li>
+        <li>Important documents (see below)</li>
+    </ul>
+    
+    <h3>CHECKED LUGGAGE:</h3>
+    <ul>
+        <li>Clothes for 15 days (can do laundry at Airbnb!)</li>
+        <li>Toiletries (full-size now OK!)</li>
+        <li>Jackets (California nights can be cool!)</li>
+        <li>Comfortable walking shoes for Disneyland</li>
+        <li>Swimsuits (Airbnb pool!)</li>
+        <li>Sunscreen (full-size in checked bag)</li>
+        <li>Wedding outfit (pack carefully!)</li>
+    </ul>
+    
+    <h3>DOCUMENTS (Keep in carry-on!):</h3>
+    <ul>
+        <li>Driver's licenses</li>
+        <li>Insurance cards</li>
+        <li>Credit cards (2-3 different ones)</li>
+        <li>PRINTED flight confirmations (Confirmation: KGTBOB)</li>
+        <li>PRINTED rental truck confirmation (35136770US4)</li>
+        <li>PRINTED Airbnb confirmation with address & check-in code</li>
+        <li>PRINTED hotel confirmations</li>
+        <li>PRINTED Disneyland tickets/barcodes</li>
+        <li>THIS ITINERARY (printed!)</li>
+        <li>Emergency contacts</li>
+    </ul>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section">
+    <h2 style="color: #002855;">✅ PRE-TRIP CHECKLIST</h2>
+    
+    <h3>THIS WEEK:</h3>
+    <ul style="list-style: none; padding: 0;">
+        <li>☐ CHECK IN ONLINE for JetBlue flights (opens 24 hours before!)</li>
+        <li>☐ Verify Pittsburgh Marriott parking rates & reservation</li>
+        <li>☐ Download JetBlue app with confirmation KGTBOB</li>
+        <li>☐ Download Budget app with confirmation 35136770US4</li>
+        <li>☐ Download Airbnb app with reservation details</li>
+        <li>☐ Download Disneyland app</li>
+        <li>☐ Print ALL confirmations (2 copies each!)</li>
+        <li>☐ Pack gradually (don't wait until last minute!)</li>
+        <li>☐ Charge all devices, download movies for son</li>
+        <li>☐ Get cash ($200 for tips/emergencies)</li>
+        <li>☐ Fill prescriptions (son's meds + backup)</li>
+        <li>☐ Stop mail delivery (Nov 23 - Dec 7)</li>
+        <li>☐ Set house light timers</li>
+        <li>☐ Arrange for neighbor to check house?</li>
+    </ul>
+    
+    <h3>DAY BEFORE (Friday, Nov 22):</h3>
+    <ul style="list-style: none; padding: 0;">
+        <li>☐ Final pack (everything except morning items)</li>
+        <li>☐ Weigh luggage (50 lbs max per bag for checked!)</li>
+        <li>☐ Load car for Pittsburgh drive</li>
+        <li>☐ Set MULTIPLE alarms</li>
+        <li>☐ Lay out clothes for tomorrow</li>
+        <li>☐ Get GOOD SLEEP!</li>
+    </ul>
+</div>
+
+<!-- EMERGENCY CONTACTS -->
+<div class="section">
+    <h2 style="color: #dc3545;">🆘 EMERGENCY CONTACTS</h2>
+    
+    <div style="background: #fff0f0; padding: 15px; border-radius: 5px; border-left: 4px solid #dc3545;">
+        <h4>Save These Now!</h4>
+        
+        <p><strong>✈️ JetBlue Customer Service:</strong> (800) 538-2583</p>
+        
+        <p><strong>🚗 Budget Rental:</strong> (800) 214-6094<br>
+        San Diego Airport: Check confirmation for local number</p>
+        
+        <p><strong>🏨 Hotels:</strong><br>
+        Pittsburgh Airport Marriott: _______________<br>
+        Four Points Sheraton Anaheim: _______________<br>
+        SpringHill Suites Bridgeport: _______________</p>
+        
+        <p><strong>🏥 Hospitals:</strong><br>
+        Desert Hot Springs - JFK Memorial: (760) 347-6191<br>
+        Anaheim Regional Medical Center: (714) 774-1450<br>
+        Bridgeport - United Hospital: (681) 342-1000</p>
+        
+        <p><strong>🏠 Home Contacts:</strong><br>
+        Neighbor (emergencies): ___________________<br>
+        House alarm company: ___________________</p>
+    </div>
+</div>
+
+<!-- FINAL MOTIVATION -->
+<div class="section" style="background: linear-gradient(135deg, #002855 0%, #EAAA00 100%); color: white;">
+    <h2 style="color: white; text-align: center;">🌟 THIS IS GOING TO BE AMAZING!</h2>
+    
+    <div style="text-align: center; font-size: 1.1em; line-height: 2;">
+        <p>✅ You're flying to California!</p>
+        <p>✅ You're spending a week in Desert Hot Springs!</p>
+        <p>✅ You're exploring Joshua Tree National Park!</p>
+        <p>✅ You're celebrating Thanksgiving together!</p>
+        <p>✅ You're going to see Salvation Mountain!</p>
+        <p>✅ You're spending TWO DAYS at Disneyland!</p>
+        <p>✅ You're attending a wedding in West Virginia!</p>
+        <p>✅ You're creating memories that last FOREVER!</p>
+    </div>
+    
+    <h3 style="text-align: center; margin-top: 30px; font-size: 2em;">
+        15 DAYS • 4 FLIGHTS • DISNEYLAND • WEDDING
+    </h3>
+    
+    <h2 style="text-align: center; margin-top: 20px; font-size: 2.5em;">
+        LET'S GO MOUNTAINEERS! 💙💛
+    </h2>
+    
+    <p style="text-align: center; font-size: 1.2em; margin-top: 20px;">
+        Safe travels, Casten Family! ✈️🏰💒
+    </p>
+</div>
+
+<div class="no-print" style="text-align: center; margin: 30px 0;">
+    <button class="print-button" onclick="window.print()">🖨️ Print Complete Itinerary</button>
+    <p style="margin-top: 20px; color: #666;">
+        Print multiple copies! Keep one in carry-on! Share with family!<br>
+        This is YOUR adventure guide!
+    </p>
+</div>
+
+<footer style="text-align: center; padding: 20px; color: #666; font-size: 0.9em;">
+    <p>Updated November 13, 2025 • Departure: November 23, 2025</p>
+    <p><strong>✈️ JetBlue:</strong> KGTBOB • <strong>🚗 Budget:</strong> 35136770US4</p>
+    <p><strong>🏨 Pittsburgh Marriott:</strong> 76384205 • <strong>🏨 Sheraton Anaheim:</strong> 77033562 • <strong>🏨 SpringHill Bridgeport:</strong> 91058782</p>
+    <p style="margin-top: 10px; font-size: 0.8em;">Total Trip Cost: ~$8,871.16 • 15 Days • 670 miles driving • 4 flights</p>
+</footer>
+
+</body>
+</html>
